@@ -1,6 +1,15 @@
 .container {
     position: relative;
+    flex-direction: row;
     border: 1px solid black;
     width: 100px;
     height: 100px;
+}
+
+.container-following {
+    border-left: 0;
+}
+
+.container-row-following {
+    border-top: 0;
 }

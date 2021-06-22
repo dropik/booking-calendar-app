@@ -1,12 +1,12 @@
 import React from "react";
 import { hot } from "react-hot-loader";
-import Container from "./container.js";
+import Table from "./table";
 import "./app.css";
 
 function App(props) {
   return(
     <div className="app">
-      <Container />
+      <Table rows="5" columns="6" />
     </div>
   );
 }
