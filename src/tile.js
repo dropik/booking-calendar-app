@@ -1,6 +1,6 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
-import "./tile.css";
+import "./Tile.css";
 
 function Tile(props) {
   return (

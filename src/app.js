@@ -1,7 +1,7 @@
 import React from "react";
 import { hot } from "react-hot-loader";
-import Table from "./table";
-import "./app.css";
+import Table from "./Table";
+import "./App.css";
 
 function App(props) {
   return(
