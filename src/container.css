@@ -5,3 +5,7 @@
     width: 4rem;
     height: 4rem;
 }
+
+.container-last {
+    border-right: 0;
+}

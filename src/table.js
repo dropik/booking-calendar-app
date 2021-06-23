@@ -54,7 +54,7 @@ function Table(props) {
     const roomsForFloor = floor.rooms;
     for (var j = 0; j < roomsForFloor.length; j++) {
       const room = roomsForFloor[j];
-      rows.push(<Room number={room.number} columns={props.columns} y={room.number} key={room.number} />);
+      rows.push(<Room number={room.number} columns={props.columns} index={j} y={room.number} key={room.number} />);
     }
   }
 

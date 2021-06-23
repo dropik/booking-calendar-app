@@ -9,11 +9,12 @@ function Room(props) {
     columns.push(<RoomNumber number={props.number} key={"roomNumber: " + props.number}/>);
 
     for (let i = 0; i < props.columns; i++) {
-        columns.push(<Container key={"x: " + i + "; y: " + props.y} x={i} y={props.y}/>);
+        var isLast = i == props.columns - 1;
+        columns.push(<Container key={"x: " + i + "; y: " + props.y} isLast={isLast} x={i} y={props.y}/>);
     }
 
     let className = "room";
-    if (props.y % 2 == 1) {
+    if (props.index % 2 == 1) {
         className += " room-odd";
     }
 
