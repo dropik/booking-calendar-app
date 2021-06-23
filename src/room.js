@@ -16,9 +16,6 @@ function Room(props) {
     if (props.y % 2 == 1) {
         className += " room-odd";
     }
-    if (props.isFollowing) {
-        className += " room-following";
-    }
 
     return <div className={className}>{columns}</div>;
 }

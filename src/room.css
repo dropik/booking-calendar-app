@@ -1,12 +1,9 @@
 .room {
     display: flex;
     border: 1px solid black;
+    border-top: 0;
 }
 
 .room-odd {
     background-color: #f4f4f4;
-}
-
-.room-following {
-    border-top: 0;
 }
