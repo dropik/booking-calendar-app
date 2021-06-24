@@ -1,6 +1,7 @@
 import React, { useLayoutEffect, useState } from "react";
 import { hot } from "react-hot-loader";
 import Table from "./Table";
+import Header from "./Header";
 import "./App.css";
 
 function App(props) {
@@ -12,6 +13,7 @@ function App(props) {
 
   return(
     <div className="app">
+      <Header columns={columns}/>
       <Table columns={columns} />
     </div>
   );

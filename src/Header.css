@@ -1,0 +1,18 @@
+.header {
+    position: fixed;
+    top: 0;
+    left: 0.5rem;
+    right: 0.5rem;
+    background-color: white;
+    z-index: 9999;
+}
+
+.data-input {
+    height: 4rem;
+    line-height: 4rem;
+    padding-left: 0.4em;
+}
+
+.data-input > input {
+    margin-left: 1rem;
+}
