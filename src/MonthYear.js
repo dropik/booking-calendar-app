@@ -3,9 +3,14 @@ import { hot } from 'react-hot-loader';
 import "./MonthYear.css";
 
 function MonthYear(props) {
+  var monthYear = props.date.toLocaleDateString("it-IT", { year: 'numeric', month: 'long'}).split(' ');
+  var month = monthYear[0];
+  month = month[0].toLocaleUpperCase() + month.substr(1, month.length - 1);
+  var year = monthYear[1];
+
   return (
     <div className="month-year">
-      <span>Giugno <b>2021</b></span>
+      <span>{month}<br/><b>{year}</b></span>
     </div>
   );
 }

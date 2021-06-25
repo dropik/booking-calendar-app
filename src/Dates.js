@@ -6,13 +6,17 @@ import "./Dates.css";
 
 function Dates(props) {
   var columns = [];
-  columns.push(<MonthYear key="giugno2021"/>);
+  const date = new Date();
+  columns.push(<MonthYear date={date} key="monthYear"/>);
 
-  var days = ['26', '27', '28', '29', '30', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14'];
-
+  var dateCounter = new Date();
   for (var i = 0; i < props.columns; i++) {
+    var day = dateCounter.getDate();
     var isLast = i == (props.columns - 1);
-    columns.push(<Day isLast={isLast} day={days[i]} key={i}/>);
+
+    columns.push(<Day isLast={isLast} day={day.toString().padStart(2, '0')} key={day}/>);
+
+    dateCounter.setDate(dateCounter.getDate() + 1);
   }
 
   return <div className="dates">{columns}</div>
