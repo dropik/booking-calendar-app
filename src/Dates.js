@@ -6,10 +6,9 @@ import "./Dates.css";
 
 function Dates(props) {
   var columns = [];
-  const date = new Date();
-  columns.push(<MonthYear date={date} key="monthYear"/>);
+  columns.push(<MonthYear date={props.date} key="monthYear"/>);
 
-  var dateCounter = new Date();
+  var dateCounter = new Date(props.date.getTime());
   for (var i = 0; i < props.columns; i++) {
     var day = dateCounter.getDate();
     var isLast = i == (props.columns - 1);
