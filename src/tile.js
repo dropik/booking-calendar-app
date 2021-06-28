@@ -10,7 +10,7 @@ function Tile(props) {
   function handleGrab(event) {
     event.preventDefault();
     setGrabbed(true);
-    setInitialY(event.clientY);
+    setInitialY(event.pageY);
   }
 
   var className = "tile";
@@ -44,7 +44,7 @@ function useMouseY() {
   const [mouseY, setMouseY] = useState(0);
   useEffect(() => {
     function updateMouseY(event) {
-      setMouseY(event.clientY);
+      setMouseY(event.pageY);
     }
     window.addEventListener('mousemove', updateMouseY);
     return () => window.removeEventListener('mousemove', updateMouseY);

@@ -1,6 +1,5 @@
 .container {
     position: relative;
-    flex-direction: row;
     border-right: 1px solid black;
     width: 4rem;
     height: 4rem;
