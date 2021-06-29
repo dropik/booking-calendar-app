@@ -9,8 +9,11 @@ function Container(props) {
     className += " container-last";
   }
 
-  var tile = (props.x == 1) && (props.y == 2) ? 
-            <Tile name="Ivan Petrov" colour="rgba(217, 73, 73, 0.69)" roomType="doppia" nights="2"/> :
+  var tile = props.tileData !== undefined ? 
+            <Tile name={props.tileData.name}
+                  colour={props.tileData.colour}
+                  roomType={props.tileData.roomType}
+                  nights={props.tileData.nights} /> :
             "";
 
   return (

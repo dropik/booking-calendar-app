@@ -5,20 +5,40 @@ import { hot } from 'react-hot-loader';
 import "./Room.css";
 
 function Room(props) {
-    var columns = [];
-    columns.push(<RoomNumber number={props.number} key={"roomNumber: " + props.number}/>);
+  var columns = [];
+  columns.push(<RoomNumber number={props.number} key="roomNumber" />);
 
-    for (var i = 0; i < props.columns; i++) {
-        var isLast = i == props.columns - 1;
-        columns.push(<Container key={"x: " + i + "; y: " + props.y} isLast={isLast} x={i} y={props.y}/>);
+  var roomData = [
+    {
+      x: 1,
+      data: {
+        name: "Ivan Petrov",
+        colour: "rgba(217, 73, 73, 0.69)",
+        roomType: "doppia",
+        nights: "2"
+      }
     }
+  ];
 
-    var className = "room";
-    if (props.index % 2 == 1) {
-        className += " room-odd";
+  var currentDate = 0;
+  var tileData;
+  for (var i = 0; i < props.columns; i++) {
+    if ((currentDate < roomData.length) && (roomData[currentDate].x === i)) {
+      tileData = roomData[currentDate].data;
+      currentDate++;
     }
+    columns.push(<Container key={"x: " + i + "; y: " + props.y}
+                            tileData={tileData}
+                            isLast={i == props.columns - 1} />);
+    tileData = undefined;
+  }
 
-    return <div className={className}>{columns}</div>;
+  var className = "room";
+  if (props.index % 2 == 1) {
+    className += " room-odd";
+  }
+
+  return <div className={className}>{columns}</div>;
 }
 
 export default hot(module)(Room);
