@@ -6,31 +6,14 @@ import "./Room.css";
 
 function Room(props) {
   var columns = [];
-  columns.push(<RoomNumber number={props.number} key="roomNumber" />);
+  columns.push(<RoomNumber number={props.y} key="roomNumber" />);
 
-  var roomData = [
-    {
-      x: 1,
-      data: {
-        name: "Ivan Petrov",
-        colour: "rgba(217, 73, 73, 0.69)",
-        roomType: "doppia",
-        nights: "2"
-      }
-    }
-  ];
+  var roomData = props.roomData === undefined ? [] : props.roomData;
 
-  var currentDate = 0;
-  var tileData;
   for (var i = 0; i < props.columns; i++) {
-    if ((currentDate < roomData.length) && (roomData[currentDate].x === i)) {
-      tileData = roomData[currentDate].data;
-      currentDate++;
-    }
     columns.push(<Container key={"x: " + i + "; y: " + props.y}
-                            tileData={tileData}
+                            tileData={roomData[i]}
                             isLast={i == props.columns - 1} />);
-    tileData = undefined;
   }
 
   var className = "room";

@@ -46,15 +46,30 @@ function Table(props) {
     ]
   }
 
+  var roomData = [];
+  roomData[1] = 
+  {
+    name: "Ivan Petrov",
+    colour: "rgba(217, 73, 73, 0.69)",
+    roomType: "doppia",
+    nights: "2"
+  };
+
+  var occupations = [];
+  occupations[2] = roomData;
+
   for (let i = 0; i < rooms.floors.length; i++) {
     const floor = rooms.floors[i];
-    var isFollowing = i > 0;
-    rows.push(<Floor name={floor.name} key={floor.name} isFollowing={isFollowing}/>);
+    rows.push(<Floor key={floor.name} name={floor.name} isFollowing={i > 0}/>);
 
     const roomsForFloor = floor.rooms;
     for (var j = 0; j < roomsForFloor.length; j++) {
       const room = roomsForFloor[j];
-      rows.push(<Room number={room.number} columns={props.columns} index={j} y={room.number} key={room.number} />);
+      rows.push(<Room key={room.number}
+                      y={room.number}
+                      columns={props.columns}
+                      roomData={occupations[room.number]}
+                      index={j} />);
     }
   }
 
