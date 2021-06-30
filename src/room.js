@@ -13,7 +13,10 @@ function Room(props) {
   for (var i = 0; i < props.columns; i++) {
     columns.push(<Container key={"x: " + i + "; y: " + props.y}
                             tileData={roomData[i]}
-                            isLast={i == props.columns - 1} />);
+                            isLast={i == props.columns - 1}
+                            x={i}
+                            y={props.y}
+                            onDrop={props.onDrop} />);
   }
 
   var className = "room";

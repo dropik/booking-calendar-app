@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { hot } from 'react-hot-loader';
 import Floor from './Floor';
 import Room from './Room';
 import "./Table.css";
+import { remToPx } from './utils';
 
 function Table(props) {
   var rows = [];
@@ -46,7 +47,7 @@ function Table(props) {
     ]
   }
 
-  var roomData = [];
+  const roomData = [];
   roomData[1] = 
   {
     name: "Ivan Petrov",
@@ -55,10 +56,52 @@ function Table(props) {
     nights: "2"
   };
 
-  var occupations = [];
-  occupations[2] = roomData;
+  const defaultOccupations = [];
+  defaultOccupations[2] = roomData;
+  const [occupations, setOccupations] = useState(defaultOccupations);
 
-  for (let i = 0; i < rooms.floors.length; i++) {
+  function handleDrop(x, y, pageY) {
+    var margin = remToPx(8) + 1;
+    var tableY = pageY - margin;
+    var rowHeight = remToPx(4) + 1;
+    var targetRow = Math.floor(tableY / rowHeight);
+    var targetY = -1;
+    for (var i = 0; i < rooms.floors.length; i++) {
+      const floor = rooms.floors[i];
+      if (targetRow == 0) {
+        break;
+      }
+      targetRow--;
+
+      for (var j = 0; j < floor.rooms.length; j++) {
+        const room = floor.rooms[j];
+        if (targetRow == 0) {
+          targetY = room.number;
+          break;
+        }
+        targetRow--;
+      }
+    }
+
+    if (targetY > 0) {
+      setOccupations(prevOccupations => {
+        var newOccupations = [...prevOccupations];
+
+        var newOrigRoomData = [...newOccupations[y]];
+        var room = newOrigRoomData[x];
+        newOrigRoomData[x] = undefined;
+        newOccupations[y] = newOrigRoomData;
+
+        var newDestRoomData = (newOccupations[targetY] === undefined) ? [] : [...newOccupations[targetY]];
+        newDestRoomData[x] = room;
+        newOccupations[targetY] = newDestRoomData;
+
+        return newOccupations;
+      });
+    }
+  }
+
+  for (var i = 0; i < rooms.floors.length; i++) {
     const floor = rooms.floors[i];
     rows.push(<Floor key={floor.name} name={floor.name} isFollowing={i > 0}/>);
 
@@ -69,7 +112,8 @@ function Table(props) {
                       y={room.number}
                       columns={props.columns}
                       roomData={occupations[room.number]}
-                      index={j} />);
+                      index={j}
+                      onDrop={handleDrop} />);
     }
   }
 

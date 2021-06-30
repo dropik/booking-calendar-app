@@ -13,7 +13,10 @@ function Container(props) {
             <Tile name={props.tileData.name}
                   colour={props.tileData.colour}
                   roomType={props.tileData.roomType}
-                  nights={props.tileData.nights} /> :
+                  nights={props.tileData.nights}
+                  x={props.x}
+                  y={props.y}
+                  onDrop={props.onDrop} /> :
             "";
 
   return (

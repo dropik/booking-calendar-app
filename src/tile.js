@@ -28,7 +28,8 @@ function Tile(props) {
   }
 
   useEffect(() => {
-    function drop() {
+    function drop(event) {
+      props.onDrop(props.x, props.y, event.pageY);
       dispatch({ type: "drop" });
     }
     window.addEventListener('mouseup', drop);

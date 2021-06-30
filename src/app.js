@@ -3,12 +3,12 @@ import { hot } from "react-hot-loader";
 import Table from "./Table";
 import Header from "./Header";
 import "./App.css";
+import { remToPx } from "./utils";
 
 function App(props) {
   const [width, height] = useWindowSize();
-  var fontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
-  var roomCellWidth = 6 * fontSize;
-  var containerWidth = 4 * fontSize;
+  var roomCellWidth = remToPx(6);
+  var containerWidth = remToPx(4);
   var columns = Math.ceil((width - roomCellWidth) / containerWidth);
 
   return(
