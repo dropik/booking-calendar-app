@@ -20,7 +20,7 @@ function App(props) {
         "rooms": [
           {
             "number": 1,
-            "type": "camera matrimoniale/doppia"
+            "type": "camera tripla standard"
           },
           {
             "number": 2,
@@ -28,7 +28,15 @@ function App(props) {
           },
           {
             "number": 3,
+            "type": "camera matrimoniale/doppia"
+          },
+          {
+            "number": 4,
             "type": "camera tripla"
+          },
+          {
+            "number": 5,
+            "type": "camera matrimoniale/doppia"
           }
         ]
       },
@@ -46,6 +54,22 @@ function App(props) {
           {
             "number": 8,
             "type": "camera singola"
+          },
+          {
+            "number": 9,
+            "type": "camera matrimoniale/doppia"
+          },
+          {
+            "number": 10,
+            "type": "camera matrimoniale/doppia economy"
+          },
+          {
+            "number": 11,
+            "type": "camera tripla"
+          },
+          {
+            "number": 12,
+            "type": "camera matrimoniale/doppia"
           }
         ]
       }
