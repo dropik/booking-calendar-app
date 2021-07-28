@@ -7,13 +7,18 @@ import "./table.css";
 function Table(props) {
   var rows = [];
 
-  for (var i = 0; i < props.rooms.floors.length; i++) {
-    const floor = props.rooms.floors[i];
+  const floors = props.rooms.floors;
+  const length = floors.length;
+  for (var i = 0; i < length; i++) {
+    const floor = floors[i];
+
     rows.push(<Floor key={floor.name} name={floor.name} isFollowing={i > 0}/>);
 
-    const roomsForFloor = floor.rooms;
-    for (var j = 0; j < roomsForFloor.length; j++) {
-      const room = roomsForFloor[j];
+    const rooms = floor.rooms;
+    const length = rooms.length;
+    for (var j = 0; j < length; j++) {
+      const room = rooms[j];
+      
       rows.push(<Room key={room.number}
                       y={room.number}
                       columns={props.columns}

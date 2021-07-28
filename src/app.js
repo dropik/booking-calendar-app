@@ -93,15 +93,22 @@ function App(props) {
     var rowHeight = remToPx(4) + 1;
     var targetRow = Math.floor(tableY / rowHeight);
     var targetY = -1;
-    for (var i = 0; i < rooms.floors.length; i++) {
-      const floor = rooms.floors[i];
+
+    const floors = rooms.floors;
+    const length = floors.length;
+    for (var i = 0; i < length; i++) {
+      const floor = floors[i];
+
       if (targetRow == 0) {
         break;
       }
       targetRow--;
 
-      for (var j = 0; j < floor.rooms.length; j++) {
+      const rooms = floor.rooms;
+      const length = rooms.length;
+      for (var j = 0; j < length; j++) {
         const room = floor.rooms[j];
+
         if (targetRow == 0) {
           targetY = room.number;
           break;
@@ -130,8 +137,7 @@ function App(props) {
 
   function recalculateOccupations() {
     var occupations = [];
-    for (var key in tiles) {
-      var tile = tiles[key];
+    tiles.forEach(tile => {
       var roomNumber = tile.roomNumber;
       var row = occupations[roomNumber];
       if (row === undefined) {
@@ -141,7 +147,7 @@ function App(props) {
       var x = Math.ceil((fromDate - date) / 86400000);
       row[x] = tile;
       occupations[roomNumber] = row;
-    }
+    });
     return occupations;
   }
 
