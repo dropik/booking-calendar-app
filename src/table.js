@@ -18,7 +18,6 @@ function Table(props) {
                       y={room.number}
                       columns={props.columns}
                       roomData={props.occupations[room.number]}
-                      index={j}
                       tiles={props.tiles}
                       occupationsDispatch={props.occupationsDispatch} />);
     }

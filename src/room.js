@@ -19,12 +19,7 @@ function Room(props) {
                             occupationsDispatch={props.occupationsDispatch} />);
   }
 
-  var className = "room";
-  if (props.index % 2 == 1) {
-    className += " room-odd";
-  }
-
-  return <div className={className}>{columns}</div>;
+  return <div className="room">{columns}</div>;
 }
 
 export default hot(module)(Room);
