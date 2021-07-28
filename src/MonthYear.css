@@ -1,0 +1,12 @@
+.month-year {
+    height: 4rem;
+    width: 6rem;
+    border-right: 1px solid black;
+    text-align: center;
+}
+
+.month-year > span {
+    display: inline-block;
+    height: 2rem;
+    margin-top: 0.75rem;
+}

@@ -1,0 +1,11 @@
+.floor {
+    border: 1px solid black;
+    width: calc(100% - 2px);
+    height: 4rem;
+    line-height: 4rem;
+    text-align: center;
+}
+
+.floor-following {
+    border-top: 0;
+}
