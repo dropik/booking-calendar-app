@@ -1,8 +1,8 @@
 import React, { useLayoutEffect, useState, useReducer } from "react";
 import { hot } from "react-hot-loader";
-import Table from "./Table";
-import Header from "./Header";
-import "./App.css";
+import Table from "./table";
+import Header from "./header";
+import "./app.css";
 import { remToPx } from "./utils";
 
 function App(props) {

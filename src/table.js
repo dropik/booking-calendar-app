@@ -1,8 +1,8 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
-import Floor from './Floor';
-import Room from './Room';
-import "./Table.css";
+import Floor from './floor';
+import Room from './room';
+import "./table.css";
 
 function Table(props) {
   var rows = [];

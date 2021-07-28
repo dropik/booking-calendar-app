@@ -1,8 +1,8 @@
 import React from 'react';
-import Container from './Container';
-import RoomNumber from './RoomNumber';
+import Container from './container';
+import RoomNumber from './roomNumber';
 import { hot } from 'react-hot-loader';
-import "./Room.css";
+import "./room.css";
 
 function Room(props) {
   var columns = [];

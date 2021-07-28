@@ -1,6 +1,6 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
-import "./Floor.css";
+import "./floor.css";
 
 function Floor(props) {
   var className ="floor";

@@ -1,6 +1,6 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
-import "./Day.css";
+import "./day.css";
 
 function Day(props) {
   var className = "day";

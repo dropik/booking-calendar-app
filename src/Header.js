@@ -1,7 +1,7 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
 import Dates from './Dates';
-import "./Header.css";
+import "./header.css";
 
 function Header(props) {
   return (

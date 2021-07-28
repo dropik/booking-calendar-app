@@ -1,6 +1,6 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
-import "./RoomNumber.css";
+import "./roomNumber.css";
 
 function RoomNumber(props) {
   return (
