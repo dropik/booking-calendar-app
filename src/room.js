@@ -16,7 +16,7 @@ function Room(props) {
                             isLast={i == props.columns - 1}
                             x={i}
                             y={props.y}
-                            onDrop={props.onDrop} />);
+                            occupationsDispatch={props.occupationsDispatch} />);
   }
 
   var className = "room";

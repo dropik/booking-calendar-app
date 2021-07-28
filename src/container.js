@@ -16,7 +16,7 @@ function Container(props) {
                   nights={props.tileData.nights}
                   x={props.x}
                   y={props.y}
-                  onDrop={props.onDrop} /> :
+                  occupationsDispatch={props.occupationsDispatch} /> :
             "";
 
   return (
