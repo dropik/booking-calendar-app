@@ -84,6 +84,14 @@ function App(props) {
       roomNumber: 2,
       from: "20210729",
       nights: 2
+    },
+    {
+      name: "Vasya Pupkin",
+      colour: "rgba(73, 122, 217, 0.69)",
+      roomType: "doppia",
+      roomNumber: 6,
+      from: "20210802",
+      nights: 3
     }
   ];
 
