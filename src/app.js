@@ -13,7 +13,7 @@ function App(props) {
 
   const [date, setDate] = useState(new Date());
 
-  const rooms = {
+  const hotel = {
     "floors": [
       {
         "name": "piano 1",
@@ -94,7 +94,7 @@ function App(props) {
     var targetRow = Math.floor(tableY / rowHeight);
     var targetY = -1;
 
-    const floors = rooms.floors;
+    const floors = hotel.floors;
     const length = floors.length;
     for (var i = 0; i < length; i++) {
       const floor = floors[i];
@@ -173,7 +173,7 @@ function App(props) {
   return(
     <div className="app">
       <Header date={date} onDateChange={handleDateChange} columns={columns} />
-      <Table date={date} rooms={rooms} tiles={tiles} occupations={occupations} occupationsDispatch={occupationsDispatch} columns={columns} />
+      <Table date={date} hotel={hotel} tiles={tiles} occupations={occupations} occupationsDispatch={occupationsDispatch} columns={columns} />
     </div>
   );
 }

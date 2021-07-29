@@ -7,26 +7,18 @@ import "./table.css";
 function Table(props) {
   var rows = [];
 
-  const floors = props.rooms.floors;
-  const length = floors.length;
-  for (var i = 0; i < length; i++) {
-    const floor = floors[i];
+  props.hotel.floors.forEach((floor, index) => {
+    rows.push(<Floor key={floor.name} name={floor.name} isFollowing={index > 0}/>);
 
-    rows.push(<Floor key={floor.name} name={floor.name} isFollowing={i > 0}/>);
-
-    const rooms = floor.rooms;
-    const length = rooms.length;
-    for (var j = 0; j < length; j++) {
-      const room = rooms[j];
-      
+    floor.rooms.forEach(room => {
       rows.push(<Room key={room.number}
                       y={room.number}
                       columns={props.columns}
                       roomData={props.occupations[room.number]}
                       tiles={props.tiles}
                       occupationsDispatch={props.occupationsDispatch} />);
-    }
-  }
+    });
+  });
 
   return <div className="table">{rows}</div>;
 }
