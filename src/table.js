@@ -1,6 +1,6 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
-import Floor from './floor';
+import EmptyRow from './emptyRow';
 import Room from './room';
 import "./table.css";
 
@@ -8,7 +8,8 @@ function Table(props) {
   var rows = [];
 
   props.hotel.floors.forEach((floor, index) => {
-    rows.push(<Floor key={floor.name} name={floor.name} isFollowing={index > 0}/>);
+    //rows.push(<Floor key={floor.name} name={floor.name} isFollowing={index > 0}/>);
+    rows.push(<EmptyRow key={floor.name} isFollowing={index > 0} />);
 
     floor.rooms.forEach(room => {
       rows.push(<Room key={room.number}
