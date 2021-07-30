@@ -2,6 +2,7 @@ import React from 'react';
 import { hot } from 'react-hot-loader';
 import Table from "./table";
 import "./tableContainer.css";
+import Hotel from "./hotel";
 
 function TableContainer(props) {
   return (
@@ -12,6 +13,8 @@ function TableContainer(props) {
               occupations={props.occupations}
               occupationsDispatch={props.occupationsDispatch}
               columns={props.columns} />
+
+      <Hotel hotel={props.hotel} />
     </div>
   );
 }

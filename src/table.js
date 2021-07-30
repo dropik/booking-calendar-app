@@ -7,7 +7,6 @@ function Table(props) {
   var rows = [];
 
   props.hotel.floors.forEach((floor, index) => {
-    //rows.push(<Floor key={floor.name} name={floor.name} isFollowing={index > 0}/>);
     floor.rooms.forEach((room, roomIndex) => {
       rows.push(<Room key={room.number}
                       y={room.number}

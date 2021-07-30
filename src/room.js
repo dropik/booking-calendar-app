@@ -5,8 +5,6 @@ import "./room.css";
 
 function Room(props) {
   var columns = [];
-  //columns.push(<RoomNumber number={props.y} key="roomNumber" />);
-
   var roomData = props.roomData === undefined ? [] : props.roomData;
 
   for (var i = 0; i < props.columns; i++) {

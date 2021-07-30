@@ -1,6 +1,7 @@
 .floor {
     border: 1px solid black;
-    width: calc(100% - 2px);
+    border-right: 0;
+    width: calc(100% - 1px);
     height: 4rem;
     line-height: 4rem;
     text-align: center;

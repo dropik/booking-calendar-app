@@ -5,5 +5,5 @@
 }
 
 .room-first {
-    margin-top: 4rem;
+    margin-top: calc(4rem + 1px);
 }

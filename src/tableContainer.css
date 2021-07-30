@@ -1,4 +1,6 @@
 .table-container {
     position: relative;
     margin-top: calc(8rem + 1px);
+    overflow: hidden;
+    border-right: 1px solid black;
 }
