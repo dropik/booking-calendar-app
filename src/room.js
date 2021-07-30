@@ -1,12 +1,11 @@
 import React from 'react';
 import Container from './container';
-import RoomNumber from './roomNumber';
 import { hot } from 'react-hot-loader';
 import "./room.css";
 
 function Room(props) {
   var columns = [];
-  columns.push(<RoomNumber number={props.y} key="roomNumber" />);
+  //columns.push(<RoomNumber number={props.y} key="roomNumber" />);
 
   var roomData = props.roomData === undefined ? [] : props.roomData;
 
@@ -19,7 +18,12 @@ function Room(props) {
                             occupationsDispatch={props.occupationsDispatch} />);
   }
 
-  return <div className="room">{columns}</div>;
+  var className = "room";
+  if (props.isFirst) {
+    className += " room-first";
+  }
+
+  return <div className={className}>{columns}</div>;
 }
 
 export default hot(module)(Room);

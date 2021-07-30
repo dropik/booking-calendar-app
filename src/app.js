@@ -1,9 +1,9 @@
 import React, { useLayoutEffect, useState, useReducer } from "react";
 import { hot } from "react-hot-loader";
-import Table from "./table";
 import Header from "./header";
 import "./app.css";
 import { remToPx } from "./utils";
+import TableContainer from "./tableContainer";
 
 function App(props) {
   const [width, height] = useWindowSize();
@@ -181,7 +181,7 @@ function App(props) {
   return(
     <div className="app">
       <Header date={date} onDateChange={handleDateChange} columns={columns} />
-      <Table date={date} hotel={hotel} tiles={tiles} occupations={occupations} occupationsDispatch={occupationsDispatch} columns={columns} />
+      <TableContainer date={date} hotel={hotel} tiles={tiles} occupations={occupations} occupationsDispatch={occupationsDispatch} columns={columns} />
     </div>
   );
 }
