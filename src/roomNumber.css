@@ -1,4 +1,6 @@
 .room-number {
+    position: relative;
+    z-index: 999; /* ciao daniel :) */
     height: 4rem;
     width: 6rem;
     line-height: 4rem;

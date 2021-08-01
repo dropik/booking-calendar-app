@@ -1,10 +1,13 @@
 .floor {
+    position: relative;
+    z-index: 999;
     border: 1px solid black;
     border-right: 0;
     width: calc(100% - 1px);
     height: 4rem;
     line-height: 4rem;
     text-align: center;
+    background-color: white;
 }
 
 .floor-following {
