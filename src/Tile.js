@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
 import { hot } from 'react-hot-loader';
-import "./tile.css";
+import "./Tile.css";
 
 function Tile(props) {
   const [grabbedState, grabbedStateDispatch] = useReducer(grabbedStateReducer, { grabbed: false, initialY: 0, top: 0 });

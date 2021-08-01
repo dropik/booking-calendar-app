@@ -1,8 +1,8 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
-import "./hotel.css";
-import Floor from "./floor";
-import RoomNumber from "./roomNumber";
+import Floor from "./Floor";
+import RoomNumber from "./RoomNumber";
+import "./Hotel.css";
 
 function Hotel(props) {
   var rows = [];

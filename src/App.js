@@ -1,9 +1,9 @@
 import React, { useLayoutEffect, useState, useReducer } from "react";
 import { hot } from "react-hot-loader";
-import Header from "./header";
-import "./app.css";
+import Header from "./Header";
+import TableContainer from "./TableContainer";
 import { remToPx } from "./utils";
-import TableContainer from "./tableContainer";
+import "./App.css";
 
 function App(props) {
   const [width, height] = useWindowSize();

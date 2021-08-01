@@ -1,8 +1,8 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
-import MonthYear from './monthYear';
-import Day from './day';
-import "./dates.css";
+import MonthYear from './MonthYear';
+import Day from './Day';
+import "./Dates.css";
 
 function Dates(props) {
   var columns = [];

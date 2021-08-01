@@ -1,7 +1,7 @@
 import React from "react";
 import { hot } from "react-hot-loader";
-import Tile from "./tile.js";
-import "./container.css";
+import Tile from "./Tile";
+import "./Container.css";
 
 function Container(props) {
   var className = "container";

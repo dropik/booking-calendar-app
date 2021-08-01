@@ -1,8 +1,8 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
-import Table from "./table";
-import "./tableContainer.css";
-import Hotel from "./hotel";
+import Table from "./Table";
+import Hotel from "./Hotel";
+import "./TableContainer.css";
 
 function TableContainer(props) {
   return (

@@ -1,6 +1,6 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
-import "./monthYear.css";
+import "./MonthYear.css";
 
 function MonthYear(props) {
   var monthYear = props.date.toLocaleDateString("it-IT", { year: 'numeric', month: 'long'}).split(' ');
