@@ -1,6 +1,6 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
-import Container from './Container';
+import TableCell from './TableCell';
 import "./Room.css";
 
 function Room(props) {
@@ -8,7 +8,7 @@ function Room(props) {
   var roomData = props.roomData === undefined ? [] : props.roomData;
 
   for (var i = 0; i < props.columns; i++) {
-    columns.push(<Container key={"x: " + i + "; y: " + props.y}
+    columns.push(<TableCell key={"x: " + i + "; y: " + props.y}
                             tileData={roomData[i]}
                             isLast={i == props.columns - 1}
                             x={i}

@@ -1,12 +1,12 @@
 import React from "react";
 import { hot } from "react-hot-loader";
 import Tile from "./Tile";
-import "./Container.css";
+import "./TableCell.css";
 
-function Container(props) {
-  var className = "container";
+function TableCell(props) {
+  var className = "table-cell";
   if (props.isLast) {
-    className += " container-last";
+    className += " table-cell-last";
   }
 
   var tile = props.tileData !== undefined ? 
@@ -26,4 +26,4 @@ function Container(props) {
   );
 }
 
-export default hot(module)(Container);
+export default hot(module)(TableCell);
