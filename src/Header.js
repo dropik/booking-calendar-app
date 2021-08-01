@@ -1,6 +1,6 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
-import Dates from './Dates';
+import DatesContainer from './DatesContainer';
 import "./Header.css";
 
 function Header(props) {
@@ -10,7 +10,7 @@ function Header(props) {
         <span>From: </span>
         <input type="date" id="fromDate" defaultValue={props.date.toISOString().substr(0,10)} onChange={props.onDateChange}/>
       </div>
-      <Dates date={props.date} columns={props.columns}/>
+      <DatesContainer date={props.date} columns={props.columns}/>
     </div>
   );
 }
