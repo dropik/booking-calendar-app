@@ -1,6 +1,5 @@
 .floor {
     position: relative;
-    z-index: 999;
     border: 1px solid black;
     border-right: 0;
     width: calc(100% - 1px);

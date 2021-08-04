@@ -4,11 +4,6 @@ import Tile from "./Tile";
 import "./TableCell.css";
 
 function TableCell(props) {
-  var className = "table-cell";
-  if (props.isLast) {
-    className += " table-cell-last";
-  }
-
   var tile = props.tileData !== undefined ? 
             <Tile name={props.tileData.name}
                   colour={props.tileData.colour}
@@ -20,7 +15,7 @@ function TableCell(props) {
             "";
 
   return (
-    <div className={className}>
+    <div className="table-cell">
       {tile}
     </div>
   );

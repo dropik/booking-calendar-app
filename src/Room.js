@@ -10,7 +10,6 @@ function Room(props) {
   for (var i = 0; i < props.columns; i++) {
     columns.push(<TableCell key={"x: " + i + "; y: " + props.y}
                             tileData={roomData[i]}
-                            isLast={i == props.columns - 1}
                             x={i}
                             y={props.y}
                             occupationsDispatch={props.occupationsDispatch} />);
