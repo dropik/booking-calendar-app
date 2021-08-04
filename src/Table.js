@@ -6,7 +6,7 @@ import "./Table.css";
 function Table(props) {
   var rows = [];
 
-  props.hotel.floors.forEach((floor, index) => {
+  props.hotel.floors.forEach(floor => {
     floor.rooms.forEach((room, roomIndex) => {
       rows.push(<Room key={room.number}
                       y={room.number}

@@ -1,6 +1,7 @@
 import React, { useLayoutEffect, useState, useReducer } from "react";
 import { hot } from "react-hot-loader";
 import Header from "./Header";
+import Hotel from "./Hotel";
 import TableContainer from "./TableContainer";
 import { remToPx } from "./utils";
 import "./App.css";
@@ -10,6 +11,7 @@ function App(props) {
   var roomCellWidth = remToPx(6);
   var containerWidth = remToPx(4);
   var columns = Math.ceil((width - roomCellWidth) / containerWidth);
+  columns = 30;
 
   const [date, setDate] = useState(new Date());
 
@@ -181,6 +183,7 @@ function App(props) {
   return(
     <div className="app">
       <Header date={date} onDateChange={handleDateChange} columns={columns} />
+      <Hotel hotel={hotel} />
       <TableContainer date={date} hotel={hotel} tiles={tiles} occupations={occupations} occupationsDispatch={occupationsDispatch} columns={columns} />
     </div>
   );

@@ -1,4 +1,4 @@
 .table {
-    position: absolute;
-    margin-top: 1px;
+    position: relative;
+    width: max-content;
 }
