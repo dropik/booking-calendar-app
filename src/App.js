@@ -3,7 +3,8 @@ import { hot } from "react-hot-loader";
 import Header from "./Header";
 import Hotel from "./Hotel";
 import TableContainer from "./TableContainer";
-import { remToPx } from "./utils";
+import { daysBetweenDates, remToPx } from "./utils";
+import { TABLE_PRELOAD_AMOUNT } from "./globals";
 import "./App.css";
 
 function App(props) {
@@ -11,67 +12,75 @@ function App(props) {
   var roomCellWidth = remToPx(6);
   var containerWidth = remToPx(4);
   var columns = Math.ceil((width - roomCellWidth) / containerWidth);
-  columns = 30;
+  columns += TABLE_PRELOAD_AMOUNT * 2;
 
   const [date, setDate] = useState(new Date());
 
+  function calculateFirstTableDate(date) {
+    let result = new Date(date.getTime());
+    result.setDate(result.getDate() - TABLE_PRELOAD_AMOUNT);
+    return result;
+  }
+
+  const [firstTableDate, setFirstTableDate] = useState(calculateFirstTableDate(date));
+
   const hotel = {
-    "floors": [
+    floors: [
       {
-        "name": "piano 1",
-        "rooms": [
+        name: "piano 1",
+        rooms: [
           {
-            "number": 1,
-            "type": "camera tripla standard"
+            number: 1,
+            type: "camera tripla standard"
           },
           {
-            "number": 2,
-            "type": "appartamento"
+            number: 2,
+            type: "appartamento"
           },
           {
-            "number": 3,
-            "type": "camera matrimoniale/doppia"
+            number: 3,
+            type: "camera matrimoniale/doppia"
           },
           {
-            "number": 4,
-            "type": "camera tripla"
+            number: 4,
+            type: "camera tripla"
           },
           {
-            "number": 5,
-            "type": "camera matrimoniale/doppia"
+            number: 5,
+            type: "camera matrimoniale/doppia"
           }
         ]
       },
       {
-        "name": "piano 2",
-        "rooms": [
+        name: "piano 2",
+        rooms: [
           {
-            "number": 6,
-            "type": "camera matrimoniale/doppia"
+            number: 6,
+            type: "camera matrimoniale/doppia"
           },
           {
-            "number": 7,
-            "type": "camera matrimoniale/doppia"
+            number: 7,
+            type: "camera matrimoniale/doppia"
           },
           {
-            "number": 8,
-            "type": "camera singola"
+            number: 8,
+            type: "camera singola"
           },
           {
-            "number": 9,
-            "type": "camera matrimoniale/doppia"
+            number: 9,
+            type: "camera matrimoniale/doppia"
           },
           {
-            "number": 10,
-            "type": "camera matrimoniale/doppia economy"
+            number: 10,
+            type: "camera matrimoniale/doppia economy"
           },
           {
-            "number": 11,
-            "type": "camera tripla"
+            number: 11,
+            type: "camera tripla"
           },
           {
-            "number": 12,
-            "type": "camera matrimoniale/doppia"
+            number: 12,
+            type: "camera matrimoniale/doppia"
           }
         ]
       }
@@ -154,7 +163,7 @@ function App(props) {
         row = [];
       }
       var fromDate = new Date(Date.parse(tile.from.substr(0, 4) + '-' + tile.from.substr(4, 2) + '-' + tile.from.substr(6, 2)));
-      var x = Math.ceil((fromDate - date) / 86400000);
+      var x = daysBetweenDates(firstTableDate, fromDate);
       row[x] = tile;
       occupations[roomNumber] = row;
     });
@@ -177,14 +186,23 @@ function App(props) {
   function handleDateChange(event) {
     var date = new Date(event.target.value);
     setDate(date);
+    setFirstTableDate(calculateFirstTableDate(date));
     occupationsDispatch({type: "dateChange"});
   }
 
   return(
     <div className="app">
-      <Header date={date} onDateChange={handleDateChange} columns={columns} />
+      <Header date={date} firstTableDate={firstTableDate} onDateChange={handleDateChange} columns={columns} />
       <Hotel hotel={hotel} />
-      <TableContainer date={date} hotel={hotel} tiles={tiles} occupations={occupations} occupationsDispatch={occupationsDispatch} columns={columns} />
+      <TableContainer
+        date={date}
+        firstTableDate={firstTableDate}
+        hotel={hotel}
+        tiles={tiles}
+        occupations={occupations}
+        occupationsDispatch={occupationsDispatch}
+        columns={columns}
+      />
     </div>
   );
 }

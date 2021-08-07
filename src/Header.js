@@ -18,7 +18,7 @@ function Header(props) {
         <span>From: </span>
         <input type="date" id="fromDate" defaultValue={props.date.toISOString().substr(0,10)} onChange={handleDateChange} />
       </div>
-      <DatesContainer date={props.date} columns={props.columns}/>
+      <DatesContainer date={props.date} firstTableDate={props.firstTableDate} columns={props.columns}/>
     </div>
   );
 }

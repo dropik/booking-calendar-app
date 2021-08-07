@@ -16,11 +16,11 @@ function Dates(props) {
 
   var columns = [];
 
-  var dateCounter = new Date(props.date.getTime());
+  var dateCounter = new Date(props.firstTableDate.getTime());
   for (var i = 0; i < props.columns; i++) {
     var day = dateCounter.getDate();
 
-    columns.push(<Day day={day.toString().padStart(2, '0')} key={day}/>);
+    columns.push(<Day day={day.toString().padStart(2, '0')} key={dateCounter.toDateString()}/>);
 
     dateCounter.setDate(dateCounter.getDate() + 1);
   }
