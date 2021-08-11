@@ -4,7 +4,7 @@ import Header from "./Header";
 import Hotel from "./Hotel";
 import TableContainer from "./TableContainer";
 import { daysBetweenDates, remToPx } from "./utils";
-import { TABLE_PRELOAD_AMOUNT } from "./globals";
+import GLOBALS from "./globals";
 import "./App.css";
 
 function App(props) {
@@ -12,13 +12,13 @@ function App(props) {
   var roomCellWidth = remToPx(6);
   var containerWidth = remToPx(4);
   var columns = Math.ceil((width - roomCellWidth) / containerWidth);
-  columns += TABLE_PRELOAD_AMOUNT * 2;
+  columns += GLOBALS.TABLE_PRELOAD_AMOUNT * 2;
 
   const [date, setDate] = useState(new Date());
 
   function calculateFirstTableDate(date) {
     let result = new Date(date.getTime());
-    result.setDate(result.getDate() - TABLE_PRELOAD_AMOUNT);
+    result.setDate(result.getDate() - GLOBALS.TABLE_PRELOAD_AMOUNT);
     return result;
   }
 
