@@ -8,9 +8,7 @@ import GLOBALS from "./globals";
 import "./App.css";
 
 function App(props) {
-  const [width, setWidth] = useState(document.documentElement.clientWidth);
-
-  function getInitialColumnsAmount() {
+  function getInitialColumnsAmount(width) {
     let roomCellWidth = remToPx(6);
     let containerWidth = remToPx(4);
     let columns = Math.ceil((width - roomCellWidth) / containerWidth);
@@ -18,16 +16,15 @@ function App(props) {
     return columns;
   }
 
-  const [columns, setColumns] = useState(getInitialColumnsAmount());
+  const [columns, setColumns] = useState(getInitialColumnsAmount(document.documentElement.clientWidth));
 
-  function updateWidth() {
-    setWidth(document.documentElement.clientWidth);
-    setColumns(getInitialColumnsAmount());
+  function updateColumns() {
+    setColumns(getInitialColumnsAmount(document.documentElement.clientWidth));
   }
 
   useLayoutEffect(() => {
-    window.addEventListener('resize', updateWidth);
-    return () => window.removeEventListener('resize', updateWidth);
+    window.addEventListener('resize', updateColumns);
+    return () => window.removeEventListener('resize', updateColumns);
   }, []);
 
   const [date, setDate] = useState(new Date());
