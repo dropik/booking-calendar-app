@@ -16,7 +16,7 @@ function Header(props) {
     <div className="header">
       <div className="data-input">
         <span>From: </span>
-        <input type="date" id="fromDate" defaultValue={props.date.toISOString().substr(0,10)} onChange={handleDateChange} />
+        <input type="date" id="fromDate" defaultValue={props.date.toLocaleDateString('en-CA')} onChange={handleDateChange} />
       </div>
       <DatesContainer date={props.date} firstTableDate={props.firstTableDate} columns={props.columns}/>
     </div>

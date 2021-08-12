@@ -8,7 +8,16 @@ import GLOBALS from "./globals";
 import "./App.css";
 
 function App(props) {
-  const [width, height] = useWindowSize();
+  const [width, setSize] = useState(0);
+  useLayoutEffect(() => {
+    function updateSize() {
+      setSize(document.documentElement.clientWidth);
+    }
+    window.addEventListener('resize', updateSize);
+    updateSize();
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+
   var roomCellWidth = remToPx(6);
   var containerWidth = remToPx(4);
   var columns = Math.ceil((width - roomCellWidth) / containerWidth);
@@ -205,19 +214,6 @@ function App(props) {
       />
     </div>
   );
-}
-
-function useWindowSize() {
-  const [size, setSize] = useState([0, 0]);
-  useLayoutEffect(() => {
-    function updateSize() {
-      setSize([document.documentElement.clientWidth, document.documentElement.clientHeight]);
-    }
-    window.addEventListener('resize', updateSize);
-    updateSize();
-    return () => window.removeEventListener('resize', updateSize);
-  }, []);
-  return size;
 }
 
 export default hot(module)(App);
