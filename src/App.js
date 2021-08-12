@@ -5,18 +5,16 @@ import Hotel from "./Hotel";
 import TableContainer from "./TableContainer";
 import { daysBetweenDates, remToPx } from "./utils";
 import GLOBALS from "./globals";
+import mocks from "./mocks";
 import "./App.css";
 
 function App(props) {
-  function getInitialColumnsAmount(width) {
-    let roomCellWidth = remToPx(6);
-    let containerWidth = remToPx(4);
-    let columns = Math.ceil((width - roomCellWidth) / containerWidth);
-    columns += GLOBALS.TABLE_PRELOAD_AMOUNT * 2;
-    return columns;
-  }
-
+  const [date, setDate] = useState(new Date());
   const [columns, setColumns] = useState(getInitialColumnsAmount(document.documentElement.clientWidth));
+  const [firstTableDate, setFirstTableDate] = useState(calculateFirstTableDate(date));
+
+  const hotel = mocks.hotel;
+  const tiles = mocks.tiles;
 
   function updateColumns() {
     setColumns(getInitialColumnsAmount(document.documentElement.clientWidth));
@@ -26,98 +24,6 @@ function App(props) {
     window.addEventListener('resize', updateColumns);
     return () => window.removeEventListener('resize', updateColumns);
   }, []);
-
-  const [date, setDate] = useState(new Date());
-
-  function calculateFirstTableDate(date) {
-    let result = new Date(date.getTime());
-    result.setDate(result.getDate() - GLOBALS.TABLE_PRELOAD_AMOUNT);
-    return result;
-  }
-
-  const [firstTableDate, setFirstTableDate] = useState(calculateFirstTableDate(date));
-
-  const hotel = {
-    floors: [
-      {
-        name: "piano 1",
-        rooms: [
-          {
-            number: 1,
-            type: "camera tripla standard"
-          },
-          {
-            number: 2,
-            type: "appartamento"
-          },
-          {
-            number: 3,
-            type: "camera matrimoniale/doppia"
-          },
-          {
-            number: 4,
-            type: "camera tripla"
-          },
-          {
-            number: 5,
-            type: "camera matrimoniale/doppia"
-          }
-        ]
-      },
-      {
-        name: "piano 2",
-        rooms: [
-          {
-            number: 6,
-            type: "camera matrimoniale/doppia"
-          },
-          {
-            number: 7,
-            type: "camera matrimoniale/doppia"
-          },
-          {
-            number: 8,
-            type: "camera singola"
-          },
-          {
-            number: 9,
-            type: "camera matrimoniale/doppia"
-          },
-          {
-            number: 10,
-            type: "camera matrimoniale/doppia economy"
-          },
-          {
-            number: 11,
-            type: "camera tripla"
-          },
-          {
-            number: 12,
-            type: "camera matrimoniale/doppia"
-          }
-        ]
-      }
-    ]
-  };
-
-  const tiles = [
-    {
-      name: "Ivan Petrov",
-      colour: "rgba(217, 73, 73, 0.69)",
-      roomType: "doppia",
-      roomNumber: 2,
-      from: "20210729",
-      nights: 2
-    },
-    {
-      name: "Vasya Pupkin",
-      colour: "rgba(73, 122, 217, 0.69)",
-      roomType: "doppia",
-      roomNumber: 6,
-      from: "20210802",
-      nights: 3
-    }
-  ];
 
   function handleMove(occupations, x, y, pageY) {
     var margin = remToPx(8) + 1;
@@ -218,6 +124,20 @@ function App(props) {
       />
     </div>
   );
+}
+
+function getInitialColumnsAmount(width) {
+  let roomCellWidth = remToPx(6);
+  let containerWidth = remToPx(4);
+  let columns = Math.ceil((width - roomCellWidth) / containerWidth);
+  columns += GLOBALS.TABLE_PRELOAD_AMOUNT * 2;
+  return columns;
+}
+
+function calculateFirstTableDate(date) {
+  let result = new Date(date.getTime());
+  result.setDate(result.getDate() - GLOBALS.TABLE_PRELOAD_AMOUNT);
+  return result;
 }
 
 export default hot(module)(App);
