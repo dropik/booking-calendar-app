@@ -8,20 +8,27 @@ import GLOBALS from "./globals";
 import "./App.css";
 
 function App(props) {
-  const [width, setSize] = useState(0);
-  useLayoutEffect(() => {
-    function updateSize() {
-      setSize(document.documentElement.clientWidth);
-    }
-    window.addEventListener('resize', updateSize);
-    updateSize();
-    return () => window.removeEventListener('resize', updateSize);
-  }, []);
+  const [width, setWidth] = useState(document.documentElement.clientWidth);
 
-  var roomCellWidth = remToPx(6);
-  var containerWidth = remToPx(4);
-  var columns = Math.ceil((width - roomCellWidth) / containerWidth);
-  columns += GLOBALS.TABLE_PRELOAD_AMOUNT * 2;
+  function getInitialColumnsAmount() {
+    let roomCellWidth = remToPx(6);
+    let containerWidth = remToPx(4);
+    let columns = Math.ceil((width - roomCellWidth) / containerWidth);
+    columns += GLOBALS.TABLE_PRELOAD_AMOUNT * 2;
+    return columns;
+  }
+
+  const [columns, setColumns] = useState(getInitialColumnsAmount());
+
+  function updateWidth() {
+    setWidth(document.documentElement.clientWidth);
+    setColumns(getInitialColumnsAmount());
+  }
+
+  useLayoutEffect(() => {
+    window.addEventListener('resize', updateWidth);
+    return () => window.removeEventListener('resize', updateWidth);
+  }, []);
 
   const [date, setDate] = useState(new Date());
 
