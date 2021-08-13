@@ -16,7 +16,7 @@ function Dates(props) {
 
   var columns = [];
 
-  var dateCounter = new Date(props.firstTableDate.getTime());
+  var dateCounter = new Date(props.startDate.getTime());
   for (var i = 0; i < props.columns; i++) {
     var day = dateCounter.getDate();
 

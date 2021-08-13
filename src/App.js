@@ -10,19 +10,39 @@ import "./App.css";
 
 function App(props) {
   const [date, setDate] = useState(new Date());
-  const [columns, setColumns] = useState(getInitialColumnsAmount(document.documentElement.clientWidth));
-  const [firstTableDate, setFirstTableDate] = useState(calculateFirstTableDate(date));
+
+  function tableBoundsReducer(bounds, action) {
+    switch (action.type) {
+      case "dateChange":
+        return {
+          startDate: calculateStartDate(date),
+          columns: getInitialColumnsAmount(document.documentElement.clientWidth)
+        };
+      case "resize":
+        return {
+          startDate: bounds.startDate,
+          columns: getInitialColumnsAmount(document.documentElement.clientWidth)
+        };
+      default:
+        return bounds;
+    }
+  }
+
+  const [tableBounds, tableBoundsDispatch] = useReducer(tableBoundsReducer, {
+    startDate: calculateStartDate(date),
+    columns: getInitialColumnsAmount(document.documentElement.clientWidth)
+  });
 
   const hotel = mocks.hotel;
   const tiles = mocks.tiles;
 
-  function updateColumns() {
-    setColumns(getInitialColumnsAmount(document.documentElement.clientWidth));
+  function handleResize() {
+    tableBoundsDispatch({ type: "resize" });
   }
 
   useLayoutEffect(() => {
-    window.addEventListener('resize', updateColumns);
-    return () => window.removeEventListener('resize', updateColumns);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   function handleMove(occupations, x, y, pageY) {
@@ -82,7 +102,7 @@ function App(props) {
         row = [];
       }
       var fromDate = new Date(Date.parse(tile.from.substr(0, 4) + '-' + tile.from.substr(4, 2) + '-' + tile.from.substr(6, 2)));
-      var x = daysBetweenDates(firstTableDate, fromDate);
+      var x = daysBetweenDates(tableBounds.startDate, fromDate);
       row[x] = tile;
       occupations[roomNumber] = row;
     });
@@ -96,7 +116,7 @@ function App(props) {
       case "dateChange":
         return recalculateOccupations();
       default:
-        break;
+        return occupations;
     }
   }
 
@@ -105,22 +125,22 @@ function App(props) {
   function handleDateChange(event) {
     var date = new Date(event.target.value);
     setDate(date);
-    setFirstTableDate(calculateFirstTableDate(date));
+    tableBoundsDispatch({ type: "dateChange" });
     occupationsDispatch({type: "dateChange"});
   }
 
   return(
     <div className="app">
-      <Header date={date} firstTableDate={firstTableDate} onDateChange={handleDateChange} columns={columns} />
+      <Header date={date} startDate={tableBounds.startDate} onDateChange={handleDateChange} columns={tableBounds.columns} />
       <Hotel hotel={hotel} />
       <TableContainer
         date={date}
-        firstTableDate={firstTableDate}
+        startDate={tableBounds.startDate}
         hotel={hotel}
         tiles={tiles}
         occupations={occupations}
         occupationsDispatch={occupationsDispatch}
-        columns={columns}
+        columns={tableBounds.columns}
       />
     </div>
   );
@@ -134,7 +154,7 @@ function getInitialColumnsAmount(width) {
   return columns;
 }
 
-function calculateFirstTableDate(date) {
+function calculateStartDate(date) {
   let result = new Date(date.getTime());
   result.setDate(result.getDate() - GLOBALS.TABLE_PRELOAD_AMOUNT);
   return result;
