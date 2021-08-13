@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState, useReducer } from "react";
+import React, { useLayoutEffect, useReducer } from "react";
 import { hot } from "react-hot-loader";
 import Header from "./Header";
 import Hotel from "./Hotel";
@@ -9,10 +9,46 @@ import mocks from "./mocks";
 import "./App.css";
 
 function App(props) {
-  const [store, storeDispatch] = useReducer(storeReducer, getInitialStore());
-
   const hotel = mocks.hotel;
   const tiles = mocks.tiles;
+  
+  function storeReducer(store, action) {
+    switch (action.type) {
+      case "dateChange":
+        let startDate = calculateStartDate(action.date);
+        return {
+          date: action.date,
+          startDate: startDate,
+          columns: getInitialColumnsAmount(document.documentElement.clientWidth),
+          occupations: recalculateOccupations(action.tiles, startDate)
+        };
+      case "resize":
+        return {
+          ...store,
+          columns: getInitialColumnsAmount(document.documentElement.clientWidth)
+        };
+      case "move":
+        return {
+          ...store,
+          occupations: tryMoveOccupation(store.occupations, action)
+        };
+      default:
+        return store;
+    }
+  }
+
+  function getInitialStore() {
+    var date = new Date();
+    var startDate = calculateStartDate(date);
+    return {
+      date: date,
+      startDate: startDate,
+      columns: getInitialColumnsAmount(document.documentElement.clientWidth),
+      occupations: recalculateOccupations(tiles, startDate)
+    }
+  }
+
+  const [store, storeDispatch] = useReducer(storeReducer, getInitialStore());
 
   useLayoutEffect(() => {
     function handleResize() {
@@ -22,43 +58,29 @@ function App(props) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  function recalculateOccupations(action) {
+  function recalculateOccupations(tiles, startDate) {
     var occupations = [];
-    action.tiles.forEach(tile => {
+    tiles.forEach(tile => {
       var roomNumber = tile.roomNumber;
       var row = occupations[roomNumber];
       if (row === undefined) {
         row = [];
       }
       var fromDate = new Date(Date.parse(tile.from.substr(0, 4) + '-' + tile.from.substr(4, 2) + '-' + tile.from.substr(6, 2)));
-      var x = daysBetweenDates(store.startDate, fromDate);
+      var x = daysBetweenDates(startDate, fromDate);
       row[x] = tile;
       occupations[roomNumber] = row;
     });
     return occupations;
   }
 
-  function occupationsReducer(occupations, action) {
-    switch (action.type) {
-      case "move":
-        return tryMoveOccupation(occupations, action);
-      case "dateChange":
-        return recalculateOccupations(action);
-      default:
-        return occupations;
-    }
-  }
-
-  const [occupations, occupationsDispatch] = useReducer(occupationsReducer, recalculateOccupations({ tiles: tiles }));
-
   function onDateChange(event) {
     var date = new Date(event.target.value);
-    storeDispatch({ type: "dateChange", date: date });
-    occupationsDispatch({ type: "dateChange", tiles: tiles });
+    storeDispatch({ type: "dateChange", date: date, tiles: tiles });
   }
 
   function onTileMove(event) {
-    occupationsDispatch({
+    storeDispatch({
       type: "move",
       x: event.x,
       y: event.y,
@@ -76,31 +98,12 @@ function App(props) {
         startDate={store.startDate}
         hotel={hotel}
         tiles={tiles}
-        occupations={occupations}
-        occupationsDispatch={occupationsDispatch}
+        occupations={store.occupations}
         onTileMove={onTileMove}
         columns={store.columns}
       />
     </div>
   );
-}
-
-function storeReducer(store, action) {
-  switch (action.type) {
-    case "dateChange":
-      return {
-        date: action.date,
-        startDate: calculateStartDate(action.date),
-        columns: getInitialColumnsAmount(document.documentElement.clientWidth)
-      };
-    case "resize":
-      return {
-        ...store,
-        columns: getInitialColumnsAmount(document.documentElement.clientWidth)
-      };
-    default:
-      return store;
-  }
 }
 
 function tryMoveOccupation(occupations, action) {
@@ -148,15 +151,6 @@ function tryMoveOccupation(occupations, action) {
     return newOccupations;
   } else {
     return occupations;
-  }
-}
-
-function getInitialStore() {
-  var date = new Date();
-  return {
-    date: date,
-    startDate: calculateStartDate(date),
-    columns: getInitialColumnsAmount(document.documentElement.clientWidth)
   }
 }
 
