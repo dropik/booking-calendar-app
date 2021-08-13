@@ -11,7 +11,6 @@ function TableCell(props) {
                   nights={props.tileData.nights}
                   x={props.x}
                   y={props.y}
-                  occupationsDispatch={props.occupationsDispatch}
                   onTileMove={props.onTileMove}
             /> :
             "";

@@ -13,7 +13,6 @@ function Room(props) {
                   tileData={roomData[i]}
                   x={i}
                   y={props.y}
-                  occupationsDispatch={props.occupationsDispatch}
                   onTileMove={props.onTileMove}
       />
     );

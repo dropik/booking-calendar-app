@@ -11,72 +11,16 @@ import "./App.css";
 function App(props) {
   const hotel = mocks.hotel;
   const tiles = mocks.tiles;
-  
-  function storeReducer(store, action) {
-    switch (action.type) {
-      case "dateChange":
-        let startDate = calculateStartDate(action.date);
-        return {
-          date: action.date,
-          startDate: startDate,
-          columns: getInitialColumnsAmount(document.documentElement.clientWidth),
-          occupations: recalculateOccupations(action.tiles, startDate)
-        };
-      case "resize":
-        return {
-          ...store,
-          columns: getInitialColumnsAmount(document.documentElement.clientWidth)
-        };
-      case "move":
-        return {
-          ...store,
-          occupations: tryMoveOccupation(store.occupations, action)
-        };
-      default:
-        return store;
-    }
-  }
+  const [store, storeDispatch] = useReducer(storeReducer, getInitialStore(tiles));
 
-  function getInitialStore() {
-    var date = new Date();
-    var startDate = calculateStartDate(date);
-    return {
-      date: date,
-      startDate: startDate,
-      columns: getInitialColumnsAmount(document.documentElement.clientWidth),
-      occupations: recalculateOccupations(tiles, startDate)
-    }
-  }
-
-  const [store, storeDispatch] = useReducer(storeReducer, getInitialStore());
-
-  useLayoutEffect(() => {
-    function handleResize() {
-      storeDispatch({ type: "resize" });
-    }
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  function recalculateOccupations(tiles, startDate) {
-    var occupations = [];
-    tiles.forEach(tile => {
-      var roomNumber = tile.roomNumber;
-      var row = occupations[roomNumber];
-      if (row === undefined) {
-        row = [];
-      }
-      var fromDate = new Date(Date.parse(tile.from.substr(0, 4) + '-' + tile.from.substr(4, 2) + '-' + tile.from.substr(6, 2)));
-      var x = daysBetweenDates(startDate, fromDate);
-      row[x] = tile;
-      occupations[roomNumber] = row;
-    });
-    return occupations;
-  }
+  useColumnsAdjustment(storeDispatch);
 
   function onDateChange(event) {
-    var date = new Date(event.target.value);
-    storeDispatch({ type: "dateChange", date: date, tiles: tiles });
+    storeDispatch({
+      type: "dateChange",
+      date: new Date(event.target.value),
+      tiles: tiles
+    });
   }
 
   function onTileMove(event) {
@@ -104,6 +48,68 @@ function App(props) {
       />
     </div>
   );
+}
+
+function storeReducer(store, action) {
+  switch (action.type) {
+    case "dateChange":
+      let startDate = calculateStartDate(action.date);
+      return {
+        date: action.date,
+        startDate: startDate,
+        columns: getInitialColumnsAmount(document.documentElement.clientWidth),
+        occupations: recalculateOccupations(action.tiles, startDate)
+      };
+    case "resize":
+      return {
+        ...store,
+        columns: getInitialColumnsAmount(document.documentElement.clientWidth)
+      };
+    case "move":
+      return {
+        ...store,
+        occupations: tryMoveOccupation(store.occupations, action)
+      };
+    default:
+      return store;
+  }
+}
+
+function getInitialStore(tiles) {
+  var date = new Date();
+  var startDate = calculateStartDate(date);
+  return {
+    date: date,
+    startDate: startDate,
+    columns: getInitialColumnsAmount(document.documentElement.clientWidth),
+    occupations: recalculateOccupations(tiles, startDate)
+  }
+}
+
+function useColumnsAdjustment(storeDispatch) {
+  useLayoutEffect(() => {
+    function handleResize() {
+      storeDispatch({ type: "resize" });
+    }
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+}
+
+function recalculateOccupations(tiles, startDate) {
+  var occupations = [];
+  tiles.forEach(tile => {
+    var roomNumber = tile.roomNumber;
+    var row = occupations[roomNumber];
+    if (row === undefined) {
+      row = [];
+    }
+    var fromDate = new Date(Date.parse(tile.from.substr(0, 4) + '-' + tile.from.substr(4, 2) + '-' + tile.from.substr(6, 2)));
+    var x = daysBetweenDates(startDate, fromDate);
+    row[x] = tile;
+    occupations[roomNumber] = row;
+  });
+  return occupations;
 }
 
 function tryMoveOccupation(occupations, action) {

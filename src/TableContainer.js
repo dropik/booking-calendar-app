@@ -20,7 +20,6 @@ function TableContainer(props) {
         hotel={props.hotel}
         tiles={props.tiles}
         occupations={props.occupations}
-        occupationsDispatch={props.occupationsDispatch}
         onTileMove={props.onTileMove}
         columns={props.columns} 
       />
