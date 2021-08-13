@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { hot } from 'react-hot-loader';
-import GLOBALS from './globals';
+import globals from './globals';
 import Table from "./Table";
 import { remToPx } from './utils';
 import "./TableContainer.css";
@@ -10,7 +10,7 @@ function TableContainer(props) {
 
   useEffect(() => {
     var columnWidth = remToPx(4) + 1;
-    var scrollLeft = columnWidth * GLOBALS.TABLE_PRELOAD_AMOUNT + 1;
+    var scrollLeft = columnWidth * globals.TABLE_PRELOAD_AMOUNT + 1;
     containerRef.current.scrollLeft = scrollLeft;
   }, [props.date, props.columns]);
 

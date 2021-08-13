@@ -4,20 +4,19 @@ import Header from "./Header";
 import Hotel from "./Hotel";
 import TableContainer from "./TableContainer";
 import { daysBetweenDates, remToPx } from "./utils";
-import GLOBALS from "./globals";
+import globals from "./globals";
 import mocks from "./mocks";
 import "./App.css";
 
 function App(props) {
-  const [date, setDate] = useState(new Date());
-  const [tableBounds, tableBoundsDispatch] = useReducer(tableBoundsReducer, getInitialTableBounds(date));
+  const [store, storeDispatch] = useReducer(storeReducer, getInitialStore());
 
   const hotel = mocks.hotel;
   const tiles = mocks.tiles;
 
   useLayoutEffect(() => {
     function handleResize() {
-      tableBoundsDispatch({ type: "resize" });
+      storeDispatch({ type: "resize" });
     }
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -32,7 +31,7 @@ function App(props) {
         row = [];
       }
       var fromDate = new Date(Date.parse(tile.from.substr(0, 4) + '-' + tile.from.substr(4, 2) + '-' + tile.from.substr(6, 2)));
-      var x = daysBetweenDates(tableBounds.startDate, fromDate);
+      var x = daysBetweenDates(store.startDate, fromDate);
       row[x] = tile;
       occupations[roomNumber] = row;
     });
@@ -54,8 +53,7 @@ function App(props) {
 
   function onDateChange(event) {
     var date = new Date(event.target.value);
-    setDate(date);
-    tableBoundsDispatch({ type: "dateChange", date: date });
+    storeDispatch({ type: "dateChange", date: date });
     occupationsDispatch({ type: "dateChange", tiles: tiles });
   }
 
@@ -71,36 +69,37 @@ function App(props) {
 
   return(
     <div className="app">
-      <Header date={date} startDate={tableBounds.startDate} onDateChange={onDateChange} columns={tableBounds.columns} />
+      <Header date={store.date} startDate={store.startDate} onDateChange={onDateChange} columns={store.columns} />
       <Hotel hotel={hotel} />
       <TableContainer
-        date={date}
-        startDate={tableBounds.startDate}
+        date={store.date}
+        startDate={store.startDate}
         hotel={hotel}
         tiles={tiles}
         occupations={occupations}
         occupationsDispatch={occupationsDispatch}
         onTileMove={onTileMove}
-        columns={tableBounds.columns}
+        columns={store.columns}
       />
     </div>
   );
 }
 
-function tableBoundsReducer(bounds, action) {
+function storeReducer(store, action) {
   switch (action.type) {
     case "dateChange":
       return {
+        date: action.date,
         startDate: calculateStartDate(action.date),
         columns: getInitialColumnsAmount(document.documentElement.clientWidth)
       };
     case "resize":
       return {
-        startDate: bounds.startDate,
+        ...store,
         columns: getInitialColumnsAmount(document.documentElement.clientWidth)
       };
     default:
-      return bounds;
+      return store;
   }
 }
 
@@ -152,8 +151,10 @@ function tryMoveOccupation(occupations, action) {
   }
 }
 
-function getInitialTableBounds(date) {
+function getInitialStore() {
+  var date = new Date();
   return {
+    date: date,
     startDate: calculateStartDate(date),
     columns: getInitialColumnsAmount(document.documentElement.clientWidth)
   }
@@ -161,7 +162,7 @@ function getInitialTableBounds(date) {
 
 function calculateStartDate(date) {
   let result = new Date(date.getTime());
-  result.setDate(result.getDate() - GLOBALS.TABLE_PRELOAD_AMOUNT);
+  result.setDate(result.getDate() - globals.TABLE_PRELOAD_AMOUNT);
   return result;
 }
 
@@ -169,7 +170,7 @@ function getInitialColumnsAmount(width) {
   let roomCellWidth = remToPx(6);
   let containerWidth = remToPx(4);
   let columns = Math.ceil((width - roomCellWidth) / containerWidth);
-  columns += GLOBALS.TABLE_PRELOAD_AMOUNT * 2;
+  columns += globals.TABLE_PRELOAD_AMOUNT * 2;
   return columns;
 }
 
