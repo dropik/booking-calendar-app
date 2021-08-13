@@ -14,6 +14,7 @@ function Table(props) {
                       roomData={props.occupations[room.number]}
                       tiles={props.tiles}
                       occupationsDispatch={props.occupationsDispatch}
+                      onTileMove={props.onTileMove}
                       isFirst={roomIndex == 0} />);
     });
   });

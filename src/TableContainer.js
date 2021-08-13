@@ -21,6 +21,7 @@ function TableContainer(props) {
         tiles={props.tiles}
         occupations={props.occupations}
         occupationsDispatch={props.occupationsDispatch}
+        onTileMove={props.onTileMove}
         columns={props.columns} 
       />
     </div>

@@ -8,11 +8,15 @@ function Room(props) {
   var roomData = props.roomData === undefined ? [] : props.roomData;
 
   for (var i = 0; i < props.columns; i++) {
-    columns.push(<TableCell key={"x: " + i + "; y: " + props.y}
-                            tileData={roomData[i]}
-                            x={i}
-                            y={props.y}
-                            occupationsDispatch={props.occupationsDispatch} />);
+    columns.push(
+      <TableCell  key={"x: " + i + "; y: " + props.y}
+                  tileData={roomData[i]}
+                  x={i}
+                  y={props.y}
+                  occupationsDispatch={props.occupationsDispatch}
+                  onTileMove={props.onTileMove}
+      />
+    );
   }
 
   var className = "room";

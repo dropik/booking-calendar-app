@@ -30,7 +30,7 @@ function Tile(props) {
   useEffect(() => {
     function drop(event) {
       if (grabbedState.grabbed) {
-        props.occupationsDispatch({ type: "move", x: props.x, y: props.y, pageY: event.pageY });
+        props.onTileMove({ x: props.x, y: props.y, pageY: event.pageY });
       }
       grabbedStateDispatch({ type: "drop" });
     }
