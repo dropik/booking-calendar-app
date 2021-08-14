@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { hot } from 'react-hot-loader';
 import Day from './Day';
 import "./Dates.css";
 
 function Dates(props) {
-  const [scrollLeft, setScrollLeft] = useState(0);
+  const datesRef = useRef(null);
 
   useEffect(() => {
     function handleScroll(event) {
-      setScrollLeft(event.target.scrollLeft);
+      datesRef.current.style.left = -event.target.scrollLeft + "px";
     }
     document.getElementById("tableContainer").addEventListener('scroll', handleScroll);
     return () => document.getElementById("tableContainer").removeEventListener('scroll', handleScroll);
@@ -25,7 +25,7 @@ function Dates(props) {
     dateCounter.setDate(dateCounter.getDate() + 1);
   }
 
-  return <div className="dates" style={{left: -scrollLeft + "px"}}>{columns}</div>
+  return <div ref={datesRef} className="dates">{columns}</div>
 }
 
 export default hot(module)(Dates);

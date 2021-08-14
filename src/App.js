@@ -33,6 +33,23 @@ function App(props) {
     });
   }
 
+  function onScroll(event) {
+    var cellWidth = remToPx(4) + 1;
+    var scrollLimit = cellWidth * globals.TABLE_FETCH_BREAKPOINT;
+    if (event.target.scrollLeft < scrollLimit) {
+      storeDispatch({
+        type: "fetchLeft",
+        tiles: tiles
+      });
+      event.target.scrollLeft = scrollLimit + 1;
+    } else if (event.target.scrollLeft > event.target.scrollLeftMax - scrollLimit) {
+      storeDispatch({
+        type: "fetchRight",
+        tiles: tiles
+      });
+    }
+  }
+
   return(
     <div className="app">
       <Header date={store.date} startDate={store.startDate} onDateChange={onDateChange} columns={store.columns} />
@@ -45,6 +62,8 @@ function App(props) {
         occupations={store.occupations}
         onTileMove={onTileMove}
         columns={store.columns}
+        onScroll={onScroll}
+        canSnapScroll={store.canSnapScroll}
       />
     </div>
   );
@@ -53,6 +72,7 @@ function App(props) {
 function storeReducer(store, action) {
   switch (action.type) {
     case "dateChange":
+    {
       let startDate = calculateStartDate(action.date);
       return {
         date: action.date,
@@ -60,6 +80,7 @@ function storeReducer(store, action) {
         columns: getInitialColumnsAmount(document.documentElement.clientWidth),
         occupations: recalculateOccupations(action.tiles, startDate)
       };
+    }
     case "resize":
       return {
         ...store,
@@ -69,6 +90,22 @@ function storeReducer(store, action) {
       return {
         ...store,
         occupations: tryMoveOccupation(store.occupations, action)
+      };
+    case "fetchLeft":
+    {
+      let startDate = calculateStartDate(store.startDate);
+      return {
+        ...store,
+        startDate: startDate,
+        columns: store.columns + globals.TABLE_PRELOAD_AMOUNT,
+        occupations: recalculateOccupations(action.tiles, startDate)
+      };
+    }
+    case "fetchRight":
+      return {
+        ...store,
+        columns: store.columns + globals.TABLE_PRELOAD_AMOUNT,
+        occupations: recalculateOccupations(action.tiles, store.startDate)
       };
     default:
       return store;
@@ -82,7 +119,8 @@ function getInitialStore(tiles) {
     date: date,
     startDate: startDate,
     columns: getInitialColumnsAmount(document.documentElement.clientWidth),
-    occupations: recalculateOccupations(tiles, startDate)
+    occupations: recalculateOccupations(tiles, startDate),
+    canSnapScroll: true
   }
 }
 

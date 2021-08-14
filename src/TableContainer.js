@@ -12,7 +12,12 @@ function TableContainer(props) {
     var columnWidth = remToPx(4) + 1;
     var scrollLeft = columnWidth * globals.TABLE_PRELOAD_AMOUNT + 1;
     containerRef.current.scrollLeft = scrollLeft;
-  }, [props.date, props.columns]);
+  }, [props.date]);
+
+  useEffect(() => {
+    containerRef.current.addEventListener('scroll', props.onScroll);
+    return () => containerRef.current.removeEventListener('scroll', props.onScroll);
+  }, []);
 
   return (
     <div ref={containerRef} id="tableContainer" className="table-container">
