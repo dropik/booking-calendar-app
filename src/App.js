@@ -41,7 +41,8 @@ function App(props) {
         type: "fetchLeft",
         tiles: tiles
       });
-      event.target.scrollLeft = scrollLimit + 1;
+      var preloadedWidth = cellWidth * globals.TABLE_PRELOAD_AMOUNT;
+      event.target.scrollLeft = preloadedWidth + scrollLimit + 1;
     } else if (event.target.scrollLeft > event.target.scrollLeftMax - scrollLimit) {
       storeDispatch({
         type: "fetchRight",
