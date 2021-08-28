@@ -53,7 +53,12 @@ function App(props) {
 
   return(
     <div className="app">
-      <Header date={store.date} startDate={store.startDate} onDateChange={onDateChange} columns={store.columns} />
+      <Header
+        date={store.date}
+        startDate={store.startDate}
+        onDateChange={onDateChange}
+        columns={store.columns}
+      />
       <Hotel hotel={hotel} />
       <TableContainer
         date={store.date}
