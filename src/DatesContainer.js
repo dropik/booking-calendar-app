@@ -8,7 +8,7 @@ function DatesContainer(props) {
   return (
     <div className="dates-container">
       <MonthYear date={props.date} key="monthYear"/>
-      <Dates date={props.date} startDate={props.startDate} columns={props.columns}/>
+      <Dates startDate={props.startDate} columns={props.columns}/>
     </div>
   );
 }

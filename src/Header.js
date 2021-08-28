@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { hot } from 'react-hot-loader';
 import DatesContainer from './DatesContainer';
 import "./Header.css";
@@ -14,6 +14,7 @@ function Header(props) {
   }
 
   const inputRef = useRef(null);
+  const [currentDate, setCurrentDate] = useState(props.date);
 
   useEffect(() => {
     function handleScroll(event) {
@@ -22,6 +23,7 @@ function Header(props) {
       let dateShift = Math.floor((event.target.scrollLeft + cellWidth / 2) / cellWidth);
       newDate.setDate(newDate.getDate() + dateShift);
       inputRef.current.value = newDate.toLocaleDateString('en-CA');
+      setCurrentDate(newDate);
     }
     document.getElementById("tableContainer").addEventListener('scroll', handleScroll);
     return () => document.getElementById("tableContainer").removeEventListener('scroll', handleScroll);
@@ -33,7 +35,7 @@ function Header(props) {
         <span>From: </span>
         <input ref={inputRef} type="date" id="fromDate" defaultValue={props.date.toLocaleDateString('en-CA')} onChange={handleDateChange} />
       </div>
-      <DatesContainer date={props.date} startDate={props.startDate} columns={props.columns}/>
+      <DatesContainer date={currentDate} startDate={props.startDate} columns={props.columns}/>
     </div>
   );
 }
