@@ -1,0 +1,7 @@
+.table-container {
+    position: relative;
+    margin-top: calc(8rem + 1px);
+    margin-left: calc(6rem + 2px);
+    overflow-x: scroll;
+    border-right: 1px solid black;
+}

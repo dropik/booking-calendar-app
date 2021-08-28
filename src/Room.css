@@ -4,6 +4,6 @@
     border-top: 0;
 }
 
-.room-odd {
-    background-color: #f4f4f4;
+.room-first {
+    margin-top: calc(4rem + 1px);
 }

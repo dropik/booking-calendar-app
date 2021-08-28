@@ -3,4 +3,8 @@ function remToPx(rem) {
   return rem * fontSize;
 }
 
-export { remToPx };
+function daysBetweenDates(from, to) {
+  return Math.ceil((to - from) / 86400000);
+}
+
+export { remToPx, daysBetweenDates };

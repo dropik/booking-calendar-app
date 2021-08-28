@@ -1,10 +1,6 @@
-.container {
+.table-cell {
     position: relative;
     border-right: 1px solid black;
     width: 4rem;
     height: 4rem;
-}
-
-.container-last {
-    border-right: 0;
 }
