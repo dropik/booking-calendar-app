@@ -14,13 +14,8 @@ function TableContainer(props) {
     containerRef.current.scrollLeft = scrollLeft;
   }, [props.date]);
 
-  useEffect(() => {
-    containerRef.current.addEventListener('scroll', props.onScroll);
-    return () => containerRef.current.removeEventListener('scroll', props.onScroll);
-  }, []);
-
   return (
-    <div ref={containerRef} id="tableContainer" className="table-container">
+    <div ref={containerRef} id="tableContainer" className="table-container" onScroll={props.onScroll}>
       <Table
         hotel={props.hotel}
         tiles={props.tiles}
