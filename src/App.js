@@ -54,7 +54,6 @@ function App(props) {
   return(
     <div className="app">
       <Header
-        date={store.date}
         startDate={store.startDate}
         onDateChange={onDateChange}
         columns={store.columns}

@@ -13,8 +13,7 @@ function Header(props) {
     }
   }
 
-  const inputRef = useRef(null);
-  const [currentDate, setCurrentDate] = useState(props.date);
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   useEffect(() => {
     function handleScroll(event) {
@@ -22,7 +21,6 @@ function Header(props) {
       let cellWidth = remToPx(4) + 1;
       let dateShift = Math.floor((event.target.scrollLeft + cellWidth / 2) / cellWidth);
       newDate.setDate(newDate.getDate() + dateShift);
-      inputRef.current.value = newDate.toLocaleDateString('en-CA');
       setCurrentDate(newDate);
     }
     document.getElementById("tableContainer").addEventListener('scroll', handleScroll);
@@ -33,7 +31,7 @@ function Header(props) {
     <div className="header">
       <div className="data-input">
         <span>From: </span>
-        <input ref={inputRef} type="date" id="fromDate" defaultValue={props.date.toLocaleDateString('en-CA')} onChange={handleDateChange} />
+        <input type="date" id="fromDate" value={currentDate.toLocaleDateString('en-CA')} onChange={handleDateChange} />
       </div>
       <DatesContainer date={currentDate} startDate={props.startDate} columns={props.columns}/>
     </div>
