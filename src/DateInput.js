@@ -3,7 +3,7 @@ import { hot } from 'react-hot-loader';
 import { useSelector } from 'react-redux';
 
 function DateInput(props) {
-  const currentDate = useSelector(state => state.currentDate.value);
+  const currentDate = useSelector(state => state.horizontalScroll.currentDate);
 
   function handleDateChange(event) {
     if (!event.target.value) {

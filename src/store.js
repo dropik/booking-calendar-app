@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import currentDateReducer from './currentDateSlice';
+import horizontalScrollReducer from './horizontalScrollSlice';
 
 export default configureStore({
   reducer: {
-    currentDate: currentDateReducer
+    horizontalScroll: horizontalScrollReducer
   }
 });
