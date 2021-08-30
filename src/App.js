@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useReducer } from "react";
+import React, { useLayoutEffect, useReducer, useState } from "react";
 import { hot } from "react-hot-loader";
 import Header from "./Header";
 import Hotel from "./Hotel";
@@ -12,6 +12,7 @@ function App(props) {
   const hotel = mocks.hotel;
   const tiles = mocks.tiles;
   const [store, storeDispatch] = useReducer(storeReducer, getInitialStore(tiles));
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   useColumnsAdjustment(storeDispatch);
 
@@ -54,6 +55,8 @@ function App(props) {
   return(
     <div className="app">
       <Header
+        currentDate={currentDate}
+        setCurrentDate={setCurrentDate}
         startDate={store.startDate}
         onDateChange={onDateChange}
         columns={store.columns}
