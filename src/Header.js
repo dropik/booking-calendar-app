@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { hot } from 'react-hot-loader';
 import DatesContainer from './DatesContainer';
 import "./Header.css";
-import { remToPx } from './utils';
 
 function Header(props) {
   function handleDateChange(event) {
@@ -12,18 +11,6 @@ function Header(props) {
       props.onDateChange(event);
     }
   }
-
-  useEffect(() => {
-    function handleScroll(event) {
-      let newDate = new Date(props.startDate);
-      let cellWidth = remToPx(4) + 1;
-      let dateShift = Math.floor((event.target.scrollLeft + cellWidth / 2) / cellWidth);
-      newDate.setDate(newDate.getDate() + dateShift);
-      props.setCurrentDate(newDate);
-    }
-    document.getElementById("tableContainer").addEventListener('scroll', handleScroll);
-    return () => document.getElementById("tableContainer").removeEventListener('scroll', handleScroll);
-  }, [props.startDate]);
 
   return (
     <div className="header">

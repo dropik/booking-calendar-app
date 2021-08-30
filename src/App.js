@@ -35,8 +35,14 @@ function App(props) {
   }
 
   function onScroll(event) {
-    var cellWidth = remToPx(4) + 1;
-    var scrollLimit = cellWidth * globals.TABLE_FETCH_BREAKPOINT;
+    let cellWidth = remToPx(4) + 1;
+
+    let newCurrentDate = new Date(store.startDate);
+    let dateShift = Math.floor((event.target.scrollLeft + cellWidth / 2) / cellWidth);
+    newCurrentDate.setDate(newCurrentDate.getDate() + dateShift);
+    setCurrentDate(newCurrentDate);
+
+    let scrollLimit = cellWidth * globals.TABLE_FETCH_BREAKPOINT;
     if (event.target.scrollLeft < scrollLimit) {
       storeDispatch({
         type: "fetchLeft",
@@ -56,7 +62,6 @@ function App(props) {
     <div className="app">
       <Header
         currentDate={currentDate}
-        setCurrentDate={setCurrentDate}
         startDate={store.startDate}
         onDateChange={onDateChange}
         columns={store.columns}
