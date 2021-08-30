@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useReducer, useState } from "react";
+import React, { useLayoutEffect, useReducer } from "react";
 import { hot } from "react-hot-loader";
 import Header from "./Header";
 import Hotel from "./Hotel";
@@ -12,7 +12,6 @@ function App(props) {
   const hotel = mocks.hotel;
   const tiles = mocks.tiles;
   const [store, storeDispatch] = useReducer(storeReducer, getInitialStore(tiles));
-  const [currentDate, setCurrentDate] = useState(new Date());
 
   useColumnsAdjustment(storeDispatch);
 
@@ -35,13 +34,12 @@ function App(props) {
   }
 
   function onScroll(event) {
+    storeDispatch({
+      type: "currentDate/scroll",
+      scrollLeft: event.target.scrollLeft
+    });
+    
     let cellWidth = remToPx(4) + 1;
-
-    let newCurrentDate = new Date(store.startDate);
-    let dateShift = Math.floor((event.target.scrollLeft + cellWidth / 2) / cellWidth);
-    newCurrentDate.setDate(newCurrentDate.getDate() + dateShift);
-    setCurrentDate(newCurrentDate);
-
     let scrollLimit = cellWidth * globals.TABLE_FETCH_BREAKPOINT;
     if (event.target.scrollLeft < scrollLimit) {
       storeDispatch({
@@ -61,7 +59,7 @@ function App(props) {
   return(
     <div className="app">
       <Header
-        currentDate={currentDate}
+        currentDate={store.currentDate}
         startDate={store.startDate}
         onDateChange={onDateChange}
         columns={store.columns}
@@ -84,11 +82,23 @@ function App(props) {
 
 function storeReducer(store, action) {
   switch (action.type) {
+    case "currentDate/scroll":
+    {
+      let cellWidth = remToPx(4) + 1;
+      let newCurrentDate = new Date(store.startDate);
+      let dateShift = Math.floor((action.scrollLeft + cellWidth / 2) / cellWidth);
+      newCurrentDate.setDate(newCurrentDate.getDate() + dateShift);
+      return {
+        ...store,
+        currentDate: newCurrentDate
+      };
+    }
     case "dateChange":
     {
       let startDate = calculateStartDate(action.date);
       return {
         date: action.date,
+        currentDate: action.date,
         startDate: startDate,
         columns: getInitialColumnsAmount(document.documentElement.clientWidth),
         occupations: recalculateOccupations(action.tiles, startDate)
@@ -130,6 +140,7 @@ function getInitialStore(tiles) {
   var startDate = calculateStartDate(date);
   return {
     date: date,
+    currentDate: date,
     startDate: startDate,
     columns: getInitialColumnsAmount(document.documentElement.clientWidth),
     occupations: recalculateOccupations(tiles, startDate),
