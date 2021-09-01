@@ -11,7 +11,7 @@ function Header(props) {
         <span>From: </span>
         <DateInput onDateChange={props.onDateChange} />
       </div>
-      <DatesContainer date={props.currentDate} startDate={props.startDate} columns={props.columns}/>
+      <DatesContainer />
     </div>
   );
 }

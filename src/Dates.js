@@ -6,7 +6,10 @@ import "./Dates.css";
 
 function Dates(props) {
   const scrollLeft = useSelector(state => state.horizontalScroll.scrollLeft);
-  var dates = useMemo(() => computeDates(props.startDate, props.columns), [props.startDate, props.columns]);
+  const startDate = useSelector(state => state.horizontalScroll.startDate);
+  const columns = useSelector(state => state.horizontalScroll.columns);
+
+  var dates = useMemo(() => computeDates(startDate, columns), [startDate, columns]);
   return (
     <div style={{left: -scrollLeft + "px"}} className="dates">{dates}</div>
   );
@@ -15,7 +18,7 @@ function Dates(props) {
 function computeDates(startDate, columns) {
   var dates = [];
 
-  var dateCounter = new Date(startDate.getTime());
+  var dateCounter = new Date(startDate);
   for (var i = 0; i < columns; i++) {
     var day = dateCounter.getDate();
     dates.push(<Day day={day.toString().padStart(2, '0')} key={dateCounter.toDateString()}/>);

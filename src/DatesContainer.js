@@ -7,8 +7,8 @@ import "./DatesContainer.css";
 function DatesContainer(props) {
   return (
     <div className="dates-container">
-      <MonthYear date={props.date} key="monthYear"/>
-      <Dates startDate={props.startDate} columns={props.columns}/>
+      <MonthYear key="monthYear"/>
+      <Dates />
     </div>
   );
 }
