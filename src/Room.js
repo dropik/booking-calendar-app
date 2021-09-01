@@ -1,14 +1,17 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
 import TableCell from './TableCell';
+import { useSelector } from 'react-redux';
 import "./Room.css";
 
 function Room(props) {
-  var columns = [];
+  const columns = useSelector(state => state.horizontalScroll.columns);
+
+  var cells = [];
   var roomData = props.roomData === undefined ? [] : props.roomData;
 
-  for (var i = 0; i < props.columns; i++) {
-    columns.push(
+  for (var i = 0; i < columns; i++) {
+    cells.push(
       <TableCell  key={"x: " + i + "; y: " + props.y}
                   tileData={roomData[i]}
                   x={i}
@@ -23,7 +26,7 @@ function Room(props) {
     className += " room-first";
   }
 
-  return <div className={className}>{columns}</div>;
+  return <div className={className}>{cells}</div>;
 }
 
 export default hot(module)(Room);

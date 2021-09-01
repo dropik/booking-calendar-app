@@ -14,17 +14,17 @@ export const horizontalScrollSlice = createSlice({
     scroll: (state, action) => {
       let cellWidth = remToPx(4) + 1;
       let dateShift = Math.floor((action.payload.scrollLeft + cellWidth / 2) / cellWidth);
-      let newDate = new Date(action.payload.startDate);
+      let newDate = new Date(state.startDate);
       newDate.setDate(newDate.getDate() + dateShift);
       state.currentDate = newDate.toLocaleDateString('en-CA');
       state.scrollLeft = action.payload.scrollLeft;
     },
     changeDate: (state, action) => {
       state.startDate = calculateStartDate(action.payload.date);
-      state.columns = getInitialColumnsAmount(document.documentElement.clientWidth);
+      recalculateColumns(state);
     },
     resize: state => {
-      state.columns = getInitialColumnsAmount(document.documentElement.clientWidth);
+      recalculateColumns(state);
     },
     fetchLeft: state => {
       state.startDate = calculateStartDate(state.startDate);
@@ -40,6 +40,10 @@ function calculateStartDate(date) {
   let result = new Date(date);
   result.setDate(result.getDate() - globals.TABLE_PRELOAD_AMOUNT);
   return result.toLocaleDateString('en-CA');
+}
+
+function recalculateColumns(state) {
+  state.columns = getInitialColumnsAmount(document.documentElement.clientWidth);
 }
 
 function getInitialColumnsAmount(width) {

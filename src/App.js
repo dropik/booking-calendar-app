@@ -48,10 +48,7 @@ function App(props) {
   }
 
   function onScroll(event) {
-    dispatch(scroll({
-      scrollLeft: event.target.scrollLeft,
-      startDate: store.startDate.toLocaleDateString('en-CA')
-    }));
+    dispatch(scroll({ scrollLeft: event.target.scrollLeft }));
     
     let cellWidth = remToPx(4) + 1;
     let scrollLimit = cellWidth * globals.TABLE_FETCH_BREAKPOINT;
@@ -78,12 +75,10 @@ function App(props) {
       <Hotel hotel={hotel} />
       <TableContainer
         containerRef={containerRef}
-        startDate={store.startDate}
         hotel={hotel}
         tiles={tiles}
         occupations={store.occupations}
         onTileMove={onTileMove}
-        columns={store.columns}
         onScroll={onScroll}
       />
     </div>
@@ -97,15 +92,9 @@ function storeReducer(store, action) {
       let startDate = calculateStartDate(action.date);
       return {
         startDate: startDate,
-        columns: getInitialColumnsAmount(document.documentElement.clientWidth),
         occupations: recalculateOccupations(action.tiles, startDate)
       };
     }
-    case "resize":
-      return {
-        ...store,
-        columns: getInitialColumnsAmount(document.documentElement.clientWidth)
-      };
     case "move":
       return {
         ...store,
@@ -117,14 +106,12 @@ function storeReducer(store, action) {
       return {
         ...store,
         startDate: startDate,
-        columns: store.columns + globals.TABLE_PRELOAD_AMOUNT,
         occupations: recalculateOccupations(action.tiles, startDate)
       };
     }
     case "fetchRight":
       return {
         ...store,
-        columns: store.columns + globals.TABLE_PRELOAD_AMOUNT,
         occupations: recalculateOccupations(action.tiles, store.startDate)
       };
     default:
@@ -137,7 +124,6 @@ function getInitialStore(tiles) {
   var startDate = calculateStartDate(date);
   return {
     startDate: startDate,
-    columns: getInitialColumnsAmount(document.documentElement.clientWidth),
     occupations: recalculateOccupations(tiles, startDate)
   }
 }
@@ -220,14 +206,6 @@ function calculateStartDate(date) {
   let result = new Date(date.getTime());
   result.setDate(result.getDate() - globals.TABLE_PRELOAD_AMOUNT);
   return result;
-}
-
-function getInitialColumnsAmount(width) {
-  let roomCellWidth = remToPx(6);
-  let containerWidth = remToPx(4);
-  let columns = Math.ceil((width - roomCellWidth) / containerWidth);
-  columns += globals.TABLE_PRELOAD_AMOUNT * 2;
-  return columns;
 }
 
 export default hot(module)(App);

@@ -10,7 +10,6 @@ function Table(props) {
     floor.rooms.forEach((room, roomIndex) => {
       rows.push(<Room key={room.number}
                       y={room.number}
-                      columns={props.columns}
                       roomData={props.occupations[room.number]}
                       tiles={props.tiles}
                       onTileMove={props.onTileMove}
