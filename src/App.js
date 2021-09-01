@@ -8,7 +8,7 @@ import globals from "./globals";
 import mocks from "./mocks";
 import "./App.css";
 import { useDispatch } from "react-redux";
-import { scroll } from './horizontalScrollSlice';
+import { scroll, changeDate, resize, fetchLeft, fetchRight } from './horizontalScrollSlice';
 
 function App(props) {
   const hotel = mocks.hotel;
@@ -17,7 +17,7 @@ function App(props) {
   const dispatch = useDispatch();
   const containerRef = useRef(null);
 
-  useColumnsAdjustment(storeDispatch);
+  useColumnsAdjustment(dispatch);
 
   function onDateChange(event) {
     storeDispatch({
@@ -25,6 +25,7 @@ function App(props) {
       date: new Date(event.target.value),
       tiles: tiles
     });
+    dispatch(changeDate({ date: event.target.value }));
     setInitialScrollLeft();
   }
 
@@ -59,6 +60,7 @@ function App(props) {
         type: "fetchLeft",
         tiles: tiles
       });
+      dispatch(fetchLeft());
       var preloadedWidth = cellWidth * globals.TABLE_PRELOAD_AMOUNT;
       event.target.scrollLeft = preloadedWidth + scrollLimit + 1;
     } else if (event.target.scrollLeft > event.target.scrollLeftMax - scrollLimit) {
@@ -66,6 +68,7 @@ function App(props) {
         type: "fetchRight",
         tiles: tiles
       });
+      dispatch(fetchRight());
     }
   }
 
@@ -86,7 +89,6 @@ function App(props) {
         onTileMove={onTileMove}
         columns={store.columns}
         onScroll={onScroll}
-        canSnapScroll={store.canSnapScroll}
       />
     </div>
   );
@@ -140,15 +142,14 @@ function getInitialStore(tiles) {
   return {
     startDate: startDate,
     columns: getInitialColumnsAmount(document.documentElement.clientWidth),
-    occupations: recalculateOccupations(tiles, startDate),
-    canSnapScroll: true
+    occupations: recalculateOccupations(tiles, startDate)
   }
 }
 
-function useColumnsAdjustment(storeDispatch) {
+function useColumnsAdjustment(dispatch) {
   useLayoutEffect(() => {
     function handleResize() {
-      storeDispatch({ type: "resize" });
+      dispatch(resize());
     }
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
