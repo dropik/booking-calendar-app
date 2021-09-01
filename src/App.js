@@ -8,7 +8,7 @@ import globals from "./globals";
 import mocks from "./mocks";
 import "./App.css";
 import { useDispatch } from "react-redux";
-import { scroll, setCurrentDate } from './horizontalScrollSlice';
+import { scroll } from './horizontalScrollSlice';
 
 function App(props) {
   const hotel = mocks.hotel;
@@ -25,7 +25,6 @@ function App(props) {
       date: new Date(event.target.value),
       tiles: tiles
     });
-    dispatch(setCurrentDate({ newDateString: event.target.value }));
     setInitialScrollLeft();
   }
 
