@@ -1,21 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { hot } from 'react-hot-loader';
-import globals from './globals';
 import Table from "./Table";
-import { remToPx } from './utils';
 import "./TableContainer.css";
 
 function TableContainer(props) {
-  const containerRef = useRef(null);
-
-  useEffect(() => {
-    var columnWidth = remToPx(4) + 1;
-    var scrollLeft = columnWidth * globals.TABLE_PRELOAD_AMOUNT + 1;
-    containerRef.current.scrollLeft = scrollLeft;
-  }, [props.date]);
-
   return (
-    <div ref={containerRef} id="tableContainer" className="table-container" onScroll={props.onScroll}>
+    <div ref={props.containerRef} className="table-container" onScroll={props.onScroll}>
       <Table
         hotel={props.hotel}
         tiles={props.tiles}

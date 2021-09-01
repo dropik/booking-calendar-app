@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useReducer } from "react";
+import React, { useEffect, useLayoutEffect, useReducer, useRef } from "react";
 import { hot } from "react-hot-loader";
 import Header from "./Header";
 import Hotel from "./Hotel";
@@ -15,6 +15,7 @@ function App(props) {
   const tiles = mocks.tiles;
   const [store, storeDispatch] = useReducer(storeReducer, getInitialStore(tiles));
   const dispatch = useDispatch();
+  const containerRef = useRef(null);
 
   useColumnsAdjustment(storeDispatch);
 
@@ -25,6 +26,15 @@ function App(props) {
       tiles: tiles
     });
     dispatch(setCurrentDate({ newDateString: event.target.value }));
+    setInitialScrollLeft();
+  }
+
+  useEffect(setInitialScrollLeft, []);
+
+  function setInitialScrollLeft() {
+    var columnWidth = remToPx(4) + 1;
+    var scrollLeft = columnWidth * globals.TABLE_PRELOAD_AMOUNT + 1;
+    containerRef.current.scrollLeft = scrollLeft;
   }
 
   function onTileMove(event) {
@@ -69,7 +79,7 @@ function App(props) {
       />
       <Hotel hotel={hotel} />
       <TableContainer
-        date={store.date}
+        containerRef={containerRef}
         startDate={store.startDate}
         hotel={hotel}
         tiles={tiles}
@@ -89,7 +99,6 @@ function storeReducer(store, action) {
     {
       let startDate = calculateStartDate(action.date);
       return {
-        date: action.date,
         startDate: startDate,
         columns: getInitialColumnsAmount(document.documentElement.clientWidth),
         occupations: recalculateOccupations(action.tiles, startDate)
@@ -130,7 +139,6 @@ function getInitialStore(tiles) {
   var date = new Date();
   var startDate = calculateStartDate(date);
   return {
-    date: date,
     startDate: startDate,
     columns: getInitialColumnsAmount(document.documentElement.clientWidth),
     occupations: recalculateOccupations(tiles, startDate),
