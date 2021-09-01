@@ -5,9 +5,9 @@ import { useSelector } from 'react-redux';
 import "./Dates.css";
 
 function Dates(props) {
-  const scrollLeft = useSelector(state => state.horizontalScroll.scrollLeft);
-  const startDate = useSelector(state => state.horizontalScroll.startDate);
-  const columns = useSelector(state => state.horizontalScroll.columns);
+  const scrollLeft = useSelector(state => state.main.scrollLeft);
+  const startDate = useSelector(state => state.main.startDate);
+  const columns = useSelector(state => state.main.columns);
 
   var dates = useMemo(() => computeDates(startDate, columns), [startDate, columns]);
   return (

@@ -8,7 +8,7 @@ import globals from "./globals";
 import mocks from "./mocks";
 import "./App.css";
 import { useDispatch } from "react-redux";
-import { scroll, changeDate, resize, fetchLeft, fetchRight } from './horizontalScrollSlice';
+import { scroll, changeDate, resize, fetchLeft, fetchRight } from './mainSlice';
 
 function App(props) {
   const hotel = mocks.hotel;

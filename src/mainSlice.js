@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import { remToPx } from "./utils";
 import globals from "./globals";
 
-export const horizontalScrollSlice = createSlice({
-  name: "horizontalScroll",
+export const mainSlice = createSlice({
+  name: "main",
   initialState: {
     currentDate: new Date().toLocaleDateString('en-CA'),
     startDate: calculateStartDate(new Date()),
@@ -54,6 +54,6 @@ function getInitialColumnsAmount(width) {
   return columns;
 }
 
-export const { scroll, changeDate, resize, fetchLeft, fetchRight } = horizontalScrollSlice.actions;
+export const { scroll, changeDate, resize, fetchLeft, fetchRight } = mainSlice.actions;
 
-export default horizontalScrollSlice.reducer;
+export default mainSlice.reducer;

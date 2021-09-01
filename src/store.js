@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import horizontalScrollReducer from './horizontalScrollSlice';
+import mainReducer from './mainSlice';
 
 export default configureStore({
   reducer: {
-    horizontalScroll: horizontalScrollReducer
+    main: mainReducer
   }
 });

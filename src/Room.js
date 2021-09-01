@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import "./Room.css";
 
 function Room(props) {
-  const columns = useSelector(state => state.horizontalScroll.columns);
+  const columns = useSelector(state => state.main.columns);
 
   var cells = [];
   var roomData = props.roomData === undefined ? [] : props.roomData;

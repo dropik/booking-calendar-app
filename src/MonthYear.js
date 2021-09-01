@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import "./MonthYear.css";
 
 function MonthYear(props) {
-  const currentDate = useSelector(state => state.horizontalScroll.currentDate);
+  const currentDate = useSelector(state => state.main.currentDate);
 
   var currentDateObj = new Date(currentDate);
   var monthYear = currentDateObj.toLocaleDateString("it-IT", { year: 'numeric', month: 'long'}).split(' ');
