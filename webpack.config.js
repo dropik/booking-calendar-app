@@ -1,5 +1,4 @@
 const path = require("path");
-const webpack = require("webpack");
 
 module.exports = {
   entry: "./src/index.js",
@@ -11,6 +10,11 @@ module.exports = {
         exclude: /(node_modules|bower_components)/,
         loader: "babel-loader",
         options: { presets: ["@babel/env"] }
+      },
+      {
+        test: /\.(js|jsx)$/,
+        use: "react-hot-loader/webpack",
+        include: /node_modules/
       },
       {
         test: /\.css$/,
@@ -25,10 +29,11 @@ module.exports = {
     filename: "bundle.js"
   },
   devServer: {
-    contentBase: path.join(__dirname, "public/"),
+    static: {
+      directory: path.join(__dirname, "public"),
+      publicPath: "/",
+    },
     port: 3000,
-    publicPath: "http://localhost:3000/dist/",
-    hotOnly: true
-  },
-  plugins: [new webpack.HotModuleReplacementPlugin()]
+    hot: true
+  }
 };
