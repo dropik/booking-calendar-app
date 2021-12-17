@@ -7,12 +7,12 @@ import { daysBetweenDates, remToPx } from "./utils";
 import globals from "./globals";
 import mocks from "./mocks";
 import "./App.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { scroll, changeDate, resize, fetchLeft, fetchRight } from './mainSlice';
 
 function App(props) {
   const hotel = mocks.hotel;
-  const tiles = mocks.tiles;
+  const tiles = useSelector(state => state.main.tiles);
   const [store, storeDispatch] = useReducer(storeReducer, getInitialStore(tiles));
   const dispatch = useDispatch();
   const containerRef = useRef(null);
@@ -57,7 +57,7 @@ function App(props) {
         type: "fetchLeft",
         tiles: tiles
       });
-      dispatch(fetchLeft());
+      dispatch(fetchLeft({ tiles: [] }));
       var preloadedWidth = cellWidth * globals.TABLE_PRELOAD_AMOUNT;
       event.target.scrollLeft = preloadedWidth + scrollLimit + 1;
     } else if (event.target.scrollLeft > event.target.scrollLeftMax - scrollLimit) {
@@ -65,7 +65,7 @@ function App(props) {
         type: "fetchRight",
         tiles: tiles
       });
-      dispatch(fetchRight());
+      dispatch(fetchRight({ tiles: [] }));
     }
   }
 

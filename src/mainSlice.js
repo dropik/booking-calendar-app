@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { remToPx } from "./utils";
 import globals from "./globals";
+import mocks from "./mocks";
 
 export const mainSlice = createSlice({
   name: "main",
@@ -8,7 +9,8 @@ export const mainSlice = createSlice({
     currentDate: new Date().toLocaleDateString('en-CA'),
     startDate: calculateStartDate(new Date()),
     columns: getInitialColumnsAmount(document.documentElement.clientWidth),
-    scrollLeft: 0
+    scrollLeft: 0,
+    tiles: mocks.tiles
   },
   reducers: {
     scroll: (state, action) => {
@@ -26,12 +28,14 @@ export const mainSlice = createSlice({
     resize: state => {
       recalculateColumns(state);
     },
-    fetchLeft: state => {
+    fetchLeft: (state, action) => {
       state.startDate = calculateStartDate(state.startDate);
       state.columns += globals.TABLE_PRELOAD_AMOUNT;
+      state.tiles = [...state.tiles, ...action.payload.tiles];
     },
-    fetchRight: state => {
+    fetchRight: (state, action) => {
       state.columns += globals.TABLE_PRELOAD_AMOUNT;
+      state.tiles = [...state.tiles, ...action.payload.tiles];
     }
   }
 });
