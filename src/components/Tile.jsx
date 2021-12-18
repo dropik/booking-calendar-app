@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useReducer } from "react";
 import { hot } from "react-hot-loader";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
@@ -7,7 +7,7 @@ import { move } from "../redux/mainSlice";
 
 import "./Tile.css";
 
-function Tile({ x, y, colour, nights, name, roomType }) {
+function Tile({ x, y, tileData }) {
   const dispatch = useDispatch();
   const [grabbedState, grabbedStateDispatch] = useReducer(grabbedStateReducer, {
     grabbed: false,
@@ -32,33 +32,23 @@ function Tile({ x, y, colour, nights, name, roomType }) {
     }
   }
 
-  function handleGrab(event) {
+  function onGrab(event) {
     event.preventDefault();
     grabbedStateDispatch({ type: "grab", event: event });
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onDrop);
   }
 
-  function onTileMove(event) {
-    dispatch(move({ x: event.x, y: event.y, pageY: event.pageY }));
+  function onMove(event) {
+    grabbedStateDispatch({ type: "move", event: event });
   }
 
-  useEffect(() => {
-    function drop(event) {
-      if (grabbedState.grabbed) {
-        onTileMove({ x: x, y: y, pageY: event.pageY });
-      }
-      grabbedStateDispatch({ type: "drop" });
-    }
-    window.addEventListener("mouseup", drop);
-    return () => window.removeEventListener("mouseup", drop);
-  }, [grabbedState.grabbed]);
-
-  useEffect(() => {
-    function move(event) {
-      grabbedStateDispatch({ type: "move", event: event });
-    }
-    window.addEventListener("mousemove", move);
-    return () => window.removeEventListener("mousemove", move);
-  }, [grabbedState.grabbed]);
+  function onDrop(event) {
+    grabbedStateDispatch({ type: "drop" });
+    dispatch(move({ x: x, y: y, pageY: event.pageY }));
+    window.removeEventListener("mousemove", onMove);
+    window.removeEventListener("mouseup", onDrop);
+  }
 
   var className = "tile";
   if (grabbedState.grabbed) {
@@ -68,15 +58,15 @@ function Tile({ x, y, colour, nights, name, roomType }) {
   return (
     <div
       className={className}
-      onMouseDown={handleGrab}
+      onMouseDown={onGrab}
       style={{
         top: grabbedState.top + "px",
-        backgroundColor: colour,
-        width: "calc(" + nights + "00% + " + (nights - 1) + "px)",
+        backgroundColor: tileData.colour,
+        width: "calc(" + tileData.nights + "00% + " + (tileData.nights - 1) + "px)",
       }}
     >
-      <span className="tile-name">{name}</span>
-      <span className="tile-room">{roomType}</span>
+      <span className="tile-name">{tileData.name}</span>
+      <span className="tile-room">{tileData.roomType}</span>
     </div>
   );
 }
@@ -84,10 +74,14 @@ function Tile({ x, y, colour, nights, name, roomType }) {
 Tile.propTypes = {
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
-  colour: PropTypes.string.isRequired,
-  nights: PropTypes.number.isRequired,
-  name: PropTypes.string.isRequired,
-  roomType: PropTypes.string.isRequired
+  tileData: PropTypes.exact({
+    colour: PropTypes.string,
+    nights: PropTypes.number,
+    name: PropTypes.string,
+    roomType: PropTypes.string,
+    roomNumber: PropTypes.number,
+    from: PropTypes.string
+  }).isRequired
 };
 
 export default hot(module)(Tile);

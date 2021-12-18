@@ -17,12 +17,9 @@ function TableCell({ x, y }) {
   var tile =
     tileData !== undefined ? (
       <Tile
-        name={tileData.name}
-        colour={tileData.colour}
-        roomType={tileData.roomType}
-        nights={tileData.nights}
         x={x}
         y={y}
+        tileData={tileData}
       />
     ) : (
       ""
