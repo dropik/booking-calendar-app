@@ -1,7 +1,7 @@
 .day {
-    flex-direction: row;
-    border-right: 1px solid black;
-    width: 4rem;
-    text-align: center;
-    line-height: 4rem;
+  flex-direction: row;
+  border-right: 1px solid black;
+  width: 4rem;
+  text-align: center;
+  line-height: 4rem;
 }

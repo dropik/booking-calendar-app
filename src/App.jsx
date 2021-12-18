@@ -8,12 +8,15 @@ import globals from "./globals";
 import mocks from "./mocks";
 import "./App.css";
 import { useDispatch, useSelector } from "react-redux";
-import { scroll, changeDate, resize, fetchLeft, fetchRight } from './mainSlice';
+import { scroll, changeDate, resize, fetchLeft, fetchRight } from "./mainSlice";
 
-function App(props) {
+function App() {
   const hotel = mocks.hotel;
   const tiles = useSelector(state => state.main.tiles);
-  const [store, storeDispatch] = useReducer(storeReducer, getInitialStore(tiles));
+  const [store, storeDispatch] = useReducer(
+    storeReducer,
+    getInitialStore(tiles)
+  );
   const dispatch = useDispatch();
   const containerRef = useRef(null);
 
@@ -23,7 +26,7 @@ function App(props) {
     storeDispatch({
       type: "dateChange",
       date: new Date(event.target.value),
-      tiles: tiles
+      tiles: tiles,
     });
     dispatch(changeDate({ date: event.target.value }));
     setInitialScrollLeft();
@@ -43,33 +46,36 @@ function App(props) {
       x: event.x,
       y: event.y,
       pageY: event.pageY,
-      hotel: hotel
+      hotel: hotel,
     });
   }
 
   function onScroll(event) {
     dispatch(scroll({ scrollLeft: event.target.scrollLeft }));
-    
+
     let cellWidth = remToPx(4) + 1;
     let scrollLimit = cellWidth * globals.TABLE_FETCH_BREAKPOINT;
     if (event.target.scrollLeft < scrollLimit) {
       storeDispatch({
         type: "fetchLeft",
-        tiles: tiles
+        tiles: tiles,
       });
       dispatch(fetchLeft({ tiles: [] }));
       var preloadedWidth = cellWidth * globals.TABLE_PRELOAD_AMOUNT;
       event.target.scrollLeft = preloadedWidth + scrollLimit + 1;
-    } else if (event.target.scrollLeft > event.target.scrollLeftMax - scrollLimit) {
+    } else if (
+      event.target.scrollLeft >
+      event.target.scrollLeftMax - scrollLimit
+    ) {
       storeDispatch({
         type: "fetchRight",
-        tiles: tiles
+        tiles: tiles,
       });
       dispatch(fetchRight({ tiles: [] }));
     }
   }
 
-  return(
+  return (
     <div className="app">
       <Header onDateChange={onDateChange} />
       <Hotel hotel={hotel} />
@@ -87,35 +93,33 @@ function App(props) {
 
 function storeReducer(store, action) {
   switch (action.type) {
-    case "dateChange":
-    {
-      let startDate = calculateStartDate(action.date);
-      return {
-        startDate: startDate,
-        occupations: recalculateOccupations(action.tiles, startDate)
-      };
-    }
-    case "move":
-      return {
-        ...store,
-        occupations: tryMoveOccupation(store.occupations, action)
-      };
-    case "fetchLeft":
-    {
-      let startDate = calculateStartDate(store.startDate);
-      return {
-        ...store,
-        startDate: startDate,
-        occupations: recalculateOccupations(action.tiles, startDate)
-      };
-    }
-    case "fetchRight":
-      return {
-        ...store,
-        occupations: recalculateOccupations(action.tiles, store.startDate)
-      };
-    default:
-      return store;
+  case "dateChange": {
+    let startDate = calculateStartDate(action.date);
+    return {
+      startDate: startDate,
+      occupations: recalculateOccupations(action.tiles, startDate),
+    };
+  }
+  case "move":
+    return {
+      ...store,
+      occupations: tryMoveOccupation(store.occupations, action),
+    };
+  case "fetchLeft": {
+    let startDate = calculateStartDate(store.startDate);
+    return {
+      ...store,
+      startDate: startDate,
+      occupations: recalculateOccupations(action.tiles, startDate),
+    };
+  }
+  case "fetchRight":
+    return {
+      ...store,
+      occupations: recalculateOccupations(action.tiles, store.startDate),
+    };
+  default:
+    return store;
   }
 }
 
@@ -124,8 +128,8 @@ function getInitialStore(tiles) {
   var startDate = calculateStartDate(date);
   return {
     startDate: startDate,
-    occupations: recalculateOccupations(tiles, startDate)
-  }
+    occupations: recalculateOccupations(tiles, startDate),
+  };
 }
 
 function useColumnsAdjustment(dispatch) {
@@ -133,8 +137,8 @@ function useColumnsAdjustment(dispatch) {
     function handleResize() {
       dispatch(resize());
     }
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 }
 
@@ -146,7 +150,15 @@ function recalculateOccupations(tiles, startDate) {
     if (row === undefined) {
       row = [];
     }
-    var fromDate = new Date(Date.parse(tile.from.substr(0, 4) + '-' + tile.from.substr(4, 2) + '-' + tile.from.substr(6, 2)));
+    var fromDate = new Date(
+      Date.parse(
+        tile.from.substr(0, 4) +
+          "-" +
+          tile.from.substr(4, 2) +
+          "-" +
+          tile.from.substr(6, 2)
+      )
+    );
     var x = daysBetweenDates(startDate, fromDate);
     row[x] = tile;
     occupations[roomNumber] = row;
@@ -192,7 +204,8 @@ function tryMoveOccupation(occupations, action) {
     newOrigRoomData[action.x] = undefined;
     newOccupations[action.y] = newOrigRoomData;
 
-    var newDestRoomData = (newOccupations[targetY] === undefined) ? [] : [...newOccupations[targetY]];
+    var newDestRoomData =
+      newOccupations[targetY] === undefined ? [] : [...newOccupations[targetY]];
     newDestRoomData[action.x] = room;
     newOccupations[targetY] = newDestRoomData;
 

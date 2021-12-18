@@ -1,13 +1,13 @@
-import React from 'react';
-import { hot } from 'react-hot-loader';
+import React from "react";
+import { hot } from "react-hot-loader";
 import MonthYear from "./MonthYear";
 import Dates from "./Dates";
 import "./DatesContainer.css";
 
-function DatesContainer(props) {
+function DatesContainer() {
   return (
     <div className="dates-container">
-      <MonthYear key="monthYear"/>
+      <MonthYear key="monthYear" />
       <Dates />
     </div>
   );

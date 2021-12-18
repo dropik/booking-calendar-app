@@ -5,7 +5,8 @@
   "main": "dist/bundle.js",
   "scripts": {
     "start": "npx webpack serve --host 0.0.0.0",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint \"{src,test}/**/*.{js,jsx}\" --fix"
   },
   "keywords": [
     "hotel",
@@ -20,6 +21,8 @@
     "@babel/preset-react": "^7.14.5",
     "babel-loader": "^8.2.2",
     "css-loader": "^5.2.6",
+    "eslint": "^8.5.0",
+    "eslint-plugin-react": "^7.27.1",
     "style-loader": "^2.0.0",
     "webpack": "^5.40.0",
     "webpack-cli": "^4.7.2",
