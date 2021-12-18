@@ -56,6 +56,7 @@ function App() {
   function onScroll(event) {
     dispatch(scroll({ scrollLeft: event.target.scrollLeft }));
 
+    let scrollLeftMax = event.target.scrollWidth - event.target.clientWidth;
     let cellWidth = remToPx(4) + 1;
     let scrollLimit = cellWidth * globals.TABLE_FETCH_BREAKPOINT;
     if (event.target.scrollLeft < scrollLimit) {
@@ -67,8 +68,7 @@ function App() {
       var preloadedWidth = cellWidth * globals.TABLE_PRELOAD_AMOUNT;
       event.target.scrollLeft = preloadedWidth + scrollLimit + 1;
     } else if (
-      event.target.scrollLeft >
-      event.target.scrollLeftMax - scrollLimit
+      event.target.scrollLeft > scrollLeftMax - scrollLimit
     ) {
       storeDispatch({
         type: "fetchRight",
