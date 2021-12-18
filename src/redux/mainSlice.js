@@ -132,7 +132,7 @@ function moveOccupation(state, action) {
     }
   }
 
-  if (targetY > 0) {
+  if ((targetY > 0) && (targetY != action.payload.y)) {
     if (state.occupations[targetY] === undefined) {
       state.occupations[targetY] = [];
     }
