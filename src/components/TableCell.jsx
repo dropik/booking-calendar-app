@@ -11,7 +11,7 @@ function TableCell({ x, y }) {
   const tileData = useSelector(state => {
     let occupations = state.main.occupations;
     let occupationsForRoom = occupations[y];
-    return occupationsForRoom === undefined ? undefined : occupationsForRoom[x];
+    return occupationsForRoom === undefined ? undefined : state.main.tiles[occupationsForRoom[x]];
   });
 
   var tile =

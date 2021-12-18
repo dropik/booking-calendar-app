@@ -68,7 +68,7 @@ const mocks = {
       colour: "rgba(217, 73, 73, 0.69)",
       roomType: "doppia",
       roomNumber: 2,
-      from: "20211225",
+      from: "2021-12-25",
       nights: 2,
     },
     {
@@ -76,7 +76,7 @@ const mocks = {
       colour: "rgba(73, 122, 217, 0.69)",
       roomType: "doppia",
       roomNumber: 6,
-      from: "20211220",
+      from: "2021-12-20",
       nights: 3,
     },
   ],

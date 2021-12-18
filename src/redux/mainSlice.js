@@ -80,23 +80,15 @@ function getInitialColumnsAmount(width) {
 
 function recalculateOccupations(tiles, startDate) {
   var occupations = [];
-  tiles.forEach(tile => {
+  tiles.forEach((tile, index) => {
     var roomNumber = tile.roomNumber;
     var row = occupations[roomNumber];
     if (row === undefined) {
       row = [];
     }
-    var fromDate = new Date(
-      Date.parse(
-        tile.from.substr(0, 4) +
-          "-" +
-          tile.from.substr(4, 2) +
-          "-" +
-          tile.from.substr(6, 2)
-      )
-    );
+    var fromDate = new Date(tile.from);
     var x = daysBetweenDates(startDate, fromDate);
-    row[x] = tile;
+    row[x] = index;
     occupations[roomNumber] = row;
   });
   return occupations;
@@ -107,7 +99,9 @@ function moveOccupation(state, action) {
   var tableY = action.payload.pageY - margin;
   var rowHeight = remToPx(4) + 1;
   var targetRow = Math.floor(tableY / rowHeight);
-  var targetY = -1;
+  var prevY = action.payload.y;
+  var x = action.payload.x;
+  var newY = -1;
 
   const floors = state.hotel.floors;
   const length = floors.length;
@@ -125,19 +119,21 @@ function moveOccupation(state, action) {
       const room = floor.rooms[j];
 
       if (targetRow == 0) {
-        targetY = room.number;
+        newY = room.number;
         break;
       }
       targetRow--;
     }
   }
 
-  if ((targetY > 0) && (targetY != action.payload.y)) {
-    if (state.occupations[targetY] === undefined) {
-      state.occupations[targetY] = [];
+  if ((newY > 0) && (newY != prevY)) {
+    if (state.occupations[newY] === undefined) {
+      state.occupations[newY] = [];
     }
-    state.occupations[targetY][action.payload.x] = state.occupations[action.payload.y][action.payload.x];
-    state.occupations[action.payload.y][action.payload.x] = undefined;
+    state.occupations[newY][x] = state.occupations[prevY][x];
+    state.occupations[prevY][x] = undefined;
+
+    state.tiles[state.occupations[newY][x]].roomNumber = newY;
   }
 }
 
