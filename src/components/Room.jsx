@@ -1,8 +1,10 @@
 import React from "react";
 import { hot } from "react-hot-loader";
-import PropTypes from "prop-types";
-import TableCell from "./TableCell";
 import { useSelector } from "react-redux";
+import PropTypes from "prop-types";
+
+import TableCell from "./TableCell";
+
 import "./Room.css";
 
 function Room({ roomData, y, isFirst, onTileMove }) {

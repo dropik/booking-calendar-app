@@ -1,14 +1,17 @@
 import React, { useEffect, useLayoutEffect, useReducer, useRef } from "react";
 import { hot } from "react-hot-loader";
+import { useDispatch, useSelector } from "react-redux";
+
+import { daysBetweenDates, remToPx } from "../utils";
+import globals from "../globals";
+import mocks from "../mocks";
+import { scroll, changeDate, resize, fetchLeft, fetchRight } from "../redux/mainSlice";
+
 import Header from "./Header";
 import Hotel from "./Hotel";
 import TableContainer from "./TableContainer";
-import { daysBetweenDates, remToPx } from "./utils";
-import globals from "./globals";
-import mocks from "./mocks";
+
 import "./App.css";
-import { useDispatch, useSelector } from "react-redux";
-import { scroll, changeDate, resize, fetchLeft, fetchRight } from "./mainSlice";
 
 function App() {
   const hotel = mocks.hotel;

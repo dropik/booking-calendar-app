@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { remToPx } from "./utils";
-import globals from "./globals";
-import mocks from "./mocks";
+
+import { remToPx } from "../utils";
+import globals from "../globals";
+import mocks from "../mocks";
 
 export const mainSlice = createSlice({
   name: "main",

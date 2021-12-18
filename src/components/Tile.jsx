@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer } from "react";
 import { hot } from "react-hot-loader";
 import PropTypes from "prop-types";
+
 import "./Tile.css";
 
 function Tile({ onTileMove, x, y, colour, nights, name, roomType }) {

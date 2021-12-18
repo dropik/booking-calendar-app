@@ -1,6 +1,7 @@
 import React from "react";
 import { hot } from "react-hot-loader";
 import PropTyeps from "prop-types";
+
 import "./Day.css";
 
 function Day({ day }) {

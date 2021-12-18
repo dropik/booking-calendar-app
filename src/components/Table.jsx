@@ -1,7 +1,9 @@
 import React from "react";
 import { hot } from "react-hot-loader";
 import PropTypes from "prop-types";
+
 import Room from "./Room";
+
 import "./Table.css";
 
 function Table({ hotel, occupations, tiles, onTileMove }) {

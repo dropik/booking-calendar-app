@@ -1,7 +1,9 @@
 import React, { useMemo } from "react";
 import { hot } from "react-hot-loader";
-import Day from "./Day";
 import { useSelector } from "react-redux";
+
+import Day from "./Day";
+
 import "./Dates.css";
 
 function Dates() {

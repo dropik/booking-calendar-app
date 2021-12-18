@@ -1,8 +1,10 @@
 import React from "react";
 import { hot } from "react-hot-loader";
 import PropTypes from "prop-types";
+
 import DatesContainer from "./DatesContainer";
 import DateInput from "./DateInput";
+
 import "./Header.css";
 
 function Header({ onDateChange }) {

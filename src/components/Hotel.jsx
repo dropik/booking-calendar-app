@@ -1,10 +1,11 @@
 import React from "react";
 import { hot } from "react-hot-loader";
 import PropTypes from "prop-types";
+
 import Floor from "./Floor";
 import RoomNumber from "./RoomNumber";
+
 import "./Hotel.css";
-import "./RoomNumber.css";
 
 function Hotel({ hotel }) {
   var rows = [];

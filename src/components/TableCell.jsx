@@ -1,7 +1,9 @@
 import React from "react";
 import { hot } from "react-hot-loader";
 import PropTypes from "prop-types";
+
 import Tile from "./Tile";
+
 import "./TableCell.css";
 
 function TableCell({ tileData, x, y, onTileMove }) {
