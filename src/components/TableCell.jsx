@@ -1,12 +1,19 @@
 import React from "react";
 import { hot } from "react-hot-loader";
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 
 import Tile from "./Tile";
 
 import "./TableCell.css";
 
-function TableCell({ tileData, x, y, onTileMove }) {
+function TableCell({ x, y }) {
+  const tileData = useSelector(state => {
+    let occupations = state.main.occupations;
+    let occupationsForRoom = occupations[y];
+    return occupationsForRoom === undefined ? undefined : occupationsForRoom[x];
+  });
+
   var tile =
     tileData !== undefined ? (
       <Tile
@@ -16,7 +23,6 @@ function TableCell({ tileData, x, y, onTileMove }) {
         nights={tileData.nights}
         x={x}
         y={y}
-        onTileMove={onTileMove}
       />
     ) : (
       ""
@@ -26,17 +32,8 @@ function TableCell({ tileData, x, y, onTileMove }) {
 }
 
 TableCell.propTypes = {
-  tileData: PropTypes.exact({
-    name: PropTypes.string,
-    colour: PropTypes.string,
-    roomType: PropTypes.string,
-    nights: PropTypes.number,
-    roomNumber: PropTypes.number,
-    from: PropTypes.string
-  }),
   x: PropTypes.number.isRequired,
-  y: PropTypes.number.isRequired,
-  onTileMove: PropTypes.func.isRequired
+  y: PropTypes.number.isRequired
 };
 
 export default hot(module)(TableCell);

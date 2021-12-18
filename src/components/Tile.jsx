@@ -1,10 +1,14 @@
 import React, { useEffect, useReducer } from "react";
 import { hot } from "react-hot-loader";
 import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
+
+import { move } from "../redux/mainSlice";
 
 import "./Tile.css";
 
-function Tile({ onTileMove, x, y, colour, nights, name, roomType }) {
+function Tile({ x, y, colour, nights, name, roomType }) {
+  const dispatch = useDispatch();
   const [grabbedState, grabbedStateDispatch] = useReducer(grabbedStateReducer, {
     grabbed: false,
     initialY: 0,
@@ -31,6 +35,10 @@ function Tile({ onTileMove, x, y, colour, nights, name, roomType }) {
   function handleGrab(event) {
     event.preventDefault();
     grabbedStateDispatch({ type: "grab", event: event });
+  }
+
+  function onTileMove(event) {
+    dispatch(move({ x: event.x, y: event.y, pageY: event.pageY }));
   }
 
   useEffect(() => {
@@ -74,7 +82,6 @@ function Tile({ onTileMove, x, y, colour, nights, name, roomType }) {
 }
 
 Tile.propTypes = {
-  onTileMove: PropTypes.func.isRequired,
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
   colour: PropTypes.string.isRequired,

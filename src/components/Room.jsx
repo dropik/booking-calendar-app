@@ -7,20 +7,17 @@ import TableCell from "./TableCell";
 
 import "./Room.css";
 
-function Room({ roomData, y, isFirst, onTileMove }) {
+function Room({ y, isFirst }) {
   const columns = useSelector(state => state.main.columns);
 
   var cells = [];
-  roomData = roomData === undefined ? [] : roomData;
 
   for (var i = 0; i < columns; i++) {
     cells.push(
       <TableCell
         key={"x: " + i + "; y: " + y}
-        tileData={roomData[i]}
         x={i}
         y={y}
-        onTileMove={onTileMove}
       />
     );
   }
@@ -34,17 +31,8 @@ function Room({ roomData, y, isFirst, onTileMove }) {
 }
 
 Room.propTypes = {
-  roomData: PropTypes.arrayOf(PropTypes.exact({
-    name: PropTypes.string,
-    colour: PropTypes.string,
-    roomType: PropTypes.string,
-    nights: PropTypes.number,
-    roomNumber: PropTypes.number,
-    from: PropTypes.string
-  })),
   y: PropTypes.number.isRequired,
-  isFirst: PropTypes.bool.isRequired,
-  onTileMove: PropTypes.func.isRequired
+  isFirst: PropTypes.bool.isRequired
 };
 
 export default hot(module)(Room);

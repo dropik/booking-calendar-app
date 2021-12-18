@@ -1,13 +1,15 @@
 import React from "react";
 import { hot } from "react-hot-loader";
-import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 
 import Floor from "./Floor";
 import RoomNumber from "./RoomNumber";
 
 import "./Hotel.css";
 
-function Hotel({ hotel }) {
+function Hotel() {
+  const hotel = useSelector(state => state.main.hotel);
+
   var rows = [];
 
   hotel.floors.forEach((floor, index) => {
@@ -22,11 +24,5 @@ function Hotel({ hotel }) {
 
   return <div className="hotel">{rows}</div>;
 }
-
-Hotel.propTypes = {
-  hotel: PropTypes.exact({
-    floors: PropTypes.array
-  }).isRequired
-};
 
 export default hot(module)(Hotel);

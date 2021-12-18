@@ -1,12 +1,14 @@
 import React from "react";
 import { hot } from "react-hot-loader";
-import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 
 import Room from "./Room";
 
 import "./Table.css";
 
-function Table({ hotel, occupations, tiles, onTileMove }) {
+function Table() {
+  const hotel = useSelector(state => state.main.hotel);
+
   var rows = [];
 
   hotel.floors.forEach(floor => {
@@ -15,9 +17,6 @@ function Table({ hotel, occupations, tiles, onTileMove }) {
         <Room
           key={room.number}
           y={room.number}
-          roomData={occupations[room.number]}
-          tiles={tiles}
-          onTileMove={onTileMove}
           isFirst={roomIndex == 0}
         />
       );
@@ -26,14 +25,5 @@ function Table({ hotel, occupations, tiles, onTileMove }) {
 
   return <div className="table">{rows}</div>;
 }
-
-Table.propTypes = {
-  hotel: PropTypes.exact({
-    floors: PropTypes.array
-  }).isRequired,
-  occupations: PropTypes.array.isRequired,
-  tiles: PropTypes.array.isRequired,
-  onTileMove: PropTypes.func.isRequired
-};
 
 export default hot(module)(Table);
