@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { daysBetweenDates, remToPx } from "../utils";
 import globals from "../globals";
-import { scroll, changeDate, resize, fetchLeft, fetchRight } from "../redux/mainSlice";
+import { scroll, changeDate, resize, fetchLeft, fetchRight, move } from "../redux/mainSlice";
 
 import Header from "./Header";
 import Hotel from "./Hotel";
@@ -30,7 +30,7 @@ function App() {
       date: new Date(event.target.value),
       tiles: tiles,
     });
-    dispatch(changeDate({ date: event.target.value }));
+    dispatch(changeDate({ date: event.target.value, tiles: [] }));
     setInitialScrollLeft();
   }
 
@@ -50,6 +50,7 @@ function App() {
       pageY: event.pageY,
       hotel: hotel,
     });
+    dispatch(move({ x: event.x, y: event.y, pageY: event.pageY }));
   }
 
   function onScroll(event) {

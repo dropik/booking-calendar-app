@@ -6,7 +6,7 @@ function remToPx(rem) {
 }
 
 function daysBetweenDates(from, to) {
-  return Math.ceil((to - from) / 86400000);
+  return Math.ceil(((new Date(to)) - (new Date(from))) / 86400000);
 }
 
 export { remToPx, daysBetweenDates };
