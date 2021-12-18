@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { daysBetweenDates, remToPx } from "../utils";
 import globals from "../globals";
-import mocks from "../mocks";
 import { scroll, changeDate, resize, fetchLeft, fetchRight } from "../redux/mainSlice";
 
 import Header from "./Header";
@@ -14,7 +13,7 @@ import TableContainer from "./TableContainer";
 import "./App.css";
 
 function App() {
-  const hotel = mocks.hotel;
+  const hotel = useSelector(state => state.main.hotel);
   const tiles = useSelector(state => state.main.tiles);
   const [store, storeDispatch] = useReducer(
     storeReducer,

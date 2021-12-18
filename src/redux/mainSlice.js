@@ -12,6 +12,7 @@ export const mainSlice = createSlice({
     columns: getInitialColumnsAmount(document.documentElement.clientWidth),
     scrollLeft: 0,
     tiles: mocks.tiles,
+    hotel: mocks.hotel
   },
   reducers: {
     scroll: (state, action) => {
