@@ -43,11 +43,11 @@ export const mainSlice = createSlice({
   initialState: initState(),
   reducers: {
     scroll: (state, action: PayloadAction<{ scrollLeft: number }>) => {
-      let cellWidth = remToPx(4) + 1;
-      let dateShift = Math.floor(
+      const cellWidth = remToPx(4) + 1;
+      const dateShift = Math.floor(
         (action.payload.scrollLeft + cellWidth / 2) / cellWidth
       );
-      let newDate = new Date(state.startDate);
+      const newDate = new Date(state.startDate);
       newDate.setDate(newDate.getDate() + dateShift);
       state.currentDate = newDate.toLocaleDateString("en-CA");
       state.scrollLeft = action.payload.scrollLeft;
@@ -79,9 +79,9 @@ export const mainSlice = createSlice({
 });
 
 function initState(): MainState {
-  let currentDate = (new Date()).toLocaleDateString("en-CA");
-  let startDate = calculateStartDate(currentDate);
-  let tiles = mocks.tiles;
+  const currentDate = (new Date()).toLocaleDateString("en-CA");
+  const startDate = calculateStartDate(currentDate);
+  const tiles = mocks.tiles;
 
   return {
     currentDate: currentDate,
@@ -95,7 +95,7 @@ function initState(): MainState {
 }
 
 function calculateStartDate(date: string) {
-  let result = new Date(date);
+  const result = new Date(date);
   result.setDate(result.getDate() - globals.TABLE_PRELOAD_AMOUNT);
   return result.toLocaleDateString("en-CA");
 }
@@ -105,23 +105,23 @@ function recalculateColumns() {
 }
 
 function getInitialColumnsAmount(width: number) {
-  let roomCellWidth = remToPx(6);
-  let containerWidth = remToPx(4);
+  const roomCellWidth = remToPx(6);
+  const containerWidth = remToPx(4);
   let columns = Math.ceil((width - roomCellWidth) / containerWidth);
   columns += globals.TABLE_PRELOAD_AMOUNT * 2;
   return columns;
 }
 
 function recalculateOccupations(tiles: Array<TileData>, startDate: string) {
-  var occupations = Array<Array<number>>();
+  const occupations = Array<Array<number>>();
   tiles.forEach((tile, index) => {
-    var roomNumber = tile.roomNumber;
-    var row = occupations[roomNumber];
+    const roomNumber = tile.roomNumber;
+    let row = occupations[roomNumber];
     if (row === undefined) {
       row = [];
     }
-    var fromDate = new Date(tile.from);
-    var x = daysBetweenDates(startDate, fromDate.toLocaleDateString("en-CA"));
+    const fromDate = new Date(tile.from);
+    const x = daysBetweenDates(startDate, fromDate.toLocaleDateString("en-CA"));
     row[x] = index;
     occupations[roomNumber] = row;
   });
@@ -129,17 +129,17 @@ function recalculateOccupations(tiles: Array<TileData>, startDate: string) {
 }
 
 function moveOccupation(state: WritableDraft<MainState>, action: PayloadAction<{ pageY: number, y: number, x: number }>) {
-  var margin = remToPx(8) + 1;
-  var tableY = action.payload.pageY - margin;
-  var rowHeight = remToPx(4) + 1;
-  var targetRow = Math.floor(tableY / rowHeight);
-  var prevY = action.payload.y;
-  var x = action.payload.x;
-  var newY = -1;
+  const margin = remToPx(8) + 1;
+  const tableY = action.payload.pageY - margin;
+  const rowHeight = remToPx(4) + 1;
+  let targetRow = Math.floor(tableY / rowHeight);
+  const prevY = action.payload.y;
+  const x = action.payload.x;
+  let newY = -1;
 
   const floors = state.hotel.floors;
   const length = floors.length;
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     const floor = floors[i];
 
     if (targetRow == 0) {
@@ -149,7 +149,7 @@ function moveOccupation(state: WritableDraft<MainState>, action: PayloadAction<{
 
     const rooms = floor.rooms;
     const length = rooms.length;
-    for (var j = 0; j < length; j++) {
+    for (let j = 0; j < length; j++) {
       const room = floor.rooms[j];
 
       if (targetRow == 0) {

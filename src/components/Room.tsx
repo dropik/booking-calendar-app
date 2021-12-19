@@ -15,9 +15,9 @@ type Props = {
 function Room(props: Props) {
   const columns = useAppSelector(state => state.main.columns);
 
-  var cells = [];
+  const cells = [];
 
-  for (var i = 0; i < columns; i++) {
+  for (let i = 0; i < columns; i++) {
     cells.push(
       <TableCell
         key={"x: " + i + "; y: " + props.y}
@@ -27,7 +27,7 @@ function Room(props: Props) {
     );
   }
 
-  var className = "room";
+  let className = "room";
   if (props.isFirst) {
     className += " room-first";
   }

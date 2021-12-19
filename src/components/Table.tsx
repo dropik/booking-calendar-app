@@ -10,7 +10,7 @@ import "./Table.css";
 function Table() {
   const hotel = useAppSelector(state => state.main.hotel);
 
-  var rows: JSX.Element[] = [];
+  const rows: JSX.Element[] = [];
 
   hotel.floors.forEach(floor => {
     floor.rooms.forEach((room, roomIndex) => {

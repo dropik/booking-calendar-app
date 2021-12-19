@@ -20,12 +20,12 @@ function TableContainer(props: Props) {
   function onScroll(event: React.UIEvent<HTMLDivElement>) {
     dispatch(scroll({ scrollLeft: event.currentTarget.scrollLeft }));
 
-    let scrollLeftMax = event.currentTarget.scrollWidth - event.currentTarget.clientWidth;
-    let cellWidth = remToPx(4) + 1;
-    let scrollLimit = cellWidth * globals.TABLE_FETCH_BREAKPOINT;
+    const scrollLeftMax = event.currentTarget.scrollWidth - event.currentTarget.clientWidth;
+    const cellWidth = remToPx(4) + 1;
+    const scrollLimit = cellWidth * globals.TABLE_FETCH_BREAKPOINT;
     if (event.currentTarget.scrollLeft < scrollLimit) {
       dispatch(fetchLeft({ tiles: [] }));
-      var preloadedWidth = cellWidth * globals.TABLE_PRELOAD_AMOUNT;
+      const preloadedWidth = cellWidth * globals.TABLE_PRELOAD_AMOUNT;
       event.currentTarget.scrollLeft = preloadedWidth + scrollLimit + 1;
     } else if (
       event.currentTarget.scrollLeft > scrollLeftMax - scrollLimit

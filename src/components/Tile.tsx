@@ -68,7 +68,7 @@ function Tile(props: Props) {
     window.removeEventListener("mouseup", onDrop);
   }
 
-  var className = "tile";
+  let className = "tile";
   if (grabbedState.grabbed) {
     className += " grabbed";
   }

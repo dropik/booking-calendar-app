@@ -12,7 +12,7 @@ function Dates() {
   const startDate = useAppSelector(state => state.main.startDate);
   const columns = useAppSelector(state => state.main.columns);
 
-  var dates = useMemo(
+  const dates = useMemo(
     () => computeDates(startDate, columns),
     [startDate, columns]
   );
@@ -24,11 +24,11 @@ function Dates() {
 }
 
 function computeDates(startDate: string, columns: number) {
-  var dates = [];
+  const dates = [];
 
-  var dateCounter = new Date(startDate);
-  for (var i = 0; i < columns; i++) {
-    var day = dateCounter.getDate();
+  const dateCounter = new Date(startDate);
+  for (let i = 0; i < columns; i++) {
+    const day = dateCounter.getDate();
     dates.push(
       <Day
         day={day.toString().padStart(2, "0")}

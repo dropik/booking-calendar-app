@@ -14,17 +14,17 @@ type Props = {
 
 function TableCell(props: Props) {
   const tileData = useAppSelector(state => {
-    let occupations = state.main.occupations;
-    let occupationsForRoom = occupations[props.y];
+    const occupations = state.main.occupations;
+    const occupationsForRoom = occupations[props.y];
     return occupationsForRoom === undefined ?
       undefined : (
-      occupationsForRoom[props.x] === undefined ?
-        undefined :
-        state.main.tiles[occupationsForRoom[props.x] as number]
+        occupationsForRoom[props.x] === undefined ?
+          undefined :
+          state.main.tiles[occupationsForRoom[props.x] as number]
       );
   });
 
-  var tile =
+  const tile =
     tileData !== undefined ? (
       <Tile
         x={props.x}

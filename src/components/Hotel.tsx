@@ -11,7 +11,7 @@ import "./Hotel.css";
 function Hotel() {
   const hotel = useAppSelector(state => state.main.hotel);
 
-  var rows: JSX.Element[] = [];
+  const rows: JSX.Element[] = [];
 
   hotel.floors.forEach((floor, index) => {
     rows.push(
