@@ -1,17 +1,18 @@
 import React, { useMemo } from "react";
 import { hot } from "react-hot-loader";
-import { useSelector } from "react-redux";
+
+import { useAppSelector } from "../redux/hooks";
 
 import Day from "./Day";
 
 import "./Dates.css";
 
 function Dates() {
-  const scrollLeft = useSelector(state => state.main.scrollLeft);
-  const startDate = useSelector(state => state.main.startDate);
-  const columns = useSelector(state => state.main.columns);
+  const scrollLeft = useAppSelector(state => state.main.scrollLeft);
+  const startDate = useAppSelector(state => state.main.startDate);
+  const columns = useAppSelector(state => state.main.columns);
 
-  var dates = useMemo(
+  const dates = useMemo(
     () => computeDates(startDate, columns),
     [startDate, columns]
   );
@@ -22,12 +23,12 @@ function Dates() {
   );
 }
 
-function computeDates(startDate, columns) {
-  var dates = [];
+function computeDates(startDate: string, columns: number) {
+  const dates = [];
 
-  var dateCounter = new Date(startDate);
-  for (var i = 0; i < columns; i++) {
-    var day = dateCounter.getDate();
+  const dateCounter = new Date(startDate);
+  for (let i = 0; i < columns; i++) {
+    const day = dateCounter.getDate();
     dates.push(
       <Day
         day={day.toString().padStart(2, "0")}

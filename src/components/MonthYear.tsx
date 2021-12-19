@@ -1,19 +1,20 @@
 import React from "react";
 import { hot } from "react-hot-loader";
-import { useSelector } from "react-redux";
+
+import { useAppSelector } from "../redux/hooks";
 
 import "./MonthYear.css";
 
 function MonthYear() {
-  const currentDate = useSelector(state => state.main.currentDate);
+  const currentDate = useAppSelector(state => state.main.currentDate);
 
-  var currentDateObj = new Date(currentDate);
-  var monthYear = currentDateObj
+  const currentDateObj = new Date(currentDate);
+  const monthYear = currentDateObj
     .toLocaleDateString("it-IT", { year: "numeric", month: "long" })
     .split(" ");
-  var month = monthYear[0];
+  let month = monthYear[0];
   month = month[0].toLocaleUpperCase() + month.substr(1, month.length - 1);
-  var year = monthYear[1];
+  const year = monthYear[1];
 
   return (
     <div className="month-year">

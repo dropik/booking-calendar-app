@@ -1,20 +1,14 @@
-const path = require("path")
+const path = require("path");
 
 module.exports = {
-  entry: "./src/index.js",
+  entry: "./src/index.tsx",
   mode: "development",
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
-        exclude: /(node_modules|bower_components)/,
-        loader: "babel-loader",
-        options: { presets: ["@babel/env"] },
-      },
-      {
-        test: /\.(js|jsx)$/,
-        use: "react-hot-loader/webpack",
-        include: /node_modules/,
+        test: /\.tsx?$/,
+        use: "ts-loader",
+        exclude: /node_modules/,
       },
       {
         test: /\.css$/,
@@ -22,7 +16,7 @@ module.exports = {
       },
     ],
   },
-  resolve: { extensions: ["*", ".js", ".jsx"] },
+  resolve: { extensions: [".tsx", ".ts", ".js"] },
   output: {
     path: path.resolve(__dirname, "dist/"),
     publicPath: "/dist/",
@@ -36,4 +30,4 @@ module.exports = {
     port: 3000,
     hot: true,
   },
-}
+};
