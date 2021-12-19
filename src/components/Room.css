@@ -1,0 +1,9 @@
+.room {
+  display: flex;
+  border: 1px solid black;
+  border-top: 0;
+}
+
+.room-first {
+  margin-top: calc(4rem + 1px);
+}

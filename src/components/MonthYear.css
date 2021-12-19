@@ -1,0 +1,14 @@
+.month-year {
+  z-index: 999;
+  height: 4rem;
+  width: 6rem;
+  border-right: 1px solid black;
+  text-align: center;
+  background-color: white;
+}
+
+.month-year > span {
+  display: inline-block;
+  height: 2rem;
+  margin-top: 0.75rem;
+}
