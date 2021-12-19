@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef } from "react";
+import React, { ChangeEvent, useEffect, useLayoutEffect, useRef } from "react";
 import { hot } from "react-hot-loader";
 import { useDispatch } from "react-redux";
 
@@ -14,7 +14,7 @@ import "./App.css";
 
 function App() {
   const dispatch = useDispatch();
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(onResize, []);
   useEffect(setInitialScrollLeft, []);
@@ -30,11 +30,11 @@ function App() {
   function setInitialScrollLeft() {
     var columnWidth = remToPx(4) + 1;
     var scrollLeft = columnWidth * globals.TABLE_PRELOAD_AMOUNT + 1;
-    containerRef.current.scrollLeft = scrollLeft;
+    containerRef.current!.scrollLeft = scrollLeft;
   }
 
-  function onDateChange(event) {
-    dispatch(changeDate({ date: event.target.value, tiles: [] }));
+  function onDateChange(event: React.FormEvent<HTMLInputElement>) {
+    dispatch(changeDate({ date: event.currentTarget.value, tiles: [] }));
     setInitialScrollLeft();
   }
 

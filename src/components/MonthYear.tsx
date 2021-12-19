@@ -1,11 +1,12 @@
 import React from "react";
 import { hot } from "react-hot-loader";
-import { useSelector } from "react-redux";
+
+import { useAppSelector } from "../redux/hooks";
 
 import "./MonthYear.css";
 
 function MonthYear() {
-  const currentDate = useSelector(state => state.main.currentDate);
+  const currentDate = useAppSelector(state => state.main.currentDate);
 
   var currentDateObj = new Date(currentDate);
   var monthYear = currentDateObj

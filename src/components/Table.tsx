@@ -1,15 +1,16 @@
 import React from "react";
 import { hot } from "react-hot-loader";
-import { useSelector } from "react-redux";
+
+import { useAppSelector } from "../redux/hooks";
 
 import Room from "./Room";
 
 import "./Table.css";
 
 function Table() {
-  const hotel = useSelector(state => state.main.hotel);
+  const hotel = useAppSelector(state => state.main.hotel);
 
-  var rows = [];
+  var rows: JSX.Element[] = [];
 
   hotel.floors.forEach(floor => {
     floor.rooms.forEach((room, roomIndex) => {

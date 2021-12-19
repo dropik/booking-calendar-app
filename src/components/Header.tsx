@@ -1,26 +1,25 @@
 import React from "react";
 import { hot } from "react-hot-loader";
-import PropTypes from "prop-types";
 
 import DatesContainer from "./DatesContainer";
 import DateInput from "./DateInput";
 
 import "./Header.css";
 
-function Header({ onDateChange }) {
+type Props = {
+  onDateChange: (event: React.FormEvent<HTMLInputElement>) => void;
+};
+
+function Header(props: Props) {
   return (
     <div className="header">
       <div className="data-input">
         <span>From: </span>
-        <DateInput onDateChange={onDateChange} />
+        <DateInput onDateChange={props.onDateChange} />
       </div>
       <DatesContainer />
     </div>
   );
 }
-
-Header.propTypes = {
-  onDateChange: PropTypes.func.isRequired
-};
 
 export default hot(module)(Header);

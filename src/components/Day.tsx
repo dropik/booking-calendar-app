@@ -1,19 +1,18 @@
 import React from "react";
 import { hot } from "react-hot-loader";
-import PropTyeps from "prop-types";
 
 import "./Day.css";
 
-function Day({ day }) {
+type Props = {
+  day: string;
+};
+
+function Day(props: Props) {
   return (
     <div className="day">
-      <b>{day}</b>
+      <b>{props.day}</b>
     </div>
   );
 }
-
-Day.propTypes = {
-  day: PropTyeps.string.isRequired
-};
 
 export default hot(module)(Day);
