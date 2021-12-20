@@ -7,7 +7,7 @@ import DateInput from "./DateInput";
 import "./Header.css";
 
 type Props = {
-  onDateChange: (event: React.FormEvent<HTMLInputElement>) => void
+  onDateChange: (date: Date) => void
 };
 
 function Header(props: Props) {

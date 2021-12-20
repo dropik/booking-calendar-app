@@ -20,14 +20,16 @@ function App() {
   useDocumentResizeAdjustment(dispatch);
   useInitialScrollLeft(containerRef);
 
+  function handleDateChange(date: Date) {
+    if (date !== null) {
+      dispatch(changeDate({ date: date.toLocaleDateString("en-CA"), tiles: [] }));
+      setInitialScrollLeft(containerRef);
+    }
+  }
+
   return (
     <div className="app">
-      <Header onDateChange={
-        (event: React.FormEvent<HTMLInputElement>) => {
-          dispatch(changeDate({ date: event.currentTarget.value, tiles: [] }));
-          setInitialScrollLeft(containerRef);
-        }
-      } />
+      <Header onDateChange={handleDateChange}/>
       <Hotel />
       <TableContainer
         containerRef={containerRef}

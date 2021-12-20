@@ -53,6 +53,7 @@ export const mainSlice = createSlice({
       state.scrollLeft = action.payload.scrollLeft;
     },
     changeDate: (state, action: PayloadAction<{ date: string, tiles: TileData[] }>) => {
+      state.currentDate = action.payload.date;
       state.startDate = calculateStartDate(action.payload.date);
       state.columns = recalculateColumns();
       state.tiles = [...state.tiles, ...action.payload.tiles];
