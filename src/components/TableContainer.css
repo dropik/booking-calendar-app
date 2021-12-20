@@ -1,7 +1,8 @@
 .table-container {
-  position: relative;
-  margin-top: calc(8rem + 1px);
+  position: absolute;
+  top: calc(8rem + 1px);
+  bottom: 0;
+  width: calc(100% - 7rem - 3px);
   margin-left: calc(6rem + 2px);
   overflow-x: scroll;
-  border-right: 1px solid black;
 }
