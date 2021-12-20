@@ -1,7 +1,7 @@
 import React from "react";
 import { hot } from "react-hot-loader";
 
-import { useAppSelector } from "../redux/hooks";
+import { useHotel } from "../redux/hooks";
 
 import Floor from "./Floor";
 import RoomNumber from "./RoomNumber";
@@ -9,7 +9,7 @@ import RoomNumber from "./RoomNumber";
 import "./Hotel.css";
 
 function Hotel() {
-  const hotel = useAppSelector(state => state.main.hotel);
+  const hotel = useHotel();
 
   const rows: JSX.Element[] = [];
 

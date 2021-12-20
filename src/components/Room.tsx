@@ -1,7 +1,7 @@
 import React from "react";
 import { hot } from "react-hot-loader";
 
-import { useAppSelector } from "../redux/hooks";
+import { useColumns } from "../redux/hooks";
 
 import TableCell from "./TableCell";
 
@@ -13,7 +13,7 @@ type Props = {
 };
 
 function Room(props: Props) {
-  const columns = useAppSelector(state => state.main.columns);
+  const columns = useColumns();
 
   const cells = [];
 

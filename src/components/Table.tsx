@@ -1,14 +1,14 @@
 import React from "react";
 import { hot } from "react-hot-loader";
 
-import { useAppSelector } from "../redux/hooks";
+import { useHotel } from "../redux/hooks";
 
 import Room from "./Room";
 
 import "./Table.css";
 
 function Table() {
-  const hotel = useAppSelector(state => state.main.hotel);
+  const hotel = useHotel();
 
   const rows: JSX.Element[] = [];
 

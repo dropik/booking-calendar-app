@@ -1,21 +1,19 @@
 import React, { useMemo } from "react";
 import { hot } from "react-hot-loader";
 
-import { useAppSelector } from "../redux/hooks";
+import { useColumns, useScrollLeft, useStartDate } from "../redux/hooks";
 
 import Day from "./Day";
 
 import "./Dates.css";
 
 function Dates() {
-  const scrollLeft = useAppSelector(state => state.main.scrollLeft);
-  const startDate = useAppSelector(state => state.main.startDate);
-  const columns = useAppSelector(state => state.main.columns);
+  const scrollLeft = useScrollLeft();
+  const startDate = useStartDate();
+  const columns = useColumns();
 
-  const dates = useMemo(
-    () => computeDates(startDate, columns),
-    [startDate, columns]
-  );
+  const dates = useDatesMemo(startDate, columns);
+
   return (
     <div style={{ left: -scrollLeft + "px" }} className="dates">
       {dates}
@@ -23,22 +21,24 @@ function Dates() {
   );
 }
 
-function computeDates(startDate: string, columns: number) {
-  const dates = [];
+function useDatesMemo(startDate: string, columns: number) {
+  return useMemo(() => {
+    const dates = [];
 
-  const dateCounter = new Date(startDate);
-  for (let i = 0; i < columns; i++) {
-    const day = dateCounter.getDate();
-    dates.push(
-      <Day
-        day={day.toString().padStart(2, "0")}
-        key={dateCounter.toDateString()}
-      />
-    );
-    dateCounter.setDate(dateCounter.getDate() + 1);
-  }
+    const dateCounter = new Date(startDate);
+    for (let i = 0; i < columns; i++) {
+      const day = dateCounter.getDate();
+      dates.push(
+        <Day
+          day={day.toString().padStart(2, "0")}
+          key={dateCounter.toDateString()}
+        />
+      );
+      dateCounter.setDate(dateCounter.getDate() + 1);
+    }
 
-  return dates;
+    return dates;
+  }, [startDate, columns]);
 }
 
 export default hot(module)(Dates);

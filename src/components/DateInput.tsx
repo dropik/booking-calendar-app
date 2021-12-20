@@ -1,22 +1,14 @@
 import React from "react";
 import { hot } from "react-hot-loader";
 
-import { useAppSelector } from "../redux/hooks";
+import { useCurrentDate } from "../redux/hooks";
 
 type Props = {
   onDateChange: (event: React.FormEvent<HTMLInputElement>) => void
 };
 
 function DateInput(props: Props) {
-  const currentDate = useAppSelector(state => state.main.currentDate);
-
-  function handleDateChange(event: React.FormEvent<HTMLInputElement>) {
-    if (!event.currentTarget.value) {
-      event.preventDefault();
-    } else {
-      props.onDateChange(event);
-    }
-  }
+  const currentDate = useCurrentDate();
 
   return (
     <input
@@ -24,10 +16,18 @@ function DateInput(props: Props) {
       id="fromDate"
       aria-label="fromDate"
       value={currentDate}
-      onChange={handleDateChange}
+      onChange={(event: React.FormEvent<HTMLInputElement>) => { handleDateChange(props, event); }}
       pattern="\d{4}-\d{2}-\d{2}"
     />
   );
+}
+
+function handleDateChange(props: Props, event: React.FormEvent<HTMLInputElement>) {
+  if (!event.currentTarget.value) {
+    event.preventDefault();
+  } else {
+    props.onDateChange(event);
+  }
 }
 
 export default hot(module)(DateInput);
