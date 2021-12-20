@@ -4,8 +4,8 @@ import { hot } from "react-hot-loader";
 import "./Floor.css";
 
 type Props = {
-  isFollowing: boolean;
-  name: string;
+  isFollowing: boolean,
+  name: string
 };
 
 function Floor(props: Props) {

@@ -4,7 +4,7 @@ import { hot } from "react-hot-loader";
 import "./RoomNumber.css";
 
 type Props = {
-  number: number;
+  number: number
 };
 
 function RoomNumber(props: Props) {

@@ -1,21 +1,21 @@
 import React from "react";
 import { hot } from "react-hot-loader";
-import { useDispatch } from "react-redux";
 
 import { remToPx } from "../utils";
-import { fetchLeft, fetchRight, scroll } from "../redux/mainSlice";
 import globals from "../globals";
+import { fetchLeft, fetchRight, scroll } from "../redux/mainSlice";
+import { useAppDispatch } from "../redux/hooks";
 
 import Table from "./Table";
 
 import "./TableContainer.css";
 
 type Props = {
-  containerRef: React.RefObject<HTMLDivElement>;
+  containerRef: React.RefObject<HTMLDivElement>
 };
 
 function TableContainer(props: Props) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   function onScroll(event: React.UIEvent<HTMLDivElement>) {
     dispatch(scroll({ scrollLeft: event.currentTarget.scrollLeft }));

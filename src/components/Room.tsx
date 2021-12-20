@@ -8,8 +8,8 @@ import TableCell from "./TableCell";
 import "./Room.css";
 
 type Props = {
-  y: number;
-  isFirst: boolean;
+  y: number,
+  isFirst: boolean
 };
 
 function Room(props: Props) {

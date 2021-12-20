@@ -4,7 +4,7 @@ import { hot } from "react-hot-loader";
 import "./Day.css";
 
 type Props = {
-  day: string;
+  day: string
 };
 
 function Day(props: Props) {

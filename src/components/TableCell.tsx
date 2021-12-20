@@ -8,8 +8,8 @@ import Tile from "./Tile";
 import "./TableCell.css";
 
 type Props = {
-  x: number;
-  y: number;
+  x: number,
+  y: number
 };
 
 function TableCell(props: Props) {

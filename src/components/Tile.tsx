@@ -1,16 +1,16 @@
 import React, { useReducer } from "react";
 import { hot } from "react-hot-loader";
-import { useDispatch } from "react-redux";
 
+import { useAppDispatch } from "../redux/hooks";
 import { move, TileData } from "../redux/mainSlice";
 
 import "./Tile.css";
 
-interface State {
-  grabbed: boolean;
-  initialY: number;
-  top: number;
-}
+type State = {
+  grabbed: boolean,
+  initialY: number,
+  top: number
+};
 
 type Action = {
     type: "grab" | "move",
@@ -20,13 +20,13 @@ type Action = {
 };
 
 type Props = {
-  x: number;
-  y: number;
-  tileData: TileData;
+  x: number,
+  y: number,
+  tileData: TileData
 };
 
 function Tile(props: Props) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [grabbedState, grabbedStateDispatch] = useReducer(grabbedStateReducer, {
     grabbed: false,
     initialY: 0,

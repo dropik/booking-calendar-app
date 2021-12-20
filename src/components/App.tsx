@@ -1,10 +1,10 @@
 import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { hot } from "react-hot-loader";
-import { useDispatch } from "react-redux";
 
 import { remToPx } from "../utils";
 import globals from "../globals";
 import { changeDate, resize } from "../redux/mainSlice";
+import { useAppDispatch } from "../redux/hooks";
 
 import Header from "./Header";
 import Hotel from "./Hotel";
@@ -13,7 +13,7 @@ import TableContainer from "./TableContainer";
 import "./App.css";
 
 function App() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const containerRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(onResize);

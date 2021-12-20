@@ -5,38 +5,38 @@ import { remToPx, daysBetweenDates } from "../utils";
 import globals from "../globals";
 import mocks from "../mocks";
 
-export interface TileData {
-  roomNumber: number;
-  from: string;
-  colour: string;
-  nights: number;
-  name: string;
-  roomType: string;
-}
+export type TileData = {
+  roomNumber: number,
+  from: string,
+  colour: string,
+  nights: number,
+  name: string,
+  roomType: string
+};
 
-export interface RoomData {
-  number: number;
-  type: string;
-}
+export type RoomData = {
+  number: number,
+  type: string
+};
 
-export interface FloorData {
-  name: string;
-  rooms: RoomData[];
-}
+export type FloorData = {
+  name: string,
+  rooms: RoomData[]
+};
 
-export interface HotelData {
-  floors: FloorData[];
-}
+export type HotelData = {
+  floors: FloorData[]
+};
 
-export interface MainState {
-  currentDate: string;
-  startDate: string;
-  columns: number;
-  scrollLeft: number;
-  tiles: TileData[];
-  hotel: HotelData;
-  occupations: (number | undefined)[][];
-}
+export type MainState = {
+  currentDate: string,
+  startDate: string,
+  columns: number,
+  scrollLeft: number,
+  tiles: TileData[],
+  hotel: HotelData,
+  occupations: (number | undefined)[][]
+};
 
 export const mainSlice = createSlice({
   name: "main",

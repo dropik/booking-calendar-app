@@ -4,7 +4,7 @@ import { hot } from "react-hot-loader";
 import { useAppSelector } from "../redux/hooks";
 
 type Props = {
-  onDateChange: (event: React.FormEvent<HTMLInputElement>) => void;
+  onDateChange: (event: React.FormEvent<HTMLInputElement>) => void
 };
 
 function DateInput(props: Props) {
