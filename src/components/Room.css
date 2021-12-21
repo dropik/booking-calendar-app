@@ -7,3 +7,7 @@
 .room-first {
   margin-top: calc(4rem + 1px);
 }
+
+.room-last {
+  border-bottom: 0;
+}

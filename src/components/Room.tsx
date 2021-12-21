@@ -9,7 +9,8 @@ import "./Room.css";
 
 type Props = {
   y: number,
-  isFirst: boolean
+  isFirst: boolean,
+  isLast: boolean
 };
 
 function Room(props: Props) {
@@ -30,6 +31,9 @@ function Room(props: Props) {
   let className = "room";
   if (props.isFirst) {
     className += " room-first";
+  }
+  if (props.isLast) {
+    className += " room-last";
   }
 
   return <div className={className}>{cells}</div>;

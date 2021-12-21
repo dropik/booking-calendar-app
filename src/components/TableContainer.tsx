@@ -30,7 +30,10 @@ function TableContainer(props: Props) {
 }
 
 function onScroll(dispatch: Dispatch<AnyAction>, event: React.UIEvent<HTMLDivElement>) {
-  dispatch(scroll({ scrollLeft: event.currentTarget.scrollLeft }));
+  dispatch(scroll({
+    scrollLeft: event.currentTarget.scrollLeft,
+    scrollTop: event.currentTarget.scrollTop
+  }));
 
   const scrollLeftMax = event.currentTarget.scrollWidth - event.currentTarget.clientWidth;
   const cellWidth = remToPx(4) + 1;

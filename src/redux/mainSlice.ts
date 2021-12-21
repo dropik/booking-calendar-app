@@ -33,6 +33,7 @@ export type MainState = {
   startDate: string,
   columns: number,
   scrollLeft: number,
+  scrollTop: number,
   tiles: TileData[],
   hotel: HotelData,
   occupations: (number | undefined)[][]
@@ -42,7 +43,7 @@ export const mainSlice = createSlice({
   name: "main",
   initialState: initState(),
   reducers: {
-    scroll: (state, action: PayloadAction<{ scrollLeft: number }>) => {
+    scroll: (state, action: PayloadAction<{ scrollLeft: number, scrollTop: number }>) => {
       const cellWidth = remToPx(4) + 1;
       const dateShift = Math.floor(
         (action.payload.scrollLeft + cellWidth / 2) / cellWidth
@@ -51,6 +52,7 @@ export const mainSlice = createSlice({
       newDate.setDate(newDate.getDate() + dateShift);
       state.currentDate = newDate.toLocaleDateString("en-CA");
       state.scrollLeft = action.payload.scrollLeft;
+      state.scrollTop = action.payload.scrollTop;
     },
     changeDate: (state, action: PayloadAction<{ date: string, tiles: TileData[] }>) => {
       state.currentDate = action.payload.date;
@@ -89,6 +91,7 @@ function initState(): MainState {
     startDate: startDate,
     columns: getInitialColumnsAmount(document.documentElement.clientWidth),
     scrollLeft: 0,
+    scrollTop: 0,
     tiles: tiles,
     hotel: mocks.hotel,
     occupations: recalculateOccupations(tiles, startDate)
@@ -131,7 +134,7 @@ function recalculateOccupations(tiles: Array<TileData>, startDate: string) {
 
 function moveOccupation(state: WritableDraft<MainState>, action: PayloadAction<{ pageY: number, y: number, x: number }>) {
   const margin = remToPx(8) + 1;
-  const tableY = action.payload.pageY - margin;
+  const tableY = action.payload.pageY + state.scrollTop - margin;
   const rowHeight = remToPx(4) + 1;
   let targetRow = Math.floor(tableY / rowHeight);
   const prevY = action.payload.y;

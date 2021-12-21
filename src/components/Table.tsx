@@ -12,13 +12,15 @@ function Table() {
 
   const rows: JSX.Element[] = [];
 
-  hotel.floors.forEach(floor => {
+  hotel.floors.forEach((floor, floorIndex) => {
     floor.rooms.forEach((room, roomIndex) => {
+      const isLast = (floorIndex === hotel.floors.length - 1) && (roomIndex === floor.rooms.length - 1);
       rows.push(
         <Room
           key={room.number}
           y={room.number}
           isFirst={roomIndex == 0}
+          isLast={isLast}
         />
       );
     });

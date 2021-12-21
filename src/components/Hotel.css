@@ -1,7 +1,14 @@
-.hotel {
-  position: absolute;
+.hotel-container {
+  position: fixed;
   top: 8rem;
   left: 0.5rem;
   right: 0.5rem;
+  bottom: 0.5rem;
+  overflow: hidden;
   border-right: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+.hotel {
+  position: relative;
 }

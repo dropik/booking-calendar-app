@@ -7,11 +7,11 @@ import { changeDate, resize } from "../redux/mainSlice";
 import { useAppDispatch } from "../redux/hooks";
 
 import Header from "./Header";
-import Hotel from "./Hotel";
 import TableContainer from "./TableContainer";
 
 import "./App.css";
 import { AnyAction } from "@reduxjs/toolkit";
+import Hotel from "./Hotel";
 
 function App() {
   const dispatch = useAppDispatch();
