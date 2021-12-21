@@ -18,18 +18,7 @@ function Hotel(props: Props) {
   const scrollTop = useScrollTop();
   const rows = useRowsMemo(hotel);
 
-  useEffect(() => {
-    let scrollbarWidth = 0;
-    const currentRef = props.tableContainerRef.current;
-    if (currentRef) {
-      scrollbarWidth = currentRef.offsetHeight - currentRef.clientHeight;
-    }
-
-    if (scrollbarWidth > 0) {
-      rows.push(<div className="scrollbar-space" key="scrollbar-space" style={{ height: scrollbarWidth }}></div>);
-    }
-  }, [props.tableContainerRef, rows]);
-
+  useScrollbarSpace(props.tableContainerRef, rows);
 
   return (
     <div className="hotel-container">
@@ -57,6 +46,20 @@ function useRowsMemo(hotel: HotelData) {
 
     return rows;
   }, [hotel.floors]);
+}
+
+function useScrollbarSpace(tableContainerRef: React.RefObject<HTMLDivElement>, rows: JSX.Element[]) {
+  useEffect(() => {
+    let scrollbarWidth = 0;
+    const currentRef = tableContainerRef.current;
+    if (currentRef) {
+      scrollbarWidth = currentRef.offsetHeight - currentRef.clientHeight;
+    }
+
+    if (scrollbarWidth > 0) {
+      rows.push(<div className="scrollbar-space" key="scrollbar-space" style={{ height: scrollbarWidth }}></div>);
+    }
+  }, [tableContainerRef, rows]);
 }
 
 export default hot(module)(Hotel);
