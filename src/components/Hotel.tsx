@@ -8,7 +8,11 @@ import RoomNumber from "./RoomNumber";
 
 import "./Hotel.css";
 
-function Hotel() {
+type Props = {
+  tableContainerRef: React.RefObject<HTMLDivElement>
+};
+
+function Hotel(props: Props) {
   const hotel = useHotel();
   const scrollTop = useScrollTop();
 
@@ -24,6 +28,16 @@ function Hotel() {
       rows.push(<RoomNumber number={room.number} key={room.number} isLast={isLast} />);
     });
   });
+
+  let scrollbarWidth = 0;
+  const currentRef = props.tableContainerRef.current;
+  if (currentRef) {
+    scrollbarWidth = currentRef.offsetHeight - currentRef.clientHeight;
+  }
+
+  if (scrollbarWidth > 0) {
+    rows.push(<div className="scrollbar-space" style={{ height: scrollbarWidth }}></div>);
+  }
 
   return (
     <div className="hotel-container">

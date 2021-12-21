@@ -11,7 +11,6 @@ function Dates() {
   const scrollLeft = useScrollLeft();
   const startDate = useStartDate();
   const columns = useColumns();
-
   const dates = useDatesMemo(startDate, columns);
 
   return (

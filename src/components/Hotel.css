@@ -12,3 +12,11 @@
 .hotel {
   position: relative;
 }
+
+.scrollbar-space {
+  position: relative;
+  width: 6rem;
+  background-color: white;
+  border: 1px solid black;
+  border-bottom: 0;
+}

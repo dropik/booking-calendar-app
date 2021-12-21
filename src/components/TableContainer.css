@@ -4,6 +4,6 @@
   bottom: 0.5rem;
   width: calc(100% - 7rem - 3px);
   margin-left: calc(6rem + 2px);
-  overflow-x: scroll;
+  overflow: scroll;
   border-bottom: 1px solid black;
 }

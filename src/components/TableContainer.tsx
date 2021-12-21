@@ -12,7 +12,7 @@ import Table from "./Table";
 import "./TableContainer.css";
 
 type Props = {
-  containerRef: React.RefObject<HTMLDivElement>
+  tableContainerRef: React.RefObject<HTMLDivElement>
 };
 
 function TableContainer(props: Props) {
@@ -20,7 +20,7 @@ function TableContainer(props: Props) {
 
   return (
     <div
-      ref={props.containerRef}
+      ref={props.tableContainerRef}
       className="table-container"
       onScroll={(event: React.UIEvent<HTMLDivElement>) => { onScroll(dispatch, event); }}
     >

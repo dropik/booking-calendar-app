@@ -15,25 +15,23 @@ import Hotel from "./Hotel";
 
 function App() {
   const dispatch = useAppDispatch();
-  const containerRef = useRef<HTMLDivElement>(null);
+  const tableContainerRef = useRef<HTMLDivElement>(null);
 
   useDocumentResizeAdjustment(dispatch);
-  useInitialScrollLeft(containerRef);
+  useInitialScrollLeft(tableContainerRef);
 
   function handleDateChange(date: Date) {
     if (date !== null) {
       dispatch(changeDate({ date: date.toLocaleDateString("en-CA"), tiles: [] }));
-      setInitialScrollLeft(containerRef);
+      setInitialScrollLeft(tableContainerRef);
     }
   }
 
   return (
     <div className="app">
       <Header onDateChange={handleDateChange}/>
-      <Hotel />
-      <TableContainer
-        containerRef={containerRef}
-      />
+      <Hotel tableContainerRef={tableContainerRef} />
+      <TableContainer tableContainerRef={tableContainerRef} />
     </div>
   );
 }
