@@ -4,12 +4,18 @@ import { hot } from "react-hot-loader";
 import "./RoomNumber.css";
 
 type Props = {
-  number: number;
+  number: number,
+  isLast: boolean
 };
 
 function RoomNumber(props: Props) {
+  let className = "room-number";
+  if (props.isLast) {
+    className += " room-number-last";
+  }
+
   return (
-    <div className="room-number">
+    <div className={className}>
       <span>Room {props.number}</span>
     </div>
   );

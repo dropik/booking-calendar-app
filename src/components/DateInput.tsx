@@ -1,31 +1,28 @@
 import React from "react";
 import { hot } from "react-hot-loader";
+import DatePicker, { registerLocale } from "react-datepicker";
+import it from "date-fns/locale/it";
 
-import { useAppSelector } from "../redux/hooks";
+import { useCurrentDate } from "../redux/hooks";
+
+import "react-datepicker/dist/react-datepicker.css";
+import "./DateInput.css";
+
+registerLocale("it", it);
 
 type Props = {
-  onDateChange: (event: React.FormEvent<HTMLInputElement>) => void;
+  onDateChange: (date: Date) => void
 };
 
 function DateInput(props: Props) {
-  const currentDate = useAppSelector(state => state.main.currentDate);
-
-  function handleDateChange(event: React.FormEvent<HTMLInputElement>) {
-    if (!event.currentTarget.value) {
-      event.preventDefault();
-    } else {
-      props.onDateChange(event);
-    }
-  }
+  const currentDate = useCurrentDate();
 
   return (
-    <input
-      type="date"
-      id="fromDate"
-      aria-label="fromDate"
-      value={currentDate}
-      onChange={handleDateChange}
-      pattern="\d{4}-\d{2}-\d{2}"
+    <DatePicker
+      locale="it"
+      dateFormat="dd/MM/yyyy"
+      selected={new Date(currentDate)}
+      onChange={props.onDateChange}
     />
   );
 }

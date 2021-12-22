@@ -1,19 +1,20 @@
 import React from "react";
 import { hot } from "react-hot-loader";
 
-import { useAppSelector } from "../redux/hooks";
+import { useColumns } from "../redux/hooks";
 
 import TableCell from "./TableCell";
 
 import "./Room.css";
 
 type Props = {
-  y: number;
-  isFirst: boolean;
+  y: number,
+  isFirst: boolean,
+  isLast: boolean
 };
 
 function Room(props: Props) {
-  const columns = useAppSelector(state => state.main.columns);
+  const columns = useColumns();
 
   const cells = [];
 
@@ -30,6 +31,9 @@ function Room(props: Props) {
   let className = "room";
   if (props.isFirst) {
     className += " room-first";
+  }
+  if (props.isLast) {
+    className += " room-last";
   }
 
   return <div className={className}>{cells}</div>;

@@ -8,3 +8,7 @@
   text-align: center;
   background-color: white;
 }
+
+.room-number-last {
+  border-bottom: 0;
+}
