@@ -1,3 +1,7 @@
 .app {
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.tile-grabbing {
+  cursor: grabbing;
+}

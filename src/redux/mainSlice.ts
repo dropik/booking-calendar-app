@@ -75,7 +75,7 @@ export const mainSlice = createSlice({
       state.tiles = [...state.tiles, ...action.payload.tiles];
       state.occupations = recalculateOccupations(state.tiles, state.startDate);
     },
-    move: (state, action) => {
+    move: (state, action: PayloadAction<{ x: number, y: number, newY: number }>) => {
       moveOccupation(state, action);
     }
   },
@@ -132,37 +132,10 @@ function recalculateOccupations(tiles: Array<TileData>, startDate: string) {
   return occupations;
 }
 
-function moveOccupation(state: WritableDraft<MainState>, action: PayloadAction<{ pageY: number, y: number, x: number }>) {
-  const margin = remToPx(8) + 1;
-  const tableY = action.payload.pageY + state.scrollTop - margin;
-  const rowHeight = remToPx(4) + 1;
-  let targetRow = Math.floor(tableY / rowHeight);
+function moveOccupation(state: WritableDraft<MainState>, action: PayloadAction<{ x: number, y: number, newY: number }>) {
   const prevY = action.payload.y;
   const x = action.payload.x;
-  let newY = -1;
-
-  const floors = state.hotel.floors;
-  const length = floors.length;
-  for (let i = 0; i < length; i++) {
-    const floor = floors[i];
-
-    if (targetRow == 0) {
-      break;
-    }
-    targetRow--;
-
-    const rooms = floor.rooms;
-    const length = rooms.length;
-    for (let j = 0; j < length; j++) {
-      const room = floor.rooms[j];
-
-      if (targetRow == 0) {
-        newY = room.number;
-        break;
-      }
-      targetRow--;
-    }
-  }
+  const newY = action.payload.newY;
 
   if ((newY > 0) && (newY != prevY)) {
     if (state.occupations[newY] === undefined) {

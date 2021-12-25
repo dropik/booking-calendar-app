@@ -20,6 +20,24 @@ function App() {
   useDocumentResizeAdjustment(dispatch);
   useInitialScrollLeft(tableContainerRef);
 
+  useEffect(() => {
+    function setCursorGrabbing() {
+      document.documentElement.classList.add("tile-grabbing");
+    }
+
+    function unsetCursorGrabbing() {
+      document.documentElement.classList.remove("tile-grabbing");
+    }
+
+    window.addEventListener("mousedown", setCursorGrabbing);
+    window.addEventListener("mouseup", unsetCursorGrabbing);
+
+    return () => {
+      window.removeEventListener("mousedown", setCursorGrabbing);
+      window.removeEventListener("mouseup", unsetCursorGrabbing);
+    };
+  }, []);
+
   function handleDateChange(date: Date) {
     if (date !== null) {
       dispatch(changeDate({ date: date.toLocaleDateString("en-CA"), tiles: [] }));
