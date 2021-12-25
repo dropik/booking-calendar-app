@@ -13,16 +13,15 @@ const initialState: GrabbedTileState = {
 export const grabbedTileSlice = createSlice({
   name: "grabbedTile",
   initialState: initialState,
-  reducers: {
-    grab: (state, action: PayloadAction<{ x: number, y: number }>) => {
+  reducers: {},
+  extraReducers: {
+    "grab": (state, action: PayloadAction<{ x: number, y: number }>) => {
       return action.payload;
     },
-    drop: () => {
+    "drop": () => {
       return initialState;
     }
   }
 });
-
-export const { grab, drop } = grabbedTileSlice.actions;
 
 export default grabbedTileSlice.reducer;

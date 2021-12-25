@@ -24,11 +24,7 @@ export type MainState = {
 export const mainSlice = createSlice({
   name: "main",
   initialState: initState(),
-  reducers: {
-    move: (state, action: PayloadAction<{ x: number, y: number, newY: number }>) => {
-      moveOccupation(state, action);
-    }
-  },
+  reducers: {},
   extraReducers: {
     "scroll": (state, action: PayloadAction<{ top: number, left: number }>) => {
       const cellWidth = remToPx(4) + 1;
@@ -53,6 +49,9 @@ export const mainSlice = createSlice({
     "fetchRight": (state, action: PayloadAction<{ tiles: TileData[] }>) => {
       state.tiles = [...state.tiles, ...action.payload.tiles];
       state.occupations = recalculateOccupations(state.tiles, state.startDate);
+    },
+    "move": (state, action: PayloadAction<{ x: number, y: number, newY: number }>) => {
+      moveOccupation(state, action);
     }
   }
 });
@@ -107,8 +106,5 @@ function moveOccupation(state: WritableDraft<MainState>, action: PayloadAction<{
     state.tiles[state.occupations[newY][x] as number].roomNumber = newY;
   }
 }
-
-export const { move } =
-  mainSlice.actions;
 
 export default mainSlice.reducer;

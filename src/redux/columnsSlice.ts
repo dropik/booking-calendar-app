@@ -22,12 +22,11 @@ function getColumnsAmount() {
 export const columnsSlice = createSlice({
   name: "columns",
   initialState: initialState,
-  reducers: {
-    resize: state => {
-      state.value = getColumnsAmount();
-    }
-  },
+  reducers: {},
   extraReducers: {
+    "resize": state => {
+      state.value = getColumnsAmount();
+    },
     "changeDate": (state) => {
       state.value = getColumnsAmount();
     },
@@ -39,7 +38,5 @@ export const columnsSlice = createSlice({
     }
   }
 });
-
-export const { resize } = columnsSlice.actions;
 
 export default columnsSlice.reducer;

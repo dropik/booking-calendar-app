@@ -5,7 +5,6 @@ import { AnyAction } from "@reduxjs/toolkit";
 import { remToPx } from "../utils";
 import globals from "../globals";
 import { useAppDispatch } from "../redux/hooks";
-import * as columns from "../redux/columnsSlice";
 
 import Header from "./Header";
 import Hotel from "./Hotel";
@@ -47,7 +46,7 @@ function getDateChangeHandler(
 function useDocumentSizeAdjustmentLayoutEffect(dispatch: React.Dispatch<AnyAction>): void {
   useLayoutEffect(() => {
     function handleResize() {
-      dispatch(columns.resize());
+      dispatch({ type: "resize" });
     }
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);

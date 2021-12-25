@@ -3,7 +3,6 @@ import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
 import { useAppDispatch, useColumns, useGrabbedTile } from "../redux/hooks";
-import * as main from "../redux/mainSlice";
 import { GrabbedTileState } from "../redux/grabbedTileSlice";
 
 import TableCell from "./TableCell";
@@ -62,7 +61,7 @@ function getDropHandler(
 ): () => void {
   return () => {
     if ((grabbedTile.x >= 0) && (grabbedTile.y >= 0)) {
-      dispatch(main.move({ x: grabbedTile.x, y: grabbedTile.y, newY: y }));
+      dispatch({ type: "move", payload: { x: grabbedTile.x, y: grabbedTile.y, newY: y } });
     }
   };
 }
