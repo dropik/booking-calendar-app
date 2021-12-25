@@ -1,8 +1,9 @@
-import React, { useReducer } from "react";
+import React, { useEffect, useReducer } from "react";
 import { hot } from "react-hot-loader";
+import { drop, grab } from "../redux/grabbedTileSlice";
 
 import { useAppDispatch } from "../redux/hooks";
-import { move, TileData } from "../redux/mainSlice";
+import { TileData } from "../redux/mainSlice";
 
 import "./Tile.css";
 
@@ -62,20 +63,31 @@ function useGrabbedState(x: number, y: number) {
   function onGrab(event: React.MouseEvent<HTMLDivElement>) {
     event.preventDefault();
     stateDispatch({ type: "grab", event: event.nativeEvent });
-    window.addEventListener("mousemove", onMove);
-    window.addEventListener("mouseup", onDrop);
+    dispatch(grab({ x: x, y: y }));
   }
 
-  function onMove(event: MouseEvent) {
-    stateDispatch({ type: "move", event: event });
-  }
+  useEffect(() => {
+    function onMove(event: MouseEvent) {
+      stateDispatch({ type: "move", event: event });
+    }
 
-  function onDrop(event: MouseEvent) {
-    stateDispatch({ type: "drop" });
-    dispatch(move({ x: x, y: y, pageY: event.pageY }));
-    window.removeEventListener("mousemove", onMove);
-    window.removeEventListener("mouseup", onDrop);
-  }
+    function onDrop() {
+      stateDispatch({ type: "drop" });
+      dispatch(drop());
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onDrop);
+    }
+
+    if (state.grabbed) {
+      window.addEventListener("mousemove", onMove);
+      window.addEventListener("mouseup", onDrop);
+    }
+
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onDrop);
+    };
+  }, [state.grabbed, dispatch]);
 
   return {state, onGrab};
 }
