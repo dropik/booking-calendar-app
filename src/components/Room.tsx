@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { hot } from "react-hot-loader";
 
 import { useAppDispatch, useAppSelector, useColumns } from "../redux/hooks";
@@ -18,21 +18,10 @@ function Room(props: Props) {
   const columns = useColumns();
   const grabbedTile = useAppSelector(state => state.grabbedTile);
   const dispatch = useAppDispatch();
+  const cells = useCellsMemo(columns, props.y);
 
   function onDrop(event: React.MouseEvent<HTMLDivElement>) {
     dispatch(move({ x: grabbedTile.x, y: grabbedTile.y, pageY: event.pageY }));
-  }
-
-  const cells = [];
-
-  for (let i = 0; i < columns; i++) {
-    cells.push(
-      <TableCell
-        key={"x: " + i + "; y: " + props.y}
-        x={i}
-        y={props.y}
-      />
-    );
   }
 
   let className = "room";
@@ -46,6 +35,24 @@ function Room(props: Props) {
   return (
     <div className={className} onMouseUp={onDrop}>{cells}</div>
   );
+}
+
+function useCellsMemo(columns: number, y: number) {
+  return useMemo(() => {
+    const cells = [];
+
+    for (let i = 0; i < columns; i++) {
+      cells.push(
+        <TableCell
+          key={"x: " + i + "; y: " + y}
+          x={i}
+          y={y}
+        />
+      );
+    }
+
+    return cells;
+  }, [columns, y]);
 }
 
 export default hot(module)(Room);
