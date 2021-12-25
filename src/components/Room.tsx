@@ -21,7 +21,9 @@ function Room(props: Props) {
   const cells = useCellsMemo(columns, props.y);
 
   function onDrop(event: React.MouseEvent<HTMLDivElement>) {
-    dispatch(move({ x: grabbedTile.x, y: grabbedTile.y, pageY: event.pageY }));
+    if ((grabbedTile.x >= 0) && (grabbedTile.y >= 0)) {
+      dispatch(move({ x: grabbedTile.x, y: grabbedTile.y, pageY: event.pageY }));
+    }
   }
 
   let className = "room";

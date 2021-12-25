@@ -84,7 +84,6 @@ function useGrabbedState(x: number, y: number) {
     }
 
     return () => {
-      console.log("cleanup");
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseup", onDrop);
     };
