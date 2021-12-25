@@ -26,15 +26,6 @@ export const mainSlice = createSlice({
   name: "main",
   initialState: initState(),
   reducers: {
-    scroll: (state, action: PayloadAction<{ scrollLeft: number }>) => {
-      const cellWidth = remToPx(4) + 1;
-      const dateShift = Math.floor(
-        (action.payload.scrollLeft + cellWidth / 2) / cellWidth
-      );
-      const newDate = new Date(state.startDate);
-      newDate.setDate(newDate.getDate() + dateShift);
-      state.currentDate = newDate.toLocaleDateString("en-CA");
-    },
     changeDate: (state, action: PayloadAction<{ date: string, tiles: TileData[] }>) => {
       state.currentDate = action.payload.date;
       state.startDate = calculateStartDate(action.payload.date);
@@ -60,6 +51,17 @@ export const mainSlice = createSlice({
       moveOccupation(state, action);
     }
   },
+  extraReducers: {
+    "scroll": (state, action: PayloadAction<{ top: number, left: number }>) => {
+      const cellWidth = remToPx(4) + 1;
+      const dateShift = Math.floor(
+        (action.payload.left + cellWidth / 2) / cellWidth
+      );
+      const newDate = new Date(state.startDate);
+      newDate.setDate(newDate.getDate() + dateShift);
+      state.currentDate = newDate.toLocaleDateString("en-CA");
+    }
+  }
 });
 
 function initState(): MainState {
@@ -126,7 +128,7 @@ function moveOccupation(state: WritableDraft<MainState>, action: PayloadAction<{
   }
 }
 
-export const { scroll, changeDate, resize, fetchLeft, fetchRight, move } =
+export const { changeDate, resize, fetchLeft, fetchRight, move } =
   mainSlice.actions;
 
 export default mainSlice.reducer;

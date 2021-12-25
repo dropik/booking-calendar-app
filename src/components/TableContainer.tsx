@@ -6,7 +6,6 @@ import { remToPx } from "../utils";
 import globals from "../globals";
 import { useAppDispatch } from "../redux/hooks";
 import * as main from "../redux/mainSlice";
-import * as scroll from "../redux/scrollSlice";
 
 import Table from "./Table";
 
@@ -35,8 +34,7 @@ function getScrollHandler(
     const scrollTop = event.currentTarget.scrollTop;
     const scrollLeft = event.currentTarget.scrollLeft;
 
-    dispatch(main.scroll({ scrollLeft: scrollLeft }));
-    dispatch(scroll.apply({ top: scrollTop, left: scrollLeft }));
+    dispatch({ type: "scroll", payload: { top: scrollTop, left: scrollLeft } });
 
     const scrollLeftMax = event.currentTarget.scrollWidth - event.currentTarget.clientWidth;
     const cellWidth = remToPx(4) + 1;
