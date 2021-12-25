@@ -14,15 +14,15 @@ export type TileData = {
   roomType: string
 };
 
-export type MainState = {
+export type TableState = {
   currentDate: string,
   startDate: string,
   tiles: TileData[],
   occupations: (number | undefined)[][]
 };
 
-export const mainSlice = createSlice({
-  name: "main",
+export const tableSlice = createSlice({
+  name: "table",
   initialState: initState(),
   reducers: {},
   extraReducers: {
@@ -56,7 +56,7 @@ export const mainSlice = createSlice({
   }
 });
 
-function initState(): MainState {
+function initState(): TableState {
   const currentDate = (new Date()).toLocaleDateString("en-CA");
   const startDate = calculateStartDate(currentDate);
   const tiles = mocks.tiles;
@@ -91,7 +91,7 @@ function recalculateOccupations(tiles: Array<TileData>, startDate: string) {
   return occupations;
 }
 
-function moveOccupation(state: WritableDraft<MainState>, action: PayloadAction<{ x: number, y: number, newY: number }>) {
+function moveOccupation(state: WritableDraft<TableState>, action: PayloadAction<{ x: number, y: number, newY: number }>) {
   const prevY = action.payload.y;
   const x = action.payload.x;
   const newY = action.payload.newY;
@@ -107,4 +107,4 @@ function moveOccupation(state: WritableDraft<MainState>, action: PayloadAction<{
   }
 }
 
-export default mainSlice.reducer;
+export default tableSlice.reducer;

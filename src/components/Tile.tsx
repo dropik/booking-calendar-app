@@ -3,7 +3,7 @@ import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
 import { useAppDispatch } from "../redux/hooks";
-import { TileData } from "../redux/mainSlice";
+import { TileData } from "../redux/tableSlice";
 
 import "./Tile.css";
 

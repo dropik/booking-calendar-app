@@ -6,7 +6,7 @@ import { useAppSelector } from "../redux/hooks";
 import Tile from "./Tile";
 
 import "./TableCell.css";
-import { TileData } from "../redux/mainSlice";
+import { TileData } from "../redux/tableSlice";
 
 type Props = {
   x: number,
@@ -33,13 +33,13 @@ function TableCell(props: Props): JSX.Element {
 
 function useTileDataAt(x: number, y: number): TileData | undefined {
   return useAppSelector(state => {
-    const occupations = state.main.occupations;
+    const occupations = state.table.occupations;
     const occupationsForRoom = occupations[y];
     return occupationsForRoom === undefined ?
       undefined : (
         occupationsForRoom[x] === undefined ?
           undefined :
-          state.main.tiles[occupationsForRoom[x] as number]
+          state.table.tiles[occupationsForRoom[x] as number]
       );
   });
 }
