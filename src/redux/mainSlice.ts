@@ -14,20 +14,6 @@ export type TileData = {
   roomType: string
 };
 
-export type RoomData = {
-  number: number,
-  type: string
-};
-
-export type FloorData = {
-  name: string,
-  rooms: RoomData[]
-};
-
-export type HotelData = {
-  floors: FloorData[]
-};
-
 export type MainState = {
   currentDate: string,
   startDate: string,
@@ -35,7 +21,6 @@ export type MainState = {
   scrollLeft: number,
   scrollTop: number,
   tiles: TileData[],
-  hotel: HotelData,
   occupations: (number | undefined)[][]
 };
 
@@ -93,7 +78,6 @@ function initState(): MainState {
     scrollLeft: 0,
     scrollTop: 0,
     tiles: tiles,
-    hotel: mocks.hotel,
     occupations: recalculateOccupations(tiles, startDate)
   };
 }

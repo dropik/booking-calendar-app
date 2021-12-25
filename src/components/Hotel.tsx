@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from "react";
 import { hot } from "react-hot-loader";
 
 import { useHotel, useScrollTop } from "../redux/hooks";
-import { HotelData } from "../redux/mainSlice";
+import { HotelData } from "../redux/hotelSlice";
 
 import Floor from "./Floor";
 import RoomNumber from "./RoomNumber";
