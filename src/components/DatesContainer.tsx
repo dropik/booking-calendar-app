@@ -6,7 +6,7 @@ import Dates from "./Dates";
 
 import "./DatesContainer.css";
 
-function DatesContainer() {
+function DatesContainer(): JSX.Element {
   return (
     <div className="dates-container">
       <MonthYear key="monthYear" />

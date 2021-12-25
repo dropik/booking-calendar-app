@@ -7,7 +7,7 @@ import Day from "./Day";
 
 import "./Dates.css";
 
-function Dates() {
+function Dates(): JSX.Element {
   const scrollLeft = useScrollLeft();
   const startDate = useStartDate();
   const columns = useColumns();
@@ -20,7 +20,7 @@ function Dates() {
   );
 }
 
-function useDatesMemo(startDate: string, columns: number) {
+function useDatesMemo(startDate: string, columns: number): JSX.Element[] {
   return useMemo(() => {
     const dates = [];
 

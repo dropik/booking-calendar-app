@@ -16,7 +16,7 @@ type Props = {
   isLast: boolean
 };
 
-function Room(props: Props) {
+function Room(props: Props): JSX.Element {
   const columns = useColumns();
   const grabbedTile = useGrabbedTile();
   const dispatch = useAppDispatch();
@@ -37,7 +37,7 @@ function Room(props: Props) {
   );
 }
 
-function useCellsMemo(columns: number, y: number) {
+function useCellsMemo(columns: number, y: number): JSX.Element[] {
   return useMemo(() => {
     const cells = [];
 
@@ -59,7 +59,7 @@ function getDropHandler(
   dispatch: React.Dispatch<AnyAction>,
   grabbedTile: GrabbedTileState,
   y: number
-) {
+): () => void {
   return () => {
     if ((grabbedTile.x >= 0) && (grabbedTile.y >= 0)) {
       dispatch(move({ x: grabbedTile.x, y: grabbedTile.y, newY: y }));

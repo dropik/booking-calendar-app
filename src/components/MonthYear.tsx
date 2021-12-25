@@ -5,7 +5,7 @@ import { useCurrentDate } from "../redux/hooks";
 
 import "./MonthYear.css";
 
-function MonthYear() {
+function MonthYear(): JSX.Element {
   const currentDate = useCurrentDate();
 
   const currentDateObj = new Date(currentDate);

@@ -4,8 +4,8 @@ import { AnyAction } from "@reduxjs/toolkit";
 
 import { remToPx } from "../utils";
 import globals from "../globals";
-import { fetchLeft, fetchRight, scroll } from "../redux/mainSlice";
 import { useAppDispatch } from "../redux/hooks";
+import { fetchLeft, fetchRight, scroll } from "../redux/mainSlice";
 
 import Table from "./Table";
 
@@ -15,7 +15,7 @@ type Props = {
   tableContainerRef: React.RefObject<HTMLDivElement>
 };
 
-function TableContainer(props: Props) {
+function TableContainer(props: Props): JSX.Element {
   const dispatch = useAppDispatch();
 
   const scrollHanlder = getScrollHandler(dispatch);
@@ -27,7 +27,9 @@ function TableContainer(props: Props) {
   );
 }
 
-function getScrollHandler(dispatch: React.Dispatch<AnyAction>) {
+function getScrollHandler(
+  dispatch: React.Dispatch<AnyAction>
+): (event: React.UIEvent<HTMLDivElement>) => void {
   return (event: React.UIEvent<HTMLDivElement>) => {
     dispatch(scroll({
       scrollLeft: event.currentTarget.scrollLeft,

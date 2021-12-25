@@ -6,30 +6,32 @@ import { useAppSelector } from "../redux/hooks";
 import Tile from "./Tile";
 
 import "./TableCell.css";
+import { TileData } from "../redux/mainSlice";
 
 type Props = {
   x: number,
   y: number
 };
 
-function TableCell(props: Props) {
+function TableCell(props: Props): JSX.Element {
   const tileData = useTileDataAt(props.x, props.y);
 
-  const tile =
-    tileData !== undefined ? (
+  const tile: JSX.Element[] = [];
+  if (tileData !== undefined) {
+    tile.push(
       <Tile
+        key="tile"
         x={props.x}
         y={props.y}
         tileData={tileData}
       />
-    ) : (
-      ""
     );
+  }
 
   return <div className="table-cell">{tile}</div>;
 }
 
-function useTileDataAt(x: number, y: number) {
+function useTileDataAt(x: number, y: number): TileData | undefined {
   return useAppSelector(state => {
     const occupations = state.main.occupations;
     const occupationsForRoom = occupations[y];

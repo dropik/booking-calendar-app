@@ -8,7 +8,7 @@ type Props = {
   isFollowing: boolean
 };
 
-function Floor(props: Props) {
+function Floor(props: Props): JSX.Element {
   let className = "floor";
   if (props.isFollowing) {
     className += " floor-following";

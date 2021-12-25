@@ -7,7 +7,7 @@ import Room from "./Room";
 
 import "./Table.css";
 
-function Table() {
+function Table(): JSX.Element {
   const hotel = useHotel();
 
   const rows: JSX.Element[] = [];

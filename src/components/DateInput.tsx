@@ -14,7 +14,7 @@ type Props = {
   onDateChange: (date: Date) => void
 };
 
-function DateInput(props: Props) {
+function DateInput(props: Props): JSX.Element {
   const currentDate = useCurrentDate();
 
   return (

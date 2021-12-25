@@ -8,7 +8,7 @@ type Props = {
   isLast: boolean
 };
 
-function RoomNumber(props: Props) {
+function RoomNumber(props: Props): JSX.Element {
   let className = "room-number";
   if (props.isLast) {
     className += " room-number-last";

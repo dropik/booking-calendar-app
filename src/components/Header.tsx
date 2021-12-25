@@ -10,7 +10,7 @@ type Props = {
   onDateChange: (date: Date) => void
 };
 
-function Header(props: Props) {
+function Header(props: Props): JSX.Element {
   return (
     <div className="header">
       <div className="data-input">

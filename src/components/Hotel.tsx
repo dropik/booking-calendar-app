@@ -13,7 +13,7 @@ type Props = {
   tableContainerRef: React.RefObject<HTMLDivElement>
 };
 
-function Hotel(props: Props) {
+function Hotel(props: Props): JSX.Element {
   const hotel = useHotel();
   const scrollTop = useScrollTop();
   const rows = useRowsMemo(hotel);
@@ -29,7 +29,7 @@ function Hotel(props: Props) {
   ;
 }
 
-function useRowsMemo(hotel: HotelData) {
+function useRowsMemo(hotel: HotelData): JSX.Element[] {
   return useMemo(() => {
     const rows: JSX.Element[] = [];
 
@@ -48,7 +48,10 @@ function useRowsMemo(hotel: HotelData) {
   }, [hotel.floors]);
 }
 
-function useHotelbarBottomSpacingEffect(tableContainerRef: React.RefObject<HTMLDivElement>, rows: JSX.Element[]) {
+function useHotelbarBottomSpacingEffect(
+  tableContainerRef: React.RefObject<HTMLDivElement>,
+  rows: JSX.Element[]
+): void {
   useEffect(() => {
     let scrollbarWidth = 0;
     const currentRef = tableContainerRef.current;

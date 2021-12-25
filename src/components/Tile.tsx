@@ -27,7 +27,7 @@ type Props = {
   tileData: TileData
 };
 
-function Tile(props: Props) {
+function Tile(props: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const {state, stateDispatch} = useGrabbedState();
 
@@ -56,7 +56,7 @@ function Tile(props: Props) {
   );
 }
 
-function useGrabbedState() {
+function useGrabbedState(): {state: State, stateDispatch: React.Dispatch<Action>} {
   const initialState: State = {
     grabbed: false,
     initialY: 0,
@@ -90,7 +90,7 @@ function getGrabHandler(
   dispatch: React.Dispatch<AnyAction>,
   x: number,
   y: number
-) {
+): (event: React.MouseEvent<HTMLDivElement>) => void {
   return (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
     stateDispatch({ type: "grab", event: event.nativeEvent });
@@ -102,7 +102,7 @@ function useMouseMoveAndDropHandlingEffect(
   state: State,
   stateDispatch: React.Dispatch<Action>,
   dispatch: React.Dispatch<AnyAction>
-) {
+): void {
   useEffect(() => {
     function onMove(event: MouseEvent) {
       stateDispatch({ type: "move", event: event });

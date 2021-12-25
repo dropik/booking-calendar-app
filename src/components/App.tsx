@@ -13,7 +13,7 @@ import TableContainer from "./TableContainer";
 
 import "./App.css";
 
-function App() {
+function App(): JSX.Element {
   const dispatch = useAppDispatch();
   const tableContainerRef = useRef<HTMLDivElement>(null);
 
@@ -35,7 +35,7 @@ function App() {
 function getDateChangeHandler(
   dispatch: React.Dispatch<AnyAction>,
   tableContainerRef: React.RefObject<HTMLDivElement>
-) {
+): (date: Date) => void {
   return (date: Date) => {
     if (date !== null) {
       dispatch(changeDate({ date: date.toLocaleDateString("en-CA"), tiles: [] }));
@@ -44,7 +44,7 @@ function getDateChangeHandler(
   };
 }
 
-function useDocumentSizeAdjustmentLayoutEffect(dispatch: React.Dispatch<AnyAction>) {
+function useDocumentSizeAdjustmentLayoutEffect(dispatch: React.Dispatch<AnyAction>): void {
   useLayoutEffect(() => {
     function handleResize() {
       dispatch(resize());
@@ -54,11 +54,11 @@ function useDocumentSizeAdjustmentLayoutEffect(dispatch: React.Dispatch<AnyActio
   });
 }
 
-function useInitialScrollLeftEffect(ref: React.RefObject<HTMLDivElement>) {
+function useInitialScrollLeftEffect(ref: React.RefObject<HTMLDivElement>): void {
   useEffect(() => { setInitialScrollLeft(ref); });
 }
 
-function useWindowCursorGrabbingEffect() {
+function useWindowCursorGrabbingEffect(): void {
   useEffect(() => {
     function setCursorGrabbing() {
       document.documentElement.classList.add("tile-grabbing");
@@ -78,7 +78,7 @@ function useWindowCursorGrabbingEffect() {
   }, []);
 }
 
-function setInitialScrollLeft(ref: React.RefObject<HTMLDivElement>) {
+function setInitialScrollLeft(ref: React.RefObject<HTMLDivElement>): void {
   const columnWidth = remToPx(4) + 1;
   const scrollLeft = columnWidth * globals.TABLE_PRELOAD_AMOUNT + 1;
   const currentTarget = ref.current;

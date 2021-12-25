@@ -7,7 +7,7 @@ type Props = {
   day: string
 };
 
-function Day(props: Props) {
+function Day(props: Props): JSX.Element {
   return (
     <div className="day">
       <b>{props.day}</b>
