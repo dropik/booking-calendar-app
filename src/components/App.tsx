@@ -5,7 +5,7 @@ import { AnyAction } from "@reduxjs/toolkit";
 import { remToPx } from "../utils";
 import globals from "../globals";
 import { useAppDispatch } from "../redux/hooks";
-import * as main from "../redux/mainSlice";
+import * as columns from "../redux/columnsSlice";
 
 import Header from "./Header";
 import Hotel from "./Hotel";
@@ -38,7 +38,7 @@ function getDateChangeHandler(
 ): (date: Date) => void {
   return (date: Date) => {
     if (date !== null) {
-      dispatch(main.changeDate({ date: date.toLocaleDateString("en-CA"), tiles: [] }));
+      dispatch({ type: "changeDate", payload: { date: date.toLocaleDateString("en-CA"), tiles: [] } });
       setInitialScrollLeft(tableContainerRef);
     }
   };
@@ -47,7 +47,7 @@ function getDateChangeHandler(
 function useDocumentSizeAdjustmentLayoutEffect(dispatch: React.Dispatch<AnyAction>): void {
   useLayoutEffect(() => {
     function handleResize() {
-      dispatch(main.resize());
+      dispatch(columns.resize());
     }
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);

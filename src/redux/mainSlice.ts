@@ -17,7 +17,6 @@ export type TileData = {
 export type MainState = {
   currentDate: string,
   startDate: string,
-  columns: number,
   tiles: TileData[],
   occupations: (number | undefined)[][]
 };
@@ -26,27 +25,6 @@ export const mainSlice = createSlice({
   name: "main",
   initialState: initState(),
   reducers: {
-    changeDate: (state, action: PayloadAction<{ date: string, tiles: TileData[] }>) => {
-      state.currentDate = action.payload.date;
-      state.startDate = calculateStartDate(action.payload.date);
-      state.columns = recalculateColumns();
-      state.tiles = [...state.tiles, ...action.payload.tiles];
-      state.occupations = recalculateOccupations(state.tiles, state.startDate);
-    },
-    resize: state => {
-      state.columns = recalculateColumns();
-    },
-    fetchLeft: (state, action: PayloadAction<{ tiles: TileData[] }>) => {
-      state.startDate = calculateStartDate(state.startDate);
-      state.columns += globals.TABLE_PRELOAD_AMOUNT;
-      state.tiles = [...state.tiles, ...action.payload.tiles];
-      state.occupations = recalculateOccupations(state.tiles, state.startDate);
-    },
-    fetchRight: (state, action: PayloadAction<{ tiles: TileData[] }>) => {
-      state.columns += globals.TABLE_PRELOAD_AMOUNT;
-      state.tiles = [...state.tiles, ...action.payload.tiles];
-      state.occupations = recalculateOccupations(state.tiles, state.startDate);
-    },
     move: (state, action: PayloadAction<{ x: number, y: number, newY: number }>) => {
       moveOccupation(state, action);
     }
@@ -60,6 +38,21 @@ export const mainSlice = createSlice({
       const newDate = new Date(state.startDate);
       newDate.setDate(newDate.getDate() + dateShift);
       state.currentDate = newDate.toLocaleDateString("en-CA");
+    },
+    "changeDate": (state, action: PayloadAction<{ date: string, tiles: TileData[] }>) => {
+      state.currentDate = action.payload.date;
+      state.startDate = calculateStartDate(action.payload.date);
+      state.tiles = [...state.tiles, ...action.payload.tiles];
+      state.occupations = recalculateOccupations(state.tiles, state.startDate);
+    },
+    "fetchLeft": (state, action: PayloadAction<{ tiles: TileData[] }>) => {
+      state.startDate = calculateStartDate(state.startDate);
+      state.tiles = [...state.tiles, ...action.payload.tiles];
+      state.occupations = recalculateOccupations(state.tiles, state.startDate);
+    },
+    "fetchRight": (state, action: PayloadAction<{ tiles: TileData[] }>) => {
+      state.tiles = [...state.tiles, ...action.payload.tiles];
+      state.occupations = recalculateOccupations(state.tiles, state.startDate);
     }
   }
 });
@@ -72,7 +65,6 @@ function initState(): MainState {
   return {
     currentDate: currentDate,
     startDate: startDate,
-    columns: getInitialColumnsAmount(document.documentElement.clientWidth),
     tiles: tiles,
     occupations: recalculateOccupations(tiles, startDate)
   };
@@ -82,18 +74,6 @@ function calculateStartDate(date: string) {
   const result = new Date(date);
   result.setDate(result.getDate() - globals.TABLE_PRELOAD_AMOUNT);
   return result.toLocaleDateString("en-CA");
-}
-
-function recalculateColumns() {
-  return getInitialColumnsAmount(document.documentElement.clientWidth);
-}
-
-function getInitialColumnsAmount(width: number) {
-  const roomCellWidth = remToPx(6);
-  const containerWidth = remToPx(4);
-  let columns = Math.ceil((width - roomCellWidth) / containerWidth);
-  columns += globals.TABLE_PRELOAD_AMOUNT * 2;
-  return columns;
 }
 
 function recalculateOccupations(tiles: Array<TileData>, startDate: string) {
@@ -128,7 +108,7 @@ function moveOccupation(state: WritableDraft<MainState>, action: PayloadAction<{
   }
 }
 
-export const { changeDate, resize, fetchLeft, fetchRight, move } =
+export const { move } =
   mainSlice.actions;
 
 export default mainSlice.reducer;

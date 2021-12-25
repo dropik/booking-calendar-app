@@ -5,7 +5,6 @@ import { AnyAction } from "@reduxjs/toolkit";
 import { remToPx } from "../utils";
 import globals from "../globals";
 import { useAppDispatch } from "../redux/hooks";
-import * as main from "../redux/mainSlice";
 
 import Table from "./Table";
 
@@ -40,13 +39,13 @@ function getScrollHandler(
     const cellWidth = remToPx(4) + 1;
     const scrollLimit = cellWidth * globals.TABLE_FETCH_BREAKPOINT;
     if (scrollLeft < scrollLimit) {
-      dispatch(main.fetchLeft({ tiles: [] }));
+      dispatch({ type: "fetchLeft", payload: { tiles: [] } });
       const preloadedWidth = cellWidth * globals.TABLE_PRELOAD_AMOUNT;
       event.currentTarget.scrollLeft = preloadedWidth + scrollLimit + 1;
     } else if (
       scrollLeft > scrollLeftMax - scrollLimit
     ) {
-      dispatch(main.fetchRight({ tiles: [] }));
+      dispatch({ type: "fetchRight", payload: { tiles: [] } });
     }
   };
 }
