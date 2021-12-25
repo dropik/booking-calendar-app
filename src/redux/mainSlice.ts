@@ -18,8 +18,6 @@ export type MainState = {
   currentDate: string,
   startDate: string,
   columns: number,
-  scrollLeft: number,
-  scrollTop: number,
   tiles: TileData[],
   occupations: (number | undefined)[][]
 };
@@ -28,7 +26,7 @@ export const mainSlice = createSlice({
   name: "main",
   initialState: initState(),
   reducers: {
-    scroll: (state, action: PayloadAction<{ scrollLeft: number, scrollTop: number }>) => {
+    scroll: (state, action: PayloadAction<{ scrollLeft: number }>) => {
       const cellWidth = remToPx(4) + 1;
       const dateShift = Math.floor(
         (action.payload.scrollLeft + cellWidth / 2) / cellWidth
@@ -36,8 +34,6 @@ export const mainSlice = createSlice({
       const newDate = new Date(state.startDate);
       newDate.setDate(newDate.getDate() + dateShift);
       state.currentDate = newDate.toLocaleDateString("en-CA");
-      state.scrollLeft = action.payload.scrollLeft;
-      state.scrollTop = action.payload.scrollTop;
     },
     changeDate: (state, action: PayloadAction<{ date: string, tiles: TileData[] }>) => {
       state.currentDate = action.payload.date;
@@ -75,8 +71,6 @@ function initState(): MainState {
     currentDate: currentDate,
     startDate: startDate,
     columns: getInitialColumnsAmount(document.documentElement.clientWidth),
-    scrollLeft: 0,
-    scrollTop: 0,
     tiles: tiles,
     occupations: recalculateOccupations(tiles, startDate)
   };
