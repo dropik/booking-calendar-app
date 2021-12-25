@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export type grabbedTileState = {
+export type GrabbedTileState = {
   x: number,
   y: number
 };
 
-const initialState: grabbedTileState = {
+const initialState: GrabbedTileState = {
   x: -1,
   y: -1
 };

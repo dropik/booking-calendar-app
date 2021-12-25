@@ -1,12 +1,14 @@
 import React, { useMemo } from "react";
 import { hot } from "react-hot-loader";
+import { AnyAction } from "@reduxjs/toolkit";
 
-import { useAppDispatch, useAppSelector, useColumns } from "../redux/hooks";
+import { useAppDispatch, useColumns, useGrabbedTile } from "../redux/hooks";
+import { move } from "../redux/mainSlice";
+import { GrabbedTileState } from "../redux/grabbedTileSlice";
 
 import TableCell from "./TableCell";
 
 import "./Room.css";
-import { move } from "../redux/mainSlice";
 
 type Props = {
   y: number,
@@ -16,15 +18,11 @@ type Props = {
 
 function Room(props: Props) {
   const columns = useColumns();
-  const grabbedTile = useAppSelector(state => state.grabbedTile);
+  const grabbedTile = useGrabbedTile();
   const dispatch = useAppDispatch();
   const cells = useCellsMemo(columns, props.y);
 
-  function onDrop() {
-    if ((grabbedTile.x >= 0) && (grabbedTile.y >= 0)) {
-      dispatch(move({ x: grabbedTile.x, y: grabbedTile.y, newY: props.y }));
-    }
-  }
+  const dropHandler = getDropHandler(dispatch, grabbedTile, props.y);
 
   let className = "room";
   if (props.isFirst) {
@@ -35,7 +33,7 @@ function Room(props: Props) {
   }
 
   return (
-    <div className={className} onMouseUp={onDrop}>{cells}</div>
+    <div className={className} onMouseUp={dropHandler}>{cells}</div>
   );
 }
 
@@ -55,6 +53,18 @@ function useCellsMemo(columns: number, y: number) {
 
     return cells;
   }, [columns, y]);
+}
+
+function getDropHandler(
+  dispatch: React.Dispatch<AnyAction>,
+  grabbedTile: GrabbedTileState,
+  y: number
+) {
+  return () => {
+    if ((grabbedTile.x >= 0) && (grabbedTile.y >= 0)) {
+      dispatch(move({ x: grabbedTile.x, y: grabbedTile.y, newY: y }));
+    }
+  };
 }
 
 export default hot(module)(Room);

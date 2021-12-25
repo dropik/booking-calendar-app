@@ -1,9 +1,10 @@
 import React, { useEffect, useReducer } from "react";
 import { hot } from "react-hot-loader";
-import { drop, grab } from "../redux/grabbedTileSlice";
+import { AnyAction } from "@reduxjs/toolkit";
 
 import { useAppDispatch } from "../redux/hooks";
 import { TileData } from "../redux/mainSlice";
+import { drop, grab } from "../redux/grabbedTileSlice";
 
 import "./Tile.css";
 
@@ -11,12 +12,6 @@ type State = {
   grabbed: boolean,
   initialY: number,
   top: number
-};
-
-const initialState: State = {
-  grabbed: false,
-  initialY: 0,
-  top: 0
 };
 
 type Action = {
@@ -33,7 +28,12 @@ type Props = {
 };
 
 function Tile(props: Props) {
-  const {state, onGrab} = useGrabbedState(props.x, props.y);
+  const dispatch = useAppDispatch();
+  const {state, stateDispatch} = useGrabbedState();
+
+  const grabHandler = getGrabHandler(stateDispatch, dispatch, props.x, props.y);
+
+  useMouseMoveAndDropHandlingEffect(state, stateDispatch, dispatch);
 
   let className = "tile";
   if (state.grabbed) {
@@ -43,7 +43,7 @@ function Tile(props: Props) {
   return (
     <div
       className={className}
-      onMouseDown={onGrab}
+      onMouseDown={grabHandler}
       style={{
         top: state.top + "px",
         backgroundColor: props.tileData.colour,
@@ -56,16 +56,53 @@ function Tile(props: Props) {
   );
 }
 
-function useGrabbedState(x: number, y: number) {
-  const dispatch = useAppDispatch();
+function useGrabbedState() {
+  const initialState: State = {
+    grabbed: false,
+    initialY: 0,
+    top: 0
+  };
+
+  function reducer(state: State, action: Action) {
+    switch (action.type) {
+    case "grab":
+      return { grabbed: true, initialY: action.event.pageY, top: 0 };
+    case "move":
+      return {
+        grabbed: true,
+        initialY: state.initialY,
+        top: state.grabbed ? action.event.pageY - state.initialY : 0,
+      };
+    case "drop":
+      return { grabbed: false, initialY: 0, top: 0 };
+    default:
+      throw new Error();
+    }
+  }
+
   const [state, stateDispatch] = useReducer(reducer, initialState);
 
-  function onGrab(event: React.MouseEvent<HTMLDivElement>) {
+  return {state, stateDispatch};
+}
+
+function getGrabHandler(
+  stateDispatch: React.Dispatch<Action>,
+  dispatch: React.Dispatch<AnyAction>,
+  x: number,
+  y: number
+) {
+  return (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
     stateDispatch({ type: "grab", event: event.nativeEvent });
     dispatch(grab({ x: x, y: y }));
-  }
+  };
+}
 
+function useMouseMoveAndDropHandlingEffect(
+  state: State,
+  stateDispatch: React.Dispatch<Action>,
+  dispatch: React.Dispatch<AnyAction>
+) {
   useEffect(() => {
     function onMove(event: MouseEvent) {
       stateDispatch({ type: "move", event: event });
@@ -87,26 +124,7 @@ function useGrabbedState(x: number, y: number) {
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseup", onDrop);
     };
-  }, [state.grabbed, dispatch]);
-
-  return {state, onGrab};
-}
-
-function reducer(state: State, action: Action) {
-  switch (action.type) {
-  case "grab":
-    return { grabbed: true, initialY: action.event.pageY, top: 0 };
-  case "move":
-    return {
-      grabbed: true,
-      initialY: state.initialY,
-      top: state.grabbed ? action.event.pageY - state.initialY : 0,
-    };
-  case "drop":
-    return { grabbed: false, initialY: 0, top: 0 };
-  default:
-    throw new Error();
-  }
+  }, [state.grabbed, stateDispatch, dispatch]);
 }
 
 export default hot(module)(Tile);

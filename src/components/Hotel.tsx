@@ -2,12 +2,12 @@ import React, { useEffect, useMemo } from "react";
 import { hot } from "react-hot-loader";
 
 import { useHotel, useScrollTop } from "../redux/hooks";
+import { HotelData } from "../redux/mainSlice";
 
 import Floor from "./Floor";
 import RoomNumber from "./RoomNumber";
 
 import "./Hotel.css";
-import { HotelData } from "../redux/mainSlice";
 
 type Props = {
   tableContainerRef: React.RefObject<HTMLDivElement>
@@ -18,7 +18,7 @@ function Hotel(props: Props) {
   const scrollTop = useScrollTop();
   const rows = useRowsMemo(hotel);
 
-  useScrollbarSpace(props.tableContainerRef, rows);
+  useHotelbarBottomSpacingEffect(props.tableContainerRef, rows);
 
   return (
     <div className="hotel-container">
@@ -48,7 +48,7 @@ function useRowsMemo(hotel: HotelData) {
   }, [hotel.floors]);
 }
 
-function useScrollbarSpace(tableContainerRef: React.RefObject<HTMLDivElement>, rows: JSX.Element[]) {
+function useHotelbarBottomSpacingEffect(tableContainerRef: React.RefObject<HTMLDivElement>, rows: JSX.Element[]) {
   useEffect(() => {
     let scrollbarWidth = 0;
     const currentRef = tableContainerRef.current;
