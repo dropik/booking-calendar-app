@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { WritableDraft } from "immer/dist/internal";
 
-import { remToPx, daysBetweenDates } from "../utils";
+import { remToPx, daysBetweenDates, dateToString } from "../utils";
 import globals from "../globals";
 import mocks from "../mocks";
 
@@ -34,7 +34,7 @@ export const tableSlice = createSlice({
       );
       const newDate = new Date(state.leftmostDate);
       newDate.setDate(newDate.getDate() + dateShift);
-      state.currentDate = newDate.toLocaleDateString("en-CA");
+      state.currentDate = dateToString(newDate);
     },
     "changeDate": (state, action: PayloadAction<{ date: string, tiles: TileData[] }>) => {
       state.initialDate = action.payload.date;
@@ -59,7 +59,7 @@ export const tableSlice = createSlice({
 });
 
 function initState(): TableState {
-  const currentDate = (new Date()).toLocaleDateString("en-CA");
+  const currentDate = dateToString(new Date());
   const leftmostDate = calculateLeftmostDate(currentDate);
   const tiles = mocks.tiles;
 
@@ -75,7 +75,7 @@ function initState(): TableState {
 function calculateLeftmostDate(date: string) {
   const result = new Date(date);
   result.setDate(result.getDate() - globals.TABLE_PRELOAD_AMOUNT);
-  return result.toLocaleDateString("en-CA");
+  return dateToString(result);
 }
 
 function recalculateOccupations(tiles: Array<TileData>, startDate: string) {
@@ -87,7 +87,7 @@ function recalculateOccupations(tiles: Array<TileData>, startDate: string) {
       row = [];
     }
     const fromDate = new Date(tile.from);
-    const x = daysBetweenDates(startDate, fromDate.toLocaleDateString("en-CA"));
+    const x = daysBetweenDates(startDate, dateToString(fromDate));
     row[x] = index;
     occupations[roomNumber] = row;
   });

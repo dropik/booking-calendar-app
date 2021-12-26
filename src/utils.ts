@@ -10,3 +10,7 @@ export function daysBetweenDates(from: string, to: string): number {
   const toDate = new Date(to);
   return Math.ceil((toDate.getTime() - fromDate.getTime()) / 86400000);
 }
+
+export function dateToString(date: Date) {
+  return date.toLocaleDateString("en-CA");
+}

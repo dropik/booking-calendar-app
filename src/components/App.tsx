@@ -2,6 +2,7 @@ import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
+import { dateToString } from "../utils";
 import { useAppDispatch } from "../redux/hooks";
 
 import Header from "./Header";
@@ -31,7 +32,7 @@ function App(): JSX.Element {
 function getDateChangeHandler(dispatch: React.Dispatch<AnyAction>): (date: Date) => void {
   return (date: Date) => {
     if (date !== null) {
-      dispatch({ type: "changeDate", payload: { date: date.toLocaleDateString("en-CA"), tiles: [] } });
+      dispatch({ type: "changeDate", payload: { date: dateToString(date), tiles: [] } });
     }
   };
 }
