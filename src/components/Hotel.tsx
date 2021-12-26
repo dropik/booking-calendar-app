@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo } from "react";
 import { hot } from "react-hot-loader";
 
-import { useHotel, useScrollTop } from "../redux/hooks";
-import { HotelData } from "../redux/hotelSlice";
+import { useAppDispatch, useHotelData, useScrollTop } from "../redux/hooks";
+import * as hotel from "../redux/hotelSlice";
 
 import Floor from "./Floor";
 import RoomNumber from "./RoomNumber";
@@ -14,9 +14,14 @@ type Props = {
 };
 
 function Hotel(props: Props): JSX.Element {
-  const hotel = useHotel();
+  const dispatch = useAppDispatch();
+  const hotelData = useHotelData();
   const scrollTop = useScrollTop();
-  const rows = useRowsMemo(hotel);
+  const rows = useRowsMemo(hotelData);
+
+  useEffect(() => {
+    dispatch(hotel.fetchAsync());
+  }, [dispatch]);
 
   useHotelbarBottomSpacingEffect(props.tableContainerRef, rows);
 
@@ -29,23 +34,23 @@ function Hotel(props: Props): JSX.Element {
   ;
 }
 
-function useRowsMemo(hotel: HotelData): JSX.Element[] {
+function useRowsMemo(hotelData: hotel.HotelData): JSX.Element[] {
   return useMemo(() => {
     const rows: JSX.Element[] = [];
 
-    hotel.floors.forEach((floor, floorIndex) => {
+    hotelData.floors.forEach((floor, floorIndex) => {
       rows.push(
         <Floor key={floor.name} name={floor.name} isFollowing={floorIndex > 0} />
       );
 
       floor.rooms.forEach((room, roomIndex) => {
-        const isLast = (floorIndex === hotel.floors.length - 1) && (roomIndex === floor.rooms.length - 1);
+        const isLast = (floorIndex === hotelData.floors.length - 1) && (roomIndex === floor.rooms.length - 1);
         rows.push(<RoomNumber number={room.number} key={room.number} isLast={isLast} />);
       });
     });
 
     return rows;
-  }, [hotel.floors]);
+  }, [hotelData.floors]);
 }
 
 function useHotelbarBottomSpacingEffect(

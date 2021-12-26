@@ -5,8 +5,8 @@
   right: 0.5rem;
   bottom: 0.5rem;
   overflow: hidden;
-  border-right: 1px solid black;
-  border-bottom: 1px solid black;
+  border: 1px solid black;
+  border-top: 0;
 }
 
 .hotel {

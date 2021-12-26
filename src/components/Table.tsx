@@ -1,14 +1,14 @@
 import React from "react";
 import { hot } from "react-hot-loader";
 
-import { useHotel } from "../redux/hooks";
+import { useHotelData } from "../redux/hooks";
 
 import Room from "./Room";
 
 import "./Table.css";
 
 function Table(): JSX.Element {
-  const hotel = useHotel();
+  const hotel = useHotelData();
 
   const rows: JSX.Element[] = [];
 
