@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
@@ -12,7 +12,6 @@ import "./App.css";
 
 function App(): JSX.Element {
   const dispatch = useAppDispatch();
-  const tableContainerRef = useRef<HTMLDivElement>(null);
 
   useDocumentSizeAdjustmentLayoutEffect(dispatch);
   useWindowCursorGrabbingEffect();
@@ -21,7 +20,7 @@ function App(): JSX.Element {
     <div className="app">
       <Header />
       <Hotel />
-      <TableContainer tableContainerRef={tableContainerRef} />
+      <TableContainer />
     </div>
   );
 }

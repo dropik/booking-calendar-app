@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
@@ -12,22 +12,19 @@ import Table from "./Table";
 
 import "./TableContainer.css";
 
-type Props = {
-  tableContainerRef: React.RefObject<HTMLDivElement>
-};
-
-function TableContainer(props: Props): JSX.Element {
+function TableContainer(): JSX.Element {
   const dispatch = useAppDispatch();
   const hotelData = useHotelData();
   const initialDate = useInitialDate();
+  const ref = useRef<HTMLDivElement>(null);
 
   const scrollHanlder = getScrollHandler(dispatch);
 
-  useTableDimentionsUpdateEffect(props.tableContainerRef, dispatch, hotelData);
-  useInitialScrollLeftEffect(props.tableContainerRef, hotelData, initialDate);
+  useTableDimentionsUpdateEffect(ref, dispatch, hotelData);
+  useInitialScrollLeftEffect(ref, hotelData, initialDate);
 
   return (
-    <div ref={props.tableContainerRef} className="table-container" onScroll={scrollHanlder}>
+    <div ref={ref} className="table-container" onScroll={scrollHanlder}>
       <Table />
     </div>
   );
