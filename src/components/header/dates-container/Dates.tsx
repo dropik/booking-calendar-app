@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { hot } from "react-hot-loader";
 
-import { useColumns, useScrollLeft, useLeftmostDate } from "../redux/hooks";
+import { useColumns, useScrollLeft, useLeftmostDate } from "../../../redux/hooks";
 
 import Day from "./Day";
 

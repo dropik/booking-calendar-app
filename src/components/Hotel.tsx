@@ -3,10 +3,10 @@ import { hot } from "react-hot-loader";
 
 import { useAppDispatch, useHotelData, useScrollTop, useTableDimentions } from "../redux/hooks";
 import * as hotel from "../redux/hotelSlice";
-import { TableDimentionsState } from "../redux/tableDimentionsSlice";
+import * as tableDimentions from "../redux/tableDimentionsSlice";
 
-import Floor from "./Floor";
-import RoomNumber from "./RoomNumber";
+import Floor from "./hotel/Floor";
+import RoomNumber from "./hotel/RoomNumber";
 
 import "./Hotel.css";
 
@@ -55,7 +55,7 @@ function useHotelDataFetchingEffect(dispatch: React.Dispatch<hotel.FetchAsyncAct
 }
 
 function useHotelbarBottomSpacingEffect(
-  tableDimentions: TableDimentionsState,
+  tableDimentions: tableDimentions.TableDimentionsState,
   rows: JSX.Element[]
 ): void {
   useEffect(() => {

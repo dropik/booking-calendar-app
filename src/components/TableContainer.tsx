@@ -8,7 +8,7 @@ import { useAppDispatch, useHotelData, useInitialDate } from "../redux/hooks";
 import { HotelData } from "../redux/hotelSlice";
 import * as tableDimentions from "../redux/tableDimentionsSlice";
 
-import Table from "./Table";
+import Table from "./table-container/Table";
 
 import "./TableContainer.css";
 

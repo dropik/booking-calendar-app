@@ -2,11 +2,11 @@ import React, { useEffect, useLayoutEffect } from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
-import { useAppDispatch } from "../redux/hooks";
+import { useAppDispatch } from "./redux/hooks";
 
-import Header from "./Header";
-import Hotel from "./Hotel";
-import TableContainer from "./TableContainer";
+import Header from "./components/Header";
+import Hotel from "./components/Hotel";
+import TableContainer from "./components/TableContainer";
 
 import "./App.css";
 

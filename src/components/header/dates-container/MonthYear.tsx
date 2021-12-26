@@ -1,7 +1,7 @@
 import React from "react";
 import { hot } from "react-hot-loader";
 
-import { useCurrentDate } from "../redux/hooks";
+import { useCurrentDate } from "../../../redux/hooks";
 
 import "./MonthYear.css";
 

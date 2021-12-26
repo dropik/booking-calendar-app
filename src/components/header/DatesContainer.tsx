@@ -1,8 +1,8 @@
 import React from "react";
 import { hot } from "react-hot-loader";
 
-import MonthYear from "./MonthYear";
-import Dates from "./Dates";
+import MonthYear from "./dates-container/MonthYear";
+import Dates from "./dates-container/Dates";
 
 import "./DatesContainer.css";
 

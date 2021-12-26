@@ -4,8 +4,8 @@ import { AnyAction } from "@reduxjs/toolkit";
 import DatePicker, { registerLocale } from "react-datepicker";
 import it from "date-fns/locale/it";
 
-import { dateToString } from "../utils";
-import { useAppDispatch, useCurrentDate } from "../redux/hooks";
+import { dateToString } from "../../utils";
+import { useAppDispatch, useCurrentDate } from "../../redux/hooks";
 
 import "react-datepicker/dist/react-datepicker.css";
 import "./DateInput.css";

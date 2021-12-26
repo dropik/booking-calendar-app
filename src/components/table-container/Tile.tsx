@@ -2,8 +2,8 @@ import React, { useEffect, useReducer } from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
-import { useAppDispatch } from "../redux/hooks";
-import { TileData } from "../redux/tableSlice";
+import { useAppDispatch } from "../../redux/hooks";
+import * as table from "../../redux/tableSlice";
 
 import "./Tile.css";
 
@@ -23,7 +23,7 @@ type Action = {
 type Props = {
   x: number,
   y: number,
-  tileData: TileData
+  tileData: table.TileData
 };
 
 function Tile(props: Props): JSX.Element {

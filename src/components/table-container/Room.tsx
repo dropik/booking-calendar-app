@@ -2,8 +2,8 @@ import React, { useMemo } from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
-import { useAppDispatch, useColumns, useGrabbedTile } from "../redux/hooks";
-import { GrabbedTileState } from "../redux/grabbedTileSlice";
+import { useAppDispatch, useColumns, useGrabbedTile } from "../../redux/hooks";
+import { GrabbedTileState } from "../../redux/grabbedTileSlice";
 
 import TableCell from "./TableCell";
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { hot } from "react-hot-loader";
-import { useHotelData } from "../redux/hooks";
+import { useHotelData } from "../../redux/hooks";
 
 import Room from "./Room";
 

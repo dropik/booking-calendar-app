@@ -1,8 +1,8 @@
 import React from "react";
 import { hot } from "react-hot-loader";
 
-import DatesContainer from "./DatesContainer";
-import DateInput from "./DateInput";
+import DatesContainer from "./header/DatesContainer";
+import DateInput from "./header/DateInput";
 
 import "./Header.css";
 
