@@ -1,20 +1,22 @@
 import React from "react";
 import { hot } from "react-hot-loader";
 
-import { useHotelData } from "../redux/hooks";
+import { HotelData } from "../redux/hotelSlice";
 
 import Room from "./Room";
 
 import "./Table.css";
 
-function Table(): JSX.Element {
-  const hotel = useHotelData();
+type Props = {
+  hotelData: HotelData
+};
 
+function Table(props: Props): JSX.Element {
   const rows: JSX.Element[] = [];
 
-  hotel.floors.forEach((floor, floorIndex) => {
+  props.hotelData.floors.forEach((floor, floorIndex) => {
     floor.rooms.forEach((room, roomIndex) => {
-      const isLast = (floorIndex === hotel.floors.length - 1) && (roomIndex === floor.rooms.length - 1);
+      const isLast = (floorIndex === props.hotelData.floors.length - 1) && (roomIndex === floor.rooms.length - 1);
       rows.push(
         <Room
           key={room.number}

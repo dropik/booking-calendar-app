@@ -2,8 +2,7 @@ import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
-import { remToPx } from "../utils";
-import globals from "../globals";
+import { getInitialScrollLeft } from "../utils";
 import { useAppDispatch } from "../redux/hooks";
 
 import Header from "./Header";
@@ -19,7 +18,6 @@ function App(): JSX.Element {
   const dateChangeHandler = getDateChangeHandler(dispatch, tableContainerRef);
 
   useDocumentSizeAdjustmentLayoutEffect(dispatch);
-  useInitialScrollLeftEffect(tableContainerRef);
   useWindowCursorGrabbingEffect();
 
   return (
@@ -38,7 +36,9 @@ function getDateChangeHandler(
   return (date: Date) => {
     if (date !== null) {
       dispatch({ type: "changeDate", payload: { date: date.toLocaleDateString("en-CA"), tiles: [] } });
-      setInitialScrollLeft(tableContainerRef);
+      if (tableContainerRef.current) {
+        tableContainerRef.current.scrollLeft = getInitialScrollLeft();
+      }
     }
   };
 }
@@ -50,11 +50,7 @@ function useDocumentSizeAdjustmentLayoutEffect(dispatch: React.Dispatch<AnyActio
     }
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  });
-}
-
-function useInitialScrollLeftEffect(ref: React.RefObject<HTMLDivElement>): void {
-  useEffect(() => { setInitialScrollLeft(ref); });
+  }, [dispatch]);
 }
 
 function useWindowCursorGrabbingEffect(): void {
@@ -75,15 +71,6 @@ function useWindowCursorGrabbingEffect(): void {
       window.removeEventListener("mouseup", unsetCursorGrabbing);
     };
   }, []);
-}
-
-function setInitialScrollLeft(ref: React.RefObject<HTMLDivElement>): void {
-  const columnWidth = remToPx(4) + 1;
-  const scrollLeft = columnWidth * globals.TABLE_PRELOAD_AMOUNT + 1;
-  const currentTarget = ref.current;
-  if (currentTarget) {
-    currentTarget.scrollLeft = scrollLeft;
-  }
 }
 
 export default hot(module)(App);

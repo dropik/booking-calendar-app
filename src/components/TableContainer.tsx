@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
-import { remToPx } from "../utils";
+import { getInitialScrollLeft, remToPx } from "../utils";
 import globals from "../globals";
-import { useAppDispatch } from "../redux/hooks";
+import { useAppDispatch, useHotelData } from "../redux/hooks";
 
 import Table from "./Table";
 
@@ -16,12 +16,19 @@ type Props = {
 
 function TableContainer(props: Props): JSX.Element {
   const dispatch = useAppDispatch();
+  const hotelData = useHotelData();
 
   const scrollHanlder = getScrollHandler(dispatch);
 
+  useEffect(() => {
+    if (props.tableContainerRef.current) {
+      props.tableContainerRef.current.scrollLeft = getInitialScrollLeft();
+    }
+  });
+
   return (
     <div ref={props.tableContainerRef} className="table-container" onScroll={scrollHanlder}>
-      <Table />
+      <Table hotelData={hotelData} />
     </div>
   );
 }
