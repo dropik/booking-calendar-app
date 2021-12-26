@@ -2,7 +2,6 @@ import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
-import { getInitialScrollLeft } from "../utils";
 import { useAppDispatch } from "../redux/hooks";
 
 import Header from "./Header";
@@ -15,7 +14,7 @@ function App(): JSX.Element {
   const dispatch = useAppDispatch();
   const tableContainerRef = useRef<HTMLDivElement>(null);
 
-  const dateChangeHandler = getDateChangeHandler(dispatch, tableContainerRef);
+  const dateChangeHandler = getDateChangeHandler(dispatch);
 
   useDocumentSizeAdjustmentLayoutEffect(dispatch);
   useWindowCursorGrabbingEffect();
@@ -29,16 +28,10 @@ function App(): JSX.Element {
   );
 }
 
-function getDateChangeHandler(
-  dispatch: React.Dispatch<AnyAction>,
-  tableContainerRef: React.RefObject<HTMLDivElement>
-): (date: Date) => void {
+function getDateChangeHandler(dispatch: React.Dispatch<AnyAction>): (date: Date) => void {
   return (date: Date) => {
     if (date !== null) {
       dispatch({ type: "changeDate", payload: { date: date.toLocaleDateString("en-CA"), tiles: [] } });
-      if (tableContainerRef.current) {
-        tableContainerRef.current.scrollLeft = getInitialScrollLeft();
-      }
     }
   };
 }

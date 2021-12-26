@@ -15,8 +15,9 @@ export type TileData = {
 };
 
 export type TableState = {
+  initialDate: string,
   currentDate: string,
-  startDate: string,
+  leftmostDate: string,
   tiles: TileData[],
   occupations: (number | undefined)[][]
 };
@@ -31,24 +32,25 @@ export const tableSlice = createSlice({
       const dateShift = Math.floor(
         (action.payload.left + cellWidth / 2) / cellWidth
       );
-      const newDate = new Date(state.startDate);
+      const newDate = new Date(state.leftmostDate);
       newDate.setDate(newDate.getDate() + dateShift);
       state.currentDate = newDate.toLocaleDateString("en-CA");
     },
     "changeDate": (state, action: PayloadAction<{ date: string, tiles: TileData[] }>) => {
+      state.initialDate = action.payload.date;
       state.currentDate = action.payload.date;
-      state.startDate = calculateStartDate(action.payload.date);
+      state.leftmostDate = calculateLeftmostDate(action.payload.date);
       state.tiles = [...state.tiles, ...action.payload.tiles];
-      state.occupations = recalculateOccupations(state.tiles, state.startDate);
+      state.occupations = recalculateOccupations(state.tiles, state.leftmostDate);
     },
     "fetchLeft": (state, action: PayloadAction<{ tiles: TileData[] }>) => {
-      state.startDate = calculateStartDate(state.startDate);
+      state.leftmostDate = calculateLeftmostDate(state.leftmostDate);
       state.tiles = [...state.tiles, ...action.payload.tiles];
-      state.occupations = recalculateOccupations(state.tiles, state.startDate);
+      state.occupations = recalculateOccupations(state.tiles, state.leftmostDate);
     },
     "fetchRight": (state, action: PayloadAction<{ tiles: TileData[] }>) => {
       state.tiles = [...state.tiles, ...action.payload.tiles];
-      state.occupations = recalculateOccupations(state.tiles, state.startDate);
+      state.occupations = recalculateOccupations(state.tiles, state.leftmostDate);
     },
     "move": (state, action: PayloadAction<{ x: number, y: number, newY: number }>) => {
       moveOccupation(state, action);
@@ -58,18 +60,19 @@ export const tableSlice = createSlice({
 
 function initState(): TableState {
   const currentDate = (new Date()).toLocaleDateString("en-CA");
-  const startDate = calculateStartDate(currentDate);
+  const leftmostDate = calculateLeftmostDate(currentDate);
   const tiles = mocks.tiles;
 
   return {
+    initialDate: currentDate,
     currentDate: currentDate,
-    startDate: startDate,
+    leftmostDate: leftmostDate,
     tiles: tiles,
-    occupations: recalculateOccupations(tiles, startDate)
+    occupations: recalculateOccupations(tiles, leftmostDate)
   };
 }
 
-function calculateStartDate(date: string) {
+function calculateLeftmostDate(date: string) {
   const result = new Date(date);
   result.setDate(result.getDate() - globals.TABLE_PRELOAD_AMOUNT);
   return result.toLocaleDateString("en-CA");

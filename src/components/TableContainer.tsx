@@ -4,7 +4,7 @@ import { AnyAction } from "@reduxjs/toolkit";
 
 import { getInitialScrollLeft, remToPx } from "../utils";
 import globals from "../globals";
-import { useAppDispatch, useHotelData } from "../redux/hooks";
+import { useAppDispatch, useHotelData, useInitialDate } from "../redux/hooks";
 
 import Table from "./Table";
 
@@ -17,6 +17,7 @@ type Props = {
 function TableContainer(props: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const hotelData = useHotelData();
+  const initialDate = useInitialDate();
 
   const scrollHanlder = getScrollHandler(dispatch);
 
@@ -24,7 +25,7 @@ function TableContainer(props: Props): JSX.Element {
     if (props.tableContainerRef.current) {
       props.tableContainerRef.current.scrollLeft = getInitialScrollLeft();
     }
-  });
+  }, [props.tableContainerRef, hotelData, initialDate]);
 
   return (
     <div ref={props.tableContainerRef} className="table-container" onScroll={scrollHanlder}>
