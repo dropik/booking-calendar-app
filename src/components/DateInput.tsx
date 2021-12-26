@@ -1,30 +1,39 @@
 import React from "react";
 import { hot } from "react-hot-loader";
+import { AnyAction } from "@reduxjs/toolkit";
 import DatePicker, { registerLocale } from "react-datepicker";
 import it from "date-fns/locale/it";
 
-import { useCurrentDate } from "../redux/hooks";
+import { dateToString } from "../utils";
+import { useAppDispatch, useCurrentDate } from "../redux/hooks";
 
 import "react-datepicker/dist/react-datepicker.css";
 import "./DateInput.css";
 
 registerLocale("it", it);
 
-type Props = {
-  onDateChange: (date: Date) => void
-};
-
-function DateInput(props: Props): JSX.Element {
+function DateInput(): JSX.Element {
+  const dispatch = useAppDispatch();
   const currentDate = useCurrentDate();
+
+  const dateChangeHandler = getDateChangeHandler(dispatch);
 
   return (
     <DatePicker
       locale="it"
       dateFormat="dd/MM/yyyy"
       selected={new Date(currentDate)}
-      onChange={props.onDateChange}
+      onChange={dateChangeHandler}
     />
   );
+}
+
+function getDateChangeHandler(dispatch: React.Dispatch<AnyAction>): (date: Date) => void {
+  return (date: Date) => {
+    if (date !== null) {
+      dispatch({ type: "changeDate", payload: { date: dateToString(date), tiles: [] } });
+    }
+  };
 }
 
 export default hot(module)(DateInput);

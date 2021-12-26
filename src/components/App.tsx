@@ -2,7 +2,6 @@ import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
-import { dateToString } from "../utils";
 import { useAppDispatch } from "../redux/hooks";
 
 import Header from "./Header";
@@ -15,26 +14,16 @@ function App(): JSX.Element {
   const dispatch = useAppDispatch();
   const tableContainerRef = useRef<HTMLDivElement>(null);
 
-  const dateChangeHandler = getDateChangeHandler(dispatch);
-
   useDocumentSizeAdjustmentLayoutEffect(dispatch);
   useWindowCursorGrabbingEffect();
 
   return (
     <div className="app">
-      <Header onDateChange={dateChangeHandler}/>
+      <Header />
       <Hotel tableContainerRef={tableContainerRef} />
       <TableContainer tableContainerRef={tableContainerRef} />
     </div>
   );
-}
-
-function getDateChangeHandler(dispatch: React.Dispatch<AnyAction>): (date: Date) => void {
-  return (date: Date) => {
-    if (date !== null) {
-      dispatch({ type: "changeDate", payload: { date: dateToString(date), tiles: [] } });
-    }
-  };
 }
 
 function useDocumentSizeAdjustmentLayoutEffect(dispatch: React.Dispatch<AnyAction>): void {
