@@ -69,6 +69,8 @@ function useHotelbarBottomSpacingEffect(
         </div>
       );
     }
+
+    return () => { rows.pop(); };
   }, [tableDimentions, rows]);
 }
 
