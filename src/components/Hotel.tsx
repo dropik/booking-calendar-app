@@ -1,26 +1,24 @@
 import React, { useEffect, useMemo } from "react";
 import { hot } from "react-hot-loader";
 
-import { useAppDispatch, useHotelData, useScrollTop } from "../redux/hooks";
+import { useAppDispatch, useHotelData, useScrollTop, useTableDimentions } from "../redux/hooks";
 import * as hotel from "../redux/hotelSlice";
+import { TableDimentionsState } from "../redux/tableDimentionsSlice";
 
 import Floor from "./Floor";
 import RoomNumber from "./RoomNumber";
 
 import "./Hotel.css";
 
-type Props = {
-  tableContainerRef: React.RefObject<HTMLDivElement>
-};
-
-function Hotel(props: Props): JSX.Element {
+function Hotel(): JSX.Element {
   const dispatch = useAppDispatch();
   const hotelData = useHotelData();
   const scrollTop = useScrollTop();
+  const tableDimentions = useTableDimentions();
   const rows = useRowsMemo(hotelData);
 
   useHotelDataFetchingEffect(dispatch);
-  useHotelbarBottomSpacingEffect(props.tableContainerRef, rows);
+  useHotelbarBottomSpacingEffect(tableDimentions, rows);
 
   return (
     <div className="hotel-container">
@@ -57,20 +55,21 @@ function useHotelDataFetchingEffect(dispatch: React.Dispatch<hotel.FetchAsyncAct
 }
 
 function useHotelbarBottomSpacingEffect(
-  tableContainerRef: React.RefObject<HTMLDivElement>,
+  tableDimentions: TableDimentionsState,
   rows: JSX.Element[]
 ): void {
   useEffect(() => {
-    let scrollbarWidth = 0;
-    const currentRef = tableContainerRef.current;
-    if (currentRef) {
-      scrollbarWidth = currentRef.offsetHeight - currentRef.clientHeight;
-    }
-
+    const scrollbarWidth = tableDimentions.offsetHeight - tableDimentions.clientHeight;
     if (scrollbarWidth > 0) {
-      rows.push(<div className="scrollbar-space" key="scrollbar-space" style={{ height: scrollbarWidth }}></div>);
+      rows.push(
+        <div
+          className="scrollbar-space"
+          key="scrollbar-space"
+          style={{ height: scrollbarWidth }}>
+        </div>
+      );
     }
-  }, [tableContainerRef, rows]);
+  }, [tableDimentions, rows]);
 }
 
 export default hot(module)(Hotel);

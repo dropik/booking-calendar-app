@@ -20,7 +20,7 @@ function App(): JSX.Element {
   return (
     <div className="app">
       <Header />
-      <Hotel tableContainerRef={tableContainerRef} />
+      <Hotel />
       <TableContainer tableContainerRef={tableContainerRef} />
     </div>
   );

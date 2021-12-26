@@ -5,11 +5,12 @@ import { AnyAction } from "@reduxjs/toolkit";
 import { remToPx } from "../utils";
 import globals from "../globals";
 import { useAppDispatch, useHotelData, useInitialDate } from "../redux/hooks";
+import { HotelData } from "../redux/hotelSlice";
+import * as tableDimentions from "../redux/tableDimentionsSlice";
 
 import Table from "./Table";
 
 import "./TableContainer.css";
-import { HotelData } from "../redux/hotelSlice";
 
 type Props = {
   tableContainerRef: React.RefObject<HTMLDivElement>
@@ -22,6 +23,7 @@ function TableContainer(props: Props): JSX.Element {
 
   const scrollHanlder = getScrollHandler(dispatch);
 
+  useTableDimentionsUpdateEffect(props.tableContainerRef, dispatch, hotelData);
   useInitialScrollLeftEffect(props.tableContainerRef, hotelData, initialDate);
 
   return (
@@ -63,6 +65,22 @@ function useInitialScrollLeftEffect(ref: React.RefObject<HTMLDivElement>, hotelD
       ref.current.scrollLeft = scrollLeft;
     }
   }, [ref, hotelData, initialDate]);
+}
+
+function useTableDimentionsUpdateEffect(
+  ref: React.RefObject<HTMLDivElement>,
+  dispatch: React.Dispatch<AnyAction>,
+  hotelData: HotelData
+): void {
+  useEffect(() => {
+    let offsetHeight = 0;
+    let clientHeight = 0;
+    if (ref.current) {
+      offsetHeight = ref.current.offsetHeight;
+      clientHeight = ref.current.clientHeight;
+    }
+    dispatch(tableDimentions.set({ offsetHeight: offsetHeight, clientHeight: clientHeight }));
+  }, [ref, dispatch, hotelData]);
 }
 
 export default hot(module)(TableContainer);
