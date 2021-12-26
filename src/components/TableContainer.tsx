@@ -2,13 +2,14 @@ import React, { useEffect } from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
-import { getInitialScrollLeft, remToPx } from "../utils";
+import { remToPx } from "../utils";
 import globals from "../globals";
 import { useAppDispatch, useHotelData, useInitialDate } from "../redux/hooks";
 
 import Table from "./Table";
 
 import "./TableContainer.css";
+import { HotelData } from "../redux/hotelSlice";
 
 type Props = {
   tableContainerRef: React.RefObject<HTMLDivElement>
@@ -21,15 +22,11 @@ function TableContainer(props: Props): JSX.Element {
 
   const scrollHanlder = getScrollHandler(dispatch);
 
-  useEffect(() => {
-    if (props.tableContainerRef.current) {
-      props.tableContainerRef.current.scrollLeft = getInitialScrollLeft();
-    }
-  }, [props.tableContainerRef, hotelData, initialDate]);
+  useInitialScrollLeftEffect(props.tableContainerRef, hotelData, initialDate);
 
   return (
     <div ref={props.tableContainerRef} className="table-container" onScroll={scrollHanlder}>
-      <Table hotelData={hotelData} />
+      <Table />
     </div>
   );
 }
@@ -56,6 +53,16 @@ function getScrollHandler(
       dispatch({ type: "fetchRight", payload: { tiles: [] } });
     }
   };
+}
+
+function useInitialScrollLeftEffect(ref: React.RefObject<HTMLDivElement>, hotelData: HotelData, initialDate: string): void {
+  useEffect(() => {
+    const columnWidth = remToPx(4) + 1;
+    const scrollLeft = columnWidth * globals.TABLE_PRELOAD_AMOUNT + 1;
+    if (ref.current) {
+      ref.current.scrollLeft = scrollLeft;
+    }
+  }, [ref, hotelData, initialDate]);
 }
 
 export default hot(module)(TableContainer);

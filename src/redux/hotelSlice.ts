@@ -33,6 +33,8 @@ export const fetchAsync = createAsyncThunk(
   }
 );
 
+export type FetchAsyncAction = ReturnType<typeof fetchAsync>;
+
 export const hotelSlice = createSlice({
   name: "hotel",
   initialState: initialState,

@@ -19,10 +19,7 @@ function Hotel(props: Props): JSX.Element {
   const scrollTop = useScrollTop();
   const rows = useRowsMemo(hotelData);
 
-  useEffect(() => {
-    dispatch(hotel.fetchAsync());
-  }, [dispatch]);
-
+  useHotelDataFetchingEffect(dispatch);
   useHotelbarBottomSpacingEffect(props.tableContainerRef, rows);
 
   return (
@@ -51,6 +48,12 @@ function useRowsMemo(hotelData: hotel.HotelData): JSX.Element[] {
 
     return rows;
   }, [hotelData.floors]);
+}
+
+function useHotelDataFetchingEffect(dispatch: React.Dispatch<hotel.FetchAsyncAction>): void {
+  useEffect(() => {
+    dispatch(hotel.fetchAsync());
+  }, [dispatch]);
 }
 
 function useHotelbarBottomSpacingEffect(
