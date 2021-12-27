@@ -2,8 +2,8 @@ import React, { useEffect, useMemo } from "react";
 import { hot } from "react-hot-loader";
 
 import { useAppDispatch, useHotelData, useScrollTop, useTableDimentions } from "../redux/hooks";
-import * as hotel from "../redux/hotelSlice";
-import * as tableDimentions from "../redux/tableDimentionsSlice";
+import * as HotelSlice from "../redux/hotelSlice";
+import * as TableDimentionsSlice from "../redux/tableDimentionsSlice";
 
 import Floor from "./hotel/Floor";
 import RoomNumber from "./hotel/RoomNumber";
@@ -29,7 +29,7 @@ function Hotel(): JSX.Element {
   ;
 }
 
-function useRowsMemo(hotelData: hotel.HotelData): JSX.Element[] {
+function useRowsMemo(hotelData: HotelSlice.HotelData): JSX.Element[] {
   return useMemo(() => {
     const rows: JSX.Element[] = [];
 
@@ -48,14 +48,14 @@ function useRowsMemo(hotelData: hotel.HotelData): JSX.Element[] {
   }, [hotelData.floors]);
 }
 
-function useHotelDataFetchingEffect(dispatch: React.Dispatch<hotel.FetchAsyncAction>): void {
+function useHotelDataFetchingEffect(dispatch: React.Dispatch<HotelSlice.FetchAsyncAction>): void {
   useEffect(() => {
-    dispatch(hotel.fetchAsync());
+    dispatch(HotelSlice.fetchAsync());
   }, [dispatch]);
 }
 
 function useHotelbarBottomSpacingEffect(
-  tableDimentions: tableDimentions.TableDimentionsState,
+  tableDimentions: TableDimentionsSlice.State,
   rows: JSX.Element[]
 ): void {
   useEffect(() => {

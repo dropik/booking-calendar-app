@@ -1,7 +1,7 @@
-import { HotelData } from "./redux/hotelSlice";
-import { TileData } from "./redux/tableSlice";
+import * as HotelSlice from "./redux/hotelSlice";
+import * as TableSlice from "./redux/tableSlice";
 
-export const hotel: HotelData = {
+export const hotel: HotelSlice.HotelData = {
   floors: [
     {
       name: "piano 1",
@@ -64,7 +64,7 @@ export const hotel: HotelData = {
   ],
 };
 
-export const tiles: TileData[] = [
+export const tiles: TableSlice.TileData[] = [
   {
     name: "Ivan Petrov",
     colour: "rgba(217, 73, 73, 0.69)",

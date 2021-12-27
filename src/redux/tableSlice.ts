@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { WritableDraft } from "immer/dist/internal";
 
-import * as utils from "../utils";
-import * as globals from "../globals";
-import * as api from "../api";
+import * as Utils from "../utils";
+import * as Globals from "../globals";
+import * as Api from "../api";
 
 export type TileData = {
   roomNumber: number,
@@ -14,7 +14,7 @@ export type TileData = {
   roomType: string
 };
 
-export type TableState = {
+export type State = {
   initialDate: string,
   currentDate: string,
   leftmostDate: string,
@@ -26,7 +26,7 @@ export type TableState = {
 export const fetchTilesAsync = createAsyncThunk(
   "table/fetchTiles",
   async () => {
-    const response = await api.fetchTilesAsync();
+    const response = await Api.fetchTilesAsync();
     return response.data;
   }
 );
@@ -39,13 +39,13 @@ export const tableSlice = createSlice({
   reducers: {},
   extraReducers: {
     "scroll": (state, action: PayloadAction<{ top: number, left: number }>) => {
-      const cellWidth = utils.remToPx(4) + 1;
+      const cellWidth = Utils.remToPx(4) + 1;
       const dateShift = Math.floor(
         (action.payload.left + cellWidth / 2) / cellWidth
       );
       const newDate = new Date(state.leftmostDate);
       newDate.setDate(newDate.getDate() + dateShift);
-      state.currentDate = utils.dateToString(newDate);
+      state.currentDate = Utils.dateToString(newDate);
     },
     "changeDate": (state, action: PayloadAction<{ date: string, tiles: TileData[] }>) => {
       state.initialDate = action.payload.date;
@@ -80,8 +80,8 @@ export const tableSlice = createSlice({
   }
 });
 
-function initState(): TableState {
-  const currentDate = utils.dateToString(new Date());
+function initState(): State {
+  const currentDate = Utils.dateToString(new Date());
   const leftmostDate = calculateLeftmostDate(currentDate);
 
   return {
@@ -96,8 +96,8 @@ function initState(): TableState {
 
 function calculateLeftmostDate(date: string) {
   const result = new Date(date);
-  result.setDate(result.getDate() - globals.TABLE_PRELOAD_AMOUNT);
-  return utils.dateToString(result);
+  result.setDate(result.getDate() - Globals.TABLE_PRELOAD_AMOUNT);
+  return Utils.dateToString(result);
 }
 
 function recalculateOccupations(tiles: Array<TileData>, startDate: string) {
@@ -109,14 +109,14 @@ function recalculateOccupations(tiles: Array<TileData>, startDate: string) {
       row = [];
     }
     const fromDate = new Date(tile.from);
-    const x = utils.daysBetweenDates(startDate, utils.dateToString(fromDate));
+    const x = Utils.daysBetweenDates(startDate, Utils.dateToString(fromDate));
     row[x] = index;
     occupations[roomNumber] = row;
   });
   return occupations;
 }
 
-function moveOccupation(state: WritableDraft<TableState>, action: PayloadAction<{ x: number, y: number, newY: number }>) {
+function moveOccupation(state: WritableDraft<State>, action: PayloadAction<{ x: number, y: number, newY: number }>) {
   const prevY = action.payload.y;
   const x = action.payload.x;
   const newY = action.payload.newY;

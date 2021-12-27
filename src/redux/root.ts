@@ -7,6 +7,6 @@ import scroll from "./scrollSlice";
 import columns from "./columnsSlice";
 import tableDimentions from "./tableDimentionsSlice";
 
-export const reducer = combineReducers(
+export default combineReducers(
   { table, grabbedTile, hotel, scroll, columns, tableDimentions }
 );

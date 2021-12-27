@@ -3,7 +3,7 @@ import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
 import { useAppDispatch, useColumns, useGrabbedTile } from "../../redux/hooks";
-import { GrabbedTileState } from "../../redux/grabbedTileSlice";
+import * as GrabbedTileSlice from "../../redux/grabbedTileSlice";
 
 import TableCell from "./TableCell";
 
@@ -56,7 +56,7 @@ function useCellsMemo(columns: number, y: number): JSX.Element[] {
 
 function getDropHandler(
   dispatch: React.Dispatch<AnyAction>,
-  grabbedTile: GrabbedTileState,
+  grabbedTile: GrabbedTileSlice.State,
   y: number
 ): () => void {
   return () => {

@@ -2,7 +2,7 @@ import React from "react";
 import { hot } from "react-hot-loader";
 
 import { useAppSelector } from "../../redux/hooks";
-import * as table from "../../redux/tableSlice";
+import * as TableSlice from "../../redux/tableSlice";
 
 import Tile from "./Tile";
 
@@ -31,7 +31,7 @@ function TableCell(props: Props): JSX.Element {
   return <div className="table-cell">{tile}</div>;
 }
 
-function useTileDataAt(x: number, y: number): table.TileData | undefined {
+function useTileDataAt(x: number, y: number): TableSlice.TileData | undefined {
   return useAppSelector(state => {
     const occupations = state.table.occupations;
     const occupationsForRoom = occupations[y];

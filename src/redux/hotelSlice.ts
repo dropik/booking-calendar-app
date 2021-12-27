@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { fetchHotelDataAsync } from "../api";
+import * as Api from "../api";
 
 export type RoomData = {
   number: number,
@@ -16,12 +16,12 @@ export type HotelData = {
   floors: FloorData[]
 };
 
-export type HotelState = {
+export type State = {
   data: HotelData,
   status: "idle" | "loading" | "failed"
 };
 
-const initialState: HotelState = {
+const initialState: State = {
   data: { floors: [] },
   status: "idle"
 };
@@ -29,7 +29,7 @@ const initialState: HotelState = {
 export const fetchAsync = createAsyncThunk(
   "hotel/fetch",
   async () => {
-    const response = await fetchHotelDataAsync();
+    const response = await Api.fetchHotelDataAsync();
     return response.data;
   }
 );

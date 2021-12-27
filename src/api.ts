@@ -1,15 +1,15 @@
-import * as mocks from "./mocks";
-import * as hotel from "./redux/hotelSlice";
-import * as table from "./redux/tableSlice";
+import * as Mocks from "./mocks";
+import * as HotelSlice from "./redux/hotelSlice";
+import * as TableSlice from "./redux/tableSlice";
 
-export function fetchHotelDataAsync(): Promise<{ data: hotel.HotelData }> {
+export function fetchHotelDataAsync(): Promise<{ data: HotelSlice.HotelData }> {
   return new Promise((resolve) => {
-    setTimeout(() => resolve({ data: mocks.hotel }), 500);
+    setTimeout(() => resolve({ data: Mocks.hotel }), 500);
   });
 }
 
-export function fetchTilesAsync(): Promise<{ data: table.TileData[] }> {
+export function fetchTilesAsync(): Promise<{ data: TableSlice.TileData[] }> {
   return new Promise((resolve) => {
-    setTimeout(() => resolve({ data: mocks.tiles }), 500);
+    setTimeout(() => resolve({ data: Mocks.tiles }), 500);
   });
 }

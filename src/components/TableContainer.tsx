@@ -2,11 +2,11 @@ import React, { useEffect, useRef } from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
-import * as utils from "../utils";
-import * as globals from "../globals";
+import * as Utils from "../utils";
+import * as Globals from "../globals";
 import { useAppDispatch, useHotelData, useInitialDate } from "../redux/hooks";
-import { HotelData } from "../redux/hotelSlice";
-import * as tableDimentions from "../redux/tableDimentionsSlice";
+import * as HotelSlice from "../redux/hotelSlice";
+import * as TableDimentionsSlice from "../redux/tableDimentionsSlice";
 
 import Table from "./table-container/Table";
 
@@ -40,11 +40,11 @@ function getScrollHandler(
     dispatch({ type: "scroll", payload: { top: scrollTop, left: scrollLeft } });
 
     const scrollLeftMax = event.currentTarget.scrollWidth - event.currentTarget.clientWidth;
-    const cellWidth = utils.remToPx(4) + 1;
-    const scrollLimit = cellWidth * globals.TABLE_FETCH_BREAKPOINT;
+    const cellWidth = Utils.remToPx(4) + 1;
+    const scrollLimit = cellWidth * Globals.TABLE_FETCH_BREAKPOINT;
     if (scrollLeft < scrollLimit) {
       dispatch({ type: "fetchLeft", payload: { tiles: [] } });
-      const preloadedWidth = cellWidth * globals.TABLE_PRELOAD_AMOUNT;
+      const preloadedWidth = cellWidth * Globals.TABLE_PRELOAD_AMOUNT;
       event.currentTarget.scrollLeft = preloadedWidth + scrollLimit + 1;
     } else if (
       scrollLeft > scrollLeftMax - scrollLimit
@@ -54,10 +54,10 @@ function getScrollHandler(
   };
 }
 
-function useInitialScrollLeftEffect(ref: React.RefObject<HTMLDivElement>, hotelData: HotelData, initialDate: string): void {
+function useInitialScrollLeftEffect(ref: React.RefObject<HTMLDivElement>, hotelData: HotelSlice.HotelData, initialDate: string): void {
   useEffect(() => {
-    const columnWidth = utils.remToPx(4) + 1;
-    const scrollLeft = columnWidth * globals.TABLE_PRELOAD_AMOUNT + 1;
+    const columnWidth = Utils.remToPx(4) + 1;
+    const scrollLeft = columnWidth * Globals.TABLE_PRELOAD_AMOUNT + 1;
     if (ref.current) {
       ref.current.scrollLeft = scrollLeft;
     }
@@ -67,7 +67,7 @@ function useInitialScrollLeftEffect(ref: React.RefObject<HTMLDivElement>, hotelD
 function useTableDimentionsUpdateEffect(
   ref: React.RefObject<HTMLDivElement>,
   dispatch: React.Dispatch<AnyAction>,
-  hotelData: HotelData
+  hotelData: HotelSlice.HotelData
 ): void {
   useEffect(() => {
     let offsetHeight = 0;
@@ -76,7 +76,7 @@ function useTableDimentionsUpdateEffect(
       offsetHeight = ref.current.offsetHeight;
       clientHeight = ref.current.clientHeight;
     }
-    dispatch(tableDimentions.set({ offsetHeight: offsetHeight, clientHeight: clientHeight }));
+    dispatch(TableDimentionsSlice.set({ offsetHeight: offsetHeight, clientHeight: clientHeight }));
   }, [ref, dispatch, hotelData]);
 }
 

@@ -1,21 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import * as globals from "../globals";
-import * as utils from "../utils";
+import * as Globals from "../globals";
+import * as Utils from "../utils";
 
-export type ColumnsState = {
+export type State = {
   value: number
 };
 
-const initialState: ColumnsState = {
+const initialState: State = {
   value: getColumnsAmount()
 };
 
 function getColumnsAmount() {
-  const roomCellWidth = utils.remToPx(6);
-  const containerWidth = utils.remToPx(4);
+  const roomCellWidth = Utils.remToPx(6);
+  const containerWidth = Utils.remToPx(4);
   let columns = Math.ceil((document.documentElement.clientWidth - roomCellWidth) / containerWidth);
-  columns += globals.TABLE_PRELOAD_AMOUNT * 2;
+  columns += Globals.TABLE_PRELOAD_AMOUNT * 2;
   return columns;
 }
 
@@ -31,10 +31,10 @@ export const columnsSlice = createSlice({
       state.value = getColumnsAmount();
     },
     "fetchLeft": (state) => {
-      state.value += globals.TABLE_PRELOAD_AMOUNT;
+      state.value += Globals.TABLE_PRELOAD_AMOUNT;
     },
     "fetchRight": (state) => {
-      state.value += globals.TABLE_PRELOAD_AMOUNT;
+      state.value += Globals.TABLE_PRELOAD_AMOUNT;
     }
   }
 });

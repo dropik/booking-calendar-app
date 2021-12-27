@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export type TableDimentionsState = {
+export type State = {
   offsetHeight: number,
   clientHeight: number
 };
 
-const initialState: TableDimentionsState = {
+const initialState: State = {
   offsetHeight: 0,
   clientHeight: 0
 };
@@ -14,7 +14,7 @@ export const tableDimentionsSlice = createSlice({
   name: "tableDimentions",
   initialState: initialState,
   reducers: {
-    set: (state, action: PayloadAction<TableDimentionsState>) => {
+    set: (state, action: PayloadAction<State>) => {
       return action.payload;
     }
   }

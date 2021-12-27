@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export type ScrollState = {
+export type State = {
   top: number,
   left: number
 };
 
-const initialState: ScrollState = {
+const initialState: State = {
   top: 0,
   left: 0
 };
