@@ -1,9 +1,9 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { WritableDraft } from "immer/dist/internal";
 
 import { remToPx, daysBetweenDates, dateToString } from "../utils";
 import globals from "../globals";
-import mocks from "../mocks";
+import * as api from "../api";
 
 export type TileData = {
   roomNumber: number,
@@ -19,8 +19,19 @@ export type TableState = {
   currentDate: string,
   leftmostDate: string,
   tiles: TileData[],
+  status: "idle" | "loading" | "failed",
   occupations: (number | undefined)[][]
 };
+
+export const fetchTilesAsync = createAsyncThunk(
+  "table/fetchTiles",
+  async () => {
+    const response = await api.fetchTilesAsync();
+    return response.data;
+  }
+);
+
+export type FetchTilesAsyncAction = ReturnType<typeof fetchTilesAsync>;
 
 export const tableSlice = createSlice({
   name: "table",
@@ -54,6 +65,17 @@ export const tableSlice = createSlice({
     },
     "move": (state, action: PayloadAction<{ x: number, y: number, newY: number }>) => {
       moveOccupation(state, action);
+    },
+    "table/fetchTiles/pending": (state) => {
+      state.status = "loading";
+    },
+    "table/fetchTiles/fulfilled": (state, action: PayloadAction<TileData[]>) => {
+      state.status = "idle";
+      state.tiles = action.payload;
+      state.occupations = recalculateOccupations(state.tiles, state.leftmostDate);
+    },
+    "table/fetchTiles/rejected": (state) => {
+      state.status = "failed";
     }
   }
 });
@@ -61,14 +83,14 @@ export const tableSlice = createSlice({
 function initState(): TableState {
   const currentDate = dateToString(new Date());
   const leftmostDate = calculateLeftmostDate(currentDate);
-  const tiles = mocks.tiles;
 
   return {
     initialDate: currentDate,
     currentDate: currentDate,
     leftmostDate: leftmostDate,
-    tiles: tiles,
-    occupations: recalculateOccupations(tiles, leftmostDate)
+    tiles: [],
+    status: "idle",
+    occupations: recalculateOccupations([], leftmostDate)
   };
 }
 

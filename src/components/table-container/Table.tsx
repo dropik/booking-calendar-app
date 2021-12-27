@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { hot } from "react-hot-loader";
-import { useHotelData } from "../../redux/hooks";
+
+import { useAppDispatch, useHotelData } from "../../redux/hooks";
+import * as table from "../../redux/tableSlice";
 
 import Room from "./Room";
 
@@ -8,6 +10,8 @@ import "./Table.css";
 
 function Table(): JSX.Element {
   const hotelData = useHotelData();
+  const dispatch = useAppDispatch();
+
   const rows: JSX.Element[] = [];
 
   hotelData.floors.forEach((floor, floorIndex) => {
@@ -24,7 +28,15 @@ function Table(): JSX.Element {
     });
   });
 
+  useTilesFetchingEffect(dispatch);
+
   return <div className="table">{rows}</div>;
+}
+
+function useTilesFetchingEffect(dispatch: React.Dispatch<table.FetchTilesAsyncAction>): void {
+  useEffect(() => {
+    dispatch(table.fetchTilesAsync());
+  }, [dispatch]);
 }
 
 export default hot(module)(Table);
