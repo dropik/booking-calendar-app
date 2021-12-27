@@ -4,7 +4,7 @@ import { AnyAction } from "@reduxjs/toolkit";
 import DatePicker, { registerLocale } from "react-datepicker";
 import it from "date-fns/locale/it";
 
-import { dateToString } from "../../utils";
+import * as utils from "../../utils";
 import { useAppDispatch, useCurrentDate } from "../../redux/hooks";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -31,7 +31,7 @@ function DateInput(): JSX.Element {
 function getDateChangeHandler(dispatch: React.Dispatch<AnyAction>): (date: Date) => void {
   return (date: Date) => {
     if (date !== null) {
-      dispatch({ type: "changeDate", payload: { date: dateToString(date), tiles: [] } });
+      dispatch({ type: "changeDate", payload: { date: utils.dateToString(date), tiles: [] } });
     }
   };
 }

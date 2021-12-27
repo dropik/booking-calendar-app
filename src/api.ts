@@ -1,4 +1,4 @@
-import mocks from "./mocks";
+import * as mocks from "./mocks";
 import * as hotel from "./redux/hotelSlice";
 import * as table from "./redux/tableSlice";
 

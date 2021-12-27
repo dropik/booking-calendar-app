@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import globals from "../globals";
-import { remToPx } from "../utils";
+import * as globals from "../globals";
+import * as utils from "../utils";
 
 export type ColumnsState = {
   value: number
@@ -12,8 +12,8 @@ const initialState: ColumnsState = {
 };
 
 function getColumnsAmount() {
-  const roomCellWidth = remToPx(6);
-  const containerWidth = remToPx(4);
+  const roomCellWidth = utils.remToPx(6);
+  const containerWidth = utils.remToPx(4);
   let columns = Math.ceil((document.documentElement.clientWidth - roomCellWidth) / containerWidth);
   columns += globals.TABLE_PRELOAD_AMOUNT * 2;
   return columns;

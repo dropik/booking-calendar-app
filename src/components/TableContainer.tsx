@@ -2,8 +2,8 @@ import React, { useEffect, useRef } from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
-import { remToPx } from "../utils";
-import globals from "../globals";
+import * as utils from "../utils";
+import * as globals from "../globals";
 import { useAppDispatch, useHotelData, useInitialDate } from "../redux/hooks";
 import { HotelData } from "../redux/hotelSlice";
 import * as tableDimentions from "../redux/tableDimentionsSlice";
@@ -40,7 +40,7 @@ function getScrollHandler(
     dispatch({ type: "scroll", payload: { top: scrollTop, left: scrollLeft } });
 
     const scrollLeftMax = event.currentTarget.scrollWidth - event.currentTarget.clientWidth;
-    const cellWidth = remToPx(4) + 1;
+    const cellWidth = utils.remToPx(4) + 1;
     const scrollLimit = cellWidth * globals.TABLE_FETCH_BREAKPOINT;
     if (scrollLeft < scrollLimit) {
       dispatch({ type: "fetchLeft", payload: { tiles: [] } });
@@ -56,7 +56,7 @@ function getScrollHandler(
 
 function useInitialScrollLeftEffect(ref: React.RefObject<HTMLDivElement>, hotelData: HotelData, initialDate: string): void {
   useEffect(() => {
-    const columnWidth = remToPx(4) + 1;
+    const columnWidth = utils.remToPx(4) + 1;
     const scrollLeft = columnWidth * globals.TABLE_PRELOAD_AMOUNT + 1;
     if (ref.current) {
       ref.current.scrollLeft = scrollLeft;

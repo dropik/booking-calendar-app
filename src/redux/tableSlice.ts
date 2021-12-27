@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { WritableDraft } from "immer/dist/internal";
 
-import { remToPx, daysBetweenDates, dateToString } from "../utils";
-import globals from "../globals";
+import * as utils from "../utils";
+import * as globals from "../globals";
 import * as api from "../api";
 
 export type TileData = {
@@ -39,13 +39,13 @@ export const tableSlice = createSlice({
   reducers: {},
   extraReducers: {
     "scroll": (state, action: PayloadAction<{ top: number, left: number }>) => {
-      const cellWidth = remToPx(4) + 1;
+      const cellWidth = utils.remToPx(4) + 1;
       const dateShift = Math.floor(
         (action.payload.left + cellWidth / 2) / cellWidth
       );
       const newDate = new Date(state.leftmostDate);
       newDate.setDate(newDate.getDate() + dateShift);
-      state.currentDate = dateToString(newDate);
+      state.currentDate = utils.dateToString(newDate);
     },
     "changeDate": (state, action: PayloadAction<{ date: string, tiles: TileData[] }>) => {
       state.initialDate = action.payload.date;
@@ -81,7 +81,7 @@ export const tableSlice = createSlice({
 });
 
 function initState(): TableState {
-  const currentDate = dateToString(new Date());
+  const currentDate = utils.dateToString(new Date());
   const leftmostDate = calculateLeftmostDate(currentDate);
 
   return {
@@ -97,7 +97,7 @@ function initState(): TableState {
 function calculateLeftmostDate(date: string) {
   const result = new Date(date);
   result.setDate(result.getDate() - globals.TABLE_PRELOAD_AMOUNT);
-  return dateToString(result);
+  return utils.dateToString(result);
 }
 
 function recalculateOccupations(tiles: Array<TileData>, startDate: string) {
@@ -109,7 +109,7 @@ function recalculateOccupations(tiles: Array<TileData>, startDate: string) {
       row = [];
     }
     const fromDate = new Date(tile.from);
-    const x = daysBetweenDates(startDate, dateToString(fromDate));
+    const x = utils.daysBetweenDates(startDate, utils.dateToString(fromDate));
     row[x] = index;
     occupations[roomNumber] = row;
   });
