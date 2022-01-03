@@ -8,7 +8,8 @@ export function fetchHotelDataAsync(): Promise<{ data: HotelSlice.HotelData }> {
   });
 }
 
-export function fetchTilesAsync(): Promise<{ data: TableSlice.TileData[] }> {
+export function fetchTilesAsync(from: string, to: string): Promise<{ data: TableSlice.TileData[] }> {
+  console.log(`fetching tiles from ${from} to ${to}...`);
   return new Promise((resolve) => {
     setTimeout(() => resolve({ data: Mocks.tiles }), 500);
   });

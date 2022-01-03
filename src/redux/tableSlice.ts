@@ -4,6 +4,7 @@ import { WritableDraft } from "immer/dist/internal";
 import * as Utils from "../utils";
 import * as Globals from "../globals";
 import * as Api from "../api";
+import { RootState } from "./store";
 
 export type TileData = {
   roomNumber: number,
@@ -14,19 +15,24 @@ export type TileData = {
   roomType: string
 };
 
+type Occupations = (number | undefined)[][];
+
 export type State = {
   initialDate: string,
   currentDate: string,
   leftmostDate: string,
   tiles: TileData[],
   status: "idle" | "loading" | "failed",
-  occupations: (number | undefined)[][]
+  occupations: Occupations
 };
 
 export const fetchTilesAsync = createAsyncThunk(
   "table/fetchTiles",
-  async () => {
-    const response = await Api.fetchTilesAsync();
+  async (arg, thunkApi) => {
+    const state = thunkApi.getState() as RootState;
+    const from = state.table.leftmostDate;
+    const to = calculateRightmostDate(from, state.columns.value);
+    const response = await Api.fetchTilesAsync(from, to);
     return response.data;
   }
 );
@@ -94,13 +100,19 @@ function initState(): State {
   };
 }
 
-function calculateLeftmostDate(date: string) {
+function calculateLeftmostDate(date: string): string {
   const result = new Date(date);
   result.setDate(result.getDate() - Globals.TABLE_PRELOAD_AMOUNT);
   return Utils.dateToString(result);
 }
 
-function recalculateOccupations(tiles: Array<TileData>, startDate: string) {
+function calculateRightmostDate(leftmostDate: string, columns: number): string {
+  const result = new Date(leftmostDate);
+  result.setDate(result.getDate() + columns);
+  return Utils.dateToString(result);
+}
+
+function recalculateOccupations(tiles: Array<TileData>, startDate: string): Occupations {
   const occupations = Array<Array<number>>();
   tiles.forEach((tile, index) => {
     const roomNumber = tile.roomNumber;
@@ -116,7 +128,10 @@ function recalculateOccupations(tiles: Array<TileData>, startDate: string) {
   return occupations;
 }
 
-function moveOccupation(state: WritableDraft<State>, action: PayloadAction<{ x: number, y: number, newY: number }>) {
+function moveOccupation(
+  state: WritableDraft<State>,
+  action: PayloadAction<{ x: number, y: number, newY: number }>
+): void {
   const prevY = action.payload.y;
   const x = action.payload.x;
   const newY = action.payload.newY;
