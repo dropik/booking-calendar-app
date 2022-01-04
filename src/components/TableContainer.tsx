@@ -49,7 +49,7 @@ function getScrollHandler(
     } else if (
       scrollLeft > scrollLeftMax - scrollLimit
     ) {
-      // fetch tiles from right
+      dispatch({ type: "fetchRight" });
     }
   };
 }
