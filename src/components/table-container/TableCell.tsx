@@ -35,12 +35,7 @@ function useTileDataAt(x: string, y: number): TableSlice.TileData | undefined {
   return useAppSelector(state => {
     const occupations = state.table.occupations;
     const occupationsForRoom = occupations[y];
-    return occupationsForRoom === undefined ?
-      undefined : (
-        occupationsForRoom[x] === undefined ?
-          undefined :
-          state.table.tiles[occupationsForRoom[x] as number]
-      );
+    return (occupationsForRoom === undefined) ? undefined : occupationsForRoom[x];
   });
 }
 

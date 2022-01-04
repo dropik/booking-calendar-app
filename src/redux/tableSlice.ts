@@ -17,7 +17,7 @@ export type TileData = {
 
 type Occupations = {
   [key: number]: {
-    [key: string]: (number | undefined)
+    [key: string]: (TileData | undefined)
   }
 };
 
@@ -25,7 +25,6 @@ export type State = {
   initialDate: string,
   currentDate: string,
   leftmostDate: string,
-  tiles: TileData[],
   status: "idle" | "loading" | "failed",
   occupations: Occupations
 };
@@ -73,8 +72,7 @@ export const tableSlice = createSlice({
     },
     "table/fetchTiles/fulfilled": (state, action: PayloadAction<TileData[]>) => {
       state.status = "idle";
-      state.tiles = action.payload;
-      state.occupations = recalculateOccupations(state.tiles);
+      addFetchedOccupations(state, action.payload);
     },
     "table/fetchTiles/rejected": (state) => {
       state.status = "failed";
@@ -90,9 +88,8 @@ function initState(): State {
     initialDate: currentDate,
     currentDate: currentDate,
     leftmostDate: leftmostDate,
-    tiles: [],
     status: "idle",
-    occupations: recalculateOccupations([])
+    occupations: {}
   };
 }
 
@@ -108,18 +105,16 @@ function calculateRightmostDate(leftmostDate: string, columns: number): string {
   return Utils.dateToString(result);
 }
 
-function recalculateOccupations(tiles: Array<TileData>): Occupations {
-  const occupations: Occupations = [];
-  tiles.forEach((tile, index) => {
+function addFetchedOccupations(state: State, tiles: Array<TileData>): void {
+  tiles.forEach(tile => {
     const roomNumber = tile.roomNumber;
-    let row = occupations[roomNumber];
+    let row = state.occupations[roomNumber];
     if (row === undefined) {
       row = {};
     }
-    row[tile.from] = index;
-    occupations[roomNumber] = row;
+    row[tile.from] = tile;
+    state.occupations[roomNumber] = row;
   });
-  return occupations;
 }
 
 function moveOccupation(
@@ -136,8 +131,6 @@ function moveOccupation(
     }
     state.occupations[newY][x] = state.occupations[prevY][x];
     state.occupations[prevY][x] = undefined;
-
-    state.tiles[state.occupations[newY][x] as number].roomNumber = newY;
   }
 }
 
