@@ -2,7 +2,8 @@ import React, { useMemo } from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
-import { useAppDispatch, useColumns, useGrabbedTile } from "../../redux/hooks";
+import * as Utils from "../../utils";
+import { useAppDispatch, useColumns, useGrabbedTile, useLeftmostDate } from "../../redux/hooks";
 import * as GrabbedTileSlice from "../../redux/grabbedTileSlice";
 
 import TableCell from "./TableCell";
@@ -19,7 +20,8 @@ function Room(props: Props): JSX.Element {
   const columns = useColumns();
   const grabbedTile = useGrabbedTile();
   const dispatch = useAppDispatch();
-  const cells = useCellsMemo(columns, props.y);
+  const leftmostDate = useLeftmostDate();
+  const cells = useCellsMemo(columns, props.y, leftmostDate);
 
   const dropHandler = getDropHandler(dispatch, grabbedTile, props.y);
 
@@ -36,22 +38,25 @@ function Room(props: Props): JSX.Element {
   );
 }
 
-function useCellsMemo(columns: number, y: number): JSX.Element[] {
+function useCellsMemo(columns: number, y: number, leftmostDate: string): JSX.Element[] {
   return useMemo(() => {
     const cells = [];
+    const dateCounter = new Date(leftmostDate);
 
     for (let i = 0; i < columns; i++) {
+      const x = Utils.dateToString(dateCounter);
       cells.push(
         <TableCell
-          key={"x: " + i + "; y: " + y}
-          x={i}
+          key={x}
+          x={x}
           y={y}
         />
       );
+      dateCounter.setDate(dateCounter.getDate() + 1);
     }
 
     return cells;
-  }, [columns, y]);
+  }, [columns, y, leftmostDate]);
 }
 
 function getDropHandler(
@@ -60,7 +65,7 @@ function getDropHandler(
   y: number
 ): () => void {
   return () => {
-    if ((grabbedTile.x >= 0) && (grabbedTile.y >= 0)) {
+    if ((grabbedTile.x !== "") && (grabbedTile.y >= 0)) {
       dispatch({ type: "move", payload: { x: grabbedTile.x, y: grabbedTile.y, newY: y } });
     }
   };

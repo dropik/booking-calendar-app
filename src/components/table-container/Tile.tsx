@@ -21,7 +21,7 @@ type Action = {
 };
 
 type Props = {
-  x: number,
+  x: string,
   y: number,
   tileData: TableSlice.TileData
 };
@@ -87,13 +87,13 @@ function useGrabbedState(): {state: State, stateDispatch: React.Dispatch<Action>
 function getGrabHandler(
   stateDispatch: React.Dispatch<Action>,
   dispatch: React.Dispatch<AnyAction>,
-  x: number,
+  x: string,
   y: number
 ): (event: React.MouseEvent<HTMLDivElement>) => void {
   return (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
     stateDispatch({ type: "grab", event: event.nativeEvent });
-    dispatch({ type: "grab", payload: { x: x, y: y } });
+    dispatch({ type: "grab", payload: { x, y } });
   };
 }
 

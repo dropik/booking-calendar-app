@@ -31,7 +31,7 @@ function DateInput(): JSX.Element {
 function getDateChangeHandler(dispatch: React.Dispatch<AnyAction>): (date: Date) => void {
   return (date: Date) => {
     if (date !== null) {
-      dispatch({ type: "changeDate", payload: { date: Utils.dateToString(date), tiles: [] } });
+      dispatch({ type: "changeDate", payload: { date: Utils.dateToString(date) } });
     }
   };
 }

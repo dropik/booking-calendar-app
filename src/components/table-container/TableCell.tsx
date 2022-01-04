@@ -9,7 +9,7 @@ import Tile from "./Tile";
 import "./TableCell.css";
 
 type Props = {
-  x: number,
+  x: string,
   y: number
 };
 
@@ -31,7 +31,7 @@ function TableCell(props: Props): JSX.Element {
   return <div className="table-cell">{tile}</div>;
 }
 
-function useTileDataAt(x: number, y: number): TableSlice.TileData | undefined {
+function useTileDataAt(x: string, y: number): TableSlice.TileData | undefined {
   return useAppSelector(state => {
     const occupations = state.table.occupations;
     const occupationsForRoom = occupations[y];

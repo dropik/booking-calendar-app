@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type State = {
-  x: number,
+  x: string,
   y: number
 };
 
 const initialState: State = {
-  x: -1,
+  x: "",
   y: -1
 };
 
@@ -15,7 +15,7 @@ export const grabbedTileSlice = createSlice({
   initialState: initialState,
   reducers: {},
   extraReducers: {
-    "grab": (state, action: PayloadAction<{ x: number, y: number }>) => {
+    "grab": (state, action: PayloadAction<{ x: string, y: number }>) => {
       return action.payload;
     },
     "drop": () => {

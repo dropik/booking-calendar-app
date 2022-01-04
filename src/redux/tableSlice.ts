@@ -4,7 +4,7 @@ import { WritableDraft } from "immer/dist/internal";
 import * as Utils from "../utils";
 import * as Globals from "../globals";
 import * as Api from "../api";
-import { RootState } from "./store";
+import * as Store from "./store";
 
 export type TileData = {
   roomNumber: number,
@@ -15,7 +15,11 @@ export type TileData = {
   roomType: string
 };
 
-type Occupations = (number | undefined)[][];
+type Occupations = {
+  [key: number]: {
+    [key: string]: (number | undefined)
+  }
+};
 
 export type State = {
   initialDate: string,
@@ -29,7 +33,7 @@ export type State = {
 export const fetchTilesAsync = createAsyncThunk(
   "table/fetchTiles",
   async (arg, thunkApi) => {
-    const state = thunkApi.getState() as RootState;
+    const state = thunkApi.getState() as Store.RootState;
     const from = state.table.leftmostDate;
     const to = calculateRightmostDate(from, state.columns.value);
     const response = await Api.fetchTilesAsync(from, to);
@@ -53,23 +57,15 @@ export const tableSlice = createSlice({
       newDate.setDate(newDate.getDate() + dateShift);
       state.currentDate = Utils.dateToString(newDate);
     },
-    "changeDate": (state, action: PayloadAction<{ date: string, tiles: TileData[] }>) => {
+    "changeDate": (state, action: PayloadAction<{ date: string }>) => {
       state.initialDate = action.payload.date;
       state.currentDate = action.payload.date;
       state.leftmostDate = calculateLeftmostDate(action.payload.date);
-      state.tiles = [...state.tiles, ...action.payload.tiles];
-      state.occupations = recalculateOccupations(state.tiles, state.leftmostDate);
     },
-    "fetchLeft": (state, action: PayloadAction<{ tiles: TileData[] }>) => {
+    "fetchLeft": (state) => {
       state.leftmostDate = calculateLeftmostDate(state.leftmostDate);
-      state.tiles = [...state.tiles, ...action.payload.tiles];
-      state.occupations = recalculateOccupations(state.tiles, state.leftmostDate);
     },
-    "fetchRight": (state, action: PayloadAction<{ tiles: TileData[] }>) => {
-      state.tiles = [...state.tiles, ...action.payload.tiles];
-      state.occupations = recalculateOccupations(state.tiles, state.leftmostDate);
-    },
-    "move": (state, action: PayloadAction<{ x: number, y: number, newY: number }>) => {
+    "move": (state, action: PayloadAction<{ x: string, y: number, newY: number }>) => {
       moveOccupation(state, action);
     },
     "table/fetchTiles/pending": (state) => {
@@ -78,7 +74,7 @@ export const tableSlice = createSlice({
     "table/fetchTiles/fulfilled": (state, action: PayloadAction<TileData[]>) => {
       state.status = "idle";
       state.tiles = action.payload;
-      state.occupations = recalculateOccupations(state.tiles, state.leftmostDate);
+      state.occupations = recalculateOccupations(state.tiles);
     },
     "table/fetchTiles/rejected": (state) => {
       state.status = "failed";
@@ -96,7 +92,7 @@ function initState(): State {
     leftmostDate: leftmostDate,
     tiles: [],
     status: "idle",
-    occupations: recalculateOccupations([], leftmostDate)
+    occupations: recalculateOccupations([])
   };
 }
 
@@ -112,17 +108,15 @@ function calculateRightmostDate(leftmostDate: string, columns: number): string {
   return Utils.dateToString(result);
 }
 
-function recalculateOccupations(tiles: Array<TileData>, startDate: string): Occupations {
-  const occupations = Array<Array<number>>();
+function recalculateOccupations(tiles: Array<TileData>): Occupations {
+  const occupations: Occupations = [];
   tiles.forEach((tile, index) => {
     const roomNumber = tile.roomNumber;
     let row = occupations[roomNumber];
     if (row === undefined) {
-      row = [];
+      row = {};
     }
-    const fromDate = new Date(tile.from);
-    const x = Utils.daysBetweenDates(startDate, Utils.dateToString(fromDate));
-    row[x] = index;
+    row[tile.from] = index;
     occupations[roomNumber] = row;
   });
   return occupations;
@@ -130,7 +124,7 @@ function recalculateOccupations(tiles: Array<TileData>, startDate: string): Occu
 
 function moveOccupation(
   state: WritableDraft<State>,
-  action: PayloadAction<{ x: number, y: number, newY: number }>
+  action: PayloadAction<{ x: string, y: number, newY: number }>
 ): void {
   const prevY = action.payload.y;
   const x = action.payload.x;
@@ -138,7 +132,7 @@ function moveOccupation(
 
   if ((newY > 0) && (newY != prevY)) {
     if (state.occupations[newY] === undefined) {
-      state.occupations[newY] = [];
+      state.occupations[newY] = {};
     }
     state.occupations[newY][x] = state.occupations[prevY][x];
     state.occupations[prevY][x] = undefined;
