@@ -23,7 +23,6 @@ type Occupations = {
 
 export type State = {
   initialDate: string,
-  currentDate: string,
   leftmostDate: string,
   status: "idle" | "loading" | "failed",
   occupations: Occupations
@@ -47,18 +46,8 @@ export const tableSlice = createSlice({
   initialState: initState(),
   reducers: {},
   extraReducers: {
-    "scroll": (state, action: PayloadAction<{ top: number, left: number }>) => {
-      const cellWidth = Utils.remToPx(4) + 1;
-      const dateShift = Math.floor(
-        (action.payload.left + cellWidth / 2) / cellWidth
-      );
-      const newDate = new Date(state.leftmostDate);
-      newDate.setDate(newDate.getDate() + dateShift);
-      state.currentDate = Utils.dateToString(newDate);
-    },
     "changeDate": (state, action: PayloadAction<{ date: string }>) => {
       state.initialDate = action.payload.date;
-      state.currentDate = action.payload.date;
       state.leftmostDate = calculateLeftmostDate(action.payload.date);
     },
     "fetchLeft": (state) => {
@@ -81,12 +70,11 @@ export const tableSlice = createSlice({
 });
 
 function initState(): State {
-  const currentDate = Utils.dateToString(new Date());
-  const leftmostDate = calculateLeftmostDate(currentDate);
+  const initialDate = Utils.dateToString(new Date());
+  const leftmostDate = calculateLeftmostDate(initialDate);
 
   return {
-    initialDate: currentDate,
-    currentDate: currentDate,
+    initialDate: initialDate,
     leftmostDate: leftmostDate,
     status: "idle",
     occupations: {}
