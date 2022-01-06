@@ -6,7 +6,8 @@ import * as Utils from "../utils";
 import * as Globals from "../globals";
 import { useAppDispatch, useHotelData, useInitialDate } from "../redux/hooks";
 import * as HotelSlice from "../redux/hotelSlice";
-import * as TableDimentionsSlice from "../redux/tableDimentionsSlice";
+import * as ScrollSlice from "../redux/scrollSlice";
+import * as TableSlice from "../redux/tableSlice";
 
 import Table from "./table-container/Table";
 
@@ -37,19 +38,19 @@ function getScrollHandler(
     const scrollTop = event.currentTarget.scrollTop;
     const scrollLeft = event.currentTarget.scrollLeft;
 
-    dispatch({ type: "scroll", payload: { top: scrollTop, left: scrollLeft } });
+    dispatch(ScrollSlice.set({ top: scrollTop, left: scrollLeft }));
 
     const scrollLeftMax = event.currentTarget.scrollWidth - event.currentTarget.clientWidth;
     const cellWidth = Utils.remToPx(4) + 1;
     const scrollLimit = cellWidth * Globals.TABLE_FETCH_BREAKPOINT;
     if (scrollLeft < scrollLimit) {
-      dispatch({ type: "fetchLeft" });
+      dispatch(TableSlice.fetchLeft());
       const preloadedWidth = cellWidth * Globals.TABLE_PRELOAD_AMOUNT;
       event.currentTarget.scrollLeft = preloadedWidth + scrollLimit + 1;
     } else if (
       scrollLeft > scrollLeftMax - scrollLimit
     ) {
-      dispatch({ type: "fetchRight" });
+      dispatch(TableSlice.fetchRight());
     }
   };
 }
@@ -76,7 +77,7 @@ function useTableDimentionsUpdateEffect(
       offsetHeight = ref.current.offsetHeight;
       clientHeight = ref.current.clientHeight;
     }
-    dispatch(TableDimentionsSlice.set({ offsetHeight: offsetHeight, clientHeight: clientHeight }));
+    dispatch(TableSlice.updateHeights({ offsetHeight, clientHeight }));
   }, [ref, dispatch, hotelData]);
 }
 

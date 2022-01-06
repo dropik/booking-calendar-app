@@ -4,6 +4,7 @@ import { AnyAction } from "@reduxjs/toolkit";
 
 import { useAppDispatch } from "../../redux/hooks";
 import * as TableSlice from "../../redux/tableSlice";
+import * as GrabbedTileSlice from "../../redux/grabbedTileSlice";
 
 import "./Tile.css";
 
@@ -93,7 +94,7 @@ function getGrabHandler(
   return (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
     stateDispatch({ type: "grab", event: event.nativeEvent });
-    dispatch({ type: "grab", payload: { x, y } });
+    dispatch(GrabbedTileSlice.grab({ x, y }));
   };
 }
 
@@ -109,7 +110,7 @@ function useMouseMoveAndDropHandlingEffect(
 
     function onDrop() {
       stateDispatch({ type: "drop" });
-      dispatch({ type: "drop" });
+      dispatch(GrabbedTileSlice.drop());
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseup", onDrop);
     }

@@ -13,13 +13,14 @@ const initialState: State = {
 export const scrollSlice = createSlice({
   name: "scroll",
   initialState: initialState,
-  reducers: {},
-  extraReducers: {
-    "scroll": (state, action: PayloadAction<{ top: number, left: number }>) => {
+  reducers: {
+    set: (state, action: PayloadAction<{ top: number, left: number }>) => {
       state.top = action.payload.top;
       state.left = action.payload.left;
     }
   }
 });
+
+export const { set } = scrollSlice.actions;
 
 export default scrollSlice.reducer;

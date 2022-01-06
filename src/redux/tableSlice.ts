@@ -22,10 +22,23 @@ type Occupations = {
 };
 
 export type State = {
+  status: "idle" | "loading" | "failed",
   initialDate: string,
   leftmostDate: string,
-  status: "idle" | "loading" | "failed",
+  columns: number,
+  offsetHeight: number,
+  clientHeight: number,
   occupations: Occupations
+};
+
+const initialState: State = {
+  status: "idle",
+  initialDate: Utils.dateToString(new Date()),
+  leftmostDate: calculateLeftmostDate(new Date()),
+  columns: getInitialColumnsAmount(),
+  offsetHeight: 0,
+  clientHeight: 0,
+  occupations: {}
 };
 
 export const fetchTilesAsync = createAsyncThunk(
@@ -33,7 +46,7 @@ export const fetchTilesAsync = createAsyncThunk(
   async (arg, thunkApi) => {
     const state = thunkApi.getState() as Store.RootState;
     const from = state.table.leftmostDate;
-    const to = calculateRightmostDate(from, state.columns.value);
+    const to = calculateRightmostDate(from, state.table.columns);
     const response = await Api.fetchTilesAsync(from, to);
     return response.data;
   }
@@ -43,51 +56,61 @@ export type FetchTilesAsyncAction = ReturnType<typeof fetchTilesAsync>;
 
 export const tableSlice = createSlice({
   name: "table",
-  initialState: initState(),
-  reducers: {},
-  extraReducers: {
-    "changeDate": (state, action: PayloadAction<{ date: string }>) => {
+  initialState: initialState,
+  reducers: {
+    resize: (state) => {
+      state.columns = getInitialColumnsAmount();
+    },
+    updateHeights: (state, action: PayloadAction<{ offsetHeight: number, clientHeight: number }>) => {
+      state.offsetHeight = action.payload.offsetHeight;
+      state.clientHeight = action.payload.clientHeight;
+    },
+    changeDate: (state, action: PayloadAction<{ date: string }>) => {
       state.initialDate = action.payload.date;
       state.leftmostDate = calculateLeftmostDate(action.payload.date);
+      state.columns = getInitialColumnsAmount();
     },
-    "fetchLeft": (state) => {
+    fetchLeft: (state) => {
       state.leftmostDate = calculateLeftmostDate(state.leftmostDate);
+      state.columns += Globals.TABLE_PRELOAD_AMOUNT;
     },
-    "move": (state, action: PayloadAction<{ x: string, y: number, newY: number }>) => {
+    fetchRight: (state) => {
+      state.columns += Globals.TABLE_PRELOAD_AMOUNT;
+    },
+    move: (state, action: PayloadAction<{ x: string, y: number, newY: number }>) => {
       moveOccupation(state, action);
-    },
-    "table/fetchTiles/pending": (state) => {
-      state.status = "loading";
-    },
-    "table/fetchTiles/fulfilled": (state, action: PayloadAction<TileData[]>) => {
-      state.status = "idle";
-      addFetchedOccupations(state, action.payload);
-    },
-    "table/fetchTiles/rejected": (state) => {
-      state.status = "failed";
     }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchTilesAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchTilesAsync.fulfilled, (state, action: PayloadAction<TileData[]>) => {
+        state.status = "idle";
+        addFetchedOccupations(state, action.payload);
+      })
+      .addCase(fetchTilesAsync.rejected, (state) => {
+        state.status = "failed";
+      });
   }
 });
 
-function initState(): State {
-  const initialDate = Utils.dateToString(new Date());
-  const leftmostDate = calculateLeftmostDate(initialDate);
-
-  return {
-    initialDate: initialDate,
-    leftmostDate: leftmostDate,
-    status: "idle",
-    occupations: {}
-  };
+function getInitialColumnsAmount() {
+  const roomCellWidth = Utils.remToPx(6);
+  const containerWidth = Utils.remToPx(4);
+  let columns = Math.ceil((document.documentElement.clientWidth - roomCellWidth) / containerWidth);
+  columns += Globals.TABLE_PRELOAD_AMOUNT * 2;
+  return columns;
 }
 
-function calculateLeftmostDate(date: string): string {
+function calculateLeftmostDate(date: string | Date): string {
   const result = new Date(date);
   result.setDate(result.getDate() - Globals.TABLE_PRELOAD_AMOUNT);
   return Utils.dateToString(result);
 }
 
-function calculateRightmostDate(leftmostDate: string, columns: number): string {
+function calculateRightmostDate(leftmostDate: string | Date, columns: number): string {
   const result = new Date(leftmostDate);
   result.setDate(result.getDate() + columns);
   return Utils.dateToString(result);
@@ -121,5 +144,7 @@ function moveOccupation(
     state.occupations[prevY][x] = undefined;
   }
 }
+
+export const { resize, updateHeights, changeDate, fetchLeft, fetchRight, move } = tableSlice.actions;
 
 export default tableSlice.reducer;

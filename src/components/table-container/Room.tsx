@@ -5,6 +5,7 @@ import { AnyAction } from "@reduxjs/toolkit";
 import * as Utils from "../../utils";
 import { useAppDispatch, useColumns, useGrabbedTile, useLeftmostDate } from "../../redux/hooks";
 import * as GrabbedTileSlice from "../../redux/grabbedTileSlice";
+import * as TableSlice from "../../redux/tableSlice";
 
 import TableCell from "./TableCell";
 
@@ -66,7 +67,7 @@ function getDropHandler(
 ): () => void {
   return () => {
     if ((grabbedTile.x !== "") && (grabbedTile.y >= 0)) {
-      dispatch({ type: "move", payload: { x: grabbedTile.x, y: grabbedTile.y, newY: y } });
+      dispatch(TableSlice.move({ x: grabbedTile.x, y: grabbedTile.y, newY: y }));
     }
   };
 }

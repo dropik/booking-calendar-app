@@ -3,6 +3,7 @@ import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
 import { useAppDispatch } from "./redux/hooks";
+import * as TableSlice from "./redux/tableSlice";
 
 import Header from "./components/Header";
 import Hotel from "./components/Hotel";
@@ -28,7 +29,7 @@ function App(): JSX.Element {
 function useDocumentSizeAdjustmentLayoutEffect(dispatch: React.Dispatch<AnyAction>): void {
   useLayoutEffect(() => {
     function handleResize() {
-      dispatch({ type: "resize" });
+      dispatch(TableSlice.resize());
     }
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
