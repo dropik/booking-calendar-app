@@ -58,7 +58,5 @@ function getInitialColumnsAmount() {
 }
 
 function calculateLeftmostDate(date: string | Date): string {
-  const result = new Date(date);
-  result.setDate(result.getDate() - Globals.TABLE_PRELOAD_AMOUNT);
-  return Utils.dateToString(result);
+  return Utils.getDateShift(date, -Globals.TABLE_PRELOAD_AMOUNT);
 }

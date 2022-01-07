@@ -39,9 +39,7 @@ export const fetchAsync = createAsyncThunk(
 export type FetchAsyncAction = ReturnType<typeof fetchAsync>;
 
 function calculateRightmostDate(leftmostDate: string | Date, columns: number): string {
-  const result = new Date(leftmostDate);
-  result.setDate(result.getDate() + columns);
-  return Utils.dateToString(result);
+  return Utils.getDateShift(leftmostDate, columns);
 }
 
 export const occupationsSlice = createSlice({

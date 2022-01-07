@@ -14,3 +14,9 @@ export function daysBetweenDates(from: string, to: string): number {
 export function dateToString(date: Date): string {
   return date.toLocaleDateString("en-CA");
 }
+
+export function getDateShift(date: string | Date, shift: number): string {
+  const result = new Date(date);
+  result.setDate(result.getDate() + shift);
+  return dateToString(result);
+}
