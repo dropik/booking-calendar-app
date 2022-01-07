@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { WritableDraft } from "immer/dist/internal";
 
-import * as Store from "./store";
 import * as Api from "../api";
-import * as Utils from "../utils";
+
+import * as TableSlice from "./tableSlice";
 
 export type TileData = {
   roomNumber: number,
@@ -27,20 +27,13 @@ const initialState: State = {
 
 export const fetchAsync = createAsyncThunk(
   "occupations/fetch",
-  async (arg, thunkApi) => {
-    const state = thunkApi.getState() as Store.RootState;
-    const from = state.table.leftmostDate;
-    const to = calculateRightmostDate(from, state.table.columns);
-    const response = await Api.fetchTilesAsync(from, to);
+  async (arg: TableSlice.FetchPeriod) => {
+    const response = await Api.fetchTilesAsync(arg.from, arg.to);
     return response.data;
   }
 );
 
 export type FetchAsyncAction = ReturnType<typeof fetchAsync>;
-
-function calculateRightmostDate(leftmostDate: string | Date, columns: number): string {
-  return Utils.getDateShift(leftmostDate, columns);
-}
 
 export const occupationsSlice = createSlice({
   name: "occupations",

@@ -3,25 +3,41 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import * as Utils from "../utils";
 import * as Globals from "../globals";
 
+export type FetchPeriod = {
+  from: string,
+  to: string
+};
+
 export type State = {
   initialDate: string,
   leftmostDate: string,
   columns: number,
   offsetHeight: number,
-  clientHeight: number
+  clientHeight: number,
+  lastFetchPeriod: FetchPeriod
 };
 
-const initialState: State = {
-  initialDate: Utils.dateToString(new Date()),
-  leftmostDate: calculateLeftmostDate(new Date()),
-  columns: getInitialColumnsAmount(),
-  offsetHeight: 0,
-  clientHeight: 0
-};
+function getInitialState(): State {
+  const initialDate = Utils.dateToString(new Date());
+  const leftmostDate = Utils.getDateShift(initialDate, -Globals.TABLE_PRELOAD_AMOUNT);
+  const columns = getInitialColumnsAmount();
+
+  return {
+    initialDate: initialDate,
+    leftmostDate: leftmostDate,
+    columns: columns,
+    offsetHeight: 0,
+    clientHeight: 0,
+    lastFetchPeriod: {
+      from: leftmostDate,
+      to: Utils.getDateShift(leftmostDate, columns - 1)
+    }
+  };
+}
 
 export const tableSlice = createSlice({
   name: "table",
-  initialState: initialState,
+  initialState: getInitialState,
   reducers: {
     resize: (state) => {
       state.columns = getInitialColumnsAmount();
@@ -32,20 +48,32 @@ export const tableSlice = createSlice({
     },
     changeDate: (state, action: PayloadAction<{ date: string }>) => {
       state.initialDate = action.payload.date;
-      state.leftmostDate = calculateLeftmostDate(action.payload.date);
+      state.leftmostDate = Utils.getDateShift(action.payload.date, -Globals.TABLE_PRELOAD_AMOUNT);
       state.columns = getInitialColumnsAmount();
+      state.lastFetchPeriod = {
+        from: state.leftmostDate,
+        to: Utils.getDateShift(state.leftmostDate, state.columns - 1)
+      };
     },
-    fetchLeft: (state) => {
-      state.leftmostDate = calculateLeftmostDate(state.leftmostDate);
+    expandLeft: (state) => {
+      state.leftmostDate = Utils.getDateShift(state.leftmostDate, -Globals.TABLE_PRELOAD_AMOUNT);
       state.columns += Globals.TABLE_PRELOAD_AMOUNT;
+      state.lastFetchPeriod = {
+        from: state.leftmostDate,
+        to: Utils.getDateShift(state.leftmostDate, Globals.TABLE_PRELOAD_AMOUNT - 1)
+      };
     },
-    fetchRight: (state) => {
+    expandRight: (state) => {
       state.columns += Globals.TABLE_PRELOAD_AMOUNT;
+      state.lastFetchPeriod = {
+        from: Utils.getDateShift(state.leftmostDate, state.columns - Globals.TABLE_PRELOAD_AMOUNT),
+        to: Utils.getDateShift(state.leftmostDate, state.columns - 1)
+      };
     }
   }
 });
 
-export const { resize, updateHeights, changeDate, fetchLeft, fetchRight } = tableSlice.actions;
+export const { resize, updateHeights, changeDate, expandLeft, expandRight } = tableSlice.actions;
 
 export default tableSlice.reducer;
 
@@ -55,8 +83,4 @@ function getInitialColumnsAmount() {
   let columns = Math.ceil((document.documentElement.clientWidth - roomCellWidth) / containerWidth);
   columns += Globals.TABLE_PRELOAD_AMOUNT * 2;
   return columns;
-}
-
-function calculateLeftmostDate(date: string | Date): string {
-  return Utils.getDateShift(date, -Globals.TABLE_PRELOAD_AMOUNT);
 }

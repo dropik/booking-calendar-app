@@ -44,13 +44,13 @@ function getScrollHandler(
     const cellWidth = Utils.remToPx(4) + 1;
     const scrollLimit = cellWidth * Globals.TABLE_FETCH_BREAKPOINT;
     if (scrollLeft < scrollLimit) {
-      dispatch(TableSlice.fetchLeft());
+      dispatch(TableSlice.expandLeft());
       const preloadedWidth = cellWidth * Globals.TABLE_PRELOAD_AMOUNT;
       event.currentTarget.scrollLeft = preloadedWidth + scrollLimit + 1;
     } else if (
       scrollLeft > scrollLeftMax - scrollLimit
     ) {
-      dispatch(TableSlice.fetchRight());
+      dispatch(TableSlice.expandRight());
     }
   };
 }
