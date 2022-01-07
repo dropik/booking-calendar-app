@@ -55,7 +55,11 @@ function getScrollHandler(
   };
 }
 
-function useInitialScrollLeftEffect(ref: React.RefObject<HTMLDivElement>, hotelData: HotelSlice.HotelData, initialDate: string): void {
+function useInitialScrollLeftEffect(
+  ref: React.RefObject<HTMLDivElement>,
+  hotelData: HotelSlice.HotelData,
+  initialDate: string
+): void {
   useEffect(() => {
     const columnWidth = Utils.remToPx(4) + 1;
     const scrollLeft = columnWidth * Globals.TABLE_PRELOAD_AMOUNT + 1;
