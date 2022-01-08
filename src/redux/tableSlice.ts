@@ -40,7 +40,15 @@ export const tableSlice = createSlice({
   initialState: getInitialState,
   reducers: {
     resize: (state) => {
-      state.columns = getInitialColumnsAmount();
+      const newColumns = getInitialColumnsAmount();
+      if (newColumns > state.columns) {
+        const prevColumns = state.columns;
+        state.columns = newColumns;
+        state.lastFetchPeriod = {
+          from: Utils.getDateShift(state.leftmostDate, prevColumns),
+          to: Utils.getDateShift(state.leftmostDate, newColumns - 1)
+        };
+      }
     },
     updateHeights: (state, action: PayloadAction<{ offsetHeight: number, clientHeight: number }>) => {
       state.offsetHeight = action.payload.offsetHeight;
