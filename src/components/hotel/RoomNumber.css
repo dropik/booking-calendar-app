@@ -5,6 +5,7 @@
   line-height: 4rem;
   border: 1px solid black;
   border-top: 0;
+  border-left: 0;
   text-align: center;
   background-color: white;
 }

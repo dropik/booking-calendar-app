@@ -1,24 +1,23 @@
 import React, { useEffect, useMemo } from "react";
 import { hot } from "react-hot-loader";
 
-import { useHotel, useScrollTop } from "../redux/hooks";
+import { useAppDispatch, useHotelData, useScrollTop, useTableDimentions } from "../redux/hooks";
+import * as HotelSlice from "../redux/hotelSlice";
 
-import Floor from "./Floor";
-import RoomNumber from "./RoomNumber";
+import Floor from "./hotel/Floor";
+import RoomNumber from "./hotel/RoomNumber";
 
 import "./Hotel.css";
-import { HotelData } from "../redux/mainSlice";
 
-type Props = {
-  tableContainerRef: React.RefObject<HTMLDivElement>
-};
-
-function Hotel(props: Props) {
-  const hotel = useHotel();
+function Hotel(): JSX.Element {
+  const dispatch = useAppDispatch();
+  const hotelData = useHotelData();
   const scrollTop = useScrollTop();
-  const rows = useRowsMemo(hotel);
+  const tableDimentions = useTableDimentions();
+  const rows = useRowsMemo(hotelData);
 
-  useScrollbarSpace(props.tableContainerRef, rows);
+  useHotelDataFetchingEffect(dispatch);
+  useHotelbarBottomSpacingEffect(tableDimentions, rows);
 
   return (
     <div className="hotel-container">
@@ -29,37 +28,49 @@ function Hotel(props: Props) {
   ;
 }
 
-function useRowsMemo(hotel: HotelData) {
+function useRowsMemo(hotelData: HotelSlice.HotelData): JSX.Element[] {
   return useMemo(() => {
     const rows: JSX.Element[] = [];
 
-    hotel.floors.forEach((floor, floorIndex) => {
+    hotelData.floors.forEach((floor, floorIndex) => {
       rows.push(
         <Floor key={floor.name} name={floor.name} isFollowing={floorIndex > 0} />
       );
 
       floor.rooms.forEach((room, roomIndex) => {
-        const isLast = (floorIndex === hotel.floors.length - 1) && (roomIndex === floor.rooms.length - 1);
+        const isLast = (floorIndex === hotelData.floors.length - 1) && (roomIndex === floor.rooms.length - 1);
         rows.push(<RoomNumber number={room.number} key={room.number} isLast={isLast} />);
       });
     });
 
     return rows;
-  }, [hotel.floors]);
+  }, [hotelData.floors]);
 }
 
-function useScrollbarSpace(tableContainerRef: React.RefObject<HTMLDivElement>, rows: JSX.Element[]) {
+function useHotelDataFetchingEffect(dispatch: React.Dispatch<HotelSlice.FetchAsyncAction>): void {
   useEffect(() => {
-    let scrollbarWidth = 0;
-    const currentRef = tableContainerRef.current;
-    if (currentRef) {
-      scrollbarWidth = currentRef.offsetHeight - currentRef.clientHeight;
+    dispatch(HotelSlice.fetchAsync());
+  }, [dispatch]);
+}
+
+function useHotelbarBottomSpacingEffect(
+  tableDimentions: { offsetHeight: number, clientHeight: number },
+  rows: JSX.Element[]
+): void {
+  useEffect(() => {
+    const scrollbarWidth = tableDimentions.offsetHeight - tableDimentions.clientHeight;
+    if (scrollbarWidth > 0) {
+      rows.push(
+        <div
+          className="scrollbar-space"
+          key="scrollbar-space"
+          style={{ height: scrollbarWidth }}>
+        </div>
+      );
     }
 
-    if (scrollbarWidth > 0) {
-      rows.push(<div className="scrollbar-space" key="scrollbar-space" style={{ height: scrollbarWidth }}></div>);
-    }
-  }, [tableContainerRef, rows]);
+    return () => { rows.pop(); };
+  }, [tableDimentions, rows]);
 }
 
 export default hot(module)(Hotel);

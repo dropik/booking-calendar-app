@@ -1,52 +1,88 @@
-import React, { Dispatch } from "react";
+import React, { useEffect, useRef } from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
-import { remToPx } from "../utils";
-import globals from "../globals";
-import { fetchLeft, fetchRight, scroll } from "../redux/mainSlice";
-import { useAppDispatch } from "../redux/hooks";
+import * as Utils from "../utils";
+import * as Globals from "../globals";
+import { useAppDispatch, useHotelData, useInitialDate } from "../redux/hooks";
+import * as HotelSlice from "../redux/hotelSlice";
+import * as ScrollSlice from "../redux/scrollSlice";
+import * as TableSlice from "../redux/tableSlice";
 
-import Table from "./Table";
+import Table from "./table-container/Table";
 
 import "./TableContainer.css";
 
-type Props = {
-  tableContainerRef: React.RefObject<HTMLDivElement>
-};
-
-function TableContainer(props: Props) {
+function TableContainer(): JSX.Element {
   const dispatch = useAppDispatch();
+  const hotelData = useHotelData();
+  const initialDate = useInitialDate();
+  const ref = useRef<HTMLDivElement>(null);
+
+  const scrollHanlder = getScrollHandler(dispatch);
+
+  useTableDimentionsUpdateEffect(ref, dispatch, hotelData);
+  useInitialScrollLeftEffect(ref, hotelData, initialDate);
 
   return (
-    <div
-      ref={props.tableContainerRef}
-      className="table-container"
-      onScroll={(event: React.UIEvent<HTMLDivElement>) => { onScroll(dispatch, event); }}
-    >
+    <div ref={ref} className="table-container" onScroll={scrollHanlder}>
       <Table />
     </div>
   );
 }
 
-function onScroll(dispatch: Dispatch<AnyAction>, event: React.UIEvent<HTMLDivElement>) {
-  dispatch(scroll({
-    scrollLeft: event.currentTarget.scrollLeft,
-    scrollTop: event.currentTarget.scrollTop
-  }));
+function getScrollHandler(
+  dispatch: React.Dispatch<AnyAction>
+): (event: React.UIEvent<HTMLDivElement>) => void {
+  return (event: React.UIEvent<HTMLDivElement>) => {
+    const scrollTop = event.currentTarget.scrollTop;
+    const scrollLeft = event.currentTarget.scrollLeft;
 
-  const scrollLeftMax = event.currentTarget.scrollWidth - event.currentTarget.clientWidth;
-  const cellWidth = remToPx(4) + 1;
-  const scrollLimit = cellWidth * globals.TABLE_FETCH_BREAKPOINT;
-  if (event.currentTarget.scrollLeft < scrollLimit) {
-    dispatch(fetchLeft({ tiles: [] }));
-    const preloadedWidth = cellWidth * globals.TABLE_PRELOAD_AMOUNT;
-    event.currentTarget.scrollLeft = preloadedWidth + scrollLimit + 1;
-  } else if (
-    event.currentTarget.scrollLeft > scrollLeftMax - scrollLimit
-  ) {
-    dispatch(fetchRight({ tiles: [] }));
-  }
+    dispatch(ScrollSlice.set({ top: scrollTop, left: scrollLeft }));
+
+    const scrollLeftMax = event.currentTarget.scrollWidth - event.currentTarget.clientWidth;
+    const cellWidth = Utils.remToPx(4) + 1;
+    const scrollLimit = cellWidth * Globals.TABLE_FETCH_BREAKPOINT;
+    if (scrollLeft < scrollLimit) {
+      dispatch(TableSlice.expandLeft());
+      const preloadedWidth = cellWidth * Globals.TABLE_PRELOAD_AMOUNT;
+      event.currentTarget.scrollLeft = preloadedWidth + scrollLimit + 1;
+    } else if (
+      scrollLeft > scrollLeftMax - scrollLimit
+    ) {
+      dispatch(TableSlice.expandRight());
+    }
+  };
+}
+
+function useInitialScrollLeftEffect(
+  ref: React.RefObject<HTMLDivElement>,
+  hotelData: HotelSlice.HotelData,
+  initialDate: string
+): void {
+  useEffect(() => {
+    const columnWidth = Utils.remToPx(4) + 1;
+    const scrollLeft = columnWidth * Globals.TABLE_PRELOAD_AMOUNT + 1;
+    if (ref.current) {
+      ref.current.scrollLeft = scrollLeft;
+    }
+  }, [ref, hotelData, initialDate]);
+}
+
+function useTableDimentionsUpdateEffect(
+  ref: React.RefObject<HTMLDivElement>,
+  dispatch: React.Dispatch<AnyAction>,
+  hotelData: HotelSlice.HotelData
+): void {
+  useEffect(() => {
+    let offsetHeight = 0;
+    let clientHeight = 0;
+    if (ref.current) {
+      offsetHeight = ref.current.offsetHeight;
+      clientHeight = ref.current.clientHeight;
+    }
+    dispatch(TableSlice.updateHeights({ offsetHeight, clientHeight }));
+  }, [ref, dispatch, hotelData]);
 }
 
 export default hot(module)(TableContainer);

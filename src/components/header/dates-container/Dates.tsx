@@ -1,17 +1,17 @@
 import React, { useMemo } from "react";
 import { hot } from "react-hot-loader";
 
-import { useColumns, useScrollLeft, useStartDate } from "../redux/hooks";
+import { useColumns, useScrollLeft, useLeftmostDate } from "../../../redux/hooks";
 
 import Day from "./Day";
 
 import "./Dates.css";
 
-function Dates() {
+function Dates(): JSX.Element {
   const scrollLeft = useScrollLeft();
-  const startDate = useStartDate();
+  const leftmostDate = useLeftmostDate();
   const columns = useColumns();
-  const dates = useDatesMemo(startDate, columns);
+  const dates = useDatesMemo(leftmostDate, columns);
 
   return (
     <div style={{ left: -scrollLeft + "px" }} className="dates">
@@ -20,7 +20,7 @@ function Dates() {
   );
 }
 
-function useDatesMemo(startDate: string, columns: number) {
+function useDatesMemo(startDate: string, columns: number): JSX.Element[] {
   return useMemo(() => {
     const dates = [];
 
