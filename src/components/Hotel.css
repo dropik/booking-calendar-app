@@ -1,9 +1,9 @@
 .hotel-container {
   position: fixed;
-  top: 8rem;
+  top: calc(8rem + 1px);
   left: 0.5rem;
   right: 0.5rem;
-  bottom: 0.5rem;
+  max-height: calc(100% - 8.5rem - 1px);
   overflow: hidden;
   border: 1px solid black;
   border-top: 0;

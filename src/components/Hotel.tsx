@@ -58,7 +58,7 @@ function useHotelbarBottomSpacingEffect(
   rows: JSX.Element[]
 ): void {
   useEffect(() => {
-    const scrollbarWidth = tableDimentions.offsetHeight - tableDimentions.clientHeight;
+    const scrollbarWidth = tableDimentions.offsetHeight - tableDimentions.clientHeight - 1;
     if (scrollbarWidth > 0) {
       rows.push(
         <div
