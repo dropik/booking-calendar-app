@@ -69,7 +69,11 @@ function useHotelbarBottomSpacingEffect(
       );
     }
 
-    return () => { rows.pop(); };
+    return () => {
+      if (scrollbarWidth > 0) {
+        rows.pop();
+      }
+    };
   }, [tableDimentions, rows]);
 }
 
