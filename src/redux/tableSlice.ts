@@ -9,7 +9,6 @@ export type FetchPeriod = {
 };
 
 export type State = {
-  initialDate: string,
   leftmostDate: string,
   columns: number,
   offsetHeight: number,
@@ -23,7 +22,6 @@ function getInitialState(): State {
   const columns = getInitialColumnsAmount();
 
   return {
-    initialDate: initialDate,
     leftmostDate: leftmostDate,
     columns: columns,
     offsetHeight: 0,
@@ -55,7 +53,6 @@ export const tableSlice = createSlice({
       state.clientHeight = action.payload.clientHeight;
     },
     changeDate: (state, action: PayloadAction<{ date: string }>) => {
-      state.initialDate = action.payload.date;
       state.leftmostDate = Utils.getDateShift(action.payload.date, -Globals.TABLE_PRELOAD_AMOUNT);
       state.columns = getInitialColumnsAmount();
       state.lastFetchPeriod = {

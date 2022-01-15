@@ -30,7 +30,6 @@ export function useTableDimentions(): { offsetHeight: number, clientHeight: numb
   });
 }
 
-export const useInitialDate:      () => string =                      () => useAppSelector(state => state.table.initialDate);
 export const useLeftmostDate:     () => string =                      () => useAppSelector(state => state.table.leftmostDate);
 export const useColumns:          () => number =                      () => useAppSelector(state => state.table.columns);
 export const useLastFetchPeriod:  () => TableSlice.FetchPeriod =      () => useAppSelector(state => state.table.lastFetchPeriod);

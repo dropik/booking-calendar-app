@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
 import * as Utils from "../utils";
 import * as Globals from "../globals";
-import { useAppDispatch, useHotelData, useInitialDate } from "../redux/hooks";
+import { useAppDispatch, useHotelData, useLeftmostDate } from "../redux/hooks";
 import * as HotelSlice from "../redux/hotelSlice";
 import * as ScrollSlice from "../redux/scrollSlice";
 import * as TableSlice from "../redux/tableSlice";
@@ -16,13 +16,13 @@ import "./TableContainer.css";
 function TableContainer(): JSX.Element {
   const dispatch = useAppDispatch();
   const hotelData = useHotelData();
-  const initialDate = useInitialDate();
+  const leftmostDate = useLeftmostDate();
   const ref = useRef<HTMLDivElement>(null);
 
   const scrollHanlder = getScrollHandler(dispatch);
 
   useTableDimentionsUpdateEffect(ref, dispatch, hotelData);
-  useInitialScrollLeftEffect(ref, hotelData, initialDate);
+  useInitialScrollLeftEffect(ref, hotelData, leftmostDate);
 
   return (
     <div ref={ref} className="table-container" onScroll={scrollHanlder}>
@@ -45,8 +45,6 @@ function getScrollHandler(
     const scrollLimit = cellWidth * Globals.TABLE_FETCH_BREAKPOINT;
     if (scrollLeft < scrollLimit) {
       dispatch(TableSlice.expandLeft());
-      const preloadedWidth = cellWidth * Globals.TABLE_PRELOAD_AMOUNT;
-      event.currentTarget.scrollLeft = preloadedWidth + scrollLimit + 1;
     } else if (
       scrollLeft > scrollLeftMax - scrollLimit
     ) {
@@ -58,15 +56,15 @@ function getScrollHandler(
 function useInitialScrollLeftEffect(
   ref: React.RefObject<HTMLDivElement>,
   hotelData: HotelSlice.HotelData,
-  initialDate: string
+  leftmostDate: string
 ): void {
-  useEffect(() => {
+  useLayoutEffect(() => {
     const columnWidth = Utils.remToPx(4) + 1;
     const scrollLeft = columnWidth * Globals.TABLE_PRELOAD_AMOUNT + 1;
     if (ref.current) {
-      ref.current.scrollLeft = scrollLeft;
+      ref.current.scrollLeft += scrollLeft;
     }
-  }, [ref, hotelData, initialDate]);
+  }, [ref, hotelData, leftmostDate]);
 }
 
 function useTableDimentionsUpdateEffect(
