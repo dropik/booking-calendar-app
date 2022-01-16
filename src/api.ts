@@ -20,7 +20,7 @@ export function fetchTilesAsync(from: string, to: string): Promise<{ data: Occup
     const currentCounter = fethcedTilesCounter;
     fethcedTilesCounter++;
     setTimeout(() => {
-      if (currentCounter < 2) {
+      if (currentCounter < Mocks.tiles.length) {
         resolve({ data: [Mocks.tiles[currentCounter]] });
       } else {
         resolve({ data: [] });

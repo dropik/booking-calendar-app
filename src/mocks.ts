@@ -66,6 +66,14 @@ export const hotel: HotelSlice.HotelData = {
 
 export const tiles: OccupationsSlice.TileData[] = [
   {
+    name: "Petr Ivanov",
+    colour: "rgba(208, 217, 73, 0.69)",
+    roomType: "doppia",
+    roomNumber: 3,
+    from: "2021-12-15",
+    nights: 40
+  },
+  {
     name: "Ivan Petrov",
     colour: "rgba(217, 73, 73, 0.69)",
     roomType: "doppia",
