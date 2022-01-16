@@ -4,6 +4,6 @@ import table from "./tableSlice";
 import grabbedTile from "./grabbedTileSlice";
 import hotel from "./hotelSlice";
 import scroll from "./scrollSlice";
-import occupations from "./occupationsSlice";
+import tiles from "./tilesSlice";
 
-export default combineReducers({ table, grabbedTile, hotel, scroll, occupations });
+export default combineReducers({ table, grabbedTile, hotel, scroll, occupations: tiles });
