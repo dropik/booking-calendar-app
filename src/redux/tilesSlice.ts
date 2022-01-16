@@ -16,13 +16,15 @@ export type TileData = {
 
 export type State = {
   status: "idle" | "loading" | "failed",
+  data: TileData[],
   [key: number]: {
     [key: string]: TileData | undefined
   }
 };
 
 const initialState: State = {
-  status: "idle"
+  status: "idle",
+  data: []
 };
 
 export const fetchAsync = createAsyncThunk(
@@ -65,12 +67,11 @@ export default occupationsSlice.reducer;
 function addFetchedOccupations(state: State, tiles: Array<TileData>): void {
   tiles.forEach(tile => {
     const roomNumber = tile.roomNumber;
-    let row = state[roomNumber];
-    if (row === undefined) {
-      row = {};
+    if (state[roomNumber] === undefined) {
+      state[roomNumber] = {};
     }
-    row[tile.from] = tile;
-    state[roomNumber] = row;
+    state[roomNumber][tile.from] = tile;
+    state.data.push(tile);
   });
 }
 

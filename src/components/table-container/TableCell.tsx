@@ -33,7 +33,7 @@ function TableCell(props: Props): JSX.Element {
 
 function useTileDataAt(x: string, y: number): TilesSlice.TileData | undefined {
   return useAppSelector(state => {
-    const occupationsForRoom = state.occupations[y];
+    const occupationsForRoom = state.tiles[y];
     return (occupationsForRoom === undefined) ? undefined : occupationsForRoom[x];
   });
 }

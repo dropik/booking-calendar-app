@@ -6,4 +6,4 @@ import hotel from "./hotelSlice";
 import scroll from "./scrollSlice";
 import tiles from "./tilesSlice";
 
-export default combineReducers({ table, grabbedTile, hotel, scroll, occupations: tiles });
+export default combineReducers({ table, grabbedTile, hotel, scroll, tiles });
