@@ -60,7 +60,7 @@ function useInitialScrollLeftEffect(
 ): void {
   useLayoutEffect(() => {
     const columnWidth = Utils.remToPx(4) + 1;
-    const scrollLeft = columnWidth * Globals.TABLE_PRELOAD_AMOUNT + 1;
+    const scrollLeft = columnWidth * Globals.TABLE_PRELOAD_AMOUNT + 2;
     if (ref.current) {
       ref.current.scrollLeft += scrollLeft;
     }
