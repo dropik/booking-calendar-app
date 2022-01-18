@@ -66,7 +66,7 @@ function getDropHandler(
   y: number
 ): () => void {
   return () => {
-    if (grabbedTile.tileId) {
+    if (grabbedTile.tileId !== undefined) {
       dispatch(TilesSlice.move({ tileId: grabbedTile.tileId, newY: y }));
     }
   };
