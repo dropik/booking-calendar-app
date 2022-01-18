@@ -18,7 +18,7 @@ export type State = {
   status: "idle" | "loading" | "failed",
   data: TileData[],
   [key: number]: {
-    [key: string]: TileData | undefined
+    [key: string]: number | undefined
   }
 };
 
@@ -28,7 +28,7 @@ const initialState: State = {
 };
 
 export const fetchAsync = createAsyncThunk(
-  "occupations/fetch",
+  "tiles/fetch",
   async (arg: TableSlice.FetchPeriod) => {
     const response = await Api.fetchTilesAsync(arg.from, arg.to);
     return response.data;
@@ -37,12 +37,12 @@ export const fetchAsync = createAsyncThunk(
 
 export type FetchAsyncAction = ReturnType<typeof fetchAsync>;
 
-export const occupationsSlice = createSlice({
-  name: "occupations",
+export const tilesSlice = createSlice({
+  name: "tiles",
   initialState: initialState,
   reducers: {
     move: (state, action: PayloadAction<{ x: string, y: number, newY: number }>) => {
-      moveOccupation(state, action);
+      moveTile(state, action);
     }
   },
   extraReducers: (builder) => {
@@ -52,7 +52,7 @@ export const occupationsSlice = createSlice({
       })
       .addCase(fetchAsync.fulfilled, (state, action: PayloadAction<TileData[]>) => {
         state.status = "idle";
-        addFetchedOccupations(state, action.payload);
+        addFetchedTiles(state, action.payload);
       })
       .addCase(fetchAsync.rejected, (state) => {
         state.status = "failed";
@@ -60,22 +60,22 @@ export const occupationsSlice = createSlice({
   }
 });
 
-export const { move } = occupationsSlice.actions;
+export const { move } = tilesSlice.actions;
 
-export default occupationsSlice.reducer;
+export default tilesSlice.reducer;
 
-function addFetchedOccupations(state: State, tiles: Array<TileData>): void {
+function addFetchedTiles(state: State, tiles: Array<TileData>): void {
   tiles.forEach(tile => {
     const roomNumber = tile.roomNumber;
     if (state[roomNumber] === undefined) {
       state[roomNumber] = {};
     }
-    state[roomNumber][tile.from] = tile;
+    state[roomNumber][tile.from] = state.data.length;
     state.data.push(tile);
   });
 }
 
-function moveOccupation(
+function moveTile(
   state: WritableDraft<State>,
   action: PayloadAction<{ x: string, y: number, newY: number }>
 ): void {
@@ -89,5 +89,6 @@ function moveOccupation(
     }
     state[newY][x] = state[prevY][x];
     state[prevY][x] = undefined;
+    state.data[state[newY][x] as number].roomNumber = newY;
   }
 }
