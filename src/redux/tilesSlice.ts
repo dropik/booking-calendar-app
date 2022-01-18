@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { WritableDraft } from "immer/dist/internal";
 
 import * as Api from "../api";
+import * as Utils from "../utils";
 
 import * as TableSlice from "./tableSlice";
 
@@ -71,7 +72,11 @@ function addFetchedTiles(state: State, tiles: Array<TileData>): void {
     if (state[roomNumber] === undefined) {
       state[roomNumber] = {};
     }
-    state[roomNumber][tile.from] = state.data.length;
+    const dateCounter = new Date(tile.from);
+    for (let i = 0; i < tile.nights; i++) {
+      state[roomNumber][Utils.dateToString(dateCounter)] = state.data.length;
+      dateCounter.setDate(dateCounter.getDate() + 1);
+    }
     state.data.push(tile);
   });
 }
