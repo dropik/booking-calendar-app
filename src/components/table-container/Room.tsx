@@ -66,8 +66,8 @@ function getDropHandler(
   y: number
 ): () => void {
   return () => {
-    if ((grabbedTile.x !== "") && (grabbedTile.y >= 0)) {
-      dispatch(TilesSlice.move({ x: grabbedTile.x, y: grabbedTile.y, newY: y }));
+    if (grabbedTile.tileId) {
+      dispatch(TilesSlice.move({ tileId: grabbedTile.tileId, newY: y }));
     }
   };
 }

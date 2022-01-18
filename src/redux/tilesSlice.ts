@@ -43,7 +43,7 @@ export const tilesSlice = createSlice({
   name: "tiles",
   initialState: initialState,
   reducers: {
-    move: (state, action: PayloadAction<{ x: string, y: number, newY: number }>) => {
+    move: (state, action: PayloadAction<{ tileId: number, newY: number }>) => {
       moveTile(state, action);
     }
   },
@@ -83,18 +83,25 @@ function addFetchedTiles(state: State, tiles: Array<TileData>): void {
 
 function moveTile(
   state: WritableDraft<State>,
-  action: PayloadAction<{ x: string, y: number, newY: number }>
+  action: PayloadAction<{ tileId: number, newY: number }>
 ): void {
-  const prevY = action.payload.y;
-  const x = action.payload.x;
+  const tileId = action.payload.tileId;
+  const tile = state.data[tileId];
   const newY = action.payload.newY;
 
-  if ((newY > 0) && (newY != prevY)) {
+  if ((newY > 0) && (newY != tile.roomNumber)) {
     if (state[newY] === undefined) {
       state[newY] = {};
     }
-    state[newY][x] = state[prevY][x];
-    state[prevY][x] = undefined;
-    state.data[state[newY][x] as number].roomNumber = newY;
+
+    const dateCounter = new Date(tile.from);
+    for (let i = 0; i < tile.nights; i++) {
+      const x = Utils.dateToString(dateCounter);
+      state[newY][x] = tileId;
+      state[tile.roomNumber][x] = undefined;
+      dateCounter.setDate(dateCounter.getDate() + 1);
+    }
+
+    tile.roomNumber = newY;
   }
 }
