@@ -30,6 +30,13 @@ export function useTableDimentions(): { offsetHeight: number, clientHeight: numb
   });
 }
 
+export function useTileIdByCoords(x: string, y: number): number {
+  return useAppSelector(state => {
+    const id = state.tiles[y][x];
+    return id === undefined ? -1 : id;
+  });
+}
+
 export const useLeftmostDate:     () => string =                      () => useAppSelector(state => state.table.leftmostDate);
 export const useColumns:          () => number =                      () => useAppSelector(state => state.table.columns);
 export const useLastFetchPeriod:  () => TableSlice.FetchPeriod =      () => useAppSelector(state => state.table.lastFetchPeriod);
