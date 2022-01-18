@@ -71,7 +71,8 @@ export const tiles: TilesSlice.TileData[] = [
     roomType: "doppia",
     roomNumber: 3,
     from: "2021-12-15",
-    nights: 40
+    nights: 40,
+    persons: 2
   },
   {
     name: "Ivan Petrov",
@@ -80,6 +81,7 @@ export const tiles: TilesSlice.TileData[] = [
     roomNumber: 2,
     from: "2021-12-25",
     nights: 2,
+    persons: 2
   },
   {
     name: "Vasya Pupkin",
@@ -88,5 +90,6 @@ export const tiles: TilesSlice.TileData[] = [
     roomNumber: 6,
     from: "2021-12-20",
     nights: 3,
+    persons: 2
   },
 ];

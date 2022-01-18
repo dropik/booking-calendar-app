@@ -11,7 +11,8 @@ export type TileData = {
   colour: string,
   nights: number,
   name: string,
-  roomType: string
+  roomType: string,
+  persons: number
 };
 
 export type State = {
