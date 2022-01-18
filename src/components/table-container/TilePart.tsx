@@ -22,7 +22,7 @@ function TilePart(props: Props): JSX.Element {
   const top = grabbed ? grabbedTile.top : 0;
   const ref = useRef<HTMLDivElement>(null);
 
-  const grabHandler = getGrabHandler(dispatch, tileId, props.x, props.y);
+  const grabHandler = getGrabHandler(dispatch, tileId);
 
   useMouseHandlingEffects(dispatch, grabbed);
   useInlineStyleEffects(ref, props.tileData.colour, top);
@@ -42,12 +42,10 @@ function TilePart(props: Props): JSX.Element {
 function getGrabHandler(
   dispatch: React.Dispatch<AnyAction>,
   tileId: number,
-  x: string,
-  y: number
 ): (event: React.MouseEvent<HTMLDivElement>) => void {
   return (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
-    dispatch(GrabbedTileSlice.grab({ tileId, x, y, pageY: event.pageY }));
+    dispatch(GrabbedTileSlice.grab({ tileId, pageY: event.pageY }));
   };
 }
 
