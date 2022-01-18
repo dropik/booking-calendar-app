@@ -4,7 +4,7 @@ import { hot } from "react-hot-loader";
 import { useAppSelector } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
 
-import Tile from "./Tile";
+import TilePart from "./TilePart";
 
 import "./TableCell.css";
 
@@ -19,7 +19,7 @@ function TableCell(props: Props): JSX.Element {
   const tile: JSX.Element[] = [];
   if (tileData !== undefined) {
     tile.push(
-      <Tile
+      <TilePart
         key="tile"
         x={props.x}
         y={props.y}

@@ -1,0 +1,17 @@
+.tile {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  z-index: 100;
+  text-align: center;
+}
+
+.grabbed {
+  z-index: -9999;
+}
+
+.tile-persons {
+  font-size: 1.2rem;
+  line-height: 4rem;
+}

@@ -6,7 +6,7 @@ import { useAppDispatch } from "../../redux/hooks";
 import * as GrabbedTileSlice from "../../redux/grabbedTileSlice";
 import * as TilesSlice from "../../redux/tilesSlice";
 
-import "./Tile.css";
+import "./TilePart.css";
 
 type State = {
   grabbed: boolean,
@@ -27,7 +27,7 @@ type Props = {
   tileData: TilesSlice.TileData
 };
 
-function Tile(props: Props): JSX.Element {
+function TilePart(props: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const {state, stateDispatch} = useGrabbedState();
 
@@ -47,11 +47,9 @@ function Tile(props: Props): JSX.Element {
       style={{
         top: state.top + "px",
         backgroundColor: props.tileData.colour,
-        width: "calc(" + props.tileData.nights + "00% + " + (props.tileData.nights - 1) + "px)",
       }}
     >
-      <span className="tile-name">{props.tileData.name}</span>
-      <span className="tile-room">{props.tileData.roomType}</span>
+      <span className="tile-persons">{props.tileData.persons}</span>
     </div>
   );
 }
@@ -127,4 +125,4 @@ function useMouseMoveAndDropHandlingEffect(
   }, [state.grabbed, stateDispatch, dispatch]);
 }
 
-export default hot(module)(Tile);
+export default hot(module)(TilePart);
