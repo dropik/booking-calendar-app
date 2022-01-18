@@ -1,11 +1,11 @@
 .room {
   display: flex;
-  border: 1px solid black;
+  border: 2px solid black;
   border-top: 0;
 }
 
 .room-first {
-  margin-top: calc(4rem + 1px);
+  margin-top: calc(4rem + 2px);
 }
 
 .room-last {

@@ -83,9 +83,9 @@ export const { resize, updateHeights, changeDate, expandLeft, expandRight } = ta
 export default tableSlice.reducer;
 
 function getInitialColumnsAmount() {
-  const roomCellWidth = Utils.remToPx(6);
-  const containerWidth = Utils.remToPx(4);
-  let columns = Math.ceil((document.documentElement.clientWidth - roomCellWidth) / containerWidth);
+  const sidebarWidth = Utils.remToPx(6);
+  const tableCellWidth = Utils.remToPx(4);
+  let columns = Math.ceil((document.documentElement.clientWidth - sidebarWidth) / tableCellWidth);
   columns += Globals.TABLE_PRELOAD_AMOUNT * 2;
   return columns;
 }
