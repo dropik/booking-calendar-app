@@ -2,7 +2,9 @@ import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
-import { useAppDispatch, useGrabbedTile, useTileIdByCoords } from "../../redux/hooks";
+import * as Utils from "../../utils";
+
+import { useAppDispatch, useColumns, useGrabbedTile, useLeftmostDate, useTileIdByCoords } from "../../redux/hooks";
 import * as GrabbedTileSlice from "../../redux/grabbedTileSlice";
 import * as TilesSlice from "../../redux/tilesSlice";
 
@@ -21,8 +23,11 @@ function TilePart(props: Props): JSX.Element {
   const grabbed = tileId === grabbedTile.tileId;
   const top = grabbed ? grabbedTile.top : 0;
   const ref = useRef<HTMLDivElement>(null);
+  const leftmostDate = useLeftmostDate();
+  const columns = useColumns();
 
-  const grabHandler = getGrabHandler(dispatch, tileId);
+  const outOfBound = isOutOfBound(props.tileData, leftmostDate, columns);
+  const grabHandler = getGrabHandler(dispatch, tileId, outOfBound);
 
   useMouseHandlingEffects(dispatch, grabbed);
   useInlineStyleEffects(ref, props.tileData.colour, top);
@@ -30,6 +35,9 @@ function TilePart(props: Props): JSX.Element {
   let className = "tile";
   if (grabbed) {
     className += " grabbed";
+  }
+  if (outOfBound) {
+    className += " out-of-bound";
   }
 
   return (
@@ -42,11 +50,19 @@ function TilePart(props: Props): JSX.Element {
 function getGrabHandler(
   dispatch: React.Dispatch<AnyAction>,
   tileId: number,
+  outOfBound: boolean
 ): (event: React.MouseEvent<HTMLDivElement>) => void {
   return (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
-    dispatch(GrabbedTileSlice.grab({ tileId, pageY: event.pageY }));
+    if (!outOfBound) {
+      dispatch(GrabbedTileSlice.grab({ tileId, pageY: event.pageY }));
+    }
   };
+}
+
+function isOutOfBound(tileData: TilesSlice.TileData, leftmostDate: string, columns: number): boolean {
+  const tileStartShift = Utils.daysBetweenDates(leftmostDate, tileData.from);
+  return (tileStartShift < 0) || (tileStartShift + tileData.nights > columns);
 }
 
 function useMouseHandlingEffects(
