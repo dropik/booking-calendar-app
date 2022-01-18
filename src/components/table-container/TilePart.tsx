@@ -31,9 +31,8 @@ function TilePart(props: Props): JSX.Element {
 
   const grabHandler = getGrabHandler(dispatch, tileId, props.x, props.y);
 
-  useDragHandlingEffect(topDispatch, dispatch, grabbed);
-  useDropHandlingEffect(topDispatch, dispatch);
-  useInlineStyleEffect(ref, props.tileData.colour, top);
+  useMouseHandlingEffects(topDispatch, dispatch, grabbed);
+  useInlineStyleEffects(ref, props.tileData.colour, top);
 
   let className = "tile";
   if (grabbed) {
@@ -76,6 +75,15 @@ function getGrabHandler(
   };
 }
 
+function useMouseHandlingEffects(
+  topDispatch: React.Dispatch<Action>,
+  dispatch: React.Dispatch<AnyAction>,
+  grabbed: boolean
+): void {
+  useDragHandlingEffect(topDispatch, dispatch, grabbed);
+  useDropHandlingEffect(topDispatch, dispatch);
+}
+
 function useDragHandlingEffect(
   topDispatch: React.Dispatch<Action>,
   dispatch: React.Dispatch<AnyAction>,
@@ -110,7 +118,7 @@ function useDropHandlingEffect(
   }, [topDispatch, dispatch]);
 }
 
-function useInlineStyleEffect(
+function useInlineStyleEffects(
   ref: React.RefObject<HTMLDivElement>,
   colour: string,
   top: number
