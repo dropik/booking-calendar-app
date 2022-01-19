@@ -1,27 +1,19 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type State = {
-  tileId: number | undefined,
-  initialPageY: number,
-  top: number
+  tileId: number | undefined
 };
 
 const initialState: State = {
-  tileId: undefined,
-  initialPageY: 0,
-  top: 0
+  tileId: undefined
 };
 
 export const grabbedTileSlice = createSlice({
   name: "grabbedTile",
   initialState: initialState,
   reducers: {
-    grab: (state, action: PayloadAction<{ tileId: number, pageY: number }>) => {
-      state.tileId = action.payload.tileId;
-      state.initialPageY = action.payload.pageY;
-    },
-    drag: (state, action: PayloadAction<{ pageY: number }>) => {
-      state.top = action.payload.pageY - state.initialPageY;
+    grab: (state, action: PayloadAction<State>) => {
+      return action.payload;
     },
     drop: () => {
       return initialState;
@@ -29,6 +21,6 @@ export const grabbedTileSlice = createSlice({
   }
 });
 
-export const { grab, drag, drop } = grabbedTileSlice.actions;
+export const { grab, drop } = grabbedTileSlice.actions;
 
 export default grabbedTileSlice.reducer;

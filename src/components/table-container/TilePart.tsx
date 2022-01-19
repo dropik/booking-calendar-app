@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
@@ -21,7 +21,6 @@ function TilePart(props: Props): JSX.Element {
   const grabbedTile = useGrabbedTile();
   const tileId = useTileIdByCoords(props.x, props.y);
   const grabbed = tileId === grabbedTile.tileId;
-  const top = grabbed ? grabbedTile.top : 0;
   const ref = useRef<HTMLDivElement>(null);
   const leftmostDate = useLeftmostDate();
   const columns = useColumns();
@@ -29,8 +28,8 @@ function TilePart(props: Props): JSX.Element {
   const outOfBound = isOutOfBound(props.tileData, leftmostDate, columns);
   const grabHandler = getGrabHandler(dispatch, tileId, outOfBound);
 
-  useMouseHandlingEffects(dispatch, grabbed);
-  useInlineStyleEffects(ref, props.tileData.colour, top);
+  useMouseHandlingEffects(dispatch, ref, grabbed);
+  useBackgroundColourEffect(ref, props.tileData.colour);
 
   let className = "tile";
   if (grabbed) {
@@ -55,7 +54,7 @@ function getGrabHandler(
   return (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
     if (!outOfBound) {
-      dispatch(GrabbedTileSlice.grab({ tileId, pageY: event.pageY }));
+      dispatch(GrabbedTileSlice.grab({ tileId }));
     }
   };
 }
@@ -67,17 +66,22 @@ function isOutOfBound(tileData: TilesSlice.TileData, leftmostDate: string, colum
 
 function useMouseHandlingEffects(
   dispatch: React.Dispatch<AnyAction>,
+  ref: React.RefObject<HTMLDivElement>,
   grabbed: boolean
 ): void {
-  useEffect(() => {
+  useLayoutEffect(() => {
+    const currentRef = ref.current;
+
     function onMove(event: MouseEvent) {
-      dispatch(GrabbedTileSlice.drag({ pageY: event.pageY }));
+      if (currentRef) {
+        const currentTopStr = currentRef.style.top;
+        const currentTop = parseInt(currentTopStr.substring(0, currentTopStr.length - 2));
+        currentRef.style.top = `${currentTop + event.movementY}px`;
+      }
     }
 
     function onDrop() {
       dispatch(GrabbedTileSlice.drop());
-      window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("mouseup", onDrop);
     }
 
     if (grabbed) {
@@ -86,28 +90,24 @@ function useMouseHandlingEffects(
     }
 
     return () => {
+      if (currentRef) {
+        currentRef.style.top = "0px";
+      }
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseup", onDrop);
     };
-  }, [grabbed, dispatch]);
+  }, [dispatch, ref, grabbed]);
 }
 
-function useInlineStyleEffects(
+function useBackgroundColourEffect(
   ref: React.RefObject<HTMLDivElement>,
-  colour: string,
-  top: number
+  colour: string
 ): void {
   useLayoutEffect(() => {
     if (ref.current) {
       ref.current.style.backgroundColor = colour;
     }
   }, [ref, colour]);
-
-  useLayoutEffect(() => {
-    if (ref.current) {
-      ref.current.style.top = `${top}px`;
-    }
-  }, [ref, top]);
 }
 
 export default hot(module)(TilePart);
