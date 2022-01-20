@@ -3,8 +3,7 @@ import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
 import * as Utils from "../../utils";
-import { useAppDispatch, useColumns, useGrabbedTile, useLeftmostDate } from "../../redux/hooks";
-import * as GrabbedTileSlice from "../../redux/grabbedTileSlice";
+import { useAppDispatch, useColumns, useLeftmostDate } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
 
 import TableCell from "./TableCell";
@@ -19,12 +18,11 @@ type Props = {
 
 function Room(props: Props): JSX.Element {
   const columns = useColumns();
-  const grabbedTile = useGrabbedTile();
   const dispatch = useAppDispatch();
   const leftmostDate = useLeftmostDate();
   const cells = useCellsMemo(columns, props.y, leftmostDate);
 
-  const dropHandler = getDropHandler(dispatch, grabbedTile, props.y);
+  const dropHandler = getDropHandler(dispatch, props.y);
 
   let className = "room";
   if (props.isFirst) {
@@ -62,13 +60,10 @@ function useCellsMemo(columns: number, y: number, leftmostDate: string): JSX.Ele
 
 function getDropHandler(
   dispatch: React.Dispatch<AnyAction>,
-  grabbedTile: GrabbedTileSlice.State,
   y: number
 ): () => void {
   return () => {
-    if (grabbedTile.tileId !== undefined) {
-      dispatch(TilesSlice.move({ tileId: grabbedTile.tileId, newY: y }));
-    }
+    dispatch(TilesSlice.move({ newY: y }));
   };
 }
 

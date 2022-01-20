@@ -5,7 +5,6 @@ import { AnyAction } from "@reduxjs/toolkit";
 import * as Utils from "../../utils";
 
 import { useAppDispatch, useAppSelector, useColumns, useLeftmostDate, useTileIdByCoords } from "../../redux/hooks";
-import * as GrabbedTileSlice from "../../redux/grabbedTileSlice";
 import * as TilesSlice from "../../redux/tilesSlice";
 
 import "./TilePart.css";
@@ -53,7 +52,6 @@ function getGrabHandler(
   return (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
     if (!outOfBound) {
-      dispatch(GrabbedTileSlice.grab({ tileId }));
       dispatch(TilesSlice.grab({ tileId }));
     }
   };
@@ -82,7 +80,6 @@ function useMouseHandlingEffects(
     }
 
     function onDrop() {
-      dispatch(GrabbedTileSlice.drop());
       dispatch(TilesSlice.drop({ tileId }));
     }
 

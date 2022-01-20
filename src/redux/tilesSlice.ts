@@ -20,6 +20,7 @@ export type TileData = {
 export type State = {
   status: "idle" | "loading" | "failed",
   data: TileData[],
+  grabbedTile: number
   [key: number]: {
     [key: string]: number | undefined
   }
@@ -27,7 +28,8 @@ export type State = {
 
 const initialState: State = {
   status: "idle",
-  data: []
+  data: [],
+  grabbedTile: -1
 };
 
 export const fetchAsync = createAsyncThunk(
@@ -44,14 +46,16 @@ export const tilesSlice = createSlice({
   name: "tiles",
   initialState: initialState,
   reducers: {
-    move: (state, action: PayloadAction<{ tileId: number, newY: number }>) => {
+    move: (state, action: PayloadAction<{ newY: number }>) => {
       moveTile(state, action);
     },
     grab: (state, action: PayloadAction<{ tileId: number }>) => {
       state.data[action.payload.tileId].grabbed = true;
+      state.grabbedTile = action.payload.tileId;
     },
     drop: (state, action: PayloadAction<{ tileId: number }>) => {
       state.data[action.payload.tileId].grabbed = false;
+      state.grabbedTile = -1;
     }
   },
   extraReducers: (builder) => {
@@ -90,13 +94,18 @@ function addFetchedTiles(state: State, tiles: Array<TileData>): void {
 
 function moveTile(
   state: WritableDraft<State>,
-  action: PayloadAction<{ tileId: number, newY: number }>
+  action: PayloadAction<{ newY: number }>
 ): void {
-  const tileId = action.payload.tileId;
+  const tileId = state.grabbedTile;
+
+  if (tileId < 0) {
+    return;
+  }
+
   const tile = state.data[tileId];
   const newY = action.payload.newY;
 
-  if ((newY > 0) && (newY != tile.roomNumber)) {
+  if (newY && (newY != tile.roomNumber)) {
     if (state[newY] === undefined) {
       state[newY] = {};
     }
