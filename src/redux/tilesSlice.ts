@@ -13,7 +13,8 @@ export type TileData = {
   nights: number,
   name: string,
   roomType: string,
-  persons: number
+  persons: number,
+  grabbed?: boolean
 };
 
 export type State = {
@@ -45,6 +46,12 @@ export const tilesSlice = createSlice({
   reducers: {
     move: (state, action: PayloadAction<{ tileId: number, newY: number }>) => {
       moveTile(state, action);
+    },
+    grab: (state, action: PayloadAction<{ tileId: number }>) => {
+      state.data[action.payload.tileId].grabbed = true;
+    },
+    drop: (state, action: PayloadAction<{ tileId: number }>) => {
+      state.data[action.payload.tileId].grabbed = false;
     }
   },
   extraReducers: (builder) => {
@@ -62,7 +69,7 @@ export const tilesSlice = createSlice({
   }
 });
 
-export const { move } = tilesSlice.actions;
+export const { move, grab, drop } = tilesSlice.actions;
 
 export default tilesSlice.reducer;
 

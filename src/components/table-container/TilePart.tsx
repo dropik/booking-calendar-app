@@ -4,7 +4,7 @@ import { AnyAction } from "@reduxjs/toolkit";
 
 import * as Utils from "../../utils";
 
-import { useAppDispatch, useColumns, useGrabbedTile, useLeftmostDate, useTileIdByCoords } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector, useColumns, useLeftmostDate, useTileIdByCoords } from "../../redux/hooks";
 import * as GrabbedTileSlice from "../../redux/grabbedTileSlice";
 import * as TilesSlice from "../../redux/tilesSlice";
 
@@ -18,9 +18,8 @@ type Props = {
 
 function TilePart(props: Props): JSX.Element {
   const dispatch = useAppDispatch();
-  const grabbedTile = useGrabbedTile();
   const tileId = useTileIdByCoords(props.x, props.y);
-  const grabbed = tileId === grabbedTile.tileId;
+  const grabbed = useAppSelector(state => state.tiles.data[tileId].grabbed);
   const ref = useRef<HTMLDivElement>(null);
   const leftmostDate = useLeftmostDate();
   const columns = useColumns();
@@ -28,7 +27,7 @@ function TilePart(props: Props): JSX.Element {
   const outOfBound = isOutOfBound(props.tileData, leftmostDate, columns);
   const grabHandler = getGrabHandler(dispatch, tileId, outOfBound);
 
-  useMouseHandlingEffects(dispatch, ref, grabbed);
+  useMouseHandlingEffects(dispatch, ref, grabbed, tileId);
   useBackgroundColourEffect(ref, props.tileData.colour);
 
   let className = "tile";
@@ -55,6 +54,7 @@ function getGrabHandler(
     event.preventDefault();
     if (!outOfBound) {
       dispatch(GrabbedTileSlice.grab({ tileId }));
+      dispatch(TilesSlice.grab({ tileId }));
     }
   };
 }
@@ -67,7 +67,8 @@ function isOutOfBound(tileData: TilesSlice.TileData, leftmostDate: string, colum
 function useMouseHandlingEffects(
   dispatch: React.Dispatch<AnyAction>,
   ref: React.RefObject<HTMLDivElement>,
-  grabbed: boolean
+  grabbed: boolean | undefined,
+  tileId: number
 ): void {
   useLayoutEffect(() => {
     const currentRef = ref.current;
@@ -82,6 +83,7 @@ function useMouseHandlingEffects(
 
     function onDrop() {
       dispatch(GrabbedTileSlice.drop());
+      dispatch(TilesSlice.drop({ tileId }));
     }
 
     if (grabbed) {
@@ -96,7 +98,7 @@ function useMouseHandlingEffects(
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseup", onDrop);
     };
-  }, [dispatch, ref, grabbed]);
+  }, [dispatch, ref, grabbed, tileId]);
 }
 
 function useBackgroundColourEffect(
