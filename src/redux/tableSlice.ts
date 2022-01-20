@@ -37,17 +37,6 @@ export const tableSlice = createSlice({
   name: "table",
   initialState: getInitialState,
   reducers: {
-    resize: (state) => {
-      const newColumns = getInitialColumnsAmount();
-      if (newColumns > state.columns) {
-        const prevColumns = state.columns;
-        state.columns = newColumns;
-        state.lastFetchPeriod = {
-          from: Utils.getDateShift(state.leftmostDate, prevColumns),
-          to: Utils.getDateShift(state.leftmostDate, newColumns - 1)
-        };
-      }
-    },
     updateHeights: (state, action: PayloadAction<{ offsetHeight: number, clientHeight: number }>) => {
       state.offsetHeight = action.payload.offsetHeight;
       state.clientHeight = action.payload.clientHeight;
@@ -78,14 +67,14 @@ export const tableSlice = createSlice({
   }
 });
 
-export const { resize, updateHeights, changeDate, expandLeft, expandRight } = tableSlice.actions;
+export const { updateHeights, changeDate, expandLeft, expandRight } = tableSlice.actions;
 
 export default tableSlice.reducer;
 
 function getInitialColumnsAmount() {
-  const roomCellWidth = Utils.remToPx(6);
-  const containerWidth = Utils.remToPx(4);
-  let columns = Math.ceil((document.documentElement.clientWidth - roomCellWidth) / containerWidth);
+  const sidebarWidth = Utils.remToPx(6);
+  const tableCellWidth = Utils.remToPx(4);
+  let columns = Math.ceil((document.documentElement.clientWidth - sidebarWidth) / tableCellWidth);
   columns += Globals.TABLE_PRELOAD_AMOUNT * 2;
   return columns;
 }

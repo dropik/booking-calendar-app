@@ -1,9 +1,5 @@
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useEffect } from "react";
 import { hot } from "react-hot-loader";
-import { AnyAction } from "@reduxjs/toolkit";
-
-import { useAppDispatch } from "./redux/hooks";
-import * as TableSlice from "./redux/tableSlice";
 
 import Header from "./components/Header";
 import Hotel from "./components/Hotel";
@@ -12,9 +8,6 @@ import TableContainer from "./components/TableContainer";
 import "./App.css";
 
 function App(): JSX.Element {
-  const dispatch = useAppDispatch();
-
-  useDocumentSizeAdjustmentLayoutEffect(dispatch);
   useWindowCursorGrabbingEffect();
 
   return (
@@ -24,16 +17,6 @@ function App(): JSX.Element {
       <TableContainer />
     </div>
   );
-}
-
-function useDocumentSizeAdjustmentLayoutEffect(dispatch: React.Dispatch<AnyAction>): void {
-  useLayoutEffect(() => {
-    function handleResize() {
-      dispatch(TableSlice.resize());
-    }
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [dispatch]);
 }
 
 function useWindowCursorGrabbingEffect(): void {

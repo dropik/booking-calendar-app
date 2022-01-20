@@ -1,6 +1,6 @@
 import * as Mocks from "./mocks";
 import * as HotelSlice from "./redux/hotelSlice";
-import * as OccupationsSlice from "./redux/occupationsSlice";
+import * as Tiles from "./redux/tilesSlice";
 
 export function fetchHotelDataAsync(): Promise<{ data: HotelSlice.HotelData }> {
   return new Promise((resolve) => {
@@ -9,7 +9,7 @@ export function fetchHotelDataAsync(): Promise<{ data: HotelSlice.HotelData }> {
 }
 
 let fethcedTilesCounter: number;
-export function fetchTilesAsync(from: string, to: string): Promise<{ data: OccupationsSlice.TileData[] }> {
+export function fetchTilesAsync(from: string, to: string): Promise<{ data: Tiles.TileData[] }> {
   console.log(`fetching tiles from ${from} to ${to}...`);
 
   if (fethcedTilesCounter === undefined) {
@@ -20,7 +20,7 @@ export function fetchTilesAsync(from: string, to: string): Promise<{ data: Occup
     const currentCounter = fethcedTilesCounter;
     fethcedTilesCounter++;
     setTimeout(() => {
-      if (currentCounter < 2) {
+      if (currentCounter < Mocks.tiles.length) {
         resolve({ data: [Mocks.tiles[currentCounter]] });
       } else {
         resolve({ data: [] });

@@ -1,11 +1,11 @@
 .hotel-container {
   position: fixed;
-  top: calc(8rem + 1px);
+  top: calc(8rem + 2px);
   left: 0.5rem;
   right: 0.5rem;
-  max-height: calc(100% - 8.5rem - 1px);
+  max-height: calc(100% - 8.5rem - 2px);
   overflow: hidden;
-  border: 1px solid black;
+  border: 2px solid black;
   border-top: 0;
 }
 
@@ -17,7 +17,7 @@
   position: relative;
   width: 6rem;
   background-color: white;
-  border: 1px solid black;
+  border: 2px solid black;
   border-bottom: 0;
   border-left: 0;
 }

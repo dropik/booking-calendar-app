@@ -2,9 +2,9 @@ import React from "react";
 import { hot } from "react-hot-loader";
 
 import { useAppSelector } from "../../redux/hooks";
-import * as OccupationsSlice from "../../redux/occupationsSlice";
+import * as TilesSlice from "../../redux/tilesSlice";
 
-import Tile from "./Tile";
+import TilePart from "./TilePart";
 
 import "./TableCell.css";
 
@@ -19,7 +19,7 @@ function TableCell(props: Props): JSX.Element {
   const tile: JSX.Element[] = [];
   if (tileData !== undefined) {
     tile.push(
-      <Tile
+      <TilePart
         key="tile"
         x={props.x}
         y={props.y}
@@ -31,10 +31,10 @@ function TableCell(props: Props): JSX.Element {
   return <div className="table-cell">{tile}</div>;
 }
 
-function useTileDataAt(x: string, y: number): OccupationsSlice.TileData | undefined {
+function useTileDataAt(x: string, y: number): TilesSlice.TileData | undefined {
   return useAppSelector(state => {
-    const occupationsForRoom = state.occupations[y];
-    return (occupationsForRoom === undefined) ? undefined : occupationsForRoom[x];
+    const tilesForRoom = state.tiles[y];
+    return (tilesForRoom === undefined) ? undefined : state.tiles.data[tilesForRoom[x] as number];
   });
 }
 

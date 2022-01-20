@@ -1,6 +1,6 @@
 .table-cell {
   position: relative;
-  border-right: 1px solid black;
+  border-right: 2px solid black;
   width: 4rem;
   height: 4rem;
 }

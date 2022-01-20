@@ -1,5 +1,5 @@
 import * as HotelSlice from "./redux/hotelSlice";
-import * as OccupationsSlice from "./redux/occupationsSlice";
+import * as TilesSlice from "./redux/tilesSlice";
 
 export const hotel: HotelSlice.HotelData = {
   floors: [
@@ -64,7 +64,16 @@ export const hotel: HotelSlice.HotelData = {
   ],
 };
 
-export const tiles: OccupationsSlice.TileData[] = [
+export const tiles: TilesSlice.TileData[] = [
+  {
+    name: "Petr Ivanov",
+    colour: "rgba(208, 217, 73, 0.69)",
+    roomType: "doppia",
+    roomNumber: 3,
+    from: "2021-12-15",
+    nights: 40,
+    persons: 2
+  },
   {
     name: "Ivan Petrov",
     colour: "rgba(217, 73, 73, 0.69)",
@@ -72,6 +81,7 @@ export const tiles: OccupationsSlice.TileData[] = [
     roomNumber: 2,
     from: "2021-12-25",
     nights: 2,
+    persons: 2
   },
   {
     name: "Vasya Pupkin",
@@ -80,5 +90,6 @@ export const tiles: OccupationsSlice.TileData[] = [
     roomNumber: 6,
     from: "2021-12-20",
     nights: 3,
+    persons: 2
   },
 ];
