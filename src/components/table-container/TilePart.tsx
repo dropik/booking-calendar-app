@@ -74,8 +74,8 @@ function useMouseHandlingEffects(
     function onMove(event: MouseEvent) {
       if (currentRef) {
         const currentTopStr = currentRef.style.top;
-        const currentTop = parseInt(currentTopStr.substring(0, currentTopStr.length - 2));
-        currentRef.style.top = `${currentTop + event.movementY}px`;
+        const currentTop = parseFloat(currentTopStr.substring(0, currentTopStr.length - 2));
+        currentRef.style.top = `${currentTop + event.movementY / window.devicePixelRatio}px`;
       }
     }
 
