@@ -70,7 +70,7 @@ export const tiles: TilesSlice.TileData[] = [
     colour: "rgba(208, 217, 73, 0.69)",
     roomType: "doppia",
     roomNumber: 3,
-    from: "2021-12-15",
+    from: "2022-02-15",
     nights: 40,
     persons: 2
   },
@@ -79,7 +79,7 @@ export const tiles: TilesSlice.TileData[] = [
     colour: "rgba(217, 73, 73, 0.69)",
     roomType: "doppia",
     roomNumber: 2,
-    from: "2021-12-25",
+    from: "2022-02-25",
     nights: 2,
     persons: 2
   },
@@ -88,7 +88,7 @@ export const tiles: TilesSlice.TileData[] = [
     colour: "rgba(73, 122, 217, 0.69)",
     roomType: "doppia",
     roomNumber: 6,
-    from: "2021-12-20",
+    from: "2022-02-20",
     nights: 3,
     persons: 2
   },

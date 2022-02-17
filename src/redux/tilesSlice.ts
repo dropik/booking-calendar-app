@@ -47,7 +47,7 @@ export const tilesSlice = createSlice({
   initialState: initialState,
   reducers: {
     move: (state, action: PayloadAction<{ newY: number }>) => {
-      moveTile(state, action);
+      tryMoveTile(state, action);
     },
     grab: (state, action: PayloadAction<{ tileId: number }>) => {
       state.data[action.payload.tileId].grabbed = true;
@@ -92,7 +92,7 @@ function addFetchedTiles(state: State, tiles: Array<TileData>): void {
   });
 }
 
-function moveTile(
+function tryMoveTile(
   state: WritableDraft<State>,
   action: PayloadAction<{ newY: number }>
 ): void {
@@ -102,22 +102,47 @@ function moveTile(
     return;
   }
 
-  const tile = state.data[tileId];
+  const tileData = state.data[tileId];
   const newY = action.payload.newY;
 
-  if (newY && (newY != tile.roomNumber)) {
+  if (newY && (newY != tileData.roomNumber)) {
     if (state[newY] === undefined) {
       state[newY] = {};
+      moveTile(state, tileData, tileId, newY);
+    } else if (!checkHasCollision(state, tileData, newY)) {
+      moveTile(state, tileData, tileId, newY);
     }
-
-    const dateCounter = new Date(tile.from);
-    for (let i = 0; i < tile.nights; i++) {
-      const x = Utils.dateToString(dateCounter);
-      state[newY][x] = tileId;
-      state[tile.roomNumber][x] = undefined;
-      dateCounter.setDate(dateCounter.getDate() + 1);
-    }
-
-    tile.roomNumber = newY;
   }
+}
+
+function moveTile(
+  state: WritableDraft<State>,
+  tileData: WritableDraft<TileData>,
+  tileId: number,
+  newY: number
+): void {
+  const dateCounter = new Date(tileData.from);
+  for (let i = 0; i < tileData.nights; i++) {
+    const x = Utils.dateToString(dateCounter);
+    state[newY][x] = tileId;
+    state[tileData.roomNumber][x] = undefined;
+    dateCounter.setDate(dateCounter.getDate() + 1);
+  }
+  tileData.roomNumber = newY;
+}
+
+function checkHasCollision(
+  state: WritableDraft<State>,
+  tileData: WritableDraft<TileData>,
+  newY: number
+): boolean {
+  const dateCounter = new Date(tileData.from);
+  for (let i = 0; i < tileData.nights; i++) {
+    const x = Utils.dateToString(dateCounter);
+    if (state[newY][x] !== undefined) {
+      return true;
+    }
+    dateCounter.setDate(dateCounter.getDate() + 1);
+  }
+  return false;
 }
