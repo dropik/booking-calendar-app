@@ -47,7 +47,7 @@ export const tilesSlice = createSlice({
   initialState: initialState,
   reducers: {
     move: (state, action: PayloadAction<{ newY: number }>) => {
-      moveTile(state, action);
+      tryMoveTile(state, action);
     },
     grab: (state, action: PayloadAction<{ tileId: number }>) => {
       state.data[action.payload.tileId].grabbed = true;
@@ -92,7 +92,7 @@ function addFetchedTiles(state: State, tiles: Array<TileData>): void {
   });
 }
 
-function moveTile(
+function tryMoveTile(
   state: WritableDraft<State>,
   action: PayloadAction<{ newY: number }>
 ): void {
@@ -108,16 +108,37 @@ function moveTile(
   if (newY && (newY != tile.roomNumber)) {
     if (state[newY] === undefined) {
       state[newY] = {};
+      moveTile(state, tile, tileId, newY);
+    } else {
+      const dateCounter = new Date(tile.from);
+      let hasCollision = false;
+      for (let i = 0; i < tile.nights; i++) {
+        const x = Utils.dateToString(dateCounter);
+        if (state[newY][x] !== undefined) {
+          hasCollision = true;
+          break;
+        }
+        dateCounter.setDate(dateCounter.getDate() + 1);
+      }
+      if (!hasCollision) {
+        moveTile(state, tile, tileId, newY);
+      }
     }
-
-    const dateCounter = new Date(tile.from);
-    for (let i = 0; i < tile.nights; i++) {
-      const x = Utils.dateToString(dateCounter);
-      state[newY][x] = tileId;
-      state[tile.roomNumber][x] = undefined;
-      dateCounter.setDate(dateCounter.getDate() + 1);
-    }
-
-    tile.roomNumber = newY;
   }
+}
+
+function moveTile(
+  state: WritableDraft<State>,
+  tile: WritableDraft<TileData>,
+  tileId: number,
+  newY: number
+): void {
+  const dateCounter = new Date(tile.from);
+  for (let i = 0; i < tile.nights; i++) {
+    const x = Utils.dateToString(dateCounter);
+    state[newY][x] = tileId;
+    state[tile.roomNumber][x] = undefined;
+    dateCounter.setDate(dateCounter.getDate() + 1);
+  }
+  tile.roomNumber = newY;
 }
