@@ -102,43 +102,47 @@ function tryMoveTile(
     return;
   }
 
-  const tile = state.data[tileId];
+  const tileData = state.data[tileId];
   const newY = action.payload.newY;
 
-  if (newY && (newY != tile.roomNumber)) {
+  if (newY && (newY != tileData.roomNumber)) {
     if (state[newY] === undefined) {
       state[newY] = {};
-      moveTile(state, tile, tileId, newY);
-    } else {
-      const dateCounter = new Date(tile.from);
-      let hasCollision = false;
-      for (let i = 0; i < tile.nights; i++) {
-        const x = Utils.dateToString(dateCounter);
-        if (state[newY][x] !== undefined) {
-          hasCollision = true;
-          break;
-        }
-        dateCounter.setDate(dateCounter.getDate() + 1);
-      }
-      if (!hasCollision) {
-        moveTile(state, tile, tileId, newY);
-      }
+      moveTile(state, tileData, tileId, newY);
+    } else if (!checkHasCollision(state, tileData, newY)) {
+      moveTile(state, tileData, tileId, newY);
     }
   }
 }
 
 function moveTile(
   state: WritableDraft<State>,
-  tile: WritableDraft<TileData>,
+  tileData: WritableDraft<TileData>,
   tileId: number,
   newY: number
 ): void {
-  const dateCounter = new Date(tile.from);
-  for (let i = 0; i < tile.nights; i++) {
+  const dateCounter = new Date(tileData.from);
+  for (let i = 0; i < tileData.nights; i++) {
     const x = Utils.dateToString(dateCounter);
     state[newY][x] = tileId;
-    state[tile.roomNumber][x] = undefined;
+    state[tileData.roomNumber][x] = undefined;
     dateCounter.setDate(dateCounter.getDate() + 1);
   }
-  tile.roomNumber = newY;
+  tileData.roomNumber = newY;
+}
+
+function checkHasCollision(
+  state: WritableDraft<State>,
+  tileData: WritableDraft<TileData>,
+  newY: number
+): boolean {
+  const dateCounter = new Date(tileData.from);
+  for (let i = 0; i < tileData.nights; i++) {
+    const x = Utils.dateToString(dateCounter);
+    if (state[newY][x] !== undefined) {
+      return true;
+    }
+    dateCounter.setDate(dateCounter.getDate() + 1);
+  }
+  return false;
 }
