@@ -18,27 +18,28 @@ type Props = {
 function Room(props: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const dates = useDates();
-  const cells = dates.map((value: string) => (
-    <TableCell
-      key={value}
-      x={value}
-      y={props.y}
-    />
-  ));
 
+  const cells = getCells(dates, props.y);
   const dropHandler = getDropHandler(dispatch, props.y);
-
-  let className = "room";
-  if (props.isFirst) {
-    className += " room-first";
-  }
-  if (props.isLast) {
-    className += " room-last";
-  }
+  const className = getClassName(props.isFirst, props.isLast);
 
   return (
     <div className={className} onMouseUp={dropHandler}>{cells}</div>
   );
+}
+
+function getCells(dates: Generator<string, void, void>, y: number): JSX.Element[] {
+  const cells = [];
+  for (const date of dates) {
+    cells.push(
+      <TableCell
+        key={date}
+        x={date}
+        y={y}
+      />
+    );
+  }
+  return cells;
 }
 
 function getDropHandler(
@@ -48,6 +49,17 @@ function getDropHandler(
   return () => {
     dispatch(TilesSlice.move({ newY: y }));
   };
+}
+
+function getClassName(isFirst: boolean, isLast: boolean): string {
+  let className = "room";
+  if (isFirst) {
+    className += " room-first";
+  }
+  if (isLast) {
+    className += " room-last";
+  }
+  return className;
 }
 
 export default hot(module)(Room);
