@@ -40,7 +40,7 @@ export function useDates(): Generator<string, void, void> {
   const dateCounter = new Date(useAppSelector(state => state.table.leftmostDate));
   const columns = useAppSelector(state => state.table.columns);
 
-  return function*() {
+  return function*(): Generator<string, void, void> {
     for (let i = 0; i < columns; i++) {
       yield Utils.dateToString(dateCounter);
       dateCounter.setDate(dateCounter.getDate() + 1);
