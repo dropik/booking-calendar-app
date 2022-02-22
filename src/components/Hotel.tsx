@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import { hot } from "react-hot-loader";
 
 import { useAppDispatch, useHotelData, useScrollTop, useTableDimentions } from "../redux/hooks";
@@ -15,13 +15,15 @@ function Hotel(): JSX.Element {
   const scrollTop = useScrollTop();
   const tableDimentions = useTableDimentions();
   const rows = useRowsMemo(hotelData);
+  const ref = useRef<HTMLDivElement>(null);
 
   useHotelDataFetchingEffect(dispatch);
   useHotelbarBottomSpacingEffect(tableDimentions, rows);
+  useScrollEffect(ref, scrollTop);
 
   return (
     <div className="hotel-container">
-      <div className="hotel" style={{ top: -scrollTop + "px" }}>
+      <div ref={ref} className="hotel">
         {rows}
       </div>
     </div>)
@@ -75,6 +77,14 @@ function useHotelbarBottomSpacingEffect(
       }
     };
   }, [tableDimentions, rows]);
+}
+
+function useScrollEffect(ref: React.RefObject<HTMLDivElement>, scrollTop: number): void {
+  useLayoutEffect(() => {
+    if (ref.current) {
+      ref.current.style.top = `${-scrollTop}px`;
+    }
+  }, [ref, scrollTop]);
 }
 
 export default hot(module)(Hotel);
