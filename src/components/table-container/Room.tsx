@@ -1,9 +1,8 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
-import * as Utils from "../../utils";
-import { useAppDispatch, useColumns, useLeftmostDate } from "../../redux/hooks";
+import { useAppDispatch, useDates } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
 
 import TableCell from "./TableCell";
@@ -17,10 +16,15 @@ type Props = {
 };
 
 function Room(props: Props): JSX.Element {
-  const columns = useColumns();
   const dispatch = useAppDispatch();
-  const leftmostDate = useLeftmostDate();
-  const cells = useCellsMemo(columns, props.y, leftmostDate);
+  const dates = useDates();
+  const cells = dates.map((value: string) => (
+    <TableCell
+      key={value}
+      x={value}
+      y={props.y}
+    />
+  ));
 
   const dropHandler = getDropHandler(dispatch, props.y);
 
@@ -35,27 +39,6 @@ function Room(props: Props): JSX.Element {
   return (
     <div className={className} onMouseUp={dropHandler}>{cells}</div>
   );
-}
-
-function useCellsMemo(columns: number, y: number, leftmostDate: string): JSX.Element[] {
-  return useMemo(() => {
-    const cells = [];
-    const dateCounter = new Date(leftmostDate);
-
-    for (let i = 0; i < columns; i++) {
-      const x = Utils.dateToString(dateCounter);
-      cells.push(
-        <TableCell
-          key={x}
-          x={x}
-          y={y}
-        />
-      );
-      dateCounter.setDate(dateCounter.getDate() + 1);
-    }
-
-    return cells;
-  }, [columns, y, leftmostDate]);
 }
 
 function getDropHandler(

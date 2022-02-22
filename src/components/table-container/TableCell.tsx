@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { hot } from "react-hot-loader";
 
 import { useAppSelector } from "../../redux/hooks";
@@ -13,7 +13,7 @@ type Props = {
   y: number
 };
 
-function TableCell(props: Props): JSX.Element {
+const TableCell = memo(function TableCell(props: Props): JSX.Element {
   const tileData = useTileDataAt(props.x, props.y);
 
   const tile: JSX.Element[] = [];
@@ -29,7 +29,7 @@ function TableCell(props: Props): JSX.Element {
   }
 
   return <div className="table-cell">{tile}</div>;
-}
+});
 
 function useTileDataAt(x: string, y: number): TilesSlice.TileData | undefined {
   return useAppSelector(state => {
