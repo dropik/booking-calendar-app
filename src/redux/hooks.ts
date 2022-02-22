@@ -36,13 +36,16 @@ export function useTileIdByCoords(x: string, y: number): number {
   });
 }
 
-export function* useDates(): Generator<string, void, void> {
+export function useDates(): Generator<string, void, void> {
   const dateCounter = new Date(useAppSelector(state => state.table.leftmostDate));
   const columns = useAppSelector(state => state.table.columns);
-  for (let i = 0; i < columns; i++) {
-    yield Utils.dateToString(dateCounter);
-    dateCounter.setDate(dateCounter.getDate() + 1);
-  }
+
+  return function*() {
+    for (let i = 0; i < columns; i++) {
+      yield Utils.dateToString(dateCounter);
+      dateCounter.setDate(dateCounter.getDate() + 1);
+    }
+  }();
 }
 
 export const useLeftmostDate:     () => string =                      () => useAppSelector(state => state.table.leftmostDate);

@@ -1,7 +1,7 @@
-import React, { useMemo } from "react";
+import React, { useLayoutEffect, useMemo, useRef } from "react";
 import { hot } from "react-hot-loader";
 
-import { useColumns, useScrollLeft, useLeftmostDate } from "../../../redux/hooks";
+import { useScrollLeft, useDates } from "../../../redux/hooks";
 
 import Day from "./Day";
 
@@ -9,35 +9,39 @@ import "./Dates.css";
 
 function Dates(): JSX.Element {
   const scrollLeft = useScrollLeft();
-  const leftmostDate = useLeftmostDate();
-  const columns = useColumns();
-  const dates = useDatesMemo(leftmostDate, columns);
+  const dates = useDates();
+  const ref = useRef<HTMLDivElement>(null);
+
+  const dayCells = useDayCellsMemo(dates);
+
+  useScrollEffect(ref, scrollLeft);
 
   return (
-    <div style={{ left: -scrollLeft + "px" }} className="dates">
-      {dates}
-    </div>
+    <div ref={ref} className="dates">{dayCells}</div>
   );
 }
 
-function useDatesMemo(startDate: string, columns: number): JSX.Element[] {
+function useDayCellsMemo(dates: Generator<string, void, void>): JSX.Element[] {
   return useMemo(() => {
-    const dates = [];
-
-    const dateCounter = new Date(startDate);
-    for (let i = 0; i < columns; i++) {
-      const day = dateCounter.getDate();
-      dates.push(
+    const dayCells: JSX.Element[] = [];
+    for (const date of dates) {
+      dayCells.push(
         <Day
-          day={day.toString().padStart(2, "0")}
-          key={dateCounter.toDateString()}
+          day={date.substring(8)}
+          key={date}
         />
       );
-      dateCounter.setDate(dateCounter.getDate() + 1);
     }
+    return dayCells;
+  }, [dates]);
+}
 
-    return dates;
-  }, [startDate, columns]);
+function useScrollEffect(ref: React.RefObject<HTMLDivElement>, scrollLeft: number): void {
+  useLayoutEffect(() => {
+    if (ref.current) {
+      ref.current.style.left = `${-scrollLeft}px`;
+    }
+  }, [ref, scrollLeft]);
 }
 
 export default hot(module)(Dates);
