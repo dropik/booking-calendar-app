@@ -13,7 +13,7 @@ type Props = {
   y: number
 };
 
-const TableCell = memo(function TableCell(props: Props): JSX.Element {
+function TableCell(props: Props): JSX.Element {
   const tileData = useTileDataAt(props.x, props.y);
 
   const tile: JSX.Element[] = [];
@@ -29,7 +29,7 @@ const TableCell = memo(function TableCell(props: Props): JSX.Element {
   }
 
   return <div className="table-cell">{tile}</div>;
-});
+}
 
 function useTileDataAt(x: string, y: number): TilesSlice.TileData | undefined {
   return useAppSelector(state => {
@@ -38,4 +38,4 @@ function useTileDataAt(x: string, y: number): TilesSlice.TileData | undefined {
   });
 }
 
-export default hot(module)(TableCell);
+export default memo(hot(module)(TableCell));

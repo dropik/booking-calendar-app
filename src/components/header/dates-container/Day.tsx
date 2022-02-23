@@ -7,12 +7,12 @@ type Props = {
   day: string
 };
 
-const Day = memo(function Day(props: Props): JSX.Element {
+function Day(props: Props): JSX.Element {
   return (
     <div className="day">
       <b>{props.day}</b>
     </div>
   );
-});
+}
 
-export default hot(module)(Day);
+export default memo(hot(module)(Day));
