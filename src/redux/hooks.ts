@@ -36,6 +36,18 @@ export function useTileIdByCoords(x: string, y: number): number {
   });
 }
 
+export function useDates(): Generator<string, void, void> {
+  const dateCounter = new Date(useAppSelector(state => state.table.leftmostDate));
+  const columns = useAppSelector(state => state.table.columns);
+
+  return function*(): Generator<string, void, void> {
+    for (let i = 0; i < columns; i++) {
+      yield Utils.dateToString(dateCounter);
+      dateCounter.setDate(dateCounter.getDate() + 1);
+    }
+  }();
+}
+
 export const useLeftmostDate:     () => string =                      () => useAppSelector(state => state.table.leftmostDate);
 export const useColumns:          () => number =                      () => useAppSelector(state => state.table.columns);
 export const useLastFetchPeriod:  () => TableSlice.FetchPeriod =      () => useAppSelector(state => state.table.lastFetchPeriod);

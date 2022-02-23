@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
@@ -12,6 +12,7 @@ import * as TableSlice from "../redux/tableSlice";
 import Table from "./table-container/Table";
 
 import "./TableContainer.css";
+import FetchTiles from "./table-container/FetchTiles";
 
 function TableContainer(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -24,9 +25,11 @@ function TableContainer(): JSX.Element {
   useTableDimentionsUpdateEffect(ref, dispatch, hotelData);
   useInitialScrollLeftEffect(ref, hotelData, leftmostDate);
 
+  const tableContents = useTableContentsMemo();
+
   return (
     <div ref={ref} className="table-container" onScroll={scrollHanlder}>
-      <Table />
+      {tableContents}
     </div>
   );
 }
@@ -81,6 +84,15 @@ function useTableDimentionsUpdateEffect(
     }
     dispatch(TableSlice.updateHeights({ offsetHeight, clientHeight }));
   }, [ref, dispatch, hotelData]);
+}
+
+function useTableContentsMemo(): JSX.Element {
+  return useMemo(() => (
+    <>
+      <Table />
+      <FetchTiles />
+    </>
+  ), []);
 }
 
 export default hot(module)(TableContainer);

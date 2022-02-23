@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { hot } from "react-hot-loader";
 
 import { useAppSelector } from "../../redux/hooks";
@@ -38,4 +38,4 @@ function useTileDataAt(x: string, y: number): TilesSlice.TileData | undefined {
   });
 }
 
-export default hot(module)(TableCell);
+export default memo(hot(module)(TableCell));

@@ -1,9 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { hot } from "react-hot-loader";
 
-import { useAppDispatch, useHotelData, useLastFetchPeriod } from "../../redux/hooks";
-import * as TilesSlice from "../../redux/tilesSlice";
-import * as TableSlice from "../../redux/tableSlice";
+import { useHotelData } from "../../redux/hooks";
 
 import Room from "./Room";
 
@@ -11,8 +9,6 @@ import "./Table.css";
 
 function Table(): JSX.Element {
   const hotelData = useHotelData();
-  const dispatch = useAppDispatch();
-  const lastFetchPeriod = useLastFetchPeriod();
 
   const rows: JSX.Element[] = [];
 
@@ -30,15 +26,7 @@ function Table(): JSX.Element {
     });
   });
 
-  useTilesFetchingEffect(dispatch, lastFetchPeriod);
-
   return <div className="table">{rows}</div>;
-}
-
-function useTilesFetchingEffect(dispatch: React.Dispatch<TilesSlice.FetchAsyncAction>, lastFetchPeriod: TableSlice.FetchPeriod): void {
-  useEffect(() => {
-    dispatch(TilesSlice.fetchAsync({ from: lastFetchPeriod.from, to: lastFetchPeriod.to }));
-  }, [dispatch, lastFetchPeriod]);
 }
 
 export default hot(module)(Table);

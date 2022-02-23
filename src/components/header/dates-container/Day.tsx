@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { hot } from "react-hot-loader";
 
 import "./Day.css";
@@ -15,4 +15,4 @@ function Day(props: Props): JSX.Element {
   );
 }
 
-export default hot(module)(Day);
+export default memo(hot(module)(Day));

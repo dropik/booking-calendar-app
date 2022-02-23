@@ -1,9 +1,8 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
-import * as Utils from "../../utils";
-import { useAppDispatch, useColumns, useLeftmostDate } from "../../redux/hooks";
+import { useAppDispatch, useDates } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
 
 import TableCell from "./TableCell";
@@ -17,45 +16,30 @@ type Props = {
 };
 
 function Room(props: Props): JSX.Element {
-  const columns = useColumns();
   const dispatch = useAppDispatch();
-  const leftmostDate = useLeftmostDate();
-  const cells = useCellsMemo(columns, props.y, leftmostDate);
+  const dates = useDates();
 
+  const cells = getCells(dates, props.y);
   const dropHandler = getDropHandler(dispatch, props.y);
-
-  let className = "room";
-  if (props.isFirst) {
-    className += " room-first";
-  }
-  if (props.isLast) {
-    className += " room-last";
-  }
+  const className = getClassName(props.isFirst, props.isLast);
 
   return (
     <div className={className} onMouseUp={dropHandler}>{cells}</div>
   );
 }
 
-function useCellsMemo(columns: number, y: number, leftmostDate: string): JSX.Element[] {
-  return useMemo(() => {
-    const cells = [];
-    const dateCounter = new Date(leftmostDate);
-
-    for (let i = 0; i < columns; i++) {
-      const x = Utils.dateToString(dateCounter);
-      cells.push(
-        <TableCell
-          key={x}
-          x={x}
-          y={y}
-        />
-      );
-      dateCounter.setDate(dateCounter.getDate() + 1);
-    }
-
-    return cells;
-  }, [columns, y, leftmostDate]);
+function getCells(dates: Generator<string, void, void>, y: number): JSX.Element[] {
+  const cells = [];
+  for (const date of dates) {
+    cells.push(
+      <TableCell
+        key={date}
+        x={date}
+        y={y}
+      />
+    );
+  }
+  return cells;
 }
 
 function getDropHandler(
@@ -65,6 +49,17 @@ function getDropHandler(
   return () => {
     dispatch(TilesSlice.move({ newY: y }));
   };
+}
+
+function getClassName(isFirst: boolean, isLast: boolean): string {
+  let className = "room";
+  if (isFirst) {
+    className += " room-first";
+  }
+  if (isLast) {
+    className += " room-last";
+  }
+  return className;
 }
 
 export default hot(module)(Room);
