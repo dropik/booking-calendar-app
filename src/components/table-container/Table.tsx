@@ -8,7 +8,6 @@ import Room from "./Room";
 import "./Table.css";
 
 function Table(): JSX.Element {
-  console.log("render");
   const hotelData = useHotelData();
 
   const rows: JSX.Element[] = [];
