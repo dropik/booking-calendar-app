@@ -4,6 +4,7 @@ import * as Store from "./store";
 import * as Utils from "../utils";
 import * as HotelSlice from "./hotelSlice";
 import * as TableSlice from "./tableSlice";
+import * as MouseSlice from "./mouseSlice";
 
 export const useAppDispatch = () => useDispatch<Store.AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<Store.RootState> = useSelector;
@@ -54,3 +55,4 @@ export const useLastFetchPeriod:  () => TableSlice.FetchPeriod =      () => useA
 export const useHotelData:        () => HotelSlice.HotelData =        () => useAppSelector(state => state.hotel.data);
 export const useScrollLeft:       () => number =                      () => useAppSelector(state => state.scroll.left);
 export const useScrollTop:        () => number =                      () => useAppSelector(state => state.scroll.top);
+export const useMousePosition:    () => MouseSlice.MousePosition =    () => useAppSelector(state => ({ x: state.mouse.x, y: state.mouse.y }));
