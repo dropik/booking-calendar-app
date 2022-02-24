@@ -56,3 +56,4 @@ export const useHotelData:        () => HotelSlice.HotelData =        () => useA
 export const useScrollLeft:       () => number =                      () => useAppSelector(state => state.scroll.left);
 export const useScrollTop:        () => number =                      () => useAppSelector(state => state.scroll.top);
 export const useMousePosition:    () => MouseSlice.MousePosition =    () => useAppSelector(state => ({ x: state.mouse.x, y: state.mouse.y }));
+export const useHoveredId:        () => number | undefined =          () => useAppSelector(state => state.mouse.hoveredId);

@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React, { Dispatch, useLayoutEffect, useRef } from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
@@ -6,6 +6,7 @@ import * as Utils from "../../utils";
 
 import { useAppDispatch, useAppSelector, useColumns, useLeftmostDate, useTileIdByCoords } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
+import * as MouseSlice from "../../redux/mouseSlice";
 
 import "./TilePart.css";
 
@@ -25,20 +26,21 @@ function TilePart(props: Props): JSX.Element {
 
   const outOfBound = isOutOfBound(props.tileData, leftmostDate, columns);
   const grabHandler = getGrabHandler(dispatch, tileId, outOfBound);
+  const overHandler = getOverHandler(dispatch, tileId);
+  const outHandler = getOutHandler(dispatch);
+  const className = getClassName(grabbed, outOfBound);
 
   useMouseHandlingEffects(dispatch, ref, grabbed, tileId);
   useBackgroundColourEffect(ref, props.tileData.colour);
 
-  let className = "tile";
-  if (grabbed) {
-    className += " grabbed";
-  }
-  if (outOfBound) {
-    className += " out-of-bound";
-  }
-
   return (
-    <div ref={ref} className={className} onMouseDown={grabHandler}>
+    <div
+      ref={ref}
+      className={className}
+      onMouseDown={grabHandler}
+      onMouseOver={overHandler}
+      onMouseOut={outHandler}
+    >
       <span className="tile-persons">{props.tileData.persons}</span>
     </div>
   );
@@ -57,9 +59,28 @@ function getGrabHandler(
   };
 }
 
+function getOverHandler(dispatch: Dispatch<AnyAction>, tileId: number): () => void {
+  return () => dispatch(MouseSlice.setHoveredId(tileId));
+}
+
+function getOutHandler(dispatch: Dispatch<AnyAction>): () => void {
+  return () => dispatch(MouseSlice.setHoveredId(undefined));
+}
+
 function isOutOfBound(tileData: TilesSlice.TileData, leftmostDate: string, columns: number): boolean {
   const tileStartShift = Utils.daysBetweenDates(leftmostDate, tileData.from);
   return (tileStartShift < 0) || (tileStartShift + tileData.nights > columns);
+}
+
+function getClassName(grabbed: boolean | undefined, outOfBound: boolean): string {
+  let className = "tile";
+  if (grabbed) {
+    className += " grabbed";
+  }
+  if (outOfBound) {
+    className += " out-of-bound";
+  }
+  return className;
 }
 
 function useMouseHandlingEffects(

@@ -2,7 +2,7 @@ import React, { Dispatch, useEffect, useLayoutEffect, useRef } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { hot } from "react-hot-loader";
 
-import { useAppDispatch, useMousePosition } from "../redux/hooks";
+import { useAppDispatch, useHoveredId, useMousePosition } from "../redux/hooks";
 import * as MouseSlice from "../redux/mouseSlice";
 
 import "./OccupationInfo.css";
@@ -11,12 +11,15 @@ function OccupationInfo(): JSX.Element {
   const mousePosition = useMousePosition();
   const ref = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
+  const hoveredId = useHoveredId();
 
   useUpdateMousePositionEffect(dispatch);
   useUpdatePopupCoordsEffect(ref, mousePosition);
 
+  const className = getClassName(hoveredId);
+
   return (
-    <div ref={ref} className="occupation-info">
+    <div ref={ref} className={className}>
       <p className="occupation-info-header">Ivan Petrov</p>
       <div className="occupation-info-data">
         <p>Camera: doppia</p>
@@ -48,6 +51,14 @@ function useUpdateMousePositionEffect(dispatch: Dispatch<AnyAction>): void {
     window.addEventListener("mousemove", updateMousePosition);
     return () => window.removeEventListener("mousemove", updateMousePosition);
   }, [dispatch]);
+}
+
+function getClassName(hoveredId: number | undefined): string {
+  let className = "occupation-info";
+  if (hoveredId === undefined) {
+    className += " hidden";
+  }
+  return className;
 }
 
 export default hot(module)(OccupationInfo);

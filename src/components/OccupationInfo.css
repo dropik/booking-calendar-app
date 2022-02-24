@@ -6,6 +6,10 @@
   border: 2px solid black;
 }
 
+.hidden {
+  display: none;
+}
+
 .occupation-info-header {
   text-align: center;
   border-bottom: 2px solid black;
