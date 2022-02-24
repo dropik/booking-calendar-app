@@ -51,7 +51,7 @@ function getGrabHandler(
 ): (event: React.MouseEvent<HTMLDivElement>) => void {
   return (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
-    if (!outOfBound) {
+    if ((event.button == 0) && !outOfBound) {
       dispatch(TilesSlice.grab({ tileId }));
     }
   };

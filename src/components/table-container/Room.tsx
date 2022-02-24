@@ -45,9 +45,11 @@ function getCells(dates: Generator<string, void, void>, y: number): JSX.Element[
 function getDropHandler(
   dispatch: React.Dispatch<AnyAction>,
   y: number
-): () => void {
-  return () => {
-    dispatch(TilesSlice.move({ newY: y }));
+): (event: React.MouseEvent<HTMLDivElement>) => void {
+  return (event: React.MouseEvent<HTMLDivElement>) => {
+    if (event.button == 0) {
+      dispatch(TilesSlice.move({ newY: y }));
+    }
   };
 }
 
