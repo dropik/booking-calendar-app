@@ -1,0 +1,10 @@
+- Drag only on left mouse button.
+- Occupation info on hover.
+- Error/warning system on badly placed tiles.
+- Unassigned tiles. Remove assignment button.
+- Modifications trace. Save and reset buttons.
+- Real API calls.
+- Real-time backend synchronization for updating tiles.
+- Prettier interface.
+- Table fragmentation system??
+- Some sort of a simple automatic tiles placement algorithm??
