@@ -55,6 +55,7 @@ function getGrabHandler(
     event.preventDefault();
     if ((event.button == 0) && !outOfBound) {
       dispatch(TilesSlice.grab({ tileId }));
+      dispatch(MouseSlice.grab());
     }
   };
 }
@@ -102,6 +103,7 @@ function useMouseHandlingEffects(
 
     function onDrop() {
       dispatch(TilesSlice.drop({ tileId }));
+      dispatch(MouseSlice.drop());
     }
 
     if (grabbed) {

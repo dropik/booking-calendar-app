@@ -2,7 +2,7 @@ import React, { Dispatch, useEffect, useLayoutEffect, useRef } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { hot } from "react-hot-loader";
 
-import { useAppDispatch, useHoveredId, useMousePosition } from "../redux/hooks";
+import { useAppDispatch, useHoveredId, useIsGrabbing, useMousePosition } from "../redux/hooks";
 import * as MouseSlice from "../redux/mouseSlice";
 
 import "./OccupationInfo.css";
@@ -12,11 +12,12 @@ function OccupationInfo(): JSX.Element {
   const ref = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
   const hoveredId = useHoveredId();
+  const isGrabbing = useIsGrabbing();
 
   useUpdateMousePositionEffect(dispatch);
   useUpdatePopupCoordsEffect(ref, mousePosition);
 
-  const className = getClassName(hoveredId);
+  const className = getClassName(hoveredId, isGrabbing);
 
   return (
     <div ref={ref} className={className}>
@@ -53,9 +54,9 @@ function useUpdateMousePositionEffect(dispatch: Dispatch<AnyAction>): void {
   }, [dispatch]);
 }
 
-function getClassName(hoveredId: number | undefined): string {
+function getClassName(hoveredId: number | undefined, isGrabbing: boolean): string {
   let className = "occupation-info";
-  if (hoveredId === undefined) {
+  if ((hoveredId === undefined) || isGrabbing) {
     className += " hidden";
   }
   return className;

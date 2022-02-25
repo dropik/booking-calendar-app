@@ -57,3 +57,4 @@ export const useScrollLeft:       () => number =                      () => useA
 export const useScrollTop:        () => number =                      () => useAppSelector(state => state.scroll.top);
 export const useMousePosition:    () => MouseSlice.MousePosition =    () => useAppSelector(state => ({ x: state.mouse.x, y: state.mouse.y }));
 export const useHoveredId:        () => number | undefined =          () => useAppSelector(state => state.mouse.hoveredId);
+export const useIsGrabbing:       () => boolean =                     () => useAppSelector(state => state.mouse.isGrabbing);
