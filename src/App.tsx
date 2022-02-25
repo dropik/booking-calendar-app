@@ -6,6 +6,7 @@ import Hotel from "./components/Hotel";
 import TableContainer from "./components/TableContainer";
 
 import "./App.css";
+import OccupationInfo from "./components/OccupationInfo";
 
 function App(): JSX.Element {
   useWindowCursorGrabbingEffect();
@@ -15,6 +16,7 @@ function App(): JSX.Element {
       <Header />
       <Hotel />
       <TableContainer />
+      <OccupationInfo />
     </div>
   );
 }

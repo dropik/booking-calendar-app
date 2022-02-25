@@ -1,0 +1,22 @@
+.occupation-info {
+  position: fixed;
+  z-index: 9999;
+  width: 12rem;
+  background-color: white;
+  border: 2px solid black;
+}
+
+.hidden {
+  display: none;
+}
+
+.occupation-info-header {
+  text-align: center;
+  border-bottom: 2px solid black;
+  margin-top: 2px;
+  line-height: 2rem;
+}
+
+.occupation-info-data {
+  padding-left: 0.5rem;
+}

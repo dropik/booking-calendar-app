@@ -1,4 +1,3 @@
-- Occupation info on hover.
 - Error/warning system on badly placed tiles.
 - Unassigned tiles. Remove assignment button.
 - Modifications trace. Save and reset buttons.
