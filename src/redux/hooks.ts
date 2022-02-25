@@ -4,7 +4,6 @@ import * as Store from "./store";
 import * as Utils from "../utils";
 import * as HotelSlice from "./hotelSlice";
 import * as TableSlice from "./tableSlice";
-import * as MouseSlice from "./mouseSlice";
 import * as TilesSlice from "./tilesSlice";
 
 export const useAppDispatch = () => useDispatch<Store.AppDispatch>();
@@ -19,15 +18,6 @@ export function useCurrentDate(): string {
     const newDate = new Date(state.table.leftmostDate);
     newDate.setDate(newDate.getDate() + dateShift);
     return Utils.dateToString(newDate);
-  });
-}
-
-export function useTableDimentions(): { offsetHeight: number, clientHeight: number } {
-  return useAppSelector((state) => {
-    return {
-      offsetHeight: state.table.offsetHeight,
-      clientHeight: state.table.clientHeight
-    };
   });
 }
 
@@ -56,12 +46,15 @@ export function useDates(): Generator<string, void, void> {
   }();
 }
 
-export const useLeftmostDate:     () => string =                        () => useAppSelector(state => state.table.leftmostDate);
-export const useColumns:          () => number =                        () => useAppSelector(state => state.table.columns);
-export const useLastFetchPeriod:  () => TableSlice.FetchPeriod =        () => useAppSelector(state => state.table.lastFetchPeriod);
-export const useHotelData:        () => HotelSlice.HotelData =          () => useAppSelector(state => state.hotel.data);
-export const useScrollLeft:       () => number =                        () => useAppSelector(state => state.scroll.left);
-export const useScrollTop:        () => number =                        () => useAppSelector(state => state.scroll.top);
-export const useMousePosition:    () => MouseSlice.MousePosition =      () => useAppSelector(state => ({ x: state.mouse.x, y: state.mouse.y }));
-export const useHoveredId:        () => number | undefined =            () => useAppSelector(state => state.mouse.hoveredId);
-export const useIsGrabbing:       () => boolean =                       () => useAppSelector(state => state.mouse.isGrabbing);
+export const useLeftmostDate:       () => string =                        () => useAppSelector(state => state.table.leftmostDate);
+export const useColumns:            () => number =                        () => useAppSelector(state => state.table.columns);
+export const useLastFetchPeriod:    () => TableSlice.FetchPeriod =        () => useAppSelector(state => state.table.lastFetchPeriod);
+export const useTableOffsetHeight:  () => number =                        () => useAppSelector(state => state.table.offsetHeight);
+export const useTableClientHeight:  () => number =                        () => useAppSelector(state => state.table.clientHeight);
+export const useHotelData:          () => HotelSlice.HotelData =          () => useAppSelector(state => state.hotel.data);
+export const useScrollLeft:         () => number =                        () => useAppSelector(state => state.scroll.left);
+export const useScrollTop:          () => number =                        () => useAppSelector(state => state.scroll.top);
+export const useMouseX:             () => number =                        () => useAppSelector(state => state.mouse.x);
+export const useMouseY:             () => number =                        () => useAppSelector(state => state.mouse.y);
+export const useHoveredId:          () => number | undefined =            () => useAppSelector(state => state.mouse.hoveredId);
+export const useIsGrabbing:         () => boolean =                       () => useAppSelector(state => state.mouse.isGrabbing);

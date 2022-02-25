@@ -2,14 +2,15 @@ import React, { Dispatch, useEffect, useLayoutEffect, useRef } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { hot } from "react-hot-loader";
 
-import { useAppDispatch, useHoveredId, useIsGrabbing, useMousePosition, useTileData } from "../redux/hooks";
+import { useAppDispatch, useHoveredId, useIsGrabbing, useMouseX, useMouseY, useTileData } from "../redux/hooks";
 import * as MouseSlice from "../redux/mouseSlice";
 import * as TilesSlice from "../redux/tilesSlice";
 
 import "./OccupationInfo.css";
 
 function OccupationInfo(): JSX.Element {
-  const mousePosition = useMousePosition();
+  const mouseX = useMouseX();
+  const mouseY = useMouseY();
   const ref = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
   const hoveredId = useHoveredId();
@@ -17,7 +18,7 @@ function OccupationInfo(): JSX.Element {
   const isGrabbing = useIsGrabbing();
 
   useUpdateMousePositionEffect(dispatch);
-  useUpdatePopupCoordsEffect(ref, mousePosition);
+  useUpdatePopupCoordsEffect(ref, mouseX, mouseY);
 
   const className = getClassName(hoveredId, isGrabbing);
 
@@ -26,14 +27,15 @@ function OccupationInfo(): JSX.Element {
 
 function useUpdatePopupCoordsEffect(
   ref: React.RefObject<HTMLDivElement>,
-  mousePosition: MouseSlice.MousePosition
+  mouseX: number,
+  mouseY: number
 ): void {
   useLayoutEffect(() => {
     if (ref.current) {
-      ref.current.style.top = `${mousePosition.y + 10}px`;
-      ref.current.style.left = `${mousePosition.x + 20}px`;
+      ref.current.style.top = `${mouseY + 10}px`;
+      ref.current.style.left = `${mouseX + 20}px`;
     }
-  }, [ref, mousePosition]);
+  }, [ref, mouseX, mouseY]);
 }
 
 function useUpdateMousePositionEffect(dispatch: Dispatch<AnyAction>): void {
