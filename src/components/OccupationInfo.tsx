@@ -2,8 +2,9 @@ import React, { Dispatch, useEffect, useLayoutEffect, useRef } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { hot } from "react-hot-loader";
 
-import { useAppDispatch, useHoveredId, useIsGrabbing, useMousePosition } from "../redux/hooks";
+import { useAppDispatch, useHoveredId, useIsGrabbing, useMousePosition, useTileData } from "../redux/hooks";
 import * as MouseSlice from "../redux/mouseSlice";
+import * as TilesSlice from "../redux/tilesSlice";
 
 import "./OccupationInfo.css";
 
@@ -12,6 +13,7 @@ function OccupationInfo(): JSX.Element {
   const ref = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
   const hoveredId = useHoveredId();
+  const tileData = useTileData(hoveredId);
   const isGrabbing = useIsGrabbing();
 
   useUpdateMousePositionEffect(dispatch);
@@ -19,17 +21,7 @@ function OccupationInfo(): JSX.Element {
 
   const className = getClassName(hoveredId, isGrabbing);
 
-  return (
-    <div ref={ref} className={className}>
-      <p className="occupation-info-header">Ivan Petrov</p>
-      <div className="occupation-info-data">
-        <p>Camera: doppia</p>
-        <p>Ospiti: 2</p>
-        <p>Arrivo: 25/02/2022</p>
-        <p>Partenza: 27/02/2022</p>
-      </div>
-    </div>
-  );
+  return getContents(tileData, ref, className);
 }
 
 function useUpdatePopupCoordsEffect(
@@ -60,6 +52,32 @@ function getClassName(hoveredId: number | undefined, isGrabbing: boolean): strin
     className += " hidden";
   }
   return className;
+}
+
+function getContents(
+  tileData: TilesSlice.TileData | undefined,
+  ref: React.RefObject<HTMLDivElement>,
+  className: string
+): JSX.Element {
+  return (tileData === undefined) ? (
+    <div ref={ref} className={className}></div>
+  ) : (
+    <div ref={ref} className={className}>
+      <p className="occupation-info-header">{tileData.name}</p>
+      <div className="occupation-info-data">
+        <p>Camera: {tileData.roomType}</p>
+        <p>Ospiti: {tileData.persons}</p>
+        <p>Arrivo: {(new Date(tileData.from)).toLocaleDateString()}</p>
+        <p>Partenza: {getLocaleDepartureDate(tileData.from, tileData.nights)}</p>
+      </div>
+    </div>
+  );
+}
+
+function getLocaleDepartureDate(from: string, nights: number): string {
+  const date = new Date(from);
+  date.setDate(date.getDate() + nights);
+  return date.toLocaleDateString();
 }
 
 export default hot(module)(OccupationInfo);
