@@ -5,6 +5,7 @@ import { hot } from "react-hot-loader";
 import { useAppDispatch, useHoveredId, useIsGrabbing, useMouseX, useMouseY, useTileData } from "../redux/hooks";
 import * as MouseSlice from "../redux/mouseSlice";
 import * as TilesSlice from "../redux/tilesSlice";
+import * as Utils from "../utils";
 
 import "./OccupationInfo.css";
 
@@ -65,9 +66,9 @@ function getContents(
     <div ref={ref} className={className}></div>
   ) : (
     <div ref={ref} className={className}>
-      <p className="occupation-info-header">{tileData.name}</p>
+      <p className="occupation-info-header name">{tileData.name}</p>
+      <p className="occupation-info-header room-type">{getFullRoomType(tileData.entity, tileData.roomType)}</p>
       <div className="occupation-info-data">
-        <p>Camera: {tileData.roomType}</p>
         <p>Ospiti: {tileData.persons}</p>
         <p>Arrivo: {(new Date(tileData.from)).toLocaleDateString()}</p>
         <p>Partenza: {getLocaleDepartureDate(tileData.from, tileData.nights)}</p>
@@ -80,6 +81,10 @@ function getLocaleDepartureDate(from: string, nights: number): string {
   const date = new Date(from);
   date.setDate(date.getDate() + nights);
   return date.toLocaleDateString();
+}
+
+function getFullRoomType(entity: string, roomType: string): string {
+  return `${Utils.getFirstLetterUppercase(entity)} (${Utils.getFirstLetterUppercase(roomType)})`;
 }
 
 export default hot(module)(OccupationInfo);

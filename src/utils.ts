@@ -18,3 +18,7 @@ export function getDateShift(date: string | Date, shift: number): string {
   result.setDate(result.getDate() + shift);
   return dateToString(result);
 }
+
+export function getFirstLetterUppercase(str: string): string {
+  return str[0].toLocaleUpperCase() + str.substring(1, str.length);
+}
