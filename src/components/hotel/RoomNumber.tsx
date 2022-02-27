@@ -16,7 +16,7 @@ function RoomNumber(props: Props): JSX.Element {
 
   return (
     <div className={className}>
-      <span>Room {props.number}</span>
+      <span>Camera {props.number}</span>
     </div>
   );
 }
