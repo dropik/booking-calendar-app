@@ -1,5 +1,6 @@
 import * as HotelSlice from "./redux/hotelSlice";
 import * as TilesSlice from "./redux/tilesSlice";
+import * as RoomTypesSlice from "./redux/roomTypesSlice";
 
 export const hotel: HotelSlice.HotelData = {
   floors: [
@@ -96,3 +97,11 @@ export const tiles: TilesSlice.TileData[] = [
     persons: 2
   },
 ];
+
+export const roomTypes: RoomTypesSlice.RoomTypeData = {};
+roomTypes["camera singola"] = [1];
+roomTypes["camera matrimoniale/doppia"] = [1, 2];
+roomTypes["camera matrimoniale/doppia economy"] = [1, 2];
+roomTypes["camera tripla"] = [2, 3];
+roomTypes["camera tripla standard"] = [2, 3];
+roomTypes["appartamento"] = [3, 4];

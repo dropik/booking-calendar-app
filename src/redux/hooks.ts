@@ -58,3 +58,4 @@ export const useMouseX:             () => number =                        () => 
 export const useMouseY:             () => number =                        () => useAppSelector(state => state.mouse.y);
 export const useHoveredId:          () => number | undefined =            () => useAppSelector(state => state.mouse.hoveredId);
 export const useIsGrabbing:         () => boolean =                       () => useAppSelector(state => state.mouse.isGrabbing);
+export const usePersonsInRoomType:  (type: string) => number[] =          (type: string) => useAppSelector(state => state.roomTypes.data[type]);

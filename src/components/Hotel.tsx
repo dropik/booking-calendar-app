@@ -3,6 +3,7 @@ import { hot } from "react-hot-loader";
 
 import { useAppDispatch, useHotelData, useScrollTop, useTableClientHeight, useTableOffsetHeight } from "../redux/hooks";
 import * as HotelSlice from "../redux/hotelSlice";
+import * as RoomTypesSlice from "../redux/roomTypesSlice";
 
 import Floor from "./hotel/Floor";
 import RoomNumber from "./hotel/RoomNumber";
@@ -19,6 +20,7 @@ function Hotel(): JSX.Element {
   const ref = useRef<HTMLDivElement>(null);
 
   useHotelDataFetchingEffect(dispatch);
+  useRoomTypesFetchingEffect(dispatch);
   useHotelbarBottomSpacingEffect(offsetHeight, clientHeight, rows);
   useScrollEffect(ref, scrollTop);
 
@@ -53,6 +55,12 @@ function useRowsMemo(hotelData: HotelSlice.HotelData): JSX.Element[] {
 function useHotelDataFetchingEffect(dispatch: React.Dispatch<HotelSlice.FetchAsyncAction>): void {
   useEffect(() => {
     dispatch(HotelSlice.fetchAsync());
+  }, [dispatch]);
+}
+
+function useRoomTypesFetchingEffect(dispatch: React.Dispatch<RoomTypesSlice.FetchAsyncAction>): void {
+  useEffect(() => {
+    dispatch(RoomTypesSlice.fetchAsync());
   }, [dispatch]);
 }
 
