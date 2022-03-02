@@ -102,10 +102,24 @@ function getAlert(personsInRoomType: number[], roomType: string, tileData: Tiles
   let alert: JSX.Element = <></>;
   if (personsInRoomType.includes(tileData.persons)) {
     if (roomType !== tileData.roomType) {
-      alert = (<span className="tile-alert warning"><FontAwesomeIcon icon={faTriangleExclamation} /></span>);
+      alert = (
+        <span
+          className="tile-alert warning"
+          title="Tipologia della stanza diversa da quella prenotata"
+        >
+          <FontAwesomeIcon icon={faTriangleExclamation} />
+        </span>
+      );
     }
   } else {
-    alert = (<span className="tile-alert error"><FontAwesomeIcon icon={faTriangleExclamation} /></span>);
+    alert = (
+      <span
+        className="tile-alert error"
+        title="Usata una stanza con il numero di occupazioni non corretti per questa prenotazione"
+      >
+        <FontAwesomeIcon icon={faTriangleExclamation} />
+      </span>
+    );
   }
   return alert;
 }
