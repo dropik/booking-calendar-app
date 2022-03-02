@@ -13,6 +13,7 @@ export type TileData = {
   nights: number,
   name: string,
   roomType: string,
+  entity: string,
   persons: number,
   grabbed?: boolean
 };

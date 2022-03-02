@@ -2,14 +2,16 @@ import React, { Dispatch, useEffect, useLayoutEffect, useRef } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { hot } from "react-hot-loader";
 
-import { useAppDispatch, useHoveredId, useIsGrabbing, useMousePosition, useTileData } from "../redux/hooks";
+import { useAppDispatch, useHoveredId, useIsGrabbing, useMouseX, useMouseY, useTileData } from "../redux/hooks";
 import * as MouseSlice from "../redux/mouseSlice";
 import * as TilesSlice from "../redux/tilesSlice";
+import * as Utils from "../utils";
 
 import "./OccupationInfo.css";
 
 function OccupationInfo(): JSX.Element {
-  const mousePosition = useMousePosition();
+  const mouseX = useMouseX();
+  const mouseY = useMouseY();
   const ref = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
   const hoveredId = useHoveredId();
@@ -17,7 +19,7 @@ function OccupationInfo(): JSX.Element {
   const isGrabbing = useIsGrabbing();
 
   useUpdateMousePositionEffect(dispatch);
-  useUpdatePopupCoordsEffect(ref, mousePosition);
+  useUpdatePopupCoordsEffect(ref, mouseX, mouseY);
 
   const className = getClassName(hoveredId, isGrabbing);
 
@@ -26,14 +28,15 @@ function OccupationInfo(): JSX.Element {
 
 function useUpdatePopupCoordsEffect(
   ref: React.RefObject<HTMLDivElement>,
-  mousePosition: MouseSlice.MousePosition
+  mouseX: number,
+  mouseY: number
 ): void {
   useLayoutEffect(() => {
     if (ref.current) {
-      ref.current.style.top = `${mousePosition.y + 10}px`;
-      ref.current.style.left = `${mousePosition.x + 20}px`;
+      ref.current.style.top = `${mouseY + 10}px`;
+      ref.current.style.left = `${mouseX + 20}px`;
     }
-  }, [ref, mousePosition]);
+  }, [ref, mouseX, mouseY]);
 }
 
 function useUpdateMousePositionEffect(dispatch: Dispatch<AnyAction>): void {
@@ -63,9 +66,9 @@ function getContents(
     <div ref={ref} className={className}></div>
   ) : (
     <div ref={ref} className={className}>
-      <p className="occupation-info-header">{tileData.name}</p>
+      <p className="occupation-info-header name">{tileData.name}</p>
+      <p className="occupation-info-header room-type">{getFullRoomType(tileData.entity, tileData.roomType)}</p>
       <div className="occupation-info-data">
-        <p>Camera: {tileData.roomType}</p>
         <p>Ospiti: {tileData.persons}</p>
         <p>Arrivo: {(new Date(tileData.from)).toLocaleDateString()}</p>
         <p>Partenza: {getLocaleDepartureDate(tileData.from, tileData.nights)}</p>
@@ -78,6 +81,10 @@ function getLocaleDepartureDate(from: string, nights: number): string {
   const date = new Date(from);
   date.setDate(date.getDate() + nights);
   return date.toLocaleDateString();
+}
+
+function getFullRoomType(entity: string, roomType: string): string {
+  return `${Utils.getFirstLetterUppercase(entity)} (${Utils.getFirstLetterUppercase(roomType)})`;
 }
 
 export default hot(module)(OccupationInfo);

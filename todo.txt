@@ -5,6 +5,9 @@
 - Real API calls.
 - Real-time backend synchronization for updating tiles.
 - Handle touchscreen.
+- Enhance info popup positioning.
+- Title / occupations view.
+- Check-in system. Police data export.
 - Prettier interface.
 - Table fragmentation system??
 - Some sort of a simple automatic tiles placement algorithm??

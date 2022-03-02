@@ -1,8 +1,9 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import { hot } from "react-hot-loader";
 
-import { useAppDispatch, useHotelData, useScrollTop, useTableDimentions } from "../redux/hooks";
+import { useAppDispatch, useHotelData, useScrollTop, useTableClientHeight, useTableOffsetHeight } from "../redux/hooks";
 import * as HotelSlice from "../redux/hotelSlice";
+import * as RoomTypesSlice from "../redux/roomTypesSlice";
 
 import Floor from "./hotel/Floor";
 import RoomNumber from "./hotel/RoomNumber";
@@ -13,12 +14,14 @@ function Hotel(): JSX.Element {
   const dispatch = useAppDispatch();
   const hotelData = useHotelData();
   const scrollTop = useScrollTop();
-  const tableDimentions = useTableDimentions();
+  const offsetHeight = useTableOffsetHeight();
+  const clientHeight = useTableClientHeight();
   const rows = useRowsMemo(hotelData);
   const ref = useRef<HTMLDivElement>(null);
 
   useHotelDataFetchingEffect(dispatch);
-  useHotelbarBottomSpacingEffect(tableDimentions, rows);
+  useRoomTypesFetchingEffect(dispatch);
+  useHotelbarBottomSpacingEffect(offsetHeight, clientHeight, rows);
   useScrollEffect(ref, scrollTop);
 
   return (
@@ -55,12 +58,19 @@ function useHotelDataFetchingEffect(dispatch: React.Dispatch<HotelSlice.FetchAsy
   }, [dispatch]);
 }
 
+function useRoomTypesFetchingEffect(dispatch: React.Dispatch<RoomTypesSlice.FetchAsyncAction>): void {
+  useEffect(() => {
+    dispatch(RoomTypesSlice.fetchAsync());
+  }, [dispatch]);
+}
+
 function useHotelbarBottomSpacingEffect(
-  tableDimentions: { offsetHeight: number, clientHeight: number },
+  offsetHeight: number,
+  clientHeight: number,
   rows: JSX.Element[]
 ): void {
   useEffect(() => {
-    const scrollbarWidth = tableDimentions.offsetHeight - tableDimentions.clientHeight - 1;
+    const scrollbarWidth = offsetHeight - clientHeight - 1;
     if (scrollbarWidth > 0) {
       rows.push(
         <div
@@ -76,7 +86,7 @@ function useHotelbarBottomSpacingEffect(
         rows.pop();
       }
     };
-  }, [tableDimentions, rows]);
+  }, [offsetHeight, clientHeight, rows]);
 }
 
 function useScrollEffect(ref: React.RefObject<HTMLDivElement>, scrollTop: number): void {

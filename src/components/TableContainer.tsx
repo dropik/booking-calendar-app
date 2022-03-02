@@ -10,9 +10,9 @@ import * as ScrollSlice from "../redux/scrollSlice";
 import * as TableSlice from "../redux/tableSlice";
 
 import Table from "./table-container/Table";
+import FetchTiles from "./table-container/FetchTiles";
 
 import "./TableContainer.css";
-import FetchTiles from "./table-container/FetchTiles";
 
 function TableContainer(): JSX.Element {
   const dispatch = useAppDispatch();

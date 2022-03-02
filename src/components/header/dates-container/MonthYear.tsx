@@ -2,6 +2,7 @@ import React from "react";
 import { hot } from "react-hot-loader";
 
 import { useCurrentDate } from "../../../redux/hooks";
+import * as Utils from "../../../utils";
 
 import "./MonthYear.css";
 
@@ -13,7 +14,7 @@ function MonthYear(): JSX.Element {
     .toLocaleDateString("it-IT", { year: "numeric", month: "long" })
     .split(" ");
   let month = monthYear[0];
-  month = month[0].toLocaleUpperCase() + month.substring(1, month.length);
+  month = Utils.getFirstLetterUppercase(month);
   const year = monthYear[1];
 
   return (

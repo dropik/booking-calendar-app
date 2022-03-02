@@ -1,7 +1,6 @@
 .occupation-info {
   position: fixed;
   z-index: 9999;
-  width: 12rem;
   background-color: white;
   border: 2px solid black;
 }
@@ -12,11 +11,19 @@
 
 .occupation-info-header {
   text-align: center;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.occupation-info-header.name {
+  font-weight: bold;
+}
+
+.occupation-info-header.room-type {
   border-bottom: 2px solid black;
-  margin-top: 2px;
-  line-height: 2rem;
+  padding-bottom: 1rem;
 }
 
 .occupation-info-data {
-  padding-left: 0.5rem;
+  padding-left: 1rem;
 }

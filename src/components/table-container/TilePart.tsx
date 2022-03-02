@@ -1,10 +1,20 @@
 import React, { Dispatch, useLayoutEffect, useRef } from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 import * as Utils from "../../utils";
 
-import { useAppDispatch, useAppSelector, useColumns, useLeftmostDate, useTileIdByCoords } from "../../redux/hooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useColumns,
+  useLeftmostDate,
+  usePersonsInRoomType,
+  useRoomTypeByNumber,
+  useTileIdByCoords
+} from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
 import * as MouseSlice from "../../redux/mouseSlice";
 
@@ -23,12 +33,15 @@ function TilePart(props: Props): JSX.Element {
   const ref = useRef<HTMLDivElement>(null);
   const leftmostDate = useLeftmostDate();
   const columns = useColumns();
+  const roomType = useRoomTypeByNumber(props.y);
+  const personsInRoomType = usePersonsInRoomType(roomType);
 
   const outOfBound = isOutOfBound(props.tileData, leftmostDate, columns);
   const grabHandler = getGrabHandler(dispatch, tileId, outOfBound);
   const overHandler = getOverHandler(dispatch, tileId);
   const outHandler = getOutHandler(dispatch);
   const className = getClassName(grabbed, outOfBound);
+  const alert = getAlert(personsInRoomType, roomType, props.tileData);
 
   useMouseHandlingEffects(dispatch, ref, grabbed, tileId);
   useBackgroundColourEffect(ref, props.tileData.colour);
@@ -42,6 +55,7 @@ function TilePart(props: Props): JSX.Element {
       onMouseOut={outHandler}
     >
       <span className="tile-persons">{props.tileData.persons}</span>
+      {alert}
     </div>
   );
 }
@@ -82,6 +96,32 @@ function getClassName(grabbed: boolean | undefined, outOfBound: boolean): string
     className += " out-of-bound";
   }
   return className;
+}
+
+function getAlert(personsInRoomType: number[], roomType: string, tileData: TilesSlice.TileData): JSX.Element {
+  let alert: JSX.Element = <></>;
+  if (personsInRoomType.includes(tileData.persons)) {
+    if (roomType !== tileData.roomType) {
+      alert = (
+        <span
+          className="tile-alert warning"
+          title="Tipologia della stanza diversa da quella prenotata"
+        >
+          <FontAwesomeIcon icon={faTriangleExclamation} />
+        </span>
+      );
+    }
+  } else {
+    alert = (
+      <span
+        className="tile-alert error"
+        title="Usata una stanza con il numero di occupazioni non corretti per questa prenotazione"
+      >
+        <FontAwesomeIcon icon={faTriangleExclamation} />
+      </span>
+    );
+  }
+  return alert;
 }
 
 function useMouseHandlingEffects(
