@@ -21,6 +21,19 @@ export function useCurrentDate(): string {
   });
 }
 
+export function useRoomTypeByNumber(roomNumber: number): string {
+  return useAppSelector((state) => {
+    for (const floor of state.hotel.data.floors) {
+      for (const room of floor.rooms) {
+        if (room.number === roomNumber) {
+          return room.type;
+        }
+      }
+    }
+    return "";
+  });
+}
+
 export function useTileIdByCoords(x: string, y: number): number {
   return useAppSelector((state) => {
     const id = state.tiles[y][x];
