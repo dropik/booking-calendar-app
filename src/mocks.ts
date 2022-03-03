@@ -69,36 +69,56 @@ export const tiles: TilesSlice.TileData[] = [
   {
     id: "0",
     name: "Petr Ivanov",
-    colour: "rgba(208, 217, 73, 0.69)",
-    roomType: "camera matrimoniale/doppia",
-    entity: "camera doppia",
-    roomNumber: 3,
     from: "2022-02-15",
     nights: 40,
-    persons: 2
+    roomType: "camera matrimoniale/doppia",
+    entity: "camera doppia",
+    persons: 2,
+    colour: "rgba(208, 217, 73, 0.69)",
+    roomNumber: 3
   },
   {
     id: "1",
     name: "Ivan Petrov",
-    colour: "rgba(217, 73, 73, 0.69)",
-    roomType: "camera matrimoniale/doppia",
-    entity: "camera doppia",
-    roomNumber: 2,
     from: "2022-02-25",
     nights: 2,
-    persons: 2
+    roomType: "camera matrimoniale/doppia",
+    entity: "camera doppia",
+    persons: 2,
+    colour: "rgba(217, 73, 73, 0.69)",
+    roomNumber: 2
   },
   {
     id: "2",
     name: "Vasya Pupkin",
-    colour: "rgba(73, 122, 217, 0.69)",
-    roomType: "camera matrimoniale/doppia",
-    entity: "camera doppia",
-    roomNumber: 6,
     from: "2022-02-20",
     nights: 3,
-    persons: 2
+    roomType: "camera matrimoniale/doppia",
+    entity: "camera doppia",
+    persons: 2,
+    colour: "rgba(73, 122, 217, 0.69)",
+    roomNumber: 6
   },
+  {
+    id: "3",
+    name: "Petr Petrov",
+    from: "2022-03-01",
+    nights: 4,
+    roomType: "camera tripla",
+    entity: "camera tripla",
+    persons: 3,
+    colour: "rgba(73, 122, 217, 0.69)"
+  },
+  {
+    id: "4",
+    name: "Ivan Vasiliev",
+    from: "2022-02-28",
+    nights: 5,
+    roomType: "camera singola",
+    entity: "camera singola",
+    persons: 1,
+    colour: "rgba(217, 73, 73, 0.69)"
+  }
 ];
 
 export const roomTypes: RoomTypesSlice.RoomTypeData = {};
