@@ -37,7 +37,7 @@ export const assignedTilesSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(TilesSlice.fetchAsync.fulfilled, (state, action: PayloadAction<TilesSlice.TileData[]>) => {
+    builder.addCase(TilesSlice.fetchAsync.fulfilled, (state, action) => {
       addFetchedTiles(state, action.payload);
     });
   }

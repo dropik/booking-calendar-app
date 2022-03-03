@@ -53,7 +53,7 @@ export const tilesSlice = createSlice({
       .addCase(fetchAsync.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(fetchAsync.fulfilled, (state, action: PayloadAction<TileData[]>) => {
+      .addCase(fetchAsync.fulfilled, (state, action) => {
         state.status = "idle";
         addFetchedTiles(state, action.payload);
       })
