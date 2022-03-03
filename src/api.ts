@@ -15,23 +15,15 @@ export function fetchRoomTypesAsync(): Promise<{ data: RoomTypesSlice.RoomTypeDa
   });
 }
 
-let fethcedTilesCounter: number;
+let isTilesFetched = false;
 export function fetchTilesAsync(from: string, to: string): Promise<{ data: TilesSlice.TileData[] }> {
   console.log(`fetching tiles from ${from} to ${to}...`);
-
-  if (fethcedTilesCounter === undefined) {
-    fethcedTilesCounter = 0;
-  }
-
   return new Promise((resolve) => {
-    const currentCounter = fethcedTilesCounter;
-    fethcedTilesCounter++;
-    setTimeout(() => {
-      if (currentCounter < Mocks.tiles.length) {
-        resolve({ data: [Mocks.tiles[currentCounter]] });
-      } else {
-        resolve({ data: [] });
-      }
-    }, 500);
+    if (isTilesFetched) {
+      setTimeout(() => resolve({ data: [] }), 500);
+    } else {
+      setTimeout(() => resolve({ data: Mocks.tiles }), 500);
+    }
+    isTilesFetched = true;
   });
 }
