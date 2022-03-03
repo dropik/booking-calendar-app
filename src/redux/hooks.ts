@@ -41,6 +41,15 @@ export function useTileIdByCoords(x: string, y: number): number {
   });
 }
 
+export function useIsGrabbedTile(id: number): boolean {
+  return useAppSelector((state) => {
+    if (!state.tiles.grabbedX || !state.tiles.grabbedY) {
+      return false;
+    }
+    return state.tiles[state.tiles.grabbedY][state.tiles.grabbedX] === id;
+  });
+}
+
 export function useTileData(id: number | undefined): TilesSlice.TileData | undefined {
   return useAppSelector((state) => {
     return (id === undefined) ? undefined : state.tiles.data[id];

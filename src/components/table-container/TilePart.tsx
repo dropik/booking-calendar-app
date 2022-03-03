@@ -8,8 +8,8 @@ import * as Utils from "../../utils";
 
 import {
   useAppDispatch,
-  useAppSelector,
   useColumns,
+  useIsGrabbedTile,
   useLeftmostDate,
   usePersonsInRoomType,
   useRoomTypeByNumber,
@@ -29,7 +29,7 @@ type Props = {
 function TilePart(props: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const tileId = useTileIdByCoords(props.x, props.y);
-  const grabbed = useAppSelector(state => state.tiles.data[tileId].grabbed);
+  const grabbed = useIsGrabbedTile(tileId);
   const ref = useRef<HTMLDivElement>(null);
   const leftmostDate = useLeftmostDate();
   const columns = useColumns();
@@ -37,7 +37,7 @@ function TilePart(props: Props): JSX.Element {
   const personsInRoomType = usePersonsInRoomType(roomType);
 
   const outOfBound = isOutOfBound(props.tileData, leftmostDate, columns);
-  const grabHandler = getGrabHandler(dispatch, tileId, props.x, props.y, outOfBound);
+  const grabHandler = getGrabHandler(dispatch, props.x, props.y, outOfBound);
   const overHandler = getOverHandler(dispatch, tileId);
   const outHandler = getOutHandler(dispatch);
   const className = getClassName(grabbed, outOfBound);
@@ -62,7 +62,6 @@ function TilePart(props: Props): JSX.Element {
 
 function getGrabHandler(
   dispatch: React.Dispatch<AnyAction>,
-  tileId: number,
   x: string,
   y: number,
   outOfBound: boolean
@@ -70,7 +69,7 @@ function getGrabHandler(
   return (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
     if ((event.button == 0) && !outOfBound) {
-      dispatch(TilesSlice.grab({ tileId, x, y }));
+      dispatch(TilesSlice.grab({ x, y }));
       dispatch(MouseSlice.grab());
     }
   };
@@ -144,7 +143,7 @@ function useMouseHandlingEffects(
     }
 
     function onDrop() {
-      dispatch(TilesSlice.drop({ tileId }));
+      dispatch(TilesSlice.drop());
       dispatch(MouseSlice.drop());
     }
 

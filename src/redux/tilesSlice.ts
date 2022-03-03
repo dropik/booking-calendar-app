@@ -14,8 +14,7 @@ export type TileData = {
   entity: string,
   persons: number,
   colour: string,
-  roomNumber: number,
-  grabbed?: boolean
+  roomNumber: number
 };
 
 export type TileDataUpdate = {
@@ -56,13 +55,11 @@ export const tilesSlice = createSlice({
     move: (state, action: PayloadAction<{ newY: number }>) => {
       tryMoveTile(state, action);
     },
-    grab: (state, action: PayloadAction<{ tileId: number, x: string, y: number }>) => {
-      state.data[action.payload.tileId].grabbed = true;
+    grab: (state, action: PayloadAction<{ x: string, y: number }>) => {
       state.grabbedX = action.payload.x;
       state.grabbedY = action.payload.y;
     },
-    drop: (state, action: PayloadAction<{ tileId: number }>) => {
-      state.data[action.payload.tileId].grabbed = false;
+    drop: (state) => {
       state.grabbedX = undefined;
       state.grabbedY = undefined;
     },
