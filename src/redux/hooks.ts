@@ -90,7 +90,7 @@ export const useLastTileUpdate:     () => AssignedTilesSlice.TileDataUpdate | un
   () => useAppSelector(state => state.assignedTiles.lastUpdate);
 
 export const useHoveredId:          () => string | undefined =
-  () => useAppSelector(state => state.mouse.hoveredId);
+  () => useAppSelector(state => state.hoveredId.value);
 
 export const useIsGrabbing:         () => boolean =
   () => useAppSelector(state => state.assignedTiles.grabbedX !== undefined);

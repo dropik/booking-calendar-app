@@ -17,7 +17,7 @@ import {
 } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
 import * as AssignedTilesSlice from "../../redux/assignedTilesSlice";
-import * as MouseSlice from "../../redux/mouseSlice";
+import * as HoveredIdSlice from "../../redux/hoveredIdSlice";
 
 import "./TilePart.css";
 
@@ -77,11 +77,11 @@ function getGrabHandler(
 }
 
 function getOverHandler(dispatch: Dispatch<AnyAction>, tileId: string | undefined): () => void {
-  return () => dispatch(MouseSlice.setHoveredId(tileId));
+  return () => dispatch(HoveredIdSlice.set(tileId));
 }
 
 function getOutHandler(dispatch: Dispatch<AnyAction>): () => void {
-  return () => dispatch(MouseSlice.setHoveredId(undefined));
+  return () => dispatch(HoveredIdSlice.set(undefined));
 }
 
 function isOutOfBound(tileData: TilesSlice.TileData, leftmostDate: string, columns: number): boolean {
