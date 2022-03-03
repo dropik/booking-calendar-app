@@ -7,21 +7,22 @@ import * as Utils from "../utils";
 import * as TableSlice from "./tableSlice";
 
 export type TileData = {
-  roomNumber: number,
-  from: string,
-  colour: string,
-  nights: number,
   name: string,
+  from: string,
+  nights: number,
   roomType: string,
   entity: string,
   persons: number,
+  colour: string,
+  roomNumber: number,
   grabbed?: boolean
 };
 
 export type State = {
   status: "idle" | "loading" | "failed",
   data: TileData[],
-  grabbedTile: number
+  grabbedTile: number,
+  grabbedX?: string,
   [key: number]: {
     [key: string]: number | undefined
   }
@@ -50,13 +51,15 @@ export const tilesSlice = createSlice({
     move: (state, action: PayloadAction<{ newY: number }>) => {
       tryMoveTile(state, action);
     },
-    grab: (state, action: PayloadAction<{ tileId: number }>) => {
+    grab: (state, action: PayloadAction<{ tileId: number, x: string }>) => {
       state.data[action.payload.tileId].grabbed = true;
       state.grabbedTile = action.payload.tileId;
+      state.grabbedX = action.payload.x;
     },
     drop: (state, action: PayloadAction<{ tileId: number }>) => {
       state.data[action.payload.tileId].grabbed = false;
       state.grabbedTile = -1;
+      state.grabbedX = undefined;
     }
   },
   extraReducers: (builder) => {
