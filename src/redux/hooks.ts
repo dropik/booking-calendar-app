@@ -41,15 +41,6 @@ export function useTileIdByCoords(x: string, y: number): string | undefined {
   });
 }
 
-export function useIsGrabbedTile(id: string | undefined): boolean {
-  return useAppSelector((state) => {
-    if (!state.assignedTiles.grabbedX || !state.assignedTiles.grabbedY || !id) {
-      return false;
-    }
-    return state.assignedTiles[state.assignedTiles.grabbedY][state.assignedTiles.grabbedX] === id;
-  });
-}
-
 export function useTileData(id: string | undefined): TilesSlice.TileData | undefined {
   return useAppSelector((state) => {
     return (id === undefined) ? undefined : state.tiles.data[id];
@@ -91,6 +82,9 @@ export const useScrollLeft:         () => number =
 
 export const useScrollTop:          () => number =
   () => useAppSelector(state => state.scroll.top);
+
+export const useIsGrabbedTile:      (id: string | undefined) => boolean =
+  (id: string | undefined) => useAppSelector(state => state.assignedTiles.grabbedMap[id as string]);
 
 export const useLastTileUpdate:     () => AssignedTilesSlice.TileDataUpdate | undefined =
   () => useAppSelector(state => state.assignedTiles.lastUpdate);

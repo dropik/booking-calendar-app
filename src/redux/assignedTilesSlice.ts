@@ -10,15 +10,20 @@ export type TileDataUpdate = {
 };
 
 export type State = {
-  grabbedX?: string,
-  grabbedY?: number,
-  lastUpdate?: TileDataUpdate,
   [key: number]: {
     [key: string]: string | undefined
-  }
+  },
+  grabbedX?: string,
+  grabbedY?: number,
+  grabbedMap: {
+    [key: string]: boolean
+  },
+  lastUpdate?: TileDataUpdate
 };
 
-const initialState: State = { };
+const initialState: State = {
+  grabbedMap: { }
+};
 
 export const assignedTilesSlice = createSlice({
   name: "assignedTiles",
@@ -27,13 +32,15 @@ export const assignedTilesSlice = createSlice({
     move: (state, action: PayloadAction<{ newY: number }>) => {
       tryMoveTile(state, action);
     },
-    grab: (state, action: PayloadAction<{ x: string, y: number }>) => {
+    grab: (state, action: PayloadAction<{ tileId: string, x: string, y: number }>) => {
       state.grabbedX = action.payload.x;
       state.grabbedY = action.payload.y;
+      state.grabbedMap[action.payload.tileId] = true;
     },
-    drop: (state) => {
+    drop: (state, action: PayloadAction<{ tileId: string }>) => {
       state.grabbedX = undefined;
       state.grabbedY = undefined;
+      state.grabbedMap[action.payload.tileId] = false;
     }
   },
   extraReducers: (builder) => {
@@ -49,6 +56,7 @@ export default assignedTilesSlice.reducer;
 
 function addFetchedTiles(state: WritableDraft<State>, tiles: TilesSlice.TileData[]): void {
   tiles.forEach(tile => {
+    state.grabbedMap[tile.id] = false;
     const roomNumber = tile.roomNumber;
     if (roomNumber) {
       if (state[roomNumber] === undefined) {

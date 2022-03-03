@@ -38,13 +38,13 @@ function TilePart(props: Props): JSX.Element {
   const personsInRoomType = usePersonsInRoomType(roomType);
 
   const outOfBound = isOutOfBound(props.tileData, leftmostDate, columns);
-  const grabHandler = getGrabHandler(dispatch, props.x, props.y, outOfBound);
+  const grabHandler = getGrabHandler(dispatch, tileId, props.x, props.y, outOfBound);
   const overHandler = getOverHandler(dispatch, tileId);
   const outHandler = getOutHandler(dispatch);
   const className = getClassName(grabbed, outOfBound);
   const alert = getAlert(personsInRoomType, roomType, props.tileData);
 
-  useMouseHandlingEffects(dispatch, ref, grabbed);
+  useMouseHandlingEffects(dispatch, ref, tileId, grabbed);
   useBackgroundColourEffect(ref, props.tileData.colour);
 
   return (
@@ -63,14 +63,15 @@ function TilePart(props: Props): JSX.Element {
 
 function getGrabHandler(
   dispatch: React.Dispatch<AnyAction>,
+  tileId: string | undefined,
   x: string,
   y: number,
   outOfBound: boolean
 ): (event: React.MouseEvent<HTMLDivElement>) => void {
   return (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
-    if ((event.button == 0) && !outOfBound) {
-      dispatch(AssignedTilesSlice.grab({ x, y }));
+    if ((event.button == 0) && tileId && !outOfBound) {
+      dispatch(AssignedTilesSlice.grab({ tileId, x, y }));
       dispatch(MouseSlice.grab());
     }
   };
@@ -129,6 +130,7 @@ function getAlert(personsInRoomType: number[], roomType: string, tileData: Tiles
 function useMouseHandlingEffects(
   dispatch: React.Dispatch<AnyAction>,
   ref: React.RefObject<HTMLDivElement>,
+  tileId: string | undefined,
   grabbed: boolean | undefined
 ): void {
   useLayoutEffect(() => {
@@ -143,7 +145,9 @@ function useMouseHandlingEffects(
     }
 
     function onDrop() {
-      dispatch(AssignedTilesSlice.drop());
+      if (tileId) {
+        dispatch(AssignedTilesSlice.drop({ tileId }));
+      }
       dispatch(MouseSlice.drop());
     }
 
@@ -159,7 +163,7 @@ function useMouseHandlingEffects(
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseup", onDrop);
     };
-  }, [dispatch, ref, grabbed]);
+  }, [dispatch, ref, tileId, grabbed]);
 }
 
 function useBackgroundColourEffect(
