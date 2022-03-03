@@ -26,7 +26,6 @@ export type TileDataUpdate = {
 export type State = {
   status: "idle" | "loading" | "failed",
   data: TileData[],
-  grabbedTile: number,
   grabbedX?: string,
   grabbedY?: number,
   lastUpdate?: TileDataUpdate,
@@ -37,8 +36,7 @@ export type State = {
 
 const initialState: State = {
   status: "idle",
-  data: [],
-  grabbedTile: -1
+  data: []
 };
 
 export const fetchAsync = createAsyncThunk(
@@ -60,13 +58,11 @@ export const tilesSlice = createSlice({
     },
     grab: (state, action: PayloadAction<{ tileId: number, x: string, y: number }>) => {
       state.data[action.payload.tileId].grabbed = true;
-      state.grabbedTile = action.payload.tileId;
       state.grabbedX = action.payload.x;
       state.grabbedY = action.payload.y;
     },
     drop: (state, action: PayloadAction<{ tileId: number }>) => {
       state.data[action.payload.tileId].grabbed = false;
-      state.grabbedTile = -1;
       state.grabbedX = undefined;
       state.grabbedY = undefined;
     },
@@ -112,9 +108,12 @@ function tryMoveTile(
   state: WritableDraft<State>,
   action: PayloadAction<{ newY: number }>
 ): void {
-  const tileId = state.grabbedTile;
-
   if (!state.grabbedX || !state.grabbedY) {
+    return;
+  }
+
+  const tileId = state[state.grabbedY][state.grabbedX];
+  if (tileId === undefined) {
     return;
   }
 
