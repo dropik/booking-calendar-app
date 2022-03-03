@@ -2,6 +2,7 @@
 - Modifications trace. Save and reset buttons.
 - Adjust drag on scroll.
 - Title / occupations view.
+- Global information about alerts/unassigned tiles present.
 - Check-in system. Police data export.
 - Handle touchscreen.
 - Enhance info popup positioning.
