@@ -18,12 +18,18 @@ export type TileData = {
   grabbed?: boolean
 };
 
+export type TileDataUpdate = {
+  id: number,
+  newRoomNumber: number
+};
+
 export type State = {
   status: "idle" | "loading" | "failed",
   data: TileData[],
   grabbedTile: number,
   grabbedX?: string,
   grabbedY?: number,
+  lastUpdate?: TileDataUpdate,
   [key: number]: {
     [key: string]: number | undefined
   }
@@ -63,6 +69,9 @@ export const tilesSlice = createSlice({
       state.grabbedTile = -1;
       state.grabbedX = undefined;
       state.grabbedY = undefined;
+    },
+    updateRoomNumber: (state, action: PayloadAction<TileDataUpdate>) => {
+      state.data[action.payload.id].roomNumber = action.payload.newRoomNumber;
     }
   },
   extraReducers: (builder) => {
@@ -80,11 +89,11 @@ export const tilesSlice = createSlice({
   }
 });
 
-export const { move, grab, drop } = tilesSlice.actions;
+export const { move, grab, drop, updateRoomNumber } = tilesSlice.actions;
 
 export default tilesSlice.reducer;
 
-function addFetchedTiles(state: State, tiles: Array<TileData>): void {
+function addFetchedTiles(state: State, tiles: TileData[]): void {
   tiles.forEach(tile => {
     const roomNumber = tile.roomNumber;
     if (state[roomNumber] === undefined) {
@@ -135,7 +144,10 @@ function moveTile(
     state[tileData.roomNumber][x] = undefined;
     dateCounter.setDate(dateCounter.getDate() + 1);
   }
-  tileData.roomNumber = newY;
+  state.lastUpdate = {
+    id: tileId,
+    newRoomNumber: newY
+  };
 }
 
 function checkHasCollision(

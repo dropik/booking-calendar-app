@@ -11,6 +11,7 @@ import * as TableSlice from "../redux/tableSlice";
 
 import Table from "./table-container/Table";
 import FetchTiles from "./table-container/FetchTiles";
+import RoomChangesTracer from "./table-container/RoomChangesTracer";
 
 import "./TableContainer.css";
 
@@ -91,6 +92,7 @@ function useTableContentsMemo(): JSX.Element {
     <>
       <Table />
       <FetchTiles />
+      <RoomChangesTracer />
     </>
   ), []);
 }

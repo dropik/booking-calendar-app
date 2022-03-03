@@ -59,16 +59,17 @@ export function useDates(): Generator<string, void, void> {
   }();
 }
 
-export const useLeftmostDate:       () => string =                        () => useAppSelector(state => state.table.leftmostDate);
-export const useColumns:            () => number =                        () => useAppSelector(state => state.table.columns);
-export const useLastFetchPeriod:    () => TableSlice.FetchPeriod =        () => useAppSelector(state => state.table.lastFetchPeriod);
-export const useTableOffsetHeight:  () => number =                        () => useAppSelector(state => state.table.offsetHeight);
-export const useTableClientHeight:  () => number =                        () => useAppSelector(state => state.table.clientHeight);
-export const useHotelData:          () => HotelSlice.HotelData =          () => useAppSelector(state => state.hotel.data);
-export const useScrollLeft:         () => number =                        () => useAppSelector(state => state.scroll.left);
-export const useScrollTop:          () => number =                        () => useAppSelector(state => state.scroll.top);
-export const useMouseX:             () => number =                        () => useAppSelector(state => state.mouse.x);
-export const useMouseY:             () => number =                        () => useAppSelector(state => state.mouse.y);
-export const useHoveredId:          () => number | undefined =            () => useAppSelector(state => state.mouse.hoveredId);
-export const useIsGrabbing:         () => boolean =                       () => useAppSelector(state => state.mouse.isGrabbing);
-export const usePersonsInRoomType:  (type: string) => number[] =          (type: string) => useAppSelector(state => state.roomTypes.data[type]);
+export const useLeftmostDate:       () => string =                                () => useAppSelector(state => state.table.leftmostDate);
+export const useColumns:            () => number =                                () => useAppSelector(state => state.table.columns);
+export const useLastFetchPeriod:    () => TableSlice.FetchPeriod =                () => useAppSelector(state => state.table.lastFetchPeriod);
+export const useTableOffsetHeight:  () => number =                                () => useAppSelector(state => state.table.offsetHeight);
+export const useTableClientHeight:  () => number =                                () => useAppSelector(state => state.table.clientHeight);
+export const useHotelData:          () => HotelSlice.HotelData =                  () => useAppSelector(state => state.hotel.data);
+export const useScrollLeft:         () => number =                                () => useAppSelector(state => state.scroll.left);
+export const useScrollTop:          () => number =                                () => useAppSelector(state => state.scroll.top);
+export const useLastTileUpdate:     () => TilesSlice.TileDataUpdate | undefined = () => useAppSelector(state => state.tiles.lastUpdate);
+export const useMouseX:             () => number =                                () => useAppSelector(state => state.mouse.x);
+export const useMouseY:             () => number =                                () => useAppSelector(state => state.mouse.y);
+export const useHoveredId:          () => number | undefined =                    () => useAppSelector(state => state.mouse.hoveredId);
+export const useIsGrabbing:         () => boolean =                               () => useAppSelector(state => state.mouse.isGrabbing);
+export const usePersonsInRoomType:  (type: string) => number[] =                  (type: string) => useAppSelector(state => state.roomTypes.data[type]);
