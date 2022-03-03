@@ -7,7 +7,7 @@ export type State = {
 const initialState: State = { };
 
 export const hoveredIdSlice = createSlice({
-  name: "mouse",
+  name: "hoveredId",
   initialState: initialState,
   reducers: {
     set: (state, action: PayloadAction<string | undefined>) => {

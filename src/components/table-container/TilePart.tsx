@@ -39,8 +39,8 @@ function TilePart(props: Props): JSX.Element {
 
   const outOfBound = isOutOfBound(props.tileData, leftmostDate, columns);
   const grabHandler = getGrabHandler(dispatch, tileId, props.x, props.y, outOfBound);
-  const overHandler = getOverHandler(dispatch, tileId);
-  const outHandler = getOutHandler(dispatch);
+  const enterHandler = getEnterHandler(dispatch, tileId);
+  const leaveHandler = getLeaveHandler(dispatch);
   const className = getClassName(grabbed, outOfBound);
   const alert = getAlert(personsInRoomType, roomType, props.tileData);
 
@@ -52,8 +52,8 @@ function TilePart(props: Props): JSX.Element {
       ref={ref}
       className={className}
       onMouseDown={grabHandler}
-      onMouseOver={overHandler}
-      onMouseOut={outHandler}
+      onMouseEnter={enterHandler}
+      onMouseLeave={leaveHandler}
     >
       <span className="tile-persons">{props.tileData.persons}</span>
       {alert}
@@ -76,11 +76,11 @@ function getGrabHandler(
   };
 }
 
-function getOverHandler(dispatch: Dispatch<AnyAction>, tileId: string | undefined): () => void {
+function getEnterHandler(dispatch: Dispatch<AnyAction>, tileId: string | undefined): () => void {
   return () => dispatch(HoveredIdSlice.set(tileId));
 }
 
-function getOutHandler(dispatch: Dispatch<AnyAction>): () => void {
+function getLeaveHandler(dispatch: Dispatch<AnyAction>): () => void {
   return () => dispatch(HoveredIdSlice.set(undefined));
 }
 
