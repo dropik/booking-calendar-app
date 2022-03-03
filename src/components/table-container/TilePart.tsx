@@ -16,6 +16,7 @@ import {
   useTileIdByCoords
 } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
+import * as AssignedTilesSlice from "../../redux/assignedTilesSlice";
 import * as MouseSlice from "../../redux/mouseSlice";
 
 import "./TilePart.css";
@@ -43,7 +44,7 @@ function TilePart(props: Props): JSX.Element {
   const className = getClassName(grabbed, outOfBound);
   const alert = getAlert(personsInRoomType, roomType, props.tileData);
 
-  useMouseHandlingEffects(dispatch, ref, grabbed, tileId);
+  useMouseHandlingEffects(dispatch, ref, grabbed);
   useBackgroundColourEffect(ref, props.tileData.colour);
 
   return (
@@ -69,13 +70,13 @@ function getGrabHandler(
   return (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
     if ((event.button == 0) && !outOfBound) {
-      dispatch(TilesSlice.grab({ x, y }));
+      dispatch(AssignedTilesSlice.grab({ x, y }));
       dispatch(MouseSlice.grab());
     }
   };
 }
 
-function getOverHandler(dispatch: Dispatch<AnyAction>, tileId: number): () => void {
+function getOverHandler(dispatch: Dispatch<AnyAction>, tileId: string | undefined): () => void {
   return () => dispatch(MouseSlice.setHoveredId(tileId));
 }
 
@@ -128,8 +129,7 @@ function getAlert(personsInRoomType: number[], roomType: string, tileData: Tiles
 function useMouseHandlingEffects(
   dispatch: React.Dispatch<AnyAction>,
   ref: React.RefObject<HTMLDivElement>,
-  grabbed: boolean | undefined,
-  tileId: number
+  grabbed: boolean | undefined
 ): void {
   useLayoutEffect(() => {
     const currentRef = ref.current;
@@ -143,7 +143,7 @@ function useMouseHandlingEffects(
     }
 
     function onDrop() {
-      dispatch(TilesSlice.drop());
+      dispatch(AssignedTilesSlice.drop());
       dispatch(MouseSlice.drop());
     }
 
@@ -159,7 +159,7 @@ function useMouseHandlingEffects(
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseup", onDrop);
     };
-  }, [dispatch, ref, grabbed, tileId]);
+  }, [dispatch, ref, grabbed]);
 }
 
 function useBackgroundColourEffect(

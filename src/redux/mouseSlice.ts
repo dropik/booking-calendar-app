@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export type State = {
   x: number,
   y: number,
-  hoveredId: number | undefined,
+  hoveredId: string | undefined,
   isGrabbing: boolean
 };
 
@@ -27,7 +27,7 @@ export const mouseSlice = createSlice({
       state.x = action.payload.x;
       state.y = action.payload.y;
     },
-    setHoveredId: (state, action: PayloadAction<number | undefined>) => {
+    setHoveredId: (state, action: PayloadAction<string | undefined>) => {
       state.hoveredId = action.payload;
     },
     grab: (state) => {

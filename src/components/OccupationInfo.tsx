@@ -49,9 +49,9 @@ function useUpdateMousePositionEffect(dispatch: Dispatch<AnyAction>): void {
   }, [dispatch]);
 }
 
-function getClassName(hoveredId: number | undefined, isGrabbing: boolean): string {
+function getClassName(hoveredId: string | undefined, isGrabbing: boolean): string {
   let className = "occupation-info";
-  if ((hoveredId === undefined) || isGrabbing) {
+  if (!hoveredId || isGrabbing) {
     className += " hidden";
   }
   return className;

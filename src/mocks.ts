@@ -67,6 +67,7 @@ export const hotel: HotelSlice.HotelData = {
 
 export const tiles: TilesSlice.TileData[] = [
   {
+    id: "0",
     name: "Petr Ivanov",
     colour: "rgba(208, 217, 73, 0.69)",
     roomType: "camera matrimoniale/doppia",
@@ -77,6 +78,7 @@ export const tiles: TilesSlice.TileData[] = [
     persons: 2
   },
   {
+    id: "1",
     name: "Ivan Petrov",
     colour: "rgba(217, 73, 73, 0.69)",
     roomType: "camera matrimoniale/doppia",
@@ -87,6 +89,7 @@ export const tiles: TilesSlice.TileData[] = [
     persons: 2
   },
   {
+    id: "2",
     name: "Vasya Pupkin",
     colour: "rgba(73, 122, 217, 0.69)",
     roomType: "camera matrimoniale/doppia",
