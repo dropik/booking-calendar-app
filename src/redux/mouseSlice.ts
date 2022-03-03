@@ -3,8 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export type State = {
   x: number,
   y: number,
-  hoveredId: string | undefined,
-  isGrabbing: boolean
+  hoveredId: string | undefined
 };
 
 export type MousePosition = {
@@ -15,8 +14,7 @@ export type MousePosition = {
 const initialState: State = {
   x: 0,
   y: 0,
-  hoveredId: undefined,
-  isGrabbing: false
+  hoveredId: undefined
 };
 
 export const mouseSlice = createSlice({
@@ -29,16 +27,10 @@ export const mouseSlice = createSlice({
     },
     setHoveredId: (state, action: PayloadAction<string | undefined>) => {
       state.hoveredId = action.payload;
-    },
-    grab: (state) => {
-      state.isGrabbing = true;
-    },
-    drop: (state) => {
-      state.isGrabbing = false;
     }
   }
 });
 
-export const { updatePosition, setHoveredId, grab, drop } = mouseSlice.actions;
+export const { updatePosition, setHoveredId } = mouseSlice.actions;
 
 export default mouseSlice.reducer;

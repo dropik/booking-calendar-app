@@ -72,7 +72,6 @@ function getGrabHandler(
     event.preventDefault();
     if ((event.button == 0) && tileId && !outOfBound) {
       dispatch(AssignedTilesSlice.grab({ tileId, x, y }));
-      dispatch(MouseSlice.grab());
     }
   };
 }
@@ -148,7 +147,6 @@ function useMouseHandlingEffects(
       if (tileId) {
         dispatch(AssignedTilesSlice.drop({ tileId }));
       }
-      dispatch(MouseSlice.drop());
     }
 
     if (grabbed) {

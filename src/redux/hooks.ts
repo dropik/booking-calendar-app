@@ -99,7 +99,7 @@ export const useHoveredId:          () => string | undefined =
   () => useAppSelector(state => state.mouse.hoveredId);
 
 export const useIsGrabbing:         () => boolean =
-  () => useAppSelector(state => state.mouse.isGrabbing);
+  () => useAppSelector(state => state.assignedTiles.grabbedX !== undefined);
 
 export const usePersonsInRoomType:  (type: string) => number[] =
   (type: string) => useAppSelector(state => state.roomTypes.data[type]);
