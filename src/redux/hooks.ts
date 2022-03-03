@@ -95,5 +95,8 @@ export const useHoveredId:          () => string | undefined =
 export const useIsGrabbing:         () => boolean =
   () => useAppSelector(state => state.assignedTiles.grabbedX !== undefined);
 
+export const useHasUnassignedTiles: (x: string) => boolean =
+  (x: string) => useAppSelector(state => (state.unassignedTiles[x] !== undefined) && (state.unassignedTiles[x].length > 0));
+
 export const usePersonsInRoomType:  (type: string) => number[] =
   (type: string) => useAppSelector(state => state.roomTypes.data[type]);
