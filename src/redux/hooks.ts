@@ -89,12 +89,6 @@ export const useIsGrabbedTile:      (id: string | undefined) => boolean =
 export const useLastTileUpdate:     () => AssignedTilesSlice.TileDataUpdate | undefined =
   () => useAppSelector(state => state.assignedTiles.lastUpdate);
 
-export const useMouseX:             () => number =
-  () => useAppSelector(state => state.mouse.x);
-
-export const useMouseY:             () => number =
-  () => useAppSelector(state => state.mouse.y);
-
 export const useHoveredId:          () => string | undefined =
   () => useAppSelector(state => state.mouse.hoveredId);
 
