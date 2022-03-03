@@ -6,13 +6,14 @@ import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import "./Day.css";
 
 type Props = {
-  day: string
+  x: string
 };
 
 function Day(props: Props): JSX.Element {
+  const day = props.x.substring(8);
   return (
     <div className="day">
-      <b>{props.day}</b>
+      <b>{day}</b>
       <span className="day-alert" title="Ci sono occupazioni non assegnati"><FontAwesomeIcon icon={faCircleExclamation} /></span>
     </div>
   );

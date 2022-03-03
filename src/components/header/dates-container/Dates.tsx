@@ -27,8 +27,8 @@ function useDayCellsMemo(dates: Generator<string, void, void>): JSX.Element[] {
     for (const date of dates) {
       dayCells.push(
         <Day
-          day={date.substring(8)}
           key={date}
+          x={date}
         />
       );
     }

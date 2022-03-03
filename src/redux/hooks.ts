@@ -12,7 +12,7 @@ export const useAppSelector: TypedUseSelectorHook<Store.RootState> = useSelector
 
 export function useCurrentDate(): string {
   return useAppSelector((state) => {
-    const cellWidth = Utils.remToPx(4) + 1;
+    const cellWidth = Utils.remToPx(4) + 2;
     const dateShift = Math.floor(
       (state.scroll.left + cellWidth / 2) / cellWidth
     );
