@@ -1,7 +1,17 @@
 .day {
   flex-direction: row;
+  position: relative;
   border-right: 2px solid black;
   width: 4rem;
   text-align: center;
   line-height: 4rem;
+}
+
+.day-alert {
+  display: inline-block;
+  position: absolute;
+  font-size: 0.8rem;
+  top: 0.4rem;
+  right: 0.4rem;
+  line-height: 1rem;
 }
