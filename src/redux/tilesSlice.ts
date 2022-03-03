@@ -23,6 +23,7 @@ export type State = {
   data: TileData[],
   grabbedTile: number,
   grabbedX?: string,
+  grabbedY?: number,
   [key: number]: {
     [key: string]: number | undefined
   }
@@ -51,15 +52,17 @@ export const tilesSlice = createSlice({
     move: (state, action: PayloadAction<{ newY: number }>) => {
       tryMoveTile(state, action);
     },
-    grab: (state, action: PayloadAction<{ tileId: number, x: string }>) => {
+    grab: (state, action: PayloadAction<{ tileId: number, x: string, y: number }>) => {
       state.data[action.payload.tileId].grabbed = true;
       state.grabbedTile = action.payload.tileId;
       state.grabbedX = action.payload.x;
+      state.grabbedY = action.payload.y;
     },
     drop: (state, action: PayloadAction<{ tileId: number }>) => {
       state.data[action.payload.tileId].grabbed = false;
       state.grabbedTile = -1;
       state.grabbedX = undefined;
+      state.grabbedY = undefined;
     }
   },
   extraReducers: (builder) => {
@@ -102,14 +105,14 @@ function tryMoveTile(
 ): void {
   const tileId = state.grabbedTile;
 
-  if (tileId < 0) {
+  if (!state.grabbedX || !state.grabbedY) {
     return;
   }
 
   const tileData = state.data[tileId];
   const newY = action.payload.newY;
 
-  if (newY && (newY != tileData.roomNumber)) {
+  if (newY && (newY !== state.grabbedY)) {
     if (state[newY] === undefined) {
       state[newY] = {};
       moveTile(state, tileData, tileId, newY);

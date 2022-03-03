@@ -37,7 +37,7 @@ function TilePart(props: Props): JSX.Element {
   const personsInRoomType = usePersonsInRoomType(roomType);
 
   const outOfBound = isOutOfBound(props.tileData, leftmostDate, columns);
-  const grabHandler = getGrabHandler(dispatch, tileId, props.x, outOfBound);
+  const grabHandler = getGrabHandler(dispatch, tileId, props.x, props.y, outOfBound);
   const overHandler = getOverHandler(dispatch, tileId);
   const outHandler = getOutHandler(dispatch);
   const className = getClassName(grabbed, outOfBound);
@@ -64,12 +64,13 @@ function getGrabHandler(
   dispatch: React.Dispatch<AnyAction>,
   tileId: number,
   x: string,
+  y: number,
   outOfBound: boolean
 ): (event: React.MouseEvent<HTMLDivElement>) => void {
   return (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
     if ((event.button == 0) && !outOfBound) {
-      dispatch(TilesSlice.grab({ tileId, x }));
+      dispatch(TilesSlice.grab({ tileId, x, y }));
       dispatch(MouseSlice.grab());
     }
   };
