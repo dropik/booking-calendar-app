@@ -123,26 +123,41 @@ function tryMoveTile(
   if (newY && (newY !== state.grabbedY)) {
     if (state[newY] === undefined) {
       state[newY] = {};
-      moveTile(state, tileData, tileId, newY);
+      moveTile(state, tileId, state.grabbedX, state.grabbedY, newY);
     } else if (!checkHasCollision(state, tileData, newY)) {
-      moveTile(state, tileData, tileId, newY);
+      moveTile(state, tileId, state.grabbedX, state.grabbedY, newY);
     }
   }
 }
 
 function moveTile(
   state: WritableDraft<State>,
-  tileData: WritableDraft<TileData>,
   tileId: number,
+  startX: string,
+  prevY: number,
   newY: number
 ): void {
-  const dateCounter = new Date(tileData.from);
-  for (let i = 0; i < tileData.nights; i++) {
-    const x = Utils.dateToString(dateCounter);
+  // go backwards from grabbed x
+  let dateCounter = new Date(startX);
+  let x = Utils.dateToString(dateCounter);
+  while (state[prevY][x] === tileId) {
+    state[prevY][x] = undefined;
     state[newY][x] = tileId;
-    state[tileData.roomNumber][x] = undefined;
-    dateCounter.setDate(dateCounter.getDate() + 1);
+    dateCounter.setDate(dateCounter.getDate() - 1);
+    x = Utils.dateToString(dateCounter);
   }
+
+  // go forward from grabbed x
+  dateCounter = new Date(startX);
+  dateCounter.setDate(dateCounter.getDate() + 1);
+  x = Utils.dateToString(dateCounter);
+  while (state[prevY][x] === tileId) {
+    state[prevY][x] = undefined;
+    state[newY][x] = tileId;
+    dateCounter.setDate(dateCounter.getDate() + 1);
+    x = Utils.dateToString(dateCounter);
+  }
+
   state.lastUpdate = {
     id: tileId,
     newRoomNumber: newY
