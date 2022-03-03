@@ -50,13 +50,15 @@ export default assignedTilesSlice.reducer;
 function addFetchedTiles(state: WritableDraft<State>, tiles: TilesSlice.TileData[]): void {
   tiles.forEach(tile => {
     const roomNumber = tile.roomNumber;
-    if (state[roomNumber] === undefined) {
-      state[roomNumber] = {};
-    }
-    const dateCounter = new Date(tile.from);
-    for (let i = 0; i < tile.nights; i++) {
-      state[roomNumber][Utils.dateToString(dateCounter)] = tile.id;
-      dateCounter.setDate(dateCounter.getDate() + 1);
+    if (roomNumber) {
+      if (state[roomNumber] === undefined) {
+        state[roomNumber] = {};
+      }
+      const dateCounter = new Date(tile.from);
+      for (let i = 0; i < tile.nights; i++) {
+        state[roomNumber][Utils.dateToString(dateCounter)] = tile.id;
+        dateCounter.setDate(dateCounter.getDate() + 1);
+      }
     }
   });
 }

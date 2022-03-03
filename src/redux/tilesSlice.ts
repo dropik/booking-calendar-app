@@ -15,7 +15,7 @@ export type TileData = {
   entity: string,
   persons: number,
   colour: string,
-  roomNumber: number
+  roomNumber?: number
 };
 
 export type State = {
