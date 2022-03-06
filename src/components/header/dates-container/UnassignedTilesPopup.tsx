@@ -8,19 +8,21 @@ import "./UnassignedTilesPopup.css";
 
 function UnassignedTilesPopup(): JSX.Element {
   const show = useShowPopup();
-  const left = useLeftShift();
+  const leftmostSelectedTileDate = useLeftmostSelectedTileDate();
+  const rightmostSelectedTileDate = useRightmostSelectedTileDate();
+  const left = useLeftShift(leftmostSelectedTileDate);
   const ref = useRef<HTMLDivElement>(null);
 
+  const days = getDaysCount(leftmostSelectedTileDate, rightmostSelectedTileDate);
   const className = getClassName(show);
+  const cells = getCells(leftmostSelectedTileDate, days);
 
   useScrollEffect(ref, left);
 
   return (
     <div ref={ref} className={className}>
       <div className="unassigned-row">
-        <div className="unassigned-cell"></div>
-        <div className="unassigned-cell"></div>
-        <div className="unassigned-cell"></div>
+        {cells}
       </div>
     </div>
   );
@@ -35,23 +37,56 @@ function useShowPopup(): boolean | undefined {
   });
 }
 
-function useLeftShift(): number {
+function useLeftmostSelectedTileDate(): string | undefined {
   return useAppSelector((state) => {
     const selectedDate = state.unassignedTiles.selectedDate;
     if (selectedDate && state.unassignedTiles.map[selectedDate]) {
-      let leftmostTileFromDate = selectedDate;
+      let leftmostSelectedTileDate = selectedDate;
       for (const tileId of state.unassignedTiles.map[selectedDate]) {
         const tile = state.tiles.data[tileId];
-        if (Utils.daysBetweenDates(leftmostTileFromDate, tile.from) < 0) {
-          leftmostTileFromDate = tile.from;
+        if (Utils.daysBetweenDates(leftmostSelectedTileDate, tile.from) < 0) {
+          leftmostSelectedTileDate = tile.from;
         }
       }
-      const daysShift = Utils.daysBetweenDates(state.table.leftmostDate, leftmostTileFromDate);
+      return leftmostSelectedTileDate;
+    }
+  });
+}
+
+function useRightmostSelectedTileDate(): string | undefined {
+  return useAppSelector((state) => {
+    const selectedDate = state.unassignedTiles.selectedDate;
+    if (selectedDate && state.unassignedTiles.map[selectedDate]) {
+      let rightmostSelectedTileDate = selectedDate;
+      for (const tileId of state.unassignedTiles.map[selectedDate]) {
+        const tile = state.tiles.data[tileId];
+        const departureDateObj = new Date(tile.from);
+        departureDateObj.setDate(departureDateObj.getDate() + tile.nights);
+        const departureDate = Utils.dateToString(departureDateObj);
+        if (Utils.daysBetweenDates(rightmostSelectedTileDate, departureDate) > 0) {
+          rightmostSelectedTileDate = departureDate;
+        }
+        return rightmostSelectedTileDate;
+      }
+    }
+  });
+}
+
+function useLeftShift(leftmostSelectedTileDate: string | undefined): number {
+  return useAppSelector((state) => {
+    if (leftmostSelectedTileDate) {
+      const daysShift = Utils.daysBetweenDates(state.table.leftmostDate, leftmostSelectedTileDate);
       const cellWidth = Utils.remToPx(4) + 2;
       const hotelBarShift = Utils.remToPx(6.5) + 4;
       return hotelBarShift + daysShift * cellWidth - state.scroll.left;
     } else return 0;
   });
+}
+
+function getDaysCount(leftmostSelectedTileDate: string | undefined, rightmostSelectedTileDate: string | undefined): number {
+  return leftmostSelectedTileDate && rightmostSelectedTileDate ?
+    Utils.daysBetweenDates(leftmostSelectedTileDate, rightmostSelectedTileDate) :
+    0;
 }
 
 function getClassName(show: boolean | undefined): string {
@@ -60,6 +95,19 @@ function getClassName(show: boolean | undefined): string {
     className += " hidden";
   }
   return className;
+}
+
+function getCells(leftmostSelectedTileDate: string | undefined, days: number): JSX.Element[] {
+  const cells: JSX.Element[] = [];
+  if (leftmostSelectedTileDate) {
+    const dateCounter = new Date(leftmostSelectedTileDate);
+    for (let i = 0; i < days; i++) {
+      const x = Utils.dateToString(dateCounter);
+      cells.push(<div key={x} className="unassigned-cell"></div>);
+      dateCounter.setDate(dateCounter.getDate() + 1);
+    }
+  }
+  return cells;
 }
 
 function useScrollEffect(ref: React.RefObject<HTMLDivElement>, left: number): void {
