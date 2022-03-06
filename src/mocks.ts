@@ -113,7 +113,7 @@ export const tiles: TilesSlice.TileData[] = [
     id: "4",
     name: "Ivan Vasiliev",
     from: "2022-02-28",
-    nights: 5,
+    nights: 4,
     roomType: "camera singola",
     entity: "camera singola",
     persons: 1,
