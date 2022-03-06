@@ -1,0 +1,5 @@
+.unassigned-cell {
+  width: 4rem;
+  height: 4rem;
+  border-right: 2px solid black;
+}
