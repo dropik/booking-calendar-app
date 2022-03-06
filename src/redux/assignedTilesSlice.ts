@@ -10,8 +10,10 @@ export type TileDataUpdate = {
 };
 
 export type State = {
-  [key: number]: {
-    [key: string]: string | undefined
+  map: {
+    [key: number]: {
+      [key: string]: string | undefined
+    }
   },
   grabbedX?: string,
   grabbedY?: number,
@@ -22,6 +24,7 @@ export type State = {
 };
 
 const initialState: State = {
+  map: { },
   grabbedMap: { }
 };
 
@@ -59,12 +62,12 @@ function addFetchedTiles(state: WritableDraft<State>, tiles: TilesSlice.TileData
     state.grabbedMap[tile.id] = false;
     const roomNumber = tile.roomNumber;
     if (roomNumber) {
-      if (state[roomNumber] === undefined) {
-        state[roomNumber] = {};
+      if (state.map[roomNumber] === undefined) {
+        state.map[roomNumber] = {};
       }
       const dateCounter = new Date(tile.from);
       for (let i = 0; i < tile.nights; i++) {
-        state[roomNumber][Utils.dateToString(dateCounter)] = tile.id;
+        state.map[roomNumber][Utils.dateToString(dateCounter)] = tile.id;
         dateCounter.setDate(dateCounter.getDate() + 1);
       }
     }
@@ -79,7 +82,7 @@ function tryMoveTile(
     return;
   }
 
-  const tileId = state[state.grabbedY][state.grabbedX];
+  const tileId = state.map[state.grabbedY][state.grabbedX];
   if (tileId === undefined) {
     return;
   }
@@ -87,8 +90,8 @@ function tryMoveTile(
   const newY = action.payload.newY;
 
   if (newY && (newY !== state.grabbedY)) {
-    if (state[newY] === undefined) {
-      state[newY] = {};
+    if (state.map[newY] === undefined) {
+      state.map[newY] = {};
       moveTile(state, tileId, state.grabbedX, state.grabbedY, newY);
     } else if (!checkHasCollision(state, tileId, state.grabbedX, state.grabbedY, newY)) {
       moveTile(state, tileId, state.grabbedX, state.grabbedY, newY);
@@ -106,9 +109,9 @@ function moveTile(
   // go backwards from grabbed x
   let dateCounter = new Date(startX);
   let x = Utils.dateToString(dateCounter);
-  while (state[prevY][x] === tileId) {
-    state[prevY][x] = undefined;
-    state[newY][x] = tileId;
+  while (state.map[prevY][x] === tileId) {
+    state.map[prevY][x] = undefined;
+    state.map[newY][x] = tileId;
     dateCounter.setDate(dateCounter.getDate() - 1);
     x = Utils.dateToString(dateCounter);
   }
@@ -117,9 +120,9 @@ function moveTile(
   dateCounter = new Date(startX);
   dateCounter.setDate(dateCounter.getDate() + 1);
   x = Utils.dateToString(dateCounter);
-  while (state[prevY][x] === tileId) {
-    state[prevY][x] = undefined;
-    state[newY][x] = tileId;
+  while (state.map[prevY][x] === tileId) {
+    state.map[prevY][x] = undefined;
+    state.map[newY][x] = tileId;
     dateCounter.setDate(dateCounter.getDate() + 1);
     x = Utils.dateToString(dateCounter);
   }
@@ -140,8 +143,8 @@ function checkHasCollision(
   // go backwards from grabbed x
   let dateCounter = new Date(startX);
   let x = Utils.dateToString(dateCounter);
-  while (state[prevY][x] === tileId) {
-    if (state[newY][x] !== undefined) {
+  while (state.map[prevY][x] === tileId) {
+    if (state.map[newY][x] !== undefined) {
       return true;
     }
     dateCounter.setDate(dateCounter.getDate() - 1);
@@ -152,8 +155,8 @@ function checkHasCollision(
   dateCounter = new Date(startX);
   dateCounter.setDate(dateCounter.getDate() + 1);
   x = Utils.dateToString(dateCounter);
-  while (state[prevY][x] === tileId) {
-    if (state[newY][x] !== undefined) {
+  while (state.map[prevY][x] === tileId) {
+    if (state.map[newY][x] !== undefined) {
       return true;
     }
     dateCounter.setDate(dateCounter.getDate() + 1);

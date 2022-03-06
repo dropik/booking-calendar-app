@@ -10,6 +10,10 @@
   margin-top: calc(4rem + 6px);
 }
 
+.hidden {
+  display: none;
+}
+
 .unassigned-row {
   display: flex;
   border-left: 2px solid black;

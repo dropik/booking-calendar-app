@@ -37,7 +37,7 @@ export function useRoomTypeByNumber(roomNumber: number): string {
 
 export function useTileIdByCoords(x: string, y: number): string | undefined {
   return useAppSelector((state) => {
-    return state.assignedTiles[y][x];
+    return state.assignedTiles.map[y][x];
   });
 }
 
@@ -96,7 +96,7 @@ export const useIsGrabbing:         () => boolean =
   () => useAppSelector(state => state.assignedTiles.grabbedX !== undefined);
 
 export const useHasUnassignedTiles: (x: string) => boolean =
-  (x: string) => useAppSelector(state => (state.unassignedTiles[x] !== undefined) && (state.unassignedTiles[x].length > 0));
+  (x: string) => useAppSelector(state => (state.unassignedTiles.map[x] !== undefined) && (state.unassignedTiles.map[x].length > 0));
 
 export const usePersonsInRoomType:  (type: string) => number[] =
   (type: string) => useAppSelector(state => state.roomTypes.data[type]);

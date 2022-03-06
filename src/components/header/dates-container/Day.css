@@ -5,6 +5,7 @@
   width: 4rem;
   text-align: center;
   line-height: 4rem;
+  cursor: pointer;
 }
 
 .day-alert {

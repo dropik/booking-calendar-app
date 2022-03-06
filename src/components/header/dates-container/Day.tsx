@@ -1,9 +1,11 @@
 import React, { memo } from "react";
 import { hot } from "react-hot-loader";
+import { AnyAction } from "@reduxjs/toolkit";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
-import { useHasUnassignedTiles } from "../../../redux/hooks";
+import { useAppDispatch, useHasUnassignedTiles } from "../../../redux/hooks";
+import * as UnassignedTilesSlice from "../../../redux/unassignedTilesSlice";
 
 import "./Day.css";
 
@@ -12,11 +14,23 @@ type Props = {
 };
 
 function Day(props: Props): JSX.Element {
+  const dispatch = useAppDispatch();
   const hasUnassignedTiles = useHasUnassignedTiles(props.x);
 
   const day = props.x.substring(8);
+  const alert = getAlert(hasUnassignedTiles);
+  const clickHandler = getClickHandler(dispatch, props.x);
 
-  const alert = hasUnassignedTiles ?
+  return (
+    <div className="day" onClick={clickHandler}>
+      <b>{day}</b>
+      {alert}
+    </div>
+  );
+}
+
+function getAlert(hasUnassignedTiles: boolean): JSX.Element {
+  return hasUnassignedTiles ?
     <span
       className="day-alert"
       title="Ci sono occupazioni non assegnati"
@@ -24,13 +38,17 @@ function Day(props: Props): JSX.Element {
       <FontAwesomeIcon icon={faCircleExclamation} />
     </span> :
     <></>;
+}
 
-  return (
-    <div className="day">
-      <b>{day}</b>
-      {alert}
-    </div>
-  );
+function getClickHandler(dispatch: React.Dispatch<AnyAction>, x: string): () => void {
+  return () => {
+    if(document.getSelection() && document.getSelection()?.empty) {
+      document.getSelection()?.empty();
+    } else if(window.getSelection()) {
+      window.getSelection()?.removeAllRanges();
+    }
+    dispatch(UnassignedTilesSlice.toggleDate({ date: x }));
+  };
 }
 
 export default memo(hot(module)(Day));
