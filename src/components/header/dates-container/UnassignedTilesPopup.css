@@ -3,11 +3,10 @@
   max-height: calc(5 * (4rem + 2px));
   background-color: white;
   z-index: 9999;
-  left: 438px;
   border-top: 2px solid black;
-  border-bottom: 2px solid black;
   box-shadow: 0px 3px 10px 0px black;
   margin-top: calc(4rem + 6px);
+  overflow: scroll;
 }
 
 .hidden {
@@ -17,6 +16,7 @@
 .unassigned-row {
   display: flex;
   border-left: 2px solid black;
+  border-bottom: 2px solid black;
 }
 
 .unassigned-cell {

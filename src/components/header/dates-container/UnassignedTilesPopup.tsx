@@ -10,20 +10,19 @@ function UnassignedTilesPopup(): JSX.Element {
   const show = useShowPopup();
   const leftmostSelectedTileDate = useLeftmostSelectedTileDate();
   const rightmostSelectedTileDate = useRightmostSelectedTileDate();
+  const tilesPerDay = useTilesPerDay();
   const left = useLeftShift(leftmostSelectedTileDate);
   const ref = useRef<HTMLDivElement>(null);
 
-  const days = getDaysCount(leftmostSelectedTileDate, rightmostSelectedTileDate);
   const className = getClassName(show);
-  const cells = getCells(leftmostSelectedTileDate, days);
+  const days = getDaysCount(leftmostSelectedTileDate, rightmostSelectedTileDate);
+  const rows = getRows(tilesPerDay, leftmostSelectedTileDate, days);
 
   useScrollEffect(ref, left);
 
   return (
     <div ref={ref} className={className}>
-      <div className="unassigned-row">
-        {cells}
-      </div>
+      {rows}
     </div>
   );
 }
@@ -72,6 +71,10 @@ function useRightmostSelectedTileDate(): string | undefined {
   });
 }
 
+function useTilesPerDay(): string[] | undefined {
+  return useAppSelector((state) => state.unassignedTiles.map[state.unassignedTiles.selectedDate as string]);
+}
+
 function useLeftShift(leftmostSelectedTileDate: string | undefined): number {
   return useAppSelector((state) => {
     if (leftmostSelectedTileDate) {
@@ -83,18 +86,29 @@ function useLeftShift(leftmostSelectedTileDate: string | undefined): number {
   });
 }
 
-function getDaysCount(leftmostSelectedTileDate: string | undefined, rightmostSelectedTileDate: string | undefined): number {
-  return leftmostSelectedTileDate && rightmostSelectedTileDate ?
-    Utils.daysBetweenDates(leftmostSelectedTileDate, rightmostSelectedTileDate) :
-    0;
-}
-
 function getClassName(show: boolean | undefined): string {
   let className = "unassigned-tiles-popup";
   if (!show) {
     className += " hidden";
   }
   return className;
+}
+
+function getDaysCount(leftmostSelectedTileDate: string | undefined, rightmostSelectedTileDate: string | undefined): number {
+  return leftmostSelectedTileDate && rightmostSelectedTileDate ?
+    Utils.daysBetweenDates(leftmostSelectedTileDate, rightmostSelectedTileDate) :
+    0;
+}
+
+function getRows(tilesPerDay: string[] | undefined, leftmostSelectedTileDate: string | undefined, days: number): JSX.Element[] {
+  const rows: JSX.Element[] = [];
+  if (tilesPerDay) {
+    for (let i = 0; i < tilesPerDay.length; i++) {
+      const cells = getCells(leftmostSelectedTileDate, days);
+      rows.push(<div key={tilesPerDay[i]} className="unassigned-row">{cells}</div>);
+    }
+  }
+  return rows;
 }
 
 function getCells(leftmostSelectedTileDate: string | undefined, days: number): JSX.Element[] {
