@@ -6,7 +6,12 @@ import { useAppSelector } from "../../../redux/hooks";
 import "./UnassignedTilesPopup.css";
 
 function UnassignedTilesPopup(): JSX.Element {
-  const show = useAppSelector((state) => state.unassignedTiles.selectedDate !== undefined);
+  const show = useAppSelector((state) => {
+    const selectedDate = state.unassignedTiles.selectedDate;
+    if (selectedDate && state.unassignedTiles.map[selectedDate]) {
+      return (state.unassignedTiles.map[selectedDate].length > 0);
+    }
+  });
 
   let className = "unassigned-tiles-popup";
   if (!show) {
