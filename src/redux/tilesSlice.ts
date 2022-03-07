@@ -116,16 +116,23 @@ function tryMoveTile(
   const prevY = state.data[tileId].roomNumber;
   const newY = action.payload.newY;
 
-  if (newY && prevY && (newY !== prevY)) {
+  if (newY && (newY !== prevY)) {
     if (state.assignedMap[newY] === undefined) {
       state.assignedMap[newY] = {};
-      moveTile(state, tileId, prevY, newY);
+      if (prevY !== undefined) {
+        moveTile(state, tileId, prevY, newY);
+      } else {
+        assignTile(state, tileId, newY);
+      }
     } else if (!checkHasCollision(state, tileId, newY)) {
-      moveTile(state, tileId, prevY, newY);
+      if (prevY !== undefined) {
+        moveTile(state, tileId, prevY, newY);
+      } else {
+        assignTile(state, tileId, newY);
+      }
     }
   }
 }
-
 
 function moveTile(
   state: WritableDraft<State>,
@@ -160,4 +167,15 @@ function checkHasCollision(
   }
 
   return false;
+}
+
+function assignTile(state: WritableDraft<State>, tileId: string, newY: number): void {
+  const tileData = state.data[tileId];
+  const dateCounter = new Date(tileData.from);
+  for (let i = 0; i < tileData.nights; i++) {
+    const x = Utils.dateToString(dateCounter);
+    state.assignedMap[newY][x] = tileId;
+    dateCounter.setDate(dateCounter.getDate() + 1);
+  }
+  state.data[tileId].roomNumber = newY;
 }
