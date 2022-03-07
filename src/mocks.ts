@@ -118,6 +118,16 @@ export const tiles: TilesSlice.TileData[] = [
     entity: "camera singola",
     persons: 1,
     colour: "rgba(217, 73, 73, 0.69)"
+  },
+  {
+    id: "5",
+    name: "Vasya Ivanov",
+    from: "2022-03-01",
+    nights: 60,
+    roomType: "camera matrimoniale/doppia",
+    entity: "camera doppia",
+    persons: 2,
+    colour: "rgba(208, 217, 73, 0.69)"
   }
 ];
 

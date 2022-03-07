@@ -35,8 +35,8 @@ function useRightmostSelectedTileDate(): string | undefined {
         if (Utils.daysBetweenDates(rightmostSelectedTileDate, departureDate) > 0) {
           rightmostSelectedTileDate = departureDate;
         }
-        return rightmostSelectedTileDate;
       }
+      return rightmostSelectedTileDate;
     }
   });
 }

@@ -83,8 +83,8 @@ export const useScrollLeft:         () => number =
 export const useScrollTop:          () => number =
   () => useAppSelector(state => state.scroll.top);
 
-export const useIsGrabbedTile:      (id: string | undefined) => boolean =
-  (id: string | undefined) => useAppSelector(state => state.assignedTiles.grabbedMap[id as string]);
+export const useIsGrabbedTile:      (id: string) => boolean =
+  (id: string) => useAppSelector(state => state.assignedTiles.grabbedMap[id]);
 
 export const useLastTileUpdate:     () => AssignedTilesSlice.TileDataUpdate | undefined =
   () => useAppSelector(state => state.assignedTiles.lastUpdate);

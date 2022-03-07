@@ -5,3 +5,8 @@
   line-height: 4rem;
   cursor: grab;
 }
+
+.unassigned-tile-part.out-of-bound {
+  background-color: rgba(190, 190, 190, 0.69) !important;
+  cursor: auto;
+}

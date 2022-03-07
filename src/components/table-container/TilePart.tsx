@@ -12,8 +12,7 @@ import {
   useIsGrabbedTile,
   useLeftmostDate,
   usePersonsInRoomType,
-  useRoomTypeByNumber,
-  useTileIdByCoords
+  useRoomTypeByNumber
 } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
 import * as AssignedTilesSlice from "../../redux/assignedTilesSlice";
@@ -29,7 +28,7 @@ type Props = {
 
 function TilePart(props: Props): JSX.Element {
   const dispatch = useAppDispatch();
-  const tileId = useTileIdByCoords(props.x, props.y);
+  const tileId = props.tileData.id;
   const grabbed = useIsGrabbedTile(tileId);
   const ref = useRef<HTMLDivElement>(null);
   const leftmostDate = useLeftmostDate();
@@ -63,20 +62,20 @@ function TilePart(props: Props): JSX.Element {
 
 function getGrabHandler(
   dispatch: React.Dispatch<AnyAction>,
-  tileId: string | undefined,
+  tileId: string,
   x: string,
   y: number,
   outOfBound: boolean
 ): (event: React.MouseEvent<HTMLDivElement>) => void {
   return (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
-    if ((event.button == 0) && tileId && !outOfBound) {
+    if ((event.button == 0) && !outOfBound) {
       dispatch(AssignedTilesSlice.grab({ tileId, x, y }));
     }
   };
 }
 
-function getEnterHandler(dispatch: Dispatch<AnyAction>, tileId: string | undefined): () => void {
+function getEnterHandler(dispatch: Dispatch<AnyAction>, tileId: string): () => void {
   return () => dispatch(HoveredIdSlice.set(tileId));
 }
 
@@ -129,7 +128,7 @@ function getAlert(personsInRoomType: number[], roomType: string, tileData: Tiles
 function useMouseHandlingEffects(
   dispatch: React.Dispatch<AnyAction>,
   ref: React.RefObject<HTMLDivElement>,
-  tileId: string | undefined,
+  tileId: string,
   grabbed: boolean | undefined
 ): void {
   useLayoutEffect(() => {
@@ -144,9 +143,7 @@ function useMouseHandlingEffects(
     }
 
     function onDrop() {
-      if (tileId) {
-        dispatch(AssignedTilesSlice.drop({ tileId }));
-      }
+      dispatch(AssignedTilesSlice.drop({ tileId }));
     }
 
     if (grabbed) {
