@@ -27,7 +27,7 @@ function useShowPopup(): boolean | undefined {
   return useAppSelector((state) => {
     const selectedDate = state.unassignedTiles.selectedDate;
     if (selectedDate && state.unassignedTiles.map[selectedDate]) {
-      return (state.unassignedTiles.map[selectedDate].length > 0);
+      return (Object.keys(state.unassignedTiles.map[selectedDate]).length > 0);
     }
   });
 }
@@ -37,7 +37,7 @@ function useLeftmostSelectedTileDate(): string | undefined {
     const selectedDate = state.unassignedTiles.selectedDate;
     if (selectedDate && state.unassignedTiles.map[selectedDate]) {
       let leftmostSelectedTileDate = selectedDate;
-      for (const tileId of state.unassignedTiles.map[selectedDate]) {
+      for (const tileId in state.unassignedTiles.map[selectedDate]) {
         const tile = state.tiles.data[tileId];
         if (Utils.daysBetweenDates(leftmostSelectedTileDate, tile.from) < 0) {
           leftmostSelectedTileDate = tile.from;
@@ -48,7 +48,7 @@ function useLeftmostSelectedTileDate(): string | undefined {
   });
 }
 
-function useTilesPerSelectedDay(): string[] | undefined {
+function useTilesPerSelectedDay(): { [key: string]: string } {
   return useAppSelector((state) => state.unassignedTiles.map[state.unassignedTiles.selectedDate as string]);
 }
 
@@ -71,10 +71,10 @@ function getClassName(show: boolean | undefined): string {
   return className;
 }
 
-function getRows(tilesPerSelectedDay: string[] | undefined, leftmostSelectedTileDate: string | undefined): JSX.Element[] {
+function getRows(tilesPerSelectedDay: { [key: string]: string }, leftmostSelectedTileDate: string | undefined): JSX.Element[] {
   const rows: JSX.Element[] = [];
   if (tilesPerSelectedDay) {
-    for (const tileId of tilesPerSelectedDay) {
+    for (const tileId in tilesPerSelectedDay) {
       if (leftmostSelectedTileDate) {
         rows.push(<UnassignedRow key={tileId} tileId={tileId} leftmostSelectedTileDate={leftmostSelectedTileDate} />);
       }

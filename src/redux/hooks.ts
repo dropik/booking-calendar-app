@@ -96,7 +96,7 @@ export const useIsGrabbing:         () => boolean =
   () => useAppSelector(state => state.assignedTiles.grabbedX !== undefined);
 
 export const useHasUnassignedTiles: (x: string) => boolean =
-  (x: string) => useAppSelector(state => (state.unassignedTiles.map[x] !== undefined) && (state.unassignedTiles.map[x].length > 0));
+  (x: string) => useAppSelector(state => (state.unassignedTiles.map[x] !== undefined) && (Object.keys(state.unassignedTiles.map[x]).length > 0));
 
 export const usePersonsInRoomType:  (type: string) => number[] =
   (type: string) => useAppSelector(state => state.roomTypes.data[type]);

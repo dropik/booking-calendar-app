@@ -27,7 +27,7 @@ function useRightmostSelectedTileDate(): string | undefined {
     const selectedDate = state.unassignedTiles.selectedDate;
     if (selectedDate && state.unassignedTiles.map[selectedDate]) {
       let rightmostSelectedTileDate = selectedDate;
-      for (const tileId of state.unassignedTiles.map[selectedDate]) {
+      for (const tileId in state.unassignedTiles.map[selectedDate]) {
         const tile = state.tiles.data[tileId];
         const departureDateObj = new Date(tile.from);
         departureDateObj.setDate(departureDateObj.getDate() + tile.nights);

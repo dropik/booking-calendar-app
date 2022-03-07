@@ -6,7 +6,9 @@ import * as TilesSlice from "./tilesSlice";
 
 export type State = {
   map: {
-    [key: string]: string[]
+    [key: string]: {
+      [key: string]: string
+    }
   },
   selectedDate?: string
 };
@@ -39,9 +41,9 @@ function addFetchedTiles(state: WritableDraft<State>, tiles: TilesSlice.TileData
       for (let i = 0; i < tile.nights; i++) {
         const x = Utils.dateToString(dateCounter);
         if (state.map[x] === undefined) {
-          state.map[x] = [];
+          state.map[x] = { };
         }
-        state.map[x].push(tile.id);
+        state.map[x][tile.id] = tile.id;
         dateCounter.setDate(dateCounter.getDate() + 1);
       }
     }
