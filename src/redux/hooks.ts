@@ -94,13 +94,13 @@ export const useScrollTop:          () => number =
   () => useAppSelector(state => state.scroll.top);
 
 export const useIsGrabbedTile:      (id: string) => boolean =
-  (id: string) => useAppSelector(state => state.tiles.grabbedAssignedMap[id]);
+  (id: string) => useAppSelector(state => state.tiles.grabbedMap[id]);
 
 export const useHoveredId:          () => string | undefined =
   () => useAppSelector(state => state.hoveredId.value);
 
 export const useIsGrabbing:         () => boolean =
-  () => useAppSelector(state => (state.tiles.grabbedAssignedTile !== undefined) || (state.unassignedTiles.grabbedTile !== undefined));
+  () => useAppSelector(state => state.tiles.grabbedTile !== undefined);
 
 export const useHasUnassignedTiles: (x: string) => boolean =
   (x: string) => useAppSelector(state => (state.unassignedTiles.map[x] !== undefined) && (Object.keys(state.unassignedTiles.map[x]).length > 0));

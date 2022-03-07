@@ -11,7 +11,6 @@ export type State = {
     }
   },
   selectedDate?: string
-  grabbedTile?: string
   grabbedMouseY: number
 };
 
@@ -27,12 +26,10 @@ const unassignedTilesSlice = createSlice({
     toggleDate: (state, action: PayloadAction<{ date: string | undefined }>) => {
       state.selectedDate = state.selectedDate === action.payload.date ? undefined : action.payload.date;
     },
-    grab: (state, action: PayloadAction<{ tileId: string, mouseY: number }>) => {
-      state.grabbedTile = action.payload.tileId;
+    grab: (state, action: PayloadAction<{ mouseY: number }>) => {
       state.grabbedMouseY = action.payload.mouseY;
     },
     drop: (state) => {
-      state.grabbedTile = undefined;
       state.grabbedMouseY = 0;
     }
   },

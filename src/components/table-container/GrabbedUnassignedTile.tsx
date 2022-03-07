@@ -19,9 +19,9 @@ function GrabbedUnassignedTile(): JSX.Element {
 
   useBackgroundColorEffect(ref, tileData);
   useLeftShiftEffect(ref, left);
-  useMouseHandlingEffect(ref, dispatch, grabbedMouseY);
+  useMouseHandlingEffect(ref, dispatch, grabbedTileId, grabbedMouseY);
 
-  if (!grabbedTileId || !tileData) {
+  if (!grabbedTileId || !tileData || (tileData.roomNumber !== undefined)) {
     return <></>;
   }
 
@@ -31,7 +31,7 @@ function GrabbedUnassignedTile(): JSX.Element {
 }
 
 function useGrabbedTile(): string | undefined {
-  return useAppSelector(state => state.unassignedTiles.grabbedTile);
+  return useAppSelector(state => state.tiles.grabbedTile);
 }
 
 function useGrabbedMouseY(): number {
@@ -57,6 +57,7 @@ function useLeftShiftEffect(ref: React.RefObject<HTMLDivElement>, left: number):
 function useMouseHandlingEffect(
   ref: React.RefObject<HTMLDivElement>,
   dispatch: React.Dispatch<AnyAction>,
+  tileId: string | undefined,
   grabbedMouseY: number
 ): void {
   useEffect(() => {
@@ -67,6 +68,9 @@ function useMouseHandlingEffect(
     }
 
     function onDrop() {
+      if (tileId) {
+        dispatch(TilesSlice.dropAssigned({ tileId }));
+      }
       dispatch(UnassignedTilesSlice.drop());
     }
 
@@ -76,7 +80,7 @@ function useMouseHandlingEffect(
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseup", onDrop);
     };
-  }, [ref, dispatch, grabbedMouseY]);
+  }, [ref, dispatch, tileId, grabbedMouseY]);
 }
 
 function getCells(tileData: TilesSlice.TileData): JSX.Element[] {

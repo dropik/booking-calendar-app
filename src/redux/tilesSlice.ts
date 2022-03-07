@@ -28,8 +28,8 @@ export type State = {
       [key: string]: string | undefined
     }
   },
-  grabbedAssignedTile?: string,
-  grabbedAssignedMap: {
+  grabbedTile?: string,
+  grabbedMap: {
     [key: string]: boolean
   }
 };
@@ -38,7 +38,7 @@ const initialState: State = {
   status: "idle",
   data: { },
   assignedMap: { },
-  grabbedAssignedMap: { }
+  grabbedMap: { }
 };
 
 export const fetchAsync = createAsyncThunk(
@@ -59,12 +59,12 @@ export const tilesSlice = createSlice({
       tryMoveTile(state, action);
     },
     grabAssigned: (state, action: PayloadAction<{ tileId: string }>) => {
-      state.grabbedAssignedTile = action.payload.tileId;
-      state.grabbedAssignedMap[action.payload.tileId] = true;
+      state.grabbedTile = action.payload.tileId;
+      state.grabbedMap[action.payload.tileId] = true;
     },
     dropAssigned: (state, action: PayloadAction<{ tileId: string }>) => {
-      state.grabbedAssignedTile = undefined;
-      state.grabbedAssignedMap[action.payload.tileId] = false;
+      state.grabbedTile = undefined;
+      state.grabbedMap[action.payload.tileId] = false;
     }
   },
   extraReducers: (builder) => {
@@ -89,7 +89,7 @@ export default tilesSlice.reducer;
 function addFetchedTiles(state: WritableDraft<State>, tiles: TileData[]): void {
   tiles.forEach(tile => {
     state.data[tile.id] = tile;
-    state.grabbedAssignedMap[tile.id] = false;
+    state.grabbedMap[tile.id] = false;
     const roomNumber = tile.roomNumber;
     if (roomNumber) {
       if (state.assignedMap[roomNumber] === undefined) {
@@ -108,11 +108,11 @@ function tryMoveTile(
   state: WritableDraft<State>,
   action: PayloadAction<{ newY: number }>
 ): void {
-  if (!state.grabbedAssignedTile) {
+  if (!state.grabbedTile) {
     return;
   }
 
-  const tileId = state.grabbedAssignedTile;
+  const tileId = state.grabbedTile;
   const prevY = state.data[tileId].roomNumber;
   const newY = action.payload.newY;
 
