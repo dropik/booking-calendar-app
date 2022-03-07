@@ -59,6 +59,17 @@ export function useDates(): Generator<string, void, void> {
   }();
 }
 
+export function useLeftShift(fromDate: string | undefined): number {
+  return useAppSelector((state) => {
+    if (fromDate) {
+      const daysShift = Utils.daysBetweenDates(state.table.leftmostDate, fromDate);
+      const cellWidth = Utils.remToPx(4) + 2;
+      const hotelBarShift = Utils.remToPx(6.5) + 4;
+      return hotelBarShift + daysShift * cellWidth - state.scroll.left;
+    } else return 0;
+  });
+}
+
 export const useLeftmostDate:       () => string =
   () => useAppSelector(state => state.table.leftmostDate);
 
@@ -93,7 +104,7 @@ export const useHoveredId:          () => string | undefined =
   () => useAppSelector(state => state.hoveredId.value);
 
 export const useIsGrabbing:         () => boolean =
-  () => useAppSelector(state => state.assignedTiles.grabbedX !== undefined);
+  () => useAppSelector(state => (state.assignedTiles.grabbedX !== undefined) || (state.unassignedTiles.grabbedTile !== undefined));
 
 export const useHasUnassignedTiles: (x: string) => boolean =
   (x: string) => useAppSelector(state => (state.unassignedTiles.map[x] !== undefined) && (Object.keys(state.unassignedTiles.map[x]).length > 0));

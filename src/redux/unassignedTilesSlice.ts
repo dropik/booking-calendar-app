@@ -11,10 +11,13 @@ export type State = {
     }
   },
   selectedDate?: string
+  grabbedTile?: string
+  grabbedMouseY: number
 };
 
 const initialState: State = {
-  map: { }
+  map: { },
+  grabbedMouseY: 0
 };
 
 const unassignedTilesSlice = createSlice({
@@ -23,6 +26,14 @@ const unassignedTilesSlice = createSlice({
   reducers: {
     toggleDate: (state, action: PayloadAction<{ date: string | undefined }>) => {
       state.selectedDate = state.selectedDate === action.payload.date ? undefined : action.payload.date;
+    },
+    grab: (state, action: PayloadAction<{ tileId: string, mouseY: number }>) => {
+      state.grabbedTile = action.payload.tileId;
+      state.grabbedMouseY = action.payload.mouseY;
+    },
+    drop: (state) => {
+      state.grabbedTile = undefined;
+      state.grabbedMouseY = 0;
     }
   },
   extraReducers: (builder) => {
@@ -32,7 +43,7 @@ const unassignedTilesSlice = createSlice({
   }
 });
 
-export const { toggleDate } = unassignedTilesSlice.actions;
+export const { toggleDate, grab, drop } = unassignedTilesSlice.actions;
 
 function addFetchedTiles(state: WritableDraft<State>, tiles: TilesSlice.TileData[]): void {
   tiles.forEach((tile) => {

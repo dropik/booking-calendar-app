@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector, useColumns, useLeftmostDate } from "../
 import * as Utils from "../../../../utils";
 import * as TilesSlice from "../../../../redux/tilesSlice";
 import * as HoveredIdSlice from "../../../../redux/hoveredIdSlice";
+import * as UnassignedTilesSlice from "../../../../redux/unassignedTilesSlice";
 
 import "./UnassignedTilePart.css";
 
@@ -27,14 +28,16 @@ function UnassignedTilePart(props: Props): JSX.Element {
     return <></>;
   }
 
+  const outOfBound = isOutOfBound(tileData, leftmostDate, columns);
+  const grabHandler = getGrabHandler(ref, dispatch, props.tileId, outOfBound);
   const enterHandler = getEnterHandler(dispatch, props.tileId);
   const leaveHandler = getLeaveHandler(dispatch);
-  const outOfBound = isOutOfBound(tileData, leftmostDate, columns);
   const className = getClassName(outOfBound);
 
   return (
     <div
       ref={ref}
+      onMouseDown={grabHandler}
       onMouseEnter={enterHandler}
       onMouseLeave={leaveHandler}
       className={className}
@@ -54,6 +57,19 @@ function useBackgroundColorEffect(ref: React.RefObject<HTMLDivElement>, tileData
       ref.current.style.backgroundColor = tileData.colour;
     }
   }, [ref, tileData]);
+}
+
+function getGrabHandler(
+  ref: React.RefObject<HTMLDivElement>,
+  dispatch: React.Dispatch<AnyAction>,
+  tileId: string,
+  outOfBound: boolean
+): (event: React.MouseEvent<HTMLDivElement>) => void {
+  return (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!outOfBound && ref.current) {
+      dispatch(UnassignedTilesSlice.grab({ tileId: tileId, mouseY: event.pageY - ref.current.getBoundingClientRect().top }));
+    }
+  };
 }
 
 function getEnterHandler(dispatch: React.Dispatch<AnyAction>, tileId: string): () => void {

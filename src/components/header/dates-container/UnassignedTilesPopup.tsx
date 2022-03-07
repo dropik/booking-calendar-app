@@ -2,7 +2,7 @@ import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { useAppDispatch, useAppSelector, useLeftShift } from "../../../redux/hooks";
 import * as Utils from "../../../utils";
 import * as UnassignedTilesSlice from "../../../redux/unassignedTilesSlice";
 
@@ -54,17 +54,6 @@ function useLeftmostSelectedTileDate(): string | undefined {
 
 function useTilesPerSelectedDay(): { [key: string]: string } {
   return useAppSelector((state) => state.unassignedTiles.map[state.unassignedTiles.selectedDate as string]);
-}
-
-function useLeftShift(leftmostSelectedTileDate: string | undefined): number {
-  return useAppSelector((state) => {
-    if (leftmostSelectedTileDate) {
-      const daysShift = Utils.daysBetweenDates(state.table.leftmostDate, leftmostSelectedTileDate);
-      const cellWidth = Utils.remToPx(4) + 2;
-      const hotelBarShift = Utils.remToPx(6.5) + 4;
-      return hotelBarShift + daysShift * cellWidth - state.scroll.left;
-    } else return 0;
-  });
 }
 
 function getClassName(show: boolean | undefined): string {
