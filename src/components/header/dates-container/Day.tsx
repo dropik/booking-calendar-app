@@ -22,7 +22,7 @@ function Day(props: Props): JSX.Element {
   const clickHandler = getClickHandler(dispatch, props.x);
 
   return (
-    <div className="day" onClick={clickHandler}>
+    <div className="day" onMouseDown={onMouseDown} onClick={clickHandler}>
       <b>{day}</b>
       {alert}
     </div>
@@ -49,6 +49,10 @@ function getClickHandler(dispatch: React.Dispatch<AnyAction>, x: string): () => 
     }
     dispatch(UnassignedTilesSlice.toggleDate({ date: x }));
   };
+}
+
+function onMouseDown(event: React.MouseEvent<HTMLDivElement>) {
+  event.stopPropagation();
 }
 
 export default memo(hot(module)(Day));

@@ -21,7 +21,7 @@ const unassignedTilesSlice = createSlice({
   name: "unassignedTiles",
   initialState: initialState,
   reducers: {
-    toggleDate: (state, action: PayloadAction<{ date: string }>) => {
+    toggleDate: (state, action: PayloadAction<{ date: string | undefined }>) => {
       state.selectedDate = state.selectedDate === action.payload.date ? undefined : action.payload.date;
     }
   },

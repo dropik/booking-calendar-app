@@ -1,14 +1,17 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { hot } from "react-hot-loader";
+import { AnyAction } from "@reduxjs/toolkit";
 
-import { useAppSelector } from "../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import * as Utils from "../../../utils";
+import * as UnassignedTilesSlice from "../../../redux/unassignedTilesSlice";
 
 import UnassignedRow from "./unassigned-tiles-popup/UnassignedRow";
 
 import "./UnassignedTilesPopup.css";
 
 function UnassignedTilesPopup(): JSX.Element {
+  const dispatch = useAppDispatch();
   const show = useShowPopup();
   const leftmostSelectedTileDate = useLeftmostSelectedTileDate();
   const tilesPerSelectedDay = useTilesPerSelectedDay();
@@ -19,6 +22,7 @@ function UnassignedTilesPopup(): JSX.Element {
   const rows = getRows(tilesPerSelectedDay, leftmostSelectedTileDate);
 
   useScrollEffect(ref, left);
+  useHideOnClickOutsidePopupEffect(dispatch);
 
   return (<div ref={ref} className={className}>{rows}</div>);
 }
@@ -89,6 +93,16 @@ function useScrollEffect(ref: React.RefObject<HTMLDivElement>, left: number): vo
       ref.current.style.left = `${left}px`;
     }
   }, [ref, left]);
+}
+
+function useHideOnClickOutsidePopupEffect(dispatch: React.Dispatch<AnyAction>): void {
+  useEffect(() => {
+    function hidePopup() {
+      dispatch(UnassignedTilesSlice.toggleDate({ date: undefined }));
+    }
+    window.addEventListener("mousedown", hidePopup);
+    return () => window.removeEventListener("mousedown", hidePopup);
+  }, [dispatch]);
 }
 
 export default hot(module)(UnassignedTilesPopup);
