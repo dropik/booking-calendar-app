@@ -3,7 +3,7 @@ import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
 import { useAppDispatch, useDates } from "../../redux/hooks";
-import * as AssignedTilesSlice from "../../redux/assignedTilesSlice";
+import * as TilesSlice from "../../redux/tilesSlice";
 
 import TableCell from "./TableCell";
 
@@ -48,7 +48,7 @@ function getDropHandler(
 ): (event: React.MouseEvent<HTMLDivElement>) => void {
   return (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.button == 0) {
-      dispatch(AssignedTilesSlice.move({ newY: y }));
+      dispatch(TilesSlice.move({ newY: y }));
     }
   };
 }

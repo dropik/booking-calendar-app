@@ -5,7 +5,6 @@ import * as Utils from "../utils";
 import * as HotelSlice from "./hotelSlice";
 import * as TableSlice from "./tableSlice";
 import * as TilesSlice from "./tilesSlice";
-import * as AssignedTilesSlice from "./assignedTilesSlice";
 
 export const useAppDispatch = () => useDispatch<Store.AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<Store.RootState> = useSelector;
@@ -37,7 +36,7 @@ export function useRoomTypeByNumber(roomNumber: number): string {
 
 export function useTileIdByCoords(x: string, y: number): string | undefined {
   return useAppSelector((state) => {
-    return state.assignedTiles.map[y][x];
+    return state.tiles.assignedMap[y][x];
   });
 }
 
@@ -95,16 +94,13 @@ export const useScrollTop:          () => number =
   () => useAppSelector(state => state.scroll.top);
 
 export const useIsGrabbedTile:      (id: string) => boolean =
-  (id: string) => useAppSelector(state => state.assignedTiles.grabbedMap[id]);
-
-export const useLastTileUpdate:     () => AssignedTilesSlice.TileDataUpdate | undefined =
-  () => useAppSelector(state => state.assignedTiles.lastUpdate);
+  (id: string) => useAppSelector(state => state.tiles.grabbedAssignedMap[id]);
 
 export const useHoveredId:          () => string | undefined =
   () => useAppSelector(state => state.hoveredId.value);
 
 export const useIsGrabbing:         () => boolean =
-  () => useAppSelector(state => (state.assignedTiles.grabbedX !== undefined) || (state.unassignedTiles.grabbedTile !== undefined));
+  () => useAppSelector(state => (state.tiles.grabbedAssignedTile !== undefined) || (state.unassignedTiles.grabbedTile !== undefined));
 
 export const useHasUnassignedTiles: (x: string) => boolean =
   (x: string) => useAppSelector(state => (state.unassignedTiles.map[x] !== undefined) && (Object.keys(state.unassignedTiles.map[x]).length > 0));

@@ -15,7 +15,6 @@ import {
   useRoomTypeByNumber
 } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
-import * as AssignedTilesSlice from "../../redux/assignedTilesSlice";
 import * as HoveredIdSlice from "../../redux/hoveredIdSlice";
 
 import "./TilePart.css";
@@ -37,7 +36,7 @@ function TilePart(props: Props): JSX.Element {
   const personsInRoomType = usePersonsInRoomType(roomType);
 
   const outOfBound = isOutOfBound(props.tileData, leftmostDate, columns);
-  const grabHandler = getGrabHandler(dispatch, tileId, props.x, props.y, outOfBound);
+  const grabHandler = getGrabHandler(dispatch, tileId, outOfBound);
   const enterHandler = getEnterHandler(dispatch, tileId);
   const leaveHandler = getLeaveHandler(dispatch);
   const className = getClassName(grabbed, outOfBound);
@@ -63,14 +62,12 @@ function TilePart(props: Props): JSX.Element {
 function getGrabHandler(
   dispatch: React.Dispatch<AnyAction>,
   tileId: string,
-  x: string,
-  y: number,
   outOfBound: boolean
 ): (event: React.MouseEvent<HTMLDivElement>) => void {
   return (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
     if ((event.button == 0) && !outOfBound) {
-      dispatch(AssignedTilesSlice.grab({ tileId, x, y }));
+      dispatch(TilesSlice.grabAssigned({ tileId }));
     }
   };
 }
@@ -143,7 +140,7 @@ function useMouseHandlingEffects(
     }
 
     function onDrop() {
-      dispatch(AssignedTilesSlice.drop({ tileId }));
+      dispatch(TilesSlice.dropAssigned({ tileId }));
     }
 
     if (grabbed) {
