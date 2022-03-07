@@ -1,6 +1,5 @@
 - Unassigned tiles. Remove assignment button.
 - Modifications trace. Save and reset buttons.
-- Adjust drag on scroll.
 - Title / occupations view.
 - Global information about alerts/unassigned tiles present.
 - Check-in system. Police data export.
@@ -9,5 +8,6 @@
 - Tile colour assignment.
 - Real-time backend synchronization for updating tiles.
 - Prettier interface.
+- Grabbed tile above table.
 - Real API calls.
 - Table fragmentation system??
