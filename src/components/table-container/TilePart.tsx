@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 import * as Utils from "../../utils";
+import * as UnassignedTilesSlice from "../../redux/unassignedTilesSlice";
 
 import {
   useAppDispatch,
@@ -36,13 +37,12 @@ function TilePart(props: Props): JSX.Element {
   const personsInRoomType = usePersonsInRoomType(roomType);
 
   const outOfBound = isOutOfBound(props.tileData, leftmostDate, columns);
-  const grabHandler = getGrabHandler(dispatch, tileId, outOfBound);
+  const grabHandler = getGrabHandler(ref, dispatch, tileId, outOfBound);
   const enterHandler = getEnterHandler(dispatch, tileId);
   const leaveHandler = getLeaveHandler(dispatch);
   const className = getClassName(grabbed, outOfBound);
   const alert = getAlert(personsInRoomType, roomType, props.tileData);
 
-  useMouseHandlingEffects(dispatch, ref, tileId, grabbed);
   useBackgroundColourEffect(ref, props.tileData.colour);
 
   return (
@@ -60,14 +60,16 @@ function TilePart(props: Props): JSX.Element {
 }
 
 function getGrabHandler(
+  ref: React.RefObject<HTMLDivElement>,
   dispatch: React.Dispatch<AnyAction>,
   tileId: string,
   outOfBound: boolean
 ): (event: React.MouseEvent<HTMLDivElement>) => void {
   return (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
-    if ((event.button == 0) && !outOfBound) {
+    if ((event.button == 0) && !outOfBound && ref.current) {
       dispatch(TilesSlice.grabAssigned({ tileId }));
+      dispatch(UnassignedTilesSlice.grab({ mouseY: event.pageY - ref.current.getBoundingClientRect().top}));
     }
   };
 }
@@ -120,42 +122,6 @@ function getAlert(personsInRoomType: number[], roomType: string, tileData: Tiles
     );
   }
   return alert;
-}
-
-function useMouseHandlingEffects(
-  dispatch: React.Dispatch<AnyAction>,
-  ref: React.RefObject<HTMLDivElement>,
-  tileId: string,
-  grabbed: boolean | undefined
-): void {
-  useLayoutEffect(() => {
-    const currentRef = ref.current;
-
-    function onMove(event: MouseEvent) {
-      if (currentRef) {
-        const currentTopStr = currentRef.style.top;
-        const currentTop = parseFloat(currentTopStr.substring(0, currentTopStr.length - 2));
-        currentRef.style.top = `${currentTop + event.movementY / window.devicePixelRatio}px`;
-      }
-    }
-
-    function onDrop() {
-      dispatch(TilesSlice.dropAssigned({ tileId }));
-    }
-
-    if (grabbed) {
-      window.addEventListener("mousemove", onMove);
-      window.addEventListener("mouseup", onDrop);
-    }
-
-    return () => {
-      if (currentRef) {
-        currentRef.style.top = "0px";
-      }
-      window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("mouseup", onDrop);
-    };
-  }, [dispatch, ref, tileId, grabbed]);
 }
 
 function useBackgroundColourEffect(

@@ -7,9 +7,9 @@ import * as Utils from "../../utils";
 import * as UnassignedTilesSlice from "../../redux/unassignedTilesSlice";
 import * as TilesSlice from "../../redux/tilesSlice";
 
-import "./GrabbedUnassignedTile.css";
+import "./GrabbedTile.css";
 
-function GrabbedUnassignedTile(): JSX.Element {
+function GrabbedTile(): JSX.Element {
   const dispatch = useAppDispatch();
   const grabbedTileId = useGrabbedTile();
   const grabbedMouseY = useGrabbedMouseY();
@@ -21,13 +21,13 @@ function GrabbedUnassignedTile(): JSX.Element {
   useLeftShiftEffect(ref, left);
   useMouseHandlingEffect(ref, dispatch, grabbedTileId, grabbedMouseY);
 
-  if (!grabbedTileId || !tileData || (tileData.roomNumber !== undefined)) {
+  if (!grabbedTileId || !tileData) {
     return <></>;
   }
 
   const cells = getCells(tileData);
 
-  return (<div ref={ref} className="grabbed-unassigned-tile">{cells}</div>);
+  return (<div ref={ref} className="grabbed-tile">{cells}</div>);
 }
 
 function useGrabbedTile(): string | undefined {
@@ -89,7 +89,7 @@ function getCells(tileData: TilesSlice.TileData): JSX.Element[] {
   for (let i = 0; i < tileData.nights; i++) {
     const x = Utils.dateToString(dateCounter);
     cells.push(
-      <div key={x} className="grabbed-unassigned-tile-cell">
+      <div key={x} className="cell">
         <b>{tileData.persons}</b>
       </div>
     );
@@ -98,4 +98,4 @@ function getCells(tileData: TilesSlice.TileData): JSX.Element[] {
   return cells;
 }
 
-export default hot(module)(GrabbedUnassignedTile);
+export default hot(module)(GrabbedTile);

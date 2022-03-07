@@ -11,7 +11,7 @@ import * as TableSlice from "../redux/tableSlice";
 
 import Table from "./table-container/Table";
 import FetchTiles from "./table-container/FetchTiles";
-import GrabbedUnassignedTile from "./table-container/GrabbedUnassignedTile";
+import GrabbedTile from "./table-container/GrabbedTile";
 
 import "./TableContainer.css";
 
@@ -92,7 +92,7 @@ function useTableContentsMemo(): JSX.Element {
     <>
       <Table />
       <FetchTiles />
-      <GrabbedUnassignedTile />
+      <GrabbedTile />
     </>
   ), []);
 }
