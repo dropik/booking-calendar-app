@@ -199,6 +199,7 @@ function assignTile(state: WritableDraft<State>, tileId: string, newY: number): 
   for (let i = 0; i < tileData.nights; i++) {
     const x = Utils.dateToString(dateCounter);
     state.assignedMap[newY][x] = tileId;
+    delete state.unassignedMap[x][tileId];
     dateCounter.setDate(dateCounter.getDate() + 1);
   }
   state.data[tileId].roomNumber = newY;
