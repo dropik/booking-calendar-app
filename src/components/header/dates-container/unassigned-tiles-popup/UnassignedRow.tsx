@@ -24,10 +24,10 @@ function UnassignedRow(props: Props): JSX.Element {
 
 function useRightmostSelectedTileDate(): string | undefined {
   return useAppSelector((state) => {
-    const selectedDate = state.unassignedTiles.selectedDate;
-    if (selectedDate && state.unassignedTiles.map[selectedDate]) {
+    const selectedDate = state.tiles.selectedDate;
+    if (selectedDate && state.tiles.unassignedMap[selectedDate]) {
       let rightmostSelectedTileDate = selectedDate;
-      for (const tileId in state.unassignedTiles.map[selectedDate]) {
+      for (const tileId in state.tiles.unassignedMap[selectedDate]) {
         const tile = state.tiles.data[tileId];
         const departureDateObj = new Date(tile.from);
         departureDateObj.setDate(departureDateObj.getDate() + tile.nights);

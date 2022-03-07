@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 import { useAppDispatch, useHasUnassignedTiles } from "../../../redux/hooks";
-import * as UnassignedTilesSlice from "../../../redux/unassignedTilesSlice";
+import * as TilesSlice from "../../../redux/tilesSlice";
 
 import "./Day.css";
 
@@ -47,7 +47,7 @@ function getClickHandler(dispatch: React.Dispatch<AnyAction>, x: string): () => 
     } else if(window.getSelection()) {
       window.getSelection()?.removeAllRanges();
     }
-    dispatch(UnassignedTilesSlice.toggleDate({ date: x }));
+    dispatch(TilesSlice.toggleDate({ date: x }));
   };
 }
 

@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 import * as Utils from "../../utils";
-import * as UnassignedTilesSlice from "../../redux/unassignedTilesSlice";
 
 import {
   useAppDispatch,
@@ -68,8 +67,7 @@ function getGrabHandler(
   return (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
     if ((event.button == 0) && !outOfBound && ref.current) {
-      dispatch(TilesSlice.grabAssigned({ tileId }));
-      dispatch(UnassignedTilesSlice.grab({ mouseY: event.pageY - ref.current.getBoundingClientRect().top}));
+      dispatch(TilesSlice.grab({ tileId, mouseY: event.pageY - ref.current.getBoundingClientRect().top }));
     }
   };
 }

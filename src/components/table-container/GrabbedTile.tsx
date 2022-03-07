@@ -4,7 +4,6 @@ import { AnyAction } from "@reduxjs/toolkit";
 
 import { useAppDispatch, useAppSelector, useLeftShift, useTileData } from "../../redux/hooks";
 import * as Utils from "../../utils";
-import * as UnassignedTilesSlice from "../../redux/unassignedTilesSlice";
 import * as TilesSlice from "../../redux/tilesSlice";
 
 import "./GrabbedTile.css";
@@ -35,7 +34,7 @@ function useGrabbedTile(): string | undefined {
 }
 
 function useGrabbedMouseY(): number {
-  return useAppSelector(state => state.unassignedTiles.grabbedMouseY);
+  return useAppSelector(state => state.tiles.grabbedMouseY);
 }
 
 function useBackgroundColorEffect(ref: React.RefObject<HTMLDivElement>, tileData: TilesSlice.TileData | undefined): void {
@@ -69,9 +68,8 @@ function useMouseHandlingEffect(
 
     function onDrop() {
       if (tileId) {
-        dispatch(TilesSlice.dropAssigned({ tileId }));
+        dispatch(TilesSlice.drop({ tileId }));
       }
-      dispatch(UnassignedTilesSlice.drop());
     }
 
     window.addEventListener("mousemove", onMove);

@@ -28,17 +28,26 @@ export type State = {
       [key: string]: string | undefined
     }
   },
-  grabbedTile?: string,
+  unassignedMap: {
+    [key: string]: {
+      [key: string]: string
+    }
+  },
   grabbedMap: {
     [key: string]: boolean
-  }
+  },
+  grabbedTile?: string,
+  selectedDate?: string
+  grabbedMouseY: number
 };
 
 const initialState: State = {
   status: "idle",
   data: { },
   assignedMap: { },
-  grabbedMap: { }
+  unassignedMap: { },
+  grabbedMap: { },
+  grabbedMouseY: 0
 };
 
 export const fetchAsync = createAsyncThunk(
@@ -58,13 +67,18 @@ export const tilesSlice = createSlice({
     move: (state, action: PayloadAction<{ newY: number }>) => {
       tryMoveTile(state, action);
     },
-    grabAssigned: (state, action: PayloadAction<{ tileId: string }>) => {
+    grab: (state, action: PayloadAction<{ tileId: string, mouseY: number }>) => {
       state.grabbedTile = action.payload.tileId;
       state.grabbedMap[action.payload.tileId] = true;
+      state.grabbedMouseY = action.payload.mouseY;
     },
-    dropAssigned: (state, action: PayloadAction<{ tileId: string }>) => {
+    drop: (state, action: PayloadAction<{ tileId: string }>) => {
       state.grabbedTile = undefined;
       state.grabbedMap[action.payload.tileId] = false;
+      state.grabbedMouseY = 0;
+    },
+    toggleDate: (state, action: PayloadAction<{ date: string | undefined }>) => {
+      state.selectedDate = state.selectedDate === action.payload.date ? undefined : action.payload.date;
     }
   },
   extraReducers: (builder) => {
@@ -82,7 +96,7 @@ export const tilesSlice = createSlice({
   }
 });
 
-export const { move, grabAssigned, dropAssigned } = tilesSlice.actions;
+export const { move, grab, drop, toggleDate } = tilesSlice.actions;
 
 export default tilesSlice.reducer;
 
@@ -91,13 +105,23 @@ function addFetchedTiles(state: WritableDraft<State>, tiles: TileData[]): void {
     state.data[tile.id] = tile;
     state.grabbedMap[tile.id] = false;
     const roomNumber = tile.roomNumber;
-    if (roomNumber) {
+    if (roomNumber !== undefined) {
       if (state.assignedMap[roomNumber] === undefined) {
         state.assignedMap[roomNumber] = {};
       }
       const dateCounter = new Date(tile.from);
       for (let i = 0; i < tile.nights; i++) {
         state.assignedMap[roomNumber][Utils.dateToString(dateCounter)] = tile.id;
+        dateCounter.setDate(dateCounter.getDate() + 1);
+      }
+    } else {
+      const dateCounter = new Date(tile.from);
+      for (let i = 0; i < tile.nights; i++) {
+        const x = Utils.dateToString(dateCounter);
+        if (state.unassignedMap[x] === undefined) {
+          state.unassignedMap[x] = { };
+        }
+        state.unassignedMap[x][tile.id] = tile.id;
         dateCounter.setDate(dateCounter.getDate() + 1);
       }
     }

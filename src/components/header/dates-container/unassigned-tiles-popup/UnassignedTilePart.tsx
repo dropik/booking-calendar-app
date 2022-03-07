@@ -6,7 +6,6 @@ import { useAppDispatch, useAppSelector, useColumns, useLeftmostDate } from "../
 import * as Utils from "../../../../utils";
 import * as TilesSlice from "../../../../redux/tilesSlice";
 import * as HoveredIdSlice from "../../../../redux/hoveredIdSlice";
-import * as UnassignedTilesSlice from "../../../../redux/unassignedTilesSlice";
 
 import "./UnassignedTilePart.css";
 
@@ -67,8 +66,7 @@ function getGrabHandler(
 ): (event: React.MouseEvent<HTMLDivElement>) => void {
   return (event: React.MouseEvent<HTMLDivElement>) => {
     if (!outOfBound && ref.current) {
-      dispatch(TilesSlice.grabAssigned({ tileId: tileId }));
-      dispatch(UnassignedTilesSlice.grab({ mouseY: event.pageY - ref.current.getBoundingClientRect().top }));
+      dispatch(TilesSlice.grab({ tileId: tileId, mouseY: event.pageY - ref.current.getBoundingClientRect().top }));
     }
   };
 }

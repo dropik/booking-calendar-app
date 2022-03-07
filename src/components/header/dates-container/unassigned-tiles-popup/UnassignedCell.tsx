@@ -24,7 +24,7 @@ function UnassignedCell(props: Props): JSX.Element {
 
 function useHasTilePart(x: string, tileId: string): boolean {
   return useAppSelector((state) => {
-    return (state.unassignedTiles.map[x] !== undefined) && (state.unassignedTiles.map[x][tileId] !== undefined);
+    return (state.tiles.unassignedMap[x] !== undefined) && (state.tiles.unassignedMap[x][tileId] !== undefined);
   });
 }
 

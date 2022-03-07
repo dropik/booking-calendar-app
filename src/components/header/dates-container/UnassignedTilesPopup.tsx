@@ -4,7 +4,7 @@ import { AnyAction } from "@reduxjs/toolkit";
 
 import { useAppDispatch, useAppSelector, useLeftShift } from "../../../redux/hooks";
 import * as Utils from "../../../utils";
-import * as UnassignedTilesSlice from "../../../redux/unassignedTilesSlice";
+import * as TilesSlice from "../../../redux/tilesSlice";
 
 import UnassignedRow from "./unassigned-tiles-popup/UnassignedRow";
 
@@ -29,19 +29,19 @@ function UnassignedTilesPopup(): JSX.Element {
 
 function useShowPopup(): boolean | undefined {
   return useAppSelector((state) => {
-    const selectedDate = state.unassignedTiles.selectedDate;
-    if (selectedDate && state.unassignedTiles.map[selectedDate]) {
-      return (Object.keys(state.unassignedTiles.map[selectedDate]).length > 0);
+    const selectedDate = state.tiles.selectedDate;
+    if (selectedDate && state.tiles.unassignedMap[selectedDate]) {
+      return (Object.keys(state.tiles.unassignedMap[selectedDate]).length > 0);
     }
   });
 }
 
 function useLeftmostSelectedTileDate(): string | undefined {
   return useAppSelector((state) => {
-    const selectedDate = state.unassignedTiles.selectedDate;
-    if (selectedDate && state.unassignedTiles.map[selectedDate]) {
+    const selectedDate = state.tiles.selectedDate;
+    if (selectedDate && state.tiles.unassignedMap[selectedDate]) {
       let leftmostSelectedTileDate = selectedDate;
-      for (const tileId in state.unassignedTiles.map[selectedDate]) {
+      for (const tileId in state.tiles.unassignedMap[selectedDate]) {
         const tile = state.tiles.data[tileId];
         if (Utils.daysBetweenDates(leftmostSelectedTileDate, tile.from) < 0) {
           leftmostSelectedTileDate = tile.from;
@@ -53,7 +53,7 @@ function useLeftmostSelectedTileDate(): string | undefined {
 }
 
 function useTilesPerSelectedDay(): { [key: string]: string } {
-  return useAppSelector((state) => state.unassignedTiles.map[state.unassignedTiles.selectedDate as string]);
+  return useAppSelector((state) => state.tiles.unassignedMap[state.tiles.selectedDate as string]);
 }
 
 function getClassName(show: boolean | undefined): string {
@@ -87,7 +87,7 @@ function useScrollEffect(ref: React.RefObject<HTMLDivElement>, left: number): vo
 function useHideOnClickOutsidePopupEffect(dispatch: React.Dispatch<AnyAction>): void {
   useEffect(() => {
     function hidePopup() {
-      dispatch(UnassignedTilesSlice.toggleDate({ date: undefined }));
+      dispatch(TilesSlice.toggleDate({ date: undefined }));
     }
     window.addEventListener("mousedown", hidePopup);
     return () => window.removeEventListener("mousedown", hidePopup);
