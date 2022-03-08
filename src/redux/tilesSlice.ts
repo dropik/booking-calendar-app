@@ -79,6 +79,21 @@ export const tilesSlice = createSlice({
     },
     toggleDate: (state, action: PayloadAction<{ date: string | undefined }>) => {
       state.selectedDate = state.selectedDate === action.payload.date ? undefined : action.payload.date;
+    },
+    removeAssignment: (state, action: PayloadAction<{ tileId: string }>) => {
+      const tileId = action.payload.tileId;
+      const tileData = state.data[tileId];
+      const roomNumber = tileData.roomNumber;
+      if (roomNumber) {
+        const dateCounter = new Date(tileData.from);
+        for (let i = 0; i < tileData.nights; i++) {
+          const x = Utils.dateToString(dateCounter);
+          state.assignedMap[roomNumber][x] = undefined;
+          state.unassignedMap[x][tileId] = tileId;
+          dateCounter.setDate(dateCounter.getDate() + 1);
+        }
+        tileData.roomNumber = undefined;
+      }
     }
   },
   extraReducers: (builder) => {
@@ -96,7 +111,7 @@ export const tilesSlice = createSlice({
   }
 });
 
-export const { move, grab, drop, toggleDate } = tilesSlice.actions;
+export const { move, grab, drop, toggleDate, removeAssignment } = tilesSlice.actions;
 
 export default tilesSlice.reducer;
 
