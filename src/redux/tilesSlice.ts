@@ -18,6 +18,13 @@ export type TileData = {
   roomNumber?: number
 };
 
+export type ChangesMap = {
+  [key: string]: {
+    originalRoom: number | undefined,
+    newRoom: number | undefined
+  }
+};
+
 export type State = {
   status: "idle" | "loading" | "failed",
   data: {
@@ -36,12 +43,7 @@ export type State = {
   grabbedMap: {
     [key: string]: boolean
   },
-  changesMap: {
-    [key: string]: {
-      originalRoom: number | undefined,
-      newRoom: number | undefined
-    }
-  },
+  changesMap: ChangesMap,
   grabbedTile?: string,
   selectedDate?: string
   mouseYOnGrab: number

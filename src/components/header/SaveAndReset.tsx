@@ -6,15 +6,25 @@ import { faRotateLeft } from "@fortawesome/free-solid-svg-icons";
 
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
+import * as SaveChangesSlice from "../../redux/saveChangesSlice";
 
 import "./SaveAndReset.css";
 
 function SaveAndReset(): JSX.Element {
   const dispatch = useAppDispatch();
   const hasChanges = useHasChanges();
+  const saveStatus = useAppSelector((state) => state.saveChanges.status);
 
   if (!hasChanges) {
     return <></>;
+  }
+
+  if (saveStatus === "loading") {
+    return (
+      <div className="save-and-reset">
+        <span>Salvataggio...</span>
+      </div>
+    );
   }
 
   const resetHandler = getResetHandler(dispatch);
@@ -40,9 +50,9 @@ function getResetHandler(dispatch: React.Dispatch<AnyAction>): () => void {
   };
 }
 
-function getSaveHandler(dispatch: React.Dispatch<AnyAction>): () => void {
+function getSaveHandler(dispatch: React.Dispatch<SaveChangesSlice.PostAsyncAction>): () => void {
   return () => {
-    dispatch(TilesSlice.saveChanges());
+    dispatch(SaveChangesSlice.postChangesAsync());
   };
 }
 
