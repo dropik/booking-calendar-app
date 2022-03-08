@@ -1,4 +1,3 @@
-- Fix bug on occupation info showing after releasing unassigned tile outside the table.
 - Modifications trace. Save and reset buttons.
 - Selection arrow for unassigned tiles popup.
 - Title / occupations view.
