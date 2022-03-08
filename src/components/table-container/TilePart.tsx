@@ -1,8 +1,6 @@
 import React, { Dispatch, useLayoutEffect, useRef } from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 import * as Utils from "../../utils";
 
@@ -18,6 +16,7 @@ import * as TilesSlice from "../../redux/tilesSlice";
 import * as HoveredIdSlice from "../../redux/hoveredIdSlice";
 
 import "./TilePart.css";
+import TilePartAlert from "./TilePartAlert";
 
 type Props = {
   x: string,
@@ -40,7 +39,6 @@ function TilePart(props: Props): JSX.Element {
   const enterHandler = getEnterHandler(dispatch, tileId);
   const leaveHandler = getLeaveHandler(dispatch);
   const className = getClassName(grabbed, outOfBound);
-  const alert = getAlert(personsInRoomType, roomType, props.tileData);
 
   useBackgroundColourEffect(ref, props.tileData.colour);
 
@@ -53,7 +51,7 @@ function TilePart(props: Props): JSX.Element {
       onMouseLeave={leaveHandler}
     >
       <span className="tile-persons">{props.tileData.persons}</span>
-      {alert}
+      <TilePartAlert personsInRoomType={personsInRoomType} roomType={roomType} tileData={props.tileData} />
     </div>
   );
 }
@@ -94,32 +92,6 @@ function getClassName(grabbed: boolean | undefined, outOfBound: boolean): string
     className += " out-of-bound";
   }
   return className;
-}
-
-function getAlert(personsInRoomType: number[], roomType: string, tileData: TilesSlice.TileData): JSX.Element {
-  let alert: JSX.Element = <></>;
-  if (personsInRoomType.includes(tileData.persons)) {
-    if (roomType !== tileData.roomType) {
-      alert = (
-        <span
-          className="tile-alert warning"
-          title="Tipologia della stanza diversa da quella prenotata"
-        >
-          <FontAwesomeIcon icon={faTriangleExclamation} />
-        </span>
-      );
-    }
-  } else {
-    alert = (
-      <span
-        className="tile-alert error"
-        title="Usata una stanza con il numero di occupazioni non corretti per questa prenotazione"
-      >
-        <FontAwesomeIcon icon={faTriangleExclamation} />
-      </span>
-    );
-  }
-  return alert;
 }
 
 function useBackgroundColourEffect(
