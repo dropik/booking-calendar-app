@@ -4,14 +4,7 @@ import { AnyAction } from "@reduxjs/toolkit";
 
 import * as Utils from "../../utils";
 
-import {
-  useAppDispatch,
-  useColumns,
-  useIsGrabbedTile,
-  useLeftmostDate,
-  usePersonsInRoomType,
-  useRoomTypeByNumber
-} from "../../redux/hooks";
+import { useAppDispatch, useAppSelector, useColumns, useLeftmostDate } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
 import * as HoveredIdSlice from "../../redux/hoveredIdSlice";
 import * as ContextMenuSlice from "../../redux/contextMenuSlice";
@@ -62,6 +55,28 @@ function TilePart(props: Props): JSX.Element {
       <TilePartAlert personsInRoomType={personsInRoomType} roomType={roomType} tileData={props.tileData} />
     </div>
   );
+}
+
+function useIsGrabbedTile(id: string) {
+  return useAppSelector(state => state.tiles.grabbedMap[id]);
+}
+
+
+function useRoomTypeByNumber(roomNumber: number): string {
+  return useAppSelector((state) => {
+    for (const floor of state.hotel.data.floors) {
+      for (const room of floor.rooms) {
+        if (room.number === roomNumber) {
+          return room.type;
+        }
+      }
+    }
+    return "";
+  });
+}
+
+function usePersonsInRoomType(type: string) {
+  return useAppSelector(state => state.roomTypes.data[type]);
 }
 
 function getGrabHandler(

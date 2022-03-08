@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import { hot } from "react-hot-loader";
 
-import { useAppDispatch, useHotelData, useScrollTop, useTableClientHeight, useTableOffsetHeight } from "../redux/hooks";
+import { useAppDispatch, useAppSelector, useHotelData } from "../redux/hooks";
 import * as HotelSlice from "../redux/hotelSlice";
 import * as RoomTypesSlice from "../redux/roomTypesSlice";
 
@@ -31,6 +31,18 @@ function Hotel(): JSX.Element {
       </div>
     </div>)
   ;
+}
+
+function useTableOffsetHeight() {
+  return useAppSelector(state => state.table.offsetHeight);
+}
+
+function useTableClientHeight() {
+  return useAppSelector(state => state.table.clientHeight);
+}
+
+function useScrollTop() {
+  return useAppSelector(state => state.scroll.top);
 }
 
 function useRowsMemo(hotelData: HotelSlice.HotelData): JSX.Element[] {

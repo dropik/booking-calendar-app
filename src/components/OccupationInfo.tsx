@@ -1,7 +1,7 @@
 import React, { SetStateAction, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { hot } from "react-hot-loader";
 
-import { useAppSelector, useHoveredId, useTileData } from "../redux/hooks";
+import { useAppSelector, useTileData } from "../redux/hooks";
 import * as TilesSlice from "../redux/tilesSlice";
 import * as Utils from "../utils";
 
@@ -25,6 +25,10 @@ function OccupationInfo(): JSX.Element {
   const className = getClassName(hoveredId, show);
 
   return getContents(tileData, ref, className);
+}
+
+function useHoveredId() {
+  return useAppSelector(state => state.hoveredId.value);
 }
 
 function useCanShow(): boolean {

@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useMemo, useRef } from "react";
 import { hot } from "react-hot-loader";
 
-import { useScrollLeft, useDates } from "../../../redux/hooks";
+import { useDates, useAppSelector } from "../../../redux/hooks";
 
 import Day from "./Day";
 
@@ -19,6 +19,10 @@ function Dates(): JSX.Element {
   return (
     <div ref={ref} className="dates">{dayCells}</div>
   );
+}
+
+function useScrollLeft() {
+  return useAppSelector(state => state.scroll.left);
 }
 
 function useDayCellsMemo(dates: Generator<string, void, void>): JSX.Element[] {

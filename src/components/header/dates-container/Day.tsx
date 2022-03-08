@@ -2,7 +2,7 @@ import React, { memo } from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
-import { useAppDispatch, useHasUnassignedTiles } from "../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import * as TilesSlice from "../../../redux/tilesSlice";
 import * as ContextMenuSlice from "../../../redux/contextMenuSlice";
 
@@ -27,6 +27,10 @@ function Day(props: Props): JSX.Element {
       <DayAlert hasUnassignedTiles={hasUnassignedTiles} />
     </div>
   );
+}
+
+function useHasUnassignedTiles(x: string) {
+  return useAppSelector(state => (state.tiles.unassignedMap[x] !== undefined) && (Object.keys(state.tiles.unassignedMap[x]).length > 0));
 }
 
 function getClickHandler(dispatch: React.Dispatch<AnyAction>, x: string): () => void {
