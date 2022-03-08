@@ -94,6 +94,9 @@ export const tilesSlice = createSlice({
       tryRemoveAssignment(state, action);
       checkChangeReturnedToOriginal(state, action.payload.tileId);
     },
+    saveChanges: (state) => {
+      state.changesMap = { };
+    },
     undoChanges: (state) => {
       unassignChangedTiles(state);
       reassignTiles(state);
@@ -114,7 +117,7 @@ export const tilesSlice = createSlice({
   }
 });
 
-export const { move, grab, drop, toggleDate, removeAssignment, undoChanges } = tilesSlice.actions;
+export const { move, grab, drop, toggleDate, removeAssignment, saveChanges, undoChanges } = tilesSlice.actions;
 
 export default tilesSlice.reducer;
 
@@ -200,6 +203,9 @@ function unassignChangedTiles(state: WritableDraft<State>): void {
       for (let i = 0; i < tileData.nights; i++) {
         const x = Utils.dateToString(dateCounter);
         state.assignedMap[newRoom][x] = undefined;
+        if (!state.unassignedMap[x]) {
+          state.unassignedMap[x] = { };
+        }
         state.unassignedMap[x][tileId] = tileId;
         dateCounter.setDate(dateCounter.getDate() + 1);
       }
@@ -217,6 +223,9 @@ function reassignTiles(state: WritableDraft<State>): void {
       const dateCounter = new Date(tileData.from);
       for (let i = 0; i < tileData.nights; i++) {
         const x = Utils.dateToString(dateCounter);
+        if (!state.assignedMap[originalRoom]) {
+          state.assignedMap[originalRoom] = { };
+        }
         state.assignedMap[originalRoom][x] = tileId;
         delete state.unassignedMap[x][tileId];
         dateCounter.setDate(dateCounter.getDate() + 1);

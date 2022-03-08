@@ -18,13 +18,14 @@ function SaveAndReset(): JSX.Element {
   }
 
   const resetHandler = getResetHandler(dispatch);
+  const saveHandler = getSaveHandler(dispatch);
 
   return (
     <div className="save-and-reset">
       <div onClick={resetHandler} className="button reset">
         <FontAwesomeIcon icon={faRotateLeft} />
       </div>
-      <div className="button save">Salva</div>
+      <div onClick={saveHandler} className="button save">Salva</div>
     </div>
   );
 }
@@ -36,6 +37,12 @@ function useHasChanges(): boolean {
 function getResetHandler(dispatch: React.Dispatch<AnyAction>): () => void {
   return () => {
     dispatch(TilesSlice.undoChanges());
+  };
+}
+
+function getSaveHandler(dispatch: React.Dispatch<AnyAction>): () => void {
+  return () => {
+    dispatch(TilesSlice.saveChanges());
   };
 }
 
