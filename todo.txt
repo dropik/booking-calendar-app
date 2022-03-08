@@ -1,4 +1,3 @@
-- Unassigned tiles. Remove assignment button.
 - Modifications trace. Save and reset buttons.
 - Title / occupations view.
 - Global information about alerts/unassigned tiles present.
