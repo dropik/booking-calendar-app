@@ -34,7 +34,7 @@ function useGrabbedTile(): string | undefined {
 }
 
 function useGrabbedMouseY(): number {
-  return useAppSelector(state => state.tiles.grabbedMouseY);
+  return useAppSelector(state => state.tiles.mouseYOnGrab);
 }
 
 function useBackgroundColorEffect(ref: React.RefObject<HTMLDivElement>, tileData: TilesSlice.TileData | undefined): void {

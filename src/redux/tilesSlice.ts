@@ -38,7 +38,7 @@ export type State = {
   },
   grabbedTile?: string,
   selectedDate?: string
-  grabbedMouseY: number
+  mouseYOnGrab: number
 };
 
 const initialState: State = {
@@ -47,7 +47,7 @@ const initialState: State = {
   assignedMap: { },
   unassignedMap: { },
   grabbedMap: { },
-  grabbedMouseY: 0
+  mouseYOnGrab: 0
 };
 
 export const fetchAsync = createAsyncThunk(
@@ -70,12 +70,12 @@ export const tilesSlice = createSlice({
     grab: (state, action: PayloadAction<{ tileId: string, mouseY: number }>) => {
       state.grabbedTile = action.payload.tileId;
       state.grabbedMap[action.payload.tileId] = true;
-      state.grabbedMouseY = action.payload.mouseY;
+      state.mouseYOnGrab = action.payload.mouseY;
     },
     drop: (state, action: PayloadAction<{ tileId: string }>) => {
       state.grabbedTile = undefined;
       state.grabbedMap[action.payload.tileId] = false;
-      state.grabbedMouseY = 0;
+      state.mouseYOnGrab = 0;
     },
     toggleDate: (state, action: PayloadAction<{ date: string | undefined }>) => {
       state.selectedDate = state.selectedDate === action.payload.date ? undefined : action.payload.date;
@@ -140,21 +140,21 @@ function tryMoveTile(
   const prevY = state.data[tileId].roomNumber;
   const newY = action.payload.newY;
 
-  if (newY && (newY !== prevY)) {
+  if (newY !== prevY) {
     if (state.assignedMap[newY] === undefined) {
-      state.assignedMap[newY] = {};
-      if (prevY !== undefined) {
-        moveTile(state, tileId, prevY, newY);
-      } else {
-        assignTile(state, tileId, newY);
-      }
+      state.assignedMap[newY] = { };
+      moveOrAssignTile(state, tileId, prevY, newY);
     } else if (!checkHasCollision(state, tileId, newY)) {
-      if (prevY !== undefined) {
-        moveTile(state, tileId, prevY, newY);
-      } else {
-        assignTile(state, tileId, newY);
-      }
+      moveOrAssignTile(state, tileId, prevY, newY);
     }
+  }
+}
+
+function moveOrAssignTile(state: WritableDraft<State>, tileId: string, prevY: number | undefined, newY: number): void {
+  if (prevY !== undefined) {
+    moveTile(state, tileId, prevY, newY);
+  } else {
+    assignTile(state, tileId, newY);
   }
 }
 
