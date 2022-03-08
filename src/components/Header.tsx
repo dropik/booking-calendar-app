@@ -10,7 +10,6 @@ function Header(): JSX.Element {
   return (
     <div className="header">
       <div className="data-input">
-        <span>From: </span>
         <DateInput />
       </div>
       <DatesContainer />

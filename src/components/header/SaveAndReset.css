@@ -1,0 +1,22 @@
+.save-and-reset {
+  float: right;
+}
+
+.save-and-reset > .button {
+  display: inline-block;
+  line-height: 2rem;
+  margin-right: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border: 2px solid black;
+  cursor: pointer;
+}
+
+.button.save {
+  background-color: #3d7deb;
+  color: white;
+}
+
+.button.reset {
+  background-color: #d0d0d0;
+}
