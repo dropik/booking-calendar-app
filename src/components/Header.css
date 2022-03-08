@@ -7,11 +7,9 @@
   z-index: 9999;
 }
 
-.data-input {
+.date-input {
+  display: flex;
+  justify-content: center;
   height: 4rem;
   line-height: 4rem;
-}
-
-.data-input > input {
-  margin-left: 1rem;
 }

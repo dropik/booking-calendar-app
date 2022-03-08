@@ -9,7 +9,7 @@ import "./Header.css";
 function Header(): JSX.Element {
   return (
     <div className="header">
-      <div className="data-input">
+      <div className="date-input">
         <DateInput />
       </div>
       <DatesContainer />

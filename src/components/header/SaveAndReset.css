@@ -1,5 +1,6 @@
 .save-and-reset {
-  float: right;
+  position: absolute;
+  right: 0;
 }
 
 .save-and-reset > .button {
