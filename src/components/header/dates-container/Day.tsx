@@ -4,6 +4,7 @@ import { AnyAction } from "@reduxjs/toolkit";
 
 import { useAppDispatch, useHasUnassignedTiles } from "../../../redux/hooks";
 import * as TilesSlice from "../../../redux/tilesSlice";
+import * as ContextMenuSlice from "../../../redux/contextMenuSlice";
 
 import "./Day.css";
 import DayAlert from "./DayAlert";
@@ -18,9 +19,10 @@ function Day(props: Props): JSX.Element {
 
   const day = props.x.substring(8);
   const clickHandler = getClickHandler(dispatch, props.x);
+  const mouseDownHandler = getMouseDownHandler(dispatch);
 
   return (
-    <div className="day" onMouseDown={onMouseDown} onClick={clickHandler}>
+    <div className="day" onMouseDown={mouseDownHandler} onClick={clickHandler}>
       <b>{day}</b>
       <DayAlert hasUnassignedTiles={hasUnassignedTiles} />
     </div>
@@ -38,8 +40,11 @@ function getClickHandler(dispatch: React.Dispatch<AnyAction>, x: string): () => 
   };
 }
 
-function onMouseDown(event: React.MouseEvent<HTMLDivElement>) {
-  event.stopPropagation();
+function getMouseDownHandler(dispatch: React.Dispatch<AnyAction>): (event: React.MouseEvent<HTMLDivElement>) => void {
+  return (event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+    dispatch(ContextMenuSlice.hideTileContextMenu());
+  };
 }
 
 export default memo(hot(module)(Day));

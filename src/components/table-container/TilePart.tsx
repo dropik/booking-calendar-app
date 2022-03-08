@@ -14,6 +14,7 @@ import {
 } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
 import * as HoveredIdSlice from "../../redux/hoveredIdSlice";
+import * as ContextMenuSlice from "../../redux/contextMenuSlice";
 
 import "./TilePart.css";
 import TilePartAlert from "./TilePartAlert";
@@ -40,6 +41,12 @@ function TilePart(props: Props): JSX.Element {
   const leaveHandler = getLeaveHandler(dispatch);
   const className = getClassName(grabbed, outOfBound);
 
+  function onContextMenu(event: React.MouseEvent<HTMLDivElement>) {
+    event.preventDefault();
+    event.stopPropagation();
+    dispatch(ContextMenuSlice.showTileContextMenu({ tileId, mouseX: event.pageX, mouseY: event.pageY }));
+  }
+
   useBackgroundColourEffect(ref, props.tileData.colour);
 
   return (
@@ -49,6 +56,7 @@ function TilePart(props: Props): JSX.Element {
       onMouseDown={grabHandler}
       onMouseEnter={enterHandler}
       onMouseLeave={leaveHandler}
+      onContextMenu={onContextMenu}
     >
       <span className="tile-persons">{props.tileData.persons}</span>
       <TilePartAlert personsInRoomType={personsInRoomType} roomType={roomType} tileData={props.tileData} />

@@ -12,6 +12,7 @@ import * as TableSlice from "../redux/tableSlice";
 import Table from "./table-container/Table";
 import FetchTiles from "./table-container/FetchTiles";
 import GrabbedTile from "./table-container/GrabbedTile";
+import TileContextMenu from "./table-container/TileContextMenu";
 
 import "./TableContainer.css";
 
@@ -93,6 +94,7 @@ function useTableContentsMemo(): JSX.Element {
       <Table />
       <FetchTiles />
       <GrabbedTile />
+      <TileContextMenu />
     </>
   ), []);
 }

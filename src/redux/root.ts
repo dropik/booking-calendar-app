@@ -6,5 +6,6 @@ import scroll from "./scrollSlice";
 import tiles from "./tilesSlice";
 import hoveredId from "./hoveredIdSlice";
 import roomTypes from "./roomTypesSlice";
+import contextMenu from "./contextMenuSlice";
 
-export default combineReducers({ table, hotel, scroll, tiles, hoveredId, roomTypes });
+export default combineReducers({ table, hotel, scroll, tiles, hoveredId, roomTypes, contextMenu });

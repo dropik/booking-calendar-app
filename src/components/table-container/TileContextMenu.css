@@ -1,0 +1,17 @@
+.tile-context-menu {
+  position: fixed;
+  z-index: 9999;
+  background-color: white;
+  border: 2px solid black;
+  border-bottom: 0;
+}
+
+.tile-context-menu div {
+  padding: 0.5rem;
+  cursor: pointer;
+  border-bottom: 2px solid black;
+}
+
+.tile-context-menu div:hover {
+  background-color: #ebebeb;
+}

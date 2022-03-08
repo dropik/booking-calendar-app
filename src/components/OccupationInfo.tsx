@@ -1,7 +1,7 @@
 import React, { SetStateAction, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { hot } from "react-hot-loader";
 
-import { useHoveredId, useIsGrabbing, useTileData } from "../redux/hooks";
+import { useAppSelector, useHoveredId, useTileData } from "../redux/hooks";
 import * as TilesSlice from "../redux/tilesSlice";
 import * as Utils from "../utils";
 
@@ -17,14 +17,18 @@ function OccupationInfo(): JSX.Element {
   const ref = useRef<HTMLDivElement>(null);
   const hoveredId = useHoveredId();
   const tileData = useTileData(hoveredId);
-  const isGrabbing = useIsGrabbing();
+  const show = useCanShow();
 
   useUpdateMousePositionEffect(setMousePosition);
   useUpdatePopupCoordsEffect(ref, mousePosition);
 
-  const className = getClassName(hoveredId, isGrabbing);
+  const className = getClassName(hoveredId, show);
 
   return getContents(tileData, ref, className);
+}
+
+function useCanShow(): boolean {
+  return useAppSelector(state => (state.tiles.grabbedTile === undefined) && (state.contextMenu.tileId === undefined));
 }
 
 function useUpdatePopupCoordsEffect(
@@ -49,9 +53,9 @@ function useUpdateMousePositionEffect(dispatch: React.Dispatch<SetStateAction<Mo
   }, [dispatch]);
 }
 
-function getClassName(hoveredId: string | undefined, isGrabbing: boolean): string {
+function getClassName(hoveredId: string | undefined, show: boolean): string {
   let className = "occupation-info";
-  if (!hoveredId || isGrabbing) {
+  if (!hoveredId || !show) {
     className += " hidden";
   }
   return className;

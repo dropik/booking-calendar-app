@@ -99,9 +99,6 @@ export const useIsGrabbedTile:      (id: string) => boolean =
 export const useHoveredId:          () => string | undefined =
   () => useAppSelector(state => state.hoveredId.value);
 
-export const useIsGrabbing:         () => boolean =
-  () => useAppSelector(state => state.tiles.grabbedTile !== undefined);
-
 export const useHasUnassignedTiles: (x: string) => boolean =
   (x: string) => useAppSelector(state => (state.tiles.unassignedMap[x] !== undefined) && (Object.keys(state.tiles.unassignedMap[x]).length > 0));
 

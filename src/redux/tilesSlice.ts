@@ -89,6 +89,9 @@ export const tilesSlice = createSlice({
         for (let i = 0; i < tileData.nights; i++) {
           const x = Utils.dateToString(dateCounter);
           state.assignedMap[roomNumber][x] = undefined;
+          if (state.unassignedMap[x] === undefined) {
+            state.unassignedMap[x] = { };
+          }
           state.unassignedMap[x][tileId] = tileId;
           dateCounter.setDate(dateCounter.getDate() + 1);
         }
