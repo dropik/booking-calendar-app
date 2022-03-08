@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useMemo } from "react";
 import { hot } from "react-hot-loader";
 
 import { useAppSelector } from "../../../../redux/hooks";
@@ -17,7 +17,7 @@ function UnassignedRow(props: Props): JSX.Element {
   const rightmostSelectedTileDate = useRightmostSelectedTileDate();
 
   const days = getDaysCount(props.leftmostSelectedTileDate, rightmostSelectedTileDate);
-  const cells = getCells(props, days);
+  const cells = useCellsMemo(props.tileId, props.leftmostSelectedTileDate, days);
 
   return (<div className="unassigned-row">{cells}</div>);
 }
@@ -47,15 +47,17 @@ function getDaysCount(leftmostSelectedTileDate: string, rightmostSelectedTileDat
     0;
 }
 
-function getCells(props: Props, days: number): JSX.Element[] {
-  const cells: JSX.Element[] = [];
-  const dateCounter = new Date(props.leftmostSelectedTileDate);
-  for (let i = 0; i < days; i++) {
-    const x = Utils.dateToString(dateCounter);
-    cells.push(<UnassignedCell key={x} tileId={props.tileId} x={x} />);
-    dateCounter.setDate(dateCounter.getDate() + 1);
-  }
-  return cells;
+function useCellsMemo(tileId: string, leftmostSelectedTileDate: string, days: number): JSX.Element[] {
+  return useMemo(() => {
+    const cells: JSX.Element[] = [];
+    const dateCounter = new Date(leftmostSelectedTileDate);
+    for (let i = 0; i < days; i++) {
+      const x = Utils.dateToString(dateCounter);
+      cells.push(<UnassignedCell key={x} tileId={tileId} x={x} />);
+      dateCounter.setDate(dateCounter.getDate() + 1);
+    }
+    return cells;
+  }, [tileId, leftmostSelectedTileDate, days]);
 }
 
-export default hot(module)(UnassignedRow);
+export default memo(hot(module)(UnassignedRow));

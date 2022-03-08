@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { hot } from "react-hot-loader";
 
 import { useAppSelector } from "../../../../redux/hooks";
@@ -28,4 +28,4 @@ function useHasTilePart(x: string, tileId: string): boolean {
   });
 }
 
-export default hot(module)(UnassignedCell);
+export default memo(hot(module)(UnassignedCell));

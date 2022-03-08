@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
@@ -19,7 +19,7 @@ function UnassignedTilesPopup(): JSX.Element {
   const ref = useRef<HTMLDivElement>(null);
 
   const className = getClassName(show);
-  const rows = getRows(tilesPerSelectedDay, leftmostSelectedTileDate);
+  const rows = useRowsMemo(tilesPerSelectedDay, leftmostSelectedTileDate);
 
   useScrollEffect(ref, left);
   useHideOnClickOutsidePopupEffect(dispatch);
@@ -64,16 +64,18 @@ function getClassName(show: boolean | undefined): string {
   return className;
 }
 
-function getRows(tilesPerSelectedDay: { [key: string]: string }, leftmostSelectedTileDate: string | undefined): JSX.Element[] {
-  const rows: JSX.Element[] = [];
-  if (tilesPerSelectedDay) {
-    for (const tileId in tilesPerSelectedDay) {
-      if (leftmostSelectedTileDate) {
-        rows.push(<UnassignedRow key={tileId} tileId={tileId} leftmostSelectedTileDate={leftmostSelectedTileDate} />);
+function useRowsMemo(tilesPerSelectedDay: { [key: string]: string }, leftmostSelectedTileDate: string | undefined): JSX.Element[] {
+  return useMemo(() => {
+    const rows: JSX.Element[] = [];
+    if (tilesPerSelectedDay) {
+      for (const tileId in tilesPerSelectedDay) {
+        if (leftmostSelectedTileDate) {
+          rows.push(<UnassignedRow key={tileId} tileId={tileId} leftmostSelectedTileDate={leftmostSelectedTileDate} />);
+        }
       }
     }
-  }
-  return rows;
+    return rows;
+  }, [tilesPerSelectedDay, leftmostSelectedTileDate]);
 }
 
 function useScrollEffect(ref: React.RefObject<HTMLDivElement>, left: number): void {
