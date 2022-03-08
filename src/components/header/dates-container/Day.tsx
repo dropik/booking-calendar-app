@@ -1,13 +1,12 @@
 import React, { memo } from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 import { useAppDispatch, useHasUnassignedTiles } from "../../../redux/hooks";
 import * as TilesSlice from "../../../redux/tilesSlice";
 
 import "./Day.css";
+import DayAlert from "./DayAlert";
 
 type Props = {
   x: string
@@ -18,26 +17,14 @@ function Day(props: Props): JSX.Element {
   const hasUnassignedTiles = useHasUnassignedTiles(props.x);
 
   const day = props.x.substring(8);
-  const alert = getAlert(hasUnassignedTiles);
   const clickHandler = getClickHandler(dispatch, props.x);
 
   return (
     <div className="day" onMouseDown={onMouseDown} onClick={clickHandler}>
       <b>{day}</b>
-      {alert}
+      <DayAlert hasUnassignedTiles={hasUnassignedTiles} />
     </div>
   );
-}
-
-function getAlert(hasUnassignedTiles: boolean): JSX.Element {
-  return hasUnassignedTiles ?
-    <span
-      className="day-alert"
-      title="Ci sono occupazioni non assegnati"
-    >
-      <FontAwesomeIcon icon={faCircleExclamation} />
-    </span> :
-    <></>;
 }
 
 function getClickHandler(dispatch: React.Dispatch<AnyAction>, x: string): () => void {

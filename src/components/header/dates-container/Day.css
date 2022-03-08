@@ -7,12 +7,3 @@
   line-height: 4rem;
   cursor: pointer;
 }
-
-.day-alert {
-  display: inline-block;
-  position: absolute;
-  font-size: 0.8rem;
-  top: 0.4rem;
-  right: 0.4rem;
-  line-height: 1rem;
-}
