@@ -93,6 +93,10 @@ export const tilesSlice = createSlice({
     removeAssignment: (state, action: PayloadAction<{ tileId: string }>) => {
       tryRemoveAssignment(state, action);
       checkChangeReturnedToOriginal(state, action.payload.tileId);
+    },
+    undoChanges: (state) => {
+      unassignChangedTiles(state);
+      reassignTiles(state);
     }
   },
   extraReducers: (builder) => {
@@ -110,7 +114,7 @@ export const tilesSlice = createSlice({
   }
 });
 
-export const { move, grab, drop, toggleDate, removeAssignment } = tilesSlice.actions;
+export const { move, grab, drop, toggleDate, removeAssignment, undoChanges } = tilesSlice.actions;
 
 export default tilesSlice.reducer;
 
@@ -182,6 +186,44 @@ function tryRemoveAssignment(state: WritableDraft<State>, action: PayloadAction<
 
     setChange(state, tileId, tileData.roomNumber, undefined);
     tileData.roomNumber = undefined;
+  }
+}
+
+function unassignChangedTiles(state: WritableDraft<State>): void {
+  for (const tileId of Object.keys(state.changesMap)) {
+    const tileData = state.data[tileId];
+    const newRoom = state.changesMap[tileId].newRoom;
+
+    if (newRoom !== undefined) {
+      state.data[tileId].roomNumber = undefined;
+      const dateCounter = new Date(tileData.from);
+      for (let i = 0; i < tileData.nights; i++) {
+        const x = Utils.dateToString(dateCounter);
+        state.assignedMap[newRoom][x] = undefined;
+        state.unassignedMap[x][tileId] = tileId;
+        dateCounter.setDate(dateCounter.getDate() + 1);
+      }
+    }
+  }
+}
+
+function reassignTiles(state: WritableDraft<State>): void {
+  for (const tileId of Object.keys(state.changesMap)) {
+    const tileData = state.data[tileId];
+    const originalRoom = state.changesMap[tileId].originalRoom;
+
+    if (originalRoom !== undefined) {
+      state.data[tileId].roomNumber = originalRoom;
+      const dateCounter = new Date(tileData.from);
+      for (let i = 0; i < tileData.nights; i++) {
+        const x = Utils.dateToString(dateCounter);
+        state.assignedMap[originalRoom][x] = tileId;
+        delete state.unassignedMap[x][tileId];
+        dateCounter.setDate(dateCounter.getDate() + 1);
+      }
+    }
+
+    delete state.changesMap[tileId];
   }
 }
 
