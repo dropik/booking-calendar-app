@@ -7,13 +7,19 @@
   display: inline-block;
   line-height: 2rem;
   margin-right: 1rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  border: 2px solid black;
   cursor: pointer;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
 
 .button.save {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border: 2px solid black;
   background-color: #3d7deb;
   color: white;
 }
@@ -27,13 +33,5 @@
 }
 
 .button.reset {
-  background-color: #d0d0d0;
-}
-
-.reset:hover {
-  background-color: #bbbbbb;
-}
-
-.reset:active {
-  background-color: #9d9d9d;
+  color: black;
 }
