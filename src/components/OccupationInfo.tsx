@@ -1,57 +1,65 @@
-import React, { Dispatch, useEffect, useLayoutEffect, useRef } from "react";
-import { AnyAction } from "@reduxjs/toolkit";
+import React, { SetStateAction, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { hot } from "react-hot-loader";
 
-import { useAppDispatch, useHoveredId, useIsGrabbing, useMouseX, useMouseY, useTileData } from "../redux/hooks";
-import * as MouseSlice from "../redux/mouseSlice";
+import { useAppSelector, useTileData } from "../redux/hooks";
 import * as TilesSlice from "../redux/tilesSlice";
 import * as Utils from "../utils";
 
 import "./OccupationInfo.css";
 
+type MousePosition = {
+  x: number,
+  y: number
+};
+
 function OccupationInfo(): JSX.Element {
-  const mouseX = useMouseX();
-  const mouseY = useMouseY();
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const ref = useRef<HTMLDivElement>(null);
-  const dispatch = useAppDispatch();
   const hoveredId = useHoveredId();
   const tileData = useTileData(hoveredId);
-  const isGrabbing = useIsGrabbing();
+  const show = useCanShow();
 
-  useUpdateMousePositionEffect(dispatch);
-  useUpdatePopupCoordsEffect(ref, mouseX, mouseY);
+  useUpdateMousePositionEffect(setMousePosition);
+  useUpdatePopupCoordsEffect(ref, mousePosition);
 
-  const className = getClassName(hoveredId, isGrabbing);
+  const className = getClassName(hoveredId, show);
 
   return getContents(tileData, ref, className);
 }
 
+function useHoveredId() {
+  return useAppSelector(state => state.hoveredId.value);
+}
+
+function useCanShow(): boolean {
+  return useAppSelector(state => (state.tiles.grabbedTile === undefined) && (state.contextMenu.tileId === undefined));
+}
+
 function useUpdatePopupCoordsEffect(
   ref: React.RefObject<HTMLDivElement>,
-  mouseX: number,
-  mouseY: number
+  mousePosition: MousePosition
 ): void {
   useLayoutEffect(() => {
     if (ref.current) {
-      ref.current.style.top = `${mouseY + 10}px`;
-      ref.current.style.left = `${mouseX + 20}px`;
+      ref.current.style.top = `${mousePosition.y + 10}px`;
+      ref.current.style.left = `${mousePosition.x + 20}px`;
     }
-  }, [ref, mouseX, mouseY]);
+  }, [ref, mousePosition]);
 }
 
-function useUpdateMousePositionEffect(dispatch: Dispatch<AnyAction>): void {
+function useUpdateMousePositionEffect(dispatch: React.Dispatch<SetStateAction<MousePosition>>): void {
   useEffect(() => {
     function updateMousePosition(event: MouseEvent) {
-      dispatch(MouseSlice.updatePosition({ x: event.x, y: event.y }));
+      dispatch({ x: event.x, y: event.y });
     }
     window.addEventListener("mousemove", updateMousePosition);
     return () => window.removeEventListener("mousemove", updateMousePosition);
   }, [dispatch]);
 }
 
-function getClassName(hoveredId: number | undefined, isGrabbing: boolean): string {
+function getClassName(hoveredId: string | undefined, show: boolean): string {
   let className = "occupation-info";
-  if ((hoveredId === undefined) || isGrabbing) {
+  if (!hoveredId || !show) {
     className += " hidden";
   }
   return className;

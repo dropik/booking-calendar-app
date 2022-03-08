@@ -1,24 +1,16 @@
 import React, { Dispatch, useLayoutEffect, useRef } from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 import * as Utils from "../../utils";
 
-import {
-  useAppDispatch,
-  useAppSelector,
-  useColumns,
-  useLeftmostDate,
-  usePersonsInRoomType,
-  useRoomTypeByNumber,
-  useTileIdByCoords
-} from "../../redux/hooks";
+import { useAppDispatch, useAppSelector, useColumns, useLeftmostDate } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
-import * as MouseSlice from "../../redux/mouseSlice";
+import * as HoveredIdSlice from "../../redux/hoveredIdSlice";
+import * as ContextMenuSlice from "../../redux/contextMenuSlice";
 
 import "./TilePart.css";
+import TilePartAlert from "./TilePartAlert";
 
 type Props = {
   x: string,
@@ -28,8 +20,8 @@ type Props = {
 
 function TilePart(props: Props): JSX.Element {
   const dispatch = useAppDispatch();
-  const tileId = useTileIdByCoords(props.x, props.y);
-  const grabbed = useAppSelector(state => state.tiles.data[tileId].grabbed);
+  const tileId = props.tileData.id;
+  const grabbed = useIsGrabbedTile(tileId);
   const ref = useRef<HTMLDivElement>(null);
   const leftmostDate = useLeftmostDate();
   const columns = useColumns();
@@ -37,13 +29,17 @@ function TilePart(props: Props): JSX.Element {
   const personsInRoomType = usePersonsInRoomType(roomType);
 
   const outOfBound = isOutOfBound(props.tileData, leftmostDate, columns);
-  const grabHandler = getGrabHandler(dispatch, tileId, outOfBound);
-  const overHandler = getOverHandler(dispatch, tileId);
-  const outHandler = getOutHandler(dispatch);
+  const grabHandler = getGrabHandler(ref, dispatch, tileId, outOfBound);
+  const enterHandler = getEnterHandler(dispatch, tileId);
+  const leaveHandler = getLeaveHandler(dispatch);
   const className = getClassName(grabbed, outOfBound);
-  const alert = getAlert(personsInRoomType, roomType, props.tileData);
 
-  useMouseHandlingEffects(dispatch, ref, grabbed, tileId);
+  function onContextMenu(event: React.MouseEvent<HTMLDivElement>) {
+    event.preventDefault();
+    event.stopPropagation();
+    dispatch(ContextMenuSlice.showTileContextMenu({ tileId, mouseX: event.pageX, mouseY: event.pageY }));
+  }
+
   useBackgroundColourEffect(ref, props.tileData.colour);
 
   return (
@@ -51,35 +47,58 @@ function TilePart(props: Props): JSX.Element {
       ref={ref}
       className={className}
       onMouseDown={grabHandler}
-      onMouseOver={overHandler}
-      onMouseOut={outHandler}
+      onMouseEnter={enterHandler}
+      onMouseLeave={leaveHandler}
+      onContextMenu={onContextMenu}
     >
       <span className="tile-persons">{props.tileData.persons}</span>
-      {alert}
+      <TilePartAlert personsInRoomType={personsInRoomType} roomType={roomType} tileData={props.tileData} />
     </div>
   );
 }
 
+function useIsGrabbedTile(id: string) {
+  return useAppSelector(state => state.tiles.grabbedMap[id]);
+}
+
+
+function useRoomTypeByNumber(roomNumber: number): string {
+  return useAppSelector((state) => {
+    for (const floor of state.hotel.data.floors) {
+      for (const room of floor.rooms) {
+        if (room.number === roomNumber) {
+          return room.type;
+        }
+      }
+    }
+    return "";
+  });
+}
+
+function usePersonsInRoomType(type: string) {
+  return useAppSelector(state => state.roomTypes.data[type]);
+}
+
 function getGrabHandler(
+  ref: React.RefObject<HTMLDivElement>,
   dispatch: React.Dispatch<AnyAction>,
-  tileId: number,
+  tileId: string,
   outOfBound: boolean
 ): (event: React.MouseEvent<HTMLDivElement>) => void {
   return (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
-    if ((event.button == 0) && !outOfBound) {
-      dispatch(TilesSlice.grab({ tileId }));
-      dispatch(MouseSlice.grab());
+    if ((event.button == 0) && !outOfBound && ref.current) {
+      dispatch(TilesSlice.grab({ tileId, mouseY: event.pageY - ref.current.getBoundingClientRect().top }));
     }
   };
 }
 
-function getOverHandler(dispatch: Dispatch<AnyAction>, tileId: number): () => void {
-  return () => dispatch(MouseSlice.setHoveredId(tileId));
+function getEnterHandler(dispatch: Dispatch<AnyAction>, tileId: string): () => void {
+  return () => dispatch(HoveredIdSlice.set(tileId));
 }
 
-function getOutHandler(dispatch: Dispatch<AnyAction>): () => void {
-  return () => dispatch(MouseSlice.setHoveredId(undefined));
+function getLeaveHandler(dispatch: Dispatch<AnyAction>): () => void {
+  return () => dispatch(HoveredIdSlice.set(undefined));
 }
 
 function isOutOfBound(tileData: TilesSlice.TileData, leftmostDate: string, columns: number): boolean {
@@ -96,69 +115,6 @@ function getClassName(grabbed: boolean | undefined, outOfBound: boolean): string
     className += " out-of-bound";
   }
   return className;
-}
-
-function getAlert(personsInRoomType: number[], roomType: string, tileData: TilesSlice.TileData): JSX.Element {
-  let alert: JSX.Element = <></>;
-  if (personsInRoomType.includes(tileData.persons)) {
-    if (roomType !== tileData.roomType) {
-      alert = (
-        <span
-          className="tile-alert warning"
-          title="Tipologia della stanza diversa da quella prenotata"
-        >
-          <FontAwesomeIcon icon={faTriangleExclamation} />
-        </span>
-      );
-    }
-  } else {
-    alert = (
-      <span
-        className="tile-alert error"
-        title="Usata una stanza con il numero di occupazioni non corretti per questa prenotazione"
-      >
-        <FontAwesomeIcon icon={faTriangleExclamation} />
-      </span>
-    );
-  }
-  return alert;
-}
-
-function useMouseHandlingEffects(
-  dispatch: React.Dispatch<AnyAction>,
-  ref: React.RefObject<HTMLDivElement>,
-  grabbed: boolean | undefined,
-  tileId: number
-): void {
-  useLayoutEffect(() => {
-    const currentRef = ref.current;
-
-    function onMove(event: MouseEvent) {
-      if (currentRef) {
-        const currentTopStr = currentRef.style.top;
-        const currentTop = parseFloat(currentTopStr.substring(0, currentTopStr.length - 2));
-        currentRef.style.top = `${currentTop + event.movementY / window.devicePixelRatio}px`;
-      }
-    }
-
-    function onDrop() {
-      dispatch(TilesSlice.drop({ tileId }));
-      dispatch(MouseSlice.drop());
-    }
-
-    if (grabbed) {
-      window.addEventListener("mousemove", onMove);
-      window.addEventListener("mouseup", onDrop);
-    }
-
-    return () => {
-      if (currentRef) {
-        currentRef.style.top = "0px";
-      }
-      window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("mouseup", onDrop);
-    };
-  }, [dispatch, ref, grabbed, tileId]);
 }
 
 function useBackgroundColourEffect(

@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import { hot } from "react-hot-loader";
 
-import { useAppDispatch, useLastFetchPeriod } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
+import * as TableSlice from "../../redux/tableSlice";
 
 function FetchTiles(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -13,6 +14,10 @@ function FetchTiles(): JSX.Element {
   }, [dispatch, lastFetchPeriod]);
 
   return <></>;
+}
+
+function useLastFetchPeriod(): TableSlice.FetchPeriod {
+  return useAppSelector(state => state.table.lastFetchPeriod);
 }
 
 export default hot(module)(FetchTiles);

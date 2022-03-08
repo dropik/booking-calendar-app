@@ -1,0 +1,15 @@
+.grabbed-tile {
+  position: fixed;
+  display: flex;
+  z-index: -9999;
+  border: 2px solid black;
+  border-right: 0;
+}
+
+.grabbed-tile > .cell {
+  width: 4rem;
+  height: 4rem;
+  border-right: 2px solid black;
+  text-align: center;
+  line-height: 4rem;
+}

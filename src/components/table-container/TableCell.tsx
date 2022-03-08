@@ -33,8 +33,8 @@ function TableCell(props: Props): JSX.Element {
 
 function useTileDataAt(x: string, y: number): TilesSlice.TileData | undefined {
   return useAppSelector(state => {
-    const tilesForRoom = state.tiles[y];
-    return (tilesForRoom === undefined) ? undefined : state.tiles.data[tilesForRoom[x] as number];
+    const tilesForRoom = state.tiles.assignedMap[y];
+    return (tilesForRoom === undefined) ? undefined : state.tiles.data[tilesForRoom[x] as string];
   });
 }
 

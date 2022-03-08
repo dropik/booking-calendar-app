@@ -1,7 +1,9 @@
 .day {
   flex-direction: row;
+  position: relative;
   border-right: 2px solid black;
   width: 4rem;
   text-align: center;
   line-height: 4rem;
+  cursor: pointer;
 }
