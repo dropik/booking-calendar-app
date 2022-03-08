@@ -13,7 +13,8 @@ export type State = {
   columns: number,
   offsetHeight: number,
   clientHeight: number,
-  lastFetchPeriod: FetchPeriod
+  lastFetchPeriod: FetchPeriod,
+  fetchReason: "changeDate" | "expand"
 };
 
 function getInitialState(): State {
@@ -29,7 +30,8 @@ function getInitialState(): State {
     lastFetchPeriod: {
       from: leftmostDate,
       to: Utils.getDateShift(leftmostDate, columns - 1)
-    }
+    },
+    fetchReason: "changeDate"
   };
 }
 
@@ -48,6 +50,7 @@ export const tableSlice = createSlice({
         from: state.leftmostDate,
         to: Utils.getDateShift(state.leftmostDate, state.columns - 1)
       };
+      state.fetchReason = "changeDate";
     },
     expandLeft: (state) => {
       state.leftmostDate = Utils.getDateShift(state.leftmostDate, -Globals.TABLE_PRELOAD_AMOUNT);
@@ -56,6 +59,7 @@ export const tableSlice = createSlice({
         from: state.leftmostDate,
         to: Utils.getDateShift(state.leftmostDate, Globals.TABLE_PRELOAD_AMOUNT - 1)
       };
+      state.fetchReason = "expand";
     },
     expandRight: (state) => {
       state.columns += Globals.TABLE_PRELOAD_AMOUNT;
@@ -63,6 +67,7 @@ export const tableSlice = createSlice({
         from: Utils.getDateShift(state.leftmostDate, state.columns - Globals.TABLE_PRELOAD_AMOUNT),
         to: Utils.getDateShift(state.leftmostDate, state.columns - 1)
       };
+      state.fetchReason = "expand";
     }
   }
 });
