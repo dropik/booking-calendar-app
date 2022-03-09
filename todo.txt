@@ -1,4 +1,3 @@
-- Modifications trace. Save and reset buttons.
 - Selection arrow for unassigned tiles popup.
 - Title / occupations view.
 - Global information about alerts/unassigned tiles present.
