@@ -5,3 +5,12 @@
 .react-datepicker-popper {
   z-index: 9999;
 }
+
+.react-datepicker-wrapper input {
+  border: 0;
+  line-height: 2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 0 0 2px inset black;
+}

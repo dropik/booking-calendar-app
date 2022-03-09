@@ -4,7 +4,7 @@ import { AnyAction } from "@reduxjs/toolkit";
 
 import * as Utils from "../utils";
 import * as Globals from "../globals";
-import { useAppDispatch, useHotelData, useLeftmostDate } from "../redux/hooks";
+import { useAppDispatch, useAppSelector, useHotelData, useLeftmostDate } from "../redux/hooks";
 import * as HotelSlice from "../redux/hotelSlice";
 import * as ScrollSlice from "../redux/scrollSlice";
 import * as TableSlice from "../redux/tableSlice";
@@ -15,17 +15,19 @@ import GrabbedTile from "./table-container/GrabbedTile";
 import TileContextMenu from "./table-container/TileContextMenu";
 
 import "./TableContainer.css";
+import ConnectionError from "./table-container/ConnectionError";
 
 function TableContainer(): JSX.Element {
   const dispatch = useAppDispatch();
+  const ref = useRef<HTMLDivElement>(null);
   const hotelData = useHotelData();
   const leftmostDate = useLeftmostDate();
-  const ref = useRef<HTMLDivElement>(null);
+  const fetchReason = useFetchReason();
 
   const scrollHanlder = getScrollHandler(dispatch);
 
   useTableDimentionsUpdateEffect(ref, dispatch, hotelData);
-  useInitialScrollLeftEffect(ref, hotelData, leftmostDate);
+  useInitialScrollLeftEffect(ref, hotelData, leftmostDate, fetchReason);
 
   const tableContents = useTableContentsMemo();
 
@@ -34,6 +36,10 @@ function TableContainer(): JSX.Element {
       {tableContents}
     </div>
   );
+}
+
+function useFetchReason(): "changeDate" | "expand" {
+  return useAppSelector((state) => state.table.fetchReason);
 }
 
 function getScrollHandler(
@@ -61,15 +67,20 @@ function getScrollHandler(
 function useInitialScrollLeftEffect(
   ref: React.RefObject<HTMLDivElement>,
   hotelData: HotelSlice.HotelData,
-  leftmostDate: string
+  leftmostDate: string,
+  fetchReason: "changeDate" | "expand"
 ): void {
   useLayoutEffect(() => {
     const columnWidth = Utils.remToPx(4) + 2;
     const scrollLeft = columnWidth * Globals.TABLE_PRELOAD_AMOUNT + 2;
     if (ref.current) {
-      ref.current.scrollLeft += scrollLeft;
+      if (fetchReason === "expand") {
+        ref.current.scrollLeft += scrollLeft;
+      } else if (fetchReason === "changeDate") {
+        ref.current.scrollLeft = scrollLeft;
+      }
     }
-  }, [ref, hotelData, leftmostDate]);
+  }, [ref, hotelData, leftmostDate, fetchReason]);
 }
 
 function useTableDimentionsUpdateEffect(
@@ -95,6 +106,7 @@ function useTableContentsMemo(): JSX.Element {
       <FetchTiles />
       <GrabbedTile />
       <TileContextMenu />
+      <ConnectionError />
     </>
   ), []);
 }

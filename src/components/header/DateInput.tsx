@@ -8,6 +8,8 @@ import * as Utils from "../../utils";
 import { useAppDispatch, useCurrentDate } from "../../redux/hooks";
 import * as TableSlice from "../../redux/tableSlice";
 
+import SaveAndReset from "./SaveAndReset";
+
 import "react-datepicker/dist/react-datepicker.css";
 import "./DateInput.css";
 
@@ -20,12 +22,15 @@ function DateInput(): JSX.Element {
   const dateChangeHandler = getDateChangeHandler(dispatch);
 
   return (
-    <DatePicker
-      locale="it"
-      dateFormat="dd/MM/yyyy"
-      selected={new Date(currentDate)}
-      onChange={dateChangeHandler}
-    />
+    <>
+      <DatePicker
+        locale="it"
+        dateFormat="dd/MM/yyyy"
+        selected={new Date(currentDate)}
+        onChange={dateChangeHandler}
+      />
+      <SaveAndReset />
+    </>
   );
 }
 

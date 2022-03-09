@@ -1,8 +1,10 @@
-- Modifications trace. Save and reset buttons.
+- Selection arrow for unassigned tiles popup.
 - Title / occupations view.
 - Global information about alerts/unassigned tiles present.
 - Check-in system. Police data export.
 - Handle touchscreen.
+- Handle connection errors.
+- Handle waiting while fetch.
 - Enhance info popup positioning.
 - Tile colour assignment.
 - Real-time backend synchronization for updating tiles.

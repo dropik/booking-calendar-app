@@ -18,6 +18,13 @@ export type TileData = {
   roomNumber?: number
 };
 
+export type ChangesMap = {
+  [key: string]: {
+    originalRoom: number | undefined,
+    newRoom: number | undefined
+  }
+};
+
 export type State = {
   status: "idle" | "loading" | "failed",
   data: {
@@ -36,6 +43,7 @@ export type State = {
   grabbedMap: {
     [key: string]: boolean
   },
+  changesMap: ChangesMap,
   grabbedTile?: string,
   selectedDate?: string
   mouseYOnGrab: number
@@ -47,6 +55,7 @@ const initialState: State = {
   assignedMap: { },
   unassignedMap: { },
   grabbedMap: { },
+  changesMap: { },
   mouseYOnGrab: 0
 };
 
@@ -66,6 +75,9 @@ export const tilesSlice = createSlice({
   reducers: {
     move: (state, action: PayloadAction<{ newY: number }>) => {
       tryMoveTile(state, action);
+      if (state.grabbedTile) {
+        checkChangeReturnedToOriginal(state, state.grabbedTile);
+      }
     },
     grab: (state, action: PayloadAction<{ tileId: string, mouseY: number }>) => {
       state.grabbedTile = action.payload.tileId;
@@ -81,22 +93,15 @@ export const tilesSlice = createSlice({
       state.selectedDate = state.selectedDate === action.payload.date ? undefined : action.payload.date;
     },
     removeAssignment: (state, action: PayloadAction<{ tileId: string }>) => {
-      const tileId = action.payload.tileId;
-      const tileData = state.data[tileId];
-      const roomNumber = tileData.roomNumber;
-      if (roomNumber) {
-        const dateCounter = new Date(tileData.from);
-        for (let i = 0; i < tileData.nights; i++) {
-          const x = Utils.dateToString(dateCounter);
-          state.assignedMap[roomNumber][x] = undefined;
-          if (state.unassignedMap[x] === undefined) {
-            state.unassignedMap[x] = { };
-          }
-          state.unassignedMap[x][tileId] = tileId;
-          dateCounter.setDate(dateCounter.getDate() + 1);
-        }
-        tileData.roomNumber = undefined;
-      }
+      tryRemoveAssignment(state, action);
+      checkChangeReturnedToOriginal(state, action.payload.tileId);
+    },
+    saveChanges: (state) => {
+      state.changesMap = { };
+    },
+    undoChanges: (state) => {
+      unassignChangedTiles(state);
+      reassignTiles(state);
     }
   },
   extraReducers: (builder) => {
@@ -114,7 +119,7 @@ export const tilesSlice = createSlice({
   }
 });
 
-export const { move, grab, drop, toggleDate, removeAssignment } = tilesSlice.actions;
+export const { move, grab, drop, toggleDate, removeAssignment, saveChanges, undoChanges } = tilesSlice.actions;
 
 export default tilesSlice.reducer;
 
@@ -168,6 +173,80 @@ function tryMoveTile(
   }
 }
 
+function tryRemoveAssignment(state: WritableDraft<State>, action: PayloadAction<{ tileId: string }>): void {
+  const tileId = action.payload.tileId;
+  const tileData = state.data[tileId];
+  const roomNumber = tileData.roomNumber;
+  if (roomNumber) {
+    const dateCounter = new Date(tileData.from);
+    for (let i = 0; i < tileData.nights; i++) {
+      const x = Utils.dateToString(dateCounter);
+      state.assignedMap[roomNumber][x] = undefined;
+      if (state.unassignedMap[x] === undefined) {
+        state.unassignedMap[x] = { };
+      }
+      state.unassignedMap[x][tileId] = tileId;
+      dateCounter.setDate(dateCounter.getDate() + 1);
+    }
+
+    setChange(state, tileId, tileData.roomNumber, undefined);
+    tileData.roomNumber = undefined;
+  }
+}
+
+function unassignChangedTiles(state: WritableDraft<State>): void {
+  for (const tileId of Object.keys(state.changesMap)) {
+    const tileData = state.data[tileId];
+    const newRoom = state.changesMap[tileId].newRoom;
+
+    if (newRoom !== undefined) {
+      state.data[tileId].roomNumber = undefined;
+      const dateCounter = new Date(tileData.from);
+      for (let i = 0; i < tileData.nights; i++) {
+        const x = Utils.dateToString(dateCounter);
+        state.assignedMap[newRoom][x] = undefined;
+        if (!state.unassignedMap[x]) {
+          state.unassignedMap[x] = { };
+        }
+        state.unassignedMap[x][tileId] = tileId;
+        dateCounter.setDate(dateCounter.getDate() + 1);
+      }
+    }
+  }
+}
+
+function reassignTiles(state: WritableDraft<State>): void {
+  for (const tileId of Object.keys(state.changesMap)) {
+    const tileData = state.data[tileId];
+    const originalRoom = state.changesMap[tileId].originalRoom;
+
+    if (originalRoom !== undefined) {
+      state.data[tileId].roomNumber = originalRoom;
+      const dateCounter = new Date(tileData.from);
+      for (let i = 0; i < tileData.nights; i++) {
+        const x = Utils.dateToString(dateCounter);
+        if (!state.assignedMap[originalRoom]) {
+          state.assignedMap[originalRoom] = { };
+        }
+        state.assignedMap[originalRoom][x] = tileId;
+        delete state.unassignedMap[x][tileId];
+        dateCounter.setDate(dateCounter.getDate() + 1);
+      }
+    }
+
+    delete state.changesMap[tileId];
+  }
+}
+
+function checkChangeReturnedToOriginal(state: WritableDraft<State>, tileId: string): void {
+  if (
+    state.changesMap[tileId] &&
+    (state.changesMap[tileId].originalRoom === state.changesMap[tileId].newRoom)
+  ) {
+    delete state.changesMap[tileId];
+  }
+}
+
 function moveOrAssignTile(state: WritableDraft<State>, tileId: string, prevY: number | undefined, newY: number): void {
   if (prevY !== undefined) {
     moveTile(state, tileId, prevY, newY);
@@ -190,6 +269,8 @@ function moveTile(
     state.assignedMap[prevY][x] = undefined;
     dateCounter.setDate(dateCounter.getDate() + 1);
   }
+
+  setChange(state, tileId, state.data[tileId].roomNumber, newY);
   state.data[tileId].roomNumber = newY;
 }
 
@@ -220,5 +301,18 @@ function assignTile(state: WritableDraft<State>, tileId: string, newY: number): 
     delete state.unassignedMap[x][tileId];
     dateCounter.setDate(dateCounter.getDate() + 1);
   }
+
+  setChange(state, tileId, state.data[tileId].roomNumber, newY);
   state.data[tileId].roomNumber = newY;
+}
+
+function setChange(state: WritableDraft<State>, tileId: string, prevY: number | undefined, newY: number | undefined): void {
+  if (!state.changesMap[tileId]) {
+    state.changesMap[tileId] = {
+      originalRoom: prevY,
+      newRoom: newY
+    };
+  } else {
+    state.changesMap[tileId].newRoom = newY;
+  }
 }

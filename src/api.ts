@@ -27,3 +27,9 @@ export function fetchTilesAsync(from: string, to: string): Promise<{ data: Tiles
     isTilesFetched = true;
   });
 }
+
+export function postChangesAsync(changes: TilesSlice.ChangesMap): Promise<{ data: "ok" }> {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve({ data: "ok" }), 1000);
+  });
+}

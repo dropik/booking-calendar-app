@@ -66,6 +66,7 @@ function getGrabHandler(
 ): (event: React.MouseEvent<HTMLDivElement>) => void {
   return (event: React.MouseEvent<HTMLDivElement>) => {
     if (!outOfBound && ref.current) {
+      dispatch(HoveredIdSlice.set(undefined));
       dispatch(TilesSlice.grab({ tileId: tileId, mouseY: event.pageY - ref.current.getBoundingClientRect().top }));
     }
   };
