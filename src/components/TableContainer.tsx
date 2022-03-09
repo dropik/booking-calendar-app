@@ -15,6 +15,7 @@ import GrabbedTile from "./table-container/GrabbedTile";
 import TileContextMenu from "./table-container/TileContextMenu";
 
 import "./TableContainer.css";
+import ConnectionError from "./table-container/ConnectionError";
 
 function TableContainer(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -105,6 +106,7 @@ function useTableContentsMemo(): JSX.Element {
       <FetchTiles />
       <GrabbedTile />
       <TileContextMenu />
+      <ConnectionError />
     </>
   ), []);
 }
