@@ -7,3 +7,7 @@
   line-height: 4rem;
   cursor: pointer;
 }
+
+.day.selected {
+  box-shadow: 0px 0px 21px -6px inset black;
+}

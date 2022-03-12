@@ -1,4 +1,3 @@
-- Selection arrow for unassigned tiles popup.
 - Title / occupations view.
 - Global information about alerts/unassigned tiles present.
 - Check-in system. Police data export.

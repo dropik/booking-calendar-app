@@ -16,13 +16,19 @@ type Props = {
 function Day(props: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const hasUnassignedTiles = useHasUnassignedTiles(props.x);
+  const selected = useAppSelector((state) => state.tiles.selectedDate === props.x);
 
   const day = props.x.substring(8);
   const clickHandler = getClickHandler(dispatch, props.x);
   const mouseDownHandler = getMouseDownHandler(dispatch);
 
+  let className = "day";
+  if (selected) {
+    className += " selected";
+  }
+
   return (
-    <div className="day" onMouseDown={mouseDownHandler} onClick={clickHandler}>
+    <div className={className} onMouseDown={mouseDownHandler} onClick={clickHandler}>
       <b>{day}</b>
       <DayAlert hasUnassignedTiles={hasUnassignedTiles} />
     </div>
@@ -33,7 +39,10 @@ function useHasUnassignedTiles(x: string) {
   return useAppSelector(state => (state.tiles.unassignedMap[x] !== undefined) && (Object.keys(state.tiles.unassignedMap[x]).length > 0));
 }
 
-function getClickHandler(dispatch: React.Dispatch<AnyAction>, x: string): () => void {
+function getClickHandler(
+  dispatch: React.Dispatch<AnyAction>,
+  x: string
+): () => void {
   return () => {
     if(document.getSelection() && document.getSelection()?.empty) {
       document.getSelection()?.empty();
