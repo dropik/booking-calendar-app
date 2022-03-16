@@ -8,6 +8,7 @@ import * as Utils from "../../utils";
 import { useAppDispatch, useCurrentDate } from "../../redux/hooks";
 import * as TableSlice from "../../redux/tableSlice";
 
+import SidemenuButton from "./SidemenuButton";
 import SaveAndReset from "./SaveAndReset";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -23,6 +24,7 @@ function DateInput(): JSX.Element {
 
   return (
     <>
+      <SidemenuButton />
       <DatePicker
         locale="it"
         dateFormat="dd/MM/yyyy"

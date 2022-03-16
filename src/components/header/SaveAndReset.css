@@ -1,6 +1,8 @@
 .save-and-reset {
-  position: absolute;
-  right: 0;
+  display: flex;
+  flex-basis: 25%;
+  justify-content: end;
+  align-items: center;
 }
 
 .save-and-reset > .button {
