@@ -1,4 +1,4 @@
-- Check-in system. Police data export. Istat export. City tax calculation. Find person.
+- Police data export. Istat export. City tax calculation. Find person.
 - Tile colour assignment.
 - Enhance info popup positioning.
 - Grabbed tile above table.
@@ -10,3 +10,4 @@
 - Prettier interface.
 - Real API calls.
 - Table fragmentation system??
+- Police data sending directly to police web portal??
