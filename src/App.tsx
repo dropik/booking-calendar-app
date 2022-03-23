@@ -7,6 +7,7 @@ import TableContainer from "./components/TableContainer";
 
 import "./App.css";
 import OccupationInfo from "./components/OccupationInfo";
+import Sidemenu from "./components/Sidemenu";
 
 function App(): JSX.Element {
   useWindowCursorGrabbingEffect();
@@ -17,6 +18,7 @@ function App(): JSX.Element {
       <Hotel />
       <TableContainer />
       <OccupationInfo />
+      <Sidemenu />
     </div>
   );
 }
