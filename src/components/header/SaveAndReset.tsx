@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
 import * as SaveChangesSlice from "../../redux/saveChangesSlice";
 
+import "../../globals.css";
 import "./SaveAndReset.css";
 
 function SaveAndReset(): JSX.Element {

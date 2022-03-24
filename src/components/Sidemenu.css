@@ -9,7 +9,7 @@
   z-index: 9999;
 }
 
-.sidemenu > .container {
+.sidemenu .container {
   flex-grow: 1;
   background-color: #393939;
   padding-top: 1rem;
@@ -17,15 +17,48 @@
   max-width: 17rem;
 }
 
-.sidemenu > .fallback {
+.sidemenu .fallback {
   flex-grow: 3;
 }
 
-.sidemenu > .container > .title {
-  text-align: center;
+.sidemenu .title {
+  display: flex;
+  padding-left: 1rem;
+  justify-content: space-between;
+  padding-right: 1rem;
 }
 
-.sidemenu > .container > hr {
+.sidemenu .button {
+  cursor: pointer;
+}
+
+.sidemenu .button:hover {
+  color: #cacaca;
+}
+
+.sidemenu .button:active {
+  color: #bdbdbd;
+}
+
+.sidemenu hr {
   border: none;
   height: 1px;
+}
+
+.sidemenu .group-label {
+  padding-left: 0.5rem;
+  padding-top: 0.5rem;
+  font-size: 0.8rem;
+  padding-bottom: 0.5rem;
+}
+
+.sidemenu .menu-item {
+  display: flex;
+  padding-left: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.sidemenu .icon {
+  flex-basis: 2rem;
 }
