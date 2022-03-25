@@ -4,15 +4,28 @@ import DatePicker from "react-datepicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
+import { useAppDispatch } from "../../redux/hooks";
+import * as DialogSlice from "../../redux/dialogSlice";
+
 import "react-datepicker/dist/react-datepicker.css";
 import "./PoliceExportDialog.css";
 
 function PoliceExportDialog(): JSX.Element {
+  const dispatch = useAppDispatch();
+
+  function preventHideOnSelfClick(event: React.MouseEvent<HTMLDivElement>) {
+    event.stopPropagation();
+  }
+
+  function hideDialog() {
+    dispatch(DialogSlice.hide());
+  }
+
   return (
-    <div className="police-export-dialog">
+    <div className="police-export-dialog" onClick={preventHideOnSelfClick}>
       <h3>
         Esporta Dati Polizia
-        <FontAwesomeIcon className="button close" icon={faXmark} />
+        <FontAwesomeIcon className="button close" icon={faXmark} onClick={hideDialog} />
       </h3>
       <hr />
       <div className="row">

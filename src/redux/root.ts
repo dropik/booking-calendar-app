@@ -9,5 +9,19 @@ import roomTypes from "./roomTypesSlice";
 import contextMenu from "./contextMenuSlice";
 import saveChanges from "./saveChangesSlice";
 import sidemenu from "./sidemenuSlice";
+import dialog from "./dialogSlice";
 
-export default combineReducers({ table, hotel, scroll, tiles, hoveredId, roomTypes, contextMenu, saveChanges, sidemenu });
+export default combineReducers(
+  {
+    table,
+    hotel,
+    scroll,
+    tiles,
+    hoveredId,
+    roomTypes,
+    contextMenu,
+    saveChanges,
+    sidemenu,
+    dialog
+  }
+);

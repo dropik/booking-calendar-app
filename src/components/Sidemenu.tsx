@@ -5,6 +5,7 @@ import { faAngleLeft, faBuilding, faChartColumn, faMoneyBill, faPerson } from "@
 
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import * as SidemenuSlice from "../redux/sidemenuSlice";
+import * as DialogSlice from "../redux/dialogSlice";
 
 import "../globals.css";
 import "./Sidemenu.css";
@@ -40,6 +41,10 @@ function Sidemenu(): JSX.Element {
     }
   }
 
+  function showDialog(dialog: DialogSlice.DialogType) {
+    dispatch(DialogSlice.show({ dialogType: dialog }));
+  }
+
   if (!showed) {
     return <></>;
   }
@@ -54,7 +59,7 @@ function Sidemenu(): JSX.Element {
         </h3>
         <hr color="#252525" />
         <div className="group-label">Esporta</div>
-        <div className="menu-item button">
+        <div className="menu-item button" onClick={() => { showDialog("police"); }}>
           <span className="icon"><FontAwesomeIcon icon={faBuilding} /></span>
           Polizia
         </div>
