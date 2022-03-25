@@ -1,17 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { hot } from "react-hot-loader";
 import DatePicker from "react-datepicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
-import { useAppDispatch } from "../../redux/hooks";
+import { useAppDispatch, useCurrentDate } from "../../redux/hooks";
 import * as DialogSlice from "../../redux/dialogSlice";
+import * as Utils from "../../utils";
 
 import "react-datepicker/dist/react-datepicker.css";
 import "./PoliceExportDialog.css";
 
 function PoliceExportDialog(): JSX.Element {
   const dispatch = useAppDispatch();
+  const currentDate = useCurrentDate();
+  const [selectedDate, setSelectedDate] = useState(currentDate);
 
   function preventHideOnSelfClick(event: React.MouseEvent<HTMLDivElement>) {
     event.stopPropagation();
@@ -19,6 +22,10 @@ function PoliceExportDialog(): JSX.Element {
 
   function hideDialog() {
     dispatch(DialogSlice.hide());
+  }
+
+  function onDateChange(date: Date) {
+    setSelectedDate(Utils.dateToString(date));
   }
 
   return (
@@ -33,8 +40,8 @@ function PoliceExportDialog(): JSX.Element {
           <DatePicker
             locale="it"
             dateFormat="dd/MM/yyyy"
-            selected={new Date()}
-            onChange={() => []}
+            selected={new Date(selectedDate)}
+            onChange={onDateChange}
           />
         </div>
         <div className="button">Esporta</div>
