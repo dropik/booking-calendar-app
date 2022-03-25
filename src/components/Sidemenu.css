@@ -7,14 +7,39 @@
   display: flex;
   background-color: rgb(0 0 0 / 23%);
   z-index: 9999;
+  animation-name: show-sidemenu;
+  animation-duration: 0.2s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes show-sidemenu {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes show-sidemenu-container {
+  from {
+    left: -1rem;
+  }
+  to {
+    left: 0;
+  }
 }
 
 .sidemenu .container {
+  position: relative;
   flex-grow: 1;
   background-color: #393939;
   padding-top: 1rem;
   color: white;
   max-width: 17rem;
+  animation-name: show-sidemenu-container;
+  animation-duration: 0.2s;
+  animation-fill-mode: forwards;
 }
 
 .sidemenu .fallback {
@@ -26,10 +51,6 @@
   padding-left: 1rem;
   justify-content: space-between;
   padding-right: 1rem;
-}
-
-.sidemenu .button {
-  cursor: pointer;
 }
 
 .sidemenu .button:hover {
