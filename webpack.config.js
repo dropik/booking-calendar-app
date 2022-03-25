@@ -34,5 +34,21 @@ module.exports = {
     },
     port: 3000,
     hot: true,
+    setupMiddlewares: (middlewares, devServer) => {
+      if (!devServer) {
+        throw new Error("webpack-dev-server is not defined");
+      }
+
+      devServer.app.get("/api/export/police", (request, response) => {
+        const date = new Date(request.query["date"]);
+        if (date.getDate() % 2 === 0) {
+          response.send("Exported!");
+        } else {
+          response.send("");
+        }
+      });
+
+      return middlewares;
+    }
   },
 };

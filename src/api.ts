@@ -33,3 +33,17 @@ export function postChangesAsync(changes: TilesSlice.ChangesMap): Promise<{ data
     setTimeout(() => resolve({ data: "ok" }), 1000);
   });
 }
+
+export async function fetchPoliceData(date: string): Promise<{ data: Blob } | { error: string }> {
+  try {
+    const response = await fetch(`/api/export/police?date=${date}`);
+    const data = await response.blob();
+    return { data };
+  } catch (error) {
+    if (error instanceof Error) {
+      return { error: error.message };
+    } else {
+      return { error: "Unknown error while fetching" };
+    }
+  }
+}

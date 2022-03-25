@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { hot } from "react-hot-loader";
 import DatePicker from "react-datepicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,6 +15,7 @@ function PoliceExportDialog(): JSX.Element {
   const dispatch = useAppDispatch();
   const currentDate = useCurrentDate();
   const [selectedDate, setSelectedDate] = useState(currentDate);
+  const ref = useRef<HTMLAnchorElement>(null);
 
   function preventHideOnSelfClick(event: React.MouseEvent<HTMLDivElement>) {
     event.stopPropagation();
@@ -26,6 +27,16 @@ function PoliceExportDialog(): JSX.Element {
 
   function onDateChange(date: Date) {
     setSelectedDate(Utils.dateToString(date));
+  }
+
+  function click() {
+    console.log("clicked");
+  }
+
+  function exportFile() {
+    if (ref.current) {
+      ref.current.click();
+    }
   }
 
   return (
@@ -44,8 +55,9 @@ function PoliceExportDialog(): JSX.Element {
             onChange={onDateChange}
           />
         </div>
-        <div className="button">Esporta</div>
+        <div className="button" onClick={exportFile}>Esporta</div>
       </div>
+      <a ref={ref} onClick={click}></a>
     </div>
   );
 }
