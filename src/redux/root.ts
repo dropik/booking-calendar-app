@@ -8,5 +8,6 @@ import hoveredId from "./hoveredIdSlice";
 import roomTypes from "./roomTypesSlice";
 import contextMenu from "./contextMenuSlice";
 import saveChanges from "./saveChangesSlice";
+import sidemenu from "./sidemenuSlice";
 
-export default combineReducers({ table, hotel, scroll, tiles, hoveredId, roomTypes, contextMenu, saveChanges });
+export default combineReducers({ table, hotel, scroll, tiles, hoveredId, roomTypes, contextMenu, saveChanges, sidemenu });

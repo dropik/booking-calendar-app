@@ -3,15 +3,29 @@ import { hot } from "react-hot-loader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faBuilding, faChartColumn, faMoneyBill, faPerson } from "@fortawesome/free-solid-svg-icons";
 
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import * as SidemenuSlice from "../redux/sidemenuSlice";
+
 import "../globals.css";
 import "./Sidemenu.css";
 
 function Sidemenu(): JSX.Element {
+  const dispatch = useAppDispatch();
+  const showed = useAppSelector((state) => state.sidemenu.showed);
+
+  function hideMenu() {
+    dispatch(SidemenuSlice.hide());
+  }
+
+  if (!showed) {
+    return <></>;
+  }
+
   return (
     <div className="sidemenu">
       <div className="container">
         <h3 className="title">
-          <span className="icon button"><FontAwesomeIcon icon={faAngleLeft} /></span>
+          <span className="icon button" onClick={hideMenu}><FontAwesomeIcon icon={faAngleLeft} /></span>
           Utilità
           <span className="icon"></span>
         </h3>
@@ -38,7 +52,7 @@ function Sidemenu(): JSX.Element {
           Cerca persona
         </div>
       </div>
-      <div className="fallback"></div>
+      <div className="fallback" onClick={hideMenu}></div>
     </div>
   );
 }
