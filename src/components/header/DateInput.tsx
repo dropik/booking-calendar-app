@@ -25,12 +25,14 @@ function DateInput(): JSX.Element {
   return (
     <>
       <SidemenuButton />
-      <DatePicker
-        locale="it"
-        dateFormat="dd/MM/yyyy"
-        selected={new Date(currentDate)}
-        onChange={dateChangeHandler}
-      />
+      <div>
+        <DatePicker
+          locale="it"
+          dateFormat="dd/MM/yyyy"
+          selected={new Date(currentDate)}
+          onChange={dateChangeHandler}
+        />
+      </div>
       <SaveAndReset />
     </>
   );
