@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { hot } from "react-hot-loader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faBuilding, faChartColumn, faMoneyBill, faPerson } from "@fortawesome/free-solid-svg-icons";
@@ -12,9 +12,32 @@ import "./Sidemenu.css";
 function Sidemenu(): JSX.Element {
   const dispatch = useAppDispatch();
   const showed = useAppSelector((state) => state.sidemenu.showed);
+  const sidemenuRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   function hideMenu() {
-    dispatch(SidemenuSlice.hide());
+    if (sidemenuRef.current) {
+      sidemenuRef.current.classList.add("hide");
+    }
+    if (containerRef.current) {
+      containerRef.current.classList.add("hide");
+    }
+  }
+
+  function handleSidemenuAnimationEnd() {
+    if (sidemenuRef.current) {
+      if (sidemenuRef.current.classList.contains("show")) {
+        sidemenuRef.current.classList.remove("show");
+      } else if (sidemenuRef.current.classList.contains("hide")) {
+        dispatch(SidemenuSlice.hide());
+      }
+    }
+  }
+
+  function handleContainerAnimationEnd() {
+    if (containerRef.current) {
+      containerRef.current.classList.remove("show");
+    }
   }
 
   if (!showed) {
@@ -22,8 +45,8 @@ function Sidemenu(): JSX.Element {
   }
 
   return (
-    <div className="sidemenu">
-      <div className="container">
+    <div ref={sidemenuRef} onAnimationEnd={handleSidemenuAnimationEnd} className="sidemenu show">
+      <div ref={containerRef} onAnimationEnd={handleContainerAnimationEnd} className="container show">
         <h3 className="title">
           <span className="icon button" onClick={hideMenu}><FontAwesomeIcon icon={faAngleLeft} /></span>
           Utilità
