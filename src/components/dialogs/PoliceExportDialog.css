@@ -1,0 +1,65 @@
+.police-export-dialog {
+  background-color: white;
+  border: 2px solid black;
+}
+
+.police-export-dialog h3 {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.police-export-dialog hr {
+  border: none;
+  height: 2px;
+  background-color: black;
+  margin-bottom: 1rem;
+}
+
+.police-export-dialog .row {
+  display: flex;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.police-export-dialog .row>div {
+  margin-left: 1rem;
+}
+
+.police-export-dialog input {
+  line-height: calc(2rem + 2px);
+}
+
+.police-export-dialog .button {
+  margin-right: 1rem;
+  border: 2px solid black;
+  line-height: 2rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  background-color: #3d7deb;
+  color: white;
+}
+
+.police-export-dialog .button:hover {
+  background-color: #2e63bf;
+}
+
+.police-export-dialog .button:active {
+  background-color: #234a8d;
+}
+
+.police-export-dialog .button.close {
+  background-color: transparent;
+  color: black;
+  border: none;
+  float: right;
+  margin: 0;
+  padding: 0;
+}
+
+.police-export-dialog .button.close:hover {
+  color: #3a3a3a;
+}
+
+.police-export-dialog .button.close:active {
+  color: #7e7e7e;
+}
