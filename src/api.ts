@@ -36,7 +36,10 @@ export function postChangesAsync(changes: TilesSlice.ChangesMap): Promise<{ data
 
 export async function fetchPoliceDataAsync(date: string): Promise<{ data: Blob } | { error: string }> {
   try {
-    const response = await fetch(`/api/export/police?date=${date}`);
+    const response = await fetch(`/api/export/polic?date=${date}`);
+    if (!response.ok) {
+      throw new Error("Response error");
+    }
     const data = await response.blob();
     return { data };
   } catch (error) {

@@ -7,9 +7,9 @@ import tiles from "./tilesSlice";
 import hoveredId from "./hoveredIdSlice";
 import roomTypes from "./roomTypesSlice";
 import contextMenu from "./contextMenuSlice";
-import saveChanges from "./saveChangesSlice";
 import sidemenu from "./sidemenuSlice";
 import dialog from "./dialogSlice";
+import connectionError from "./connectionErrorSlice";
 
 export default combineReducers(
   {
@@ -20,8 +20,8 @@ export default combineReducers(
     hoveredId,
     roomTypes,
     contextMenu,
-    saveChanges,
     sidemenu,
-    dialog
+    dialog,
+    connectionError
   }
 );
