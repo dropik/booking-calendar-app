@@ -34,19 +34,11 @@ export function postChangesAsync(changes: TilesSlice.ChangesMap): Promise<{ data
   });
 }
 
-export async function fetchPoliceDataAsync(date: string): Promise<{ data: Blob } | { error: string }> {
-  try {
-    const response = await fetch(`/api/export/polic?date=${date}`);
-    if (!response.ok) {
-      throw new Error("Response error");
-    }
-    const data = await response.blob();
-    return { data };
-  } catch (error) {
-    if (error instanceof Error) {
-      return { error: error.message };
-    } else {
-      return { error: "Unknown error while fetching" };
-    }
+export async function fetchPoliceDataAsync(date: string): Promise<{ data: Blob }> {
+  const response = await fetch(`/api/export/police?date=${date}`);
+  if (!response.ok) {
+    throw new Error("Response error");
   }
+  const data = await response.blob();
+  return { data };
 }

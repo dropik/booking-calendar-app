@@ -4,7 +4,8 @@ import DatePicker from "react-datepicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 
-import { useCurrentDate } from "../../redux/hooks";
+import { useAppDispatch, useCurrentDate } from "../../redux/hooks";
+import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
 import * as Utils from "../../utils";
 import * as Api from "../../api";
 
@@ -20,6 +21,7 @@ type Props = {
 }
 
 function PoliceExportDialog(props: Props): JSX.Element {
+  const dispatch = useAppDispatch();
   const currentDate = useCurrentDate();
   const [selectedDate, setSelectedDate] = useState(currentDate);
   const [dialogState, setDialogState] = useState<DialogState>("fill");
@@ -35,19 +37,24 @@ function PoliceExportDialog(props: Props): JSX.Element {
 
   function exportFile() {
     async function fetchPoliceDataAsync() {
-      const response = await Api.fetchPoliceDataAsync(selectedDate);
-      if (("data" in response) && (anchorRef.current)) {
-        if (response.data.size > 0) {
-          anchorRef.current.href = URL.createObjectURL(response.data);
-          anchorRef.current.download = `polizia-${selectedDate}.txt`;
-          anchorRef.current.click();
+      try {
+        const response = await Api.fetchPoliceDataAsync(selectedDate);
+        if (anchorRef.current) {
+          if (response.data.size > 0) {
+            anchorRef.current.href = URL.createObjectURL(response.data);
+            anchorRef.current.download = `polizia-${selectedDate}.txt`;
+            anchorRef.current.click();
 
-          setDialogState("done");
-          setTimeout(props.fadeOutDialog, 1000);
-        } else {
-          setDialogState("no data");
-          setTimeout(() => { setDialogState("fill"); }, 1000);
+            setDialogState("done");
+            setTimeout(props.fadeOutDialog, 1000);
+          } else {
+            setDialogState("no data");
+            setTimeout(() => { setDialogState("fill"); }, 1000);
+          }
         }
+      } catch (error) {
+        dispatch(ConnectionErrorSlice.show());
+        setDialogState("fill");
       }
     }
     fetchPoliceDataAsync();
