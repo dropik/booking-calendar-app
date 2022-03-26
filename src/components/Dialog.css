@@ -9,3 +9,34 @@
   align-items: center;
   justify-content: center;
 }
+
+.dialog-container > div {
+  position: relative;
+  background-color: white;
+  border: 2px solid black;
+  box-shadow: 0 0 16px 0px black;
+}
+
+@keyframes show-dialog {
+  from {
+    opacity: 0;
+    top: 1rem;
+  }
+  to {
+    opacity: 1;
+    top: 0;
+  }
+}
+
+.dialog-container > div.show {
+  animation-name: show-dialog;
+  animation-duration: 0.2s;
+  animation-fill-mode: forwards;
+}
+
+.dialog-container > div.hide {
+  animation-name: show-dialog;
+  animation-duration: 0.2s;
+  animation-fill-mode: forwards;
+  animation-direction: reverse;
+}

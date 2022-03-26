@@ -4,8 +4,7 @@ import DatePicker from "react-datepicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 
-import { useAppDispatch, useCurrentDate } from "../../redux/hooks";
-import * as DialogSlice from "../../redux/dialogSlice";
+import { useCurrentDate } from "../../redux/hooks";
 import * as Utils from "../../utils";
 import * as Api from "../../api";
 
@@ -14,19 +13,20 @@ import "./PoliceExportDialog.css";
 
 type DialogState = "fill" | "loading" | "done" | "no data";
 
-function PoliceExportDialog(): JSX.Element {
-  const dispatch = useAppDispatch();
+type Props = {
+  dialogRef: React.RefObject<HTMLDivElement>,
+  fadeOutDialog: () => void,
+  onAnimationEnd: () => void
+}
+
+function PoliceExportDialog(props: Props): JSX.Element {
   const currentDate = useCurrentDate();
   const [selectedDate, setSelectedDate] = useState(currentDate);
   const [dialogState, setDialogState] = useState<DialogState>("fill");
-  const ref = useRef<HTMLAnchorElement>(null);
+  const anchorRef = useRef<HTMLAnchorElement>(null);
 
   function preventHideOnSelfClick(event: React.MouseEvent<HTMLDivElement>) {
     event.stopPropagation();
-  }
-
-  function hideDialog() {
-    dispatch(DialogSlice.hide());
   }
 
   function onDateChange(date: Date) {
@@ -36,18 +36,17 @@ function PoliceExportDialog(): JSX.Element {
   function exportFile() {
     async function fetchPoliceDataAsync() {
       const response = await Api.fetchPoliceDataAsync(selectedDate);
-      if (("data" in response) && (ref.current)) {
+      if (("data" in response) && (anchorRef.current)) {
         if (response.data.size > 0) {
-          ref.current.href = URL.createObjectURL(response.data);
-          ref.current.download = `polizia-${selectedDate}.txt`;
-          ref.current.click();
+          anchorRef.current.href = URL.createObjectURL(response.data);
+          anchorRef.current.download = `polizia-${selectedDate}.txt`;
+          anchorRef.current.click();
+
           setDialogState("done");
-          setTimeout(hideDialog, 1000);
+          setTimeout(props.fadeOutDialog, 1000);
         } else {
           setDialogState("no data");
-          setTimeout(() => {
-            setDialogState("fill");
-          }, 1000);
+          setTimeout(() => { setDialogState("fill"); }, 1000);
         }
       }
     }
@@ -84,14 +83,19 @@ function PoliceExportDialog(): JSX.Element {
   }
 
   return (
-    <div className="police-export-dialog" onClick={preventHideOnSelfClick}>
+    <div
+      ref={props.dialogRef}
+      className="police-export-dialog show"
+      onClick={preventHideOnSelfClick}
+      onAnimationEnd={props.onAnimationEnd}
+    >
       <h3>
         Esporta Dati Polizia
-        <FontAwesomeIcon className="button close" icon={faXmark} onClick={hideDialog} />
+        <FontAwesomeIcon className="button close" icon={faXmark} onClick={props.fadeOutDialog} />
       </h3>
       <hr />
       <div className="row">{dialogBody}</div>
-      <a ref={ref}></a>
+      <a ref={anchorRef}></a>
     </div>
   );
 }
