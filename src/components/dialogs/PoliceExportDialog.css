@@ -29,6 +29,10 @@
   line-height: calc(2rem + 2px);
 }
 
+.police-export-dialog a {
+  display: none;
+}
+
 .police-export-dialog .button {
   margin-right: 1rem;
   border: 2px solid black;
@@ -54,6 +58,7 @@
   float: right;
   margin: 0;
   padding: 0;
+  margin-left: 1rem;
 }
 
 .police-export-dialog .button.close:hover {
@@ -62,4 +67,10 @@
 
 .police-export-dialog .button.close:active {
   color: #7e7e7e;
+}
+
+.police-export-dialog .message {
+  width: 100%;
+  margin-right: 1rem;
+  text-align: center;
 }
