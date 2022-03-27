@@ -42,3 +42,12 @@ export async function fetchPoliceDataAsync(date: string): Promise<{ data: Blob }
   const data = await response.blob();
   return { data };
 }
+
+export async function fetchIstatDataAsync(date: string): Promise<{ data: Blob }> {
+  const response = await fetch(`/api/export/istat?date=${date}`);
+  if (!response.ok) {
+    throw new Error("Response error");
+  }
+  const data = await response.blob();
+  return { data };
+}

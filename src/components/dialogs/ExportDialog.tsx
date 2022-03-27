@@ -6,21 +6,23 @@ import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 import { useAppDispatch, useCurrentDate } from "../../redux/hooks";
 import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
+import * as DialogSlice from "../../redux/dialogSlice";
 import * as Utils from "../../utils";
 import * as Api from "../../api";
 
 import "react-datepicker/dist/react-datepicker.css";
-import "./PoliceExportDialog.css";
+import "./ExportDialog.css";
 
 type DialogState = "fill" | "loading" | "done" | "no data";
 
 type Props = {
+  type: DialogSlice.DialogType,
   dialogRef: React.RefObject<HTMLDivElement>,
   fadeOutDialog: () => void,
   onAnimationEnd: () => void
 }
 
-function PoliceExportDialog(props: Props): JSX.Element {
+function ExportDialog(props: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const currentDate = useCurrentDate();
   const [selectedDate, setSelectedDate] = useState(currentDate);
@@ -35,14 +37,37 @@ function PoliceExportDialog(props: Props): JSX.Element {
     setSelectedDate(Utils.dateToString(date));
   }
 
+  let getBlobAsync: () => Promise<Blob>;
+  let filename: string;
+  let title: string;
+
+  switch (props.type) {
+  case "police":
+    getBlobAsync = async () => {
+      const response = await Api.fetchPoliceDataAsync(selectedDate);
+      return response.data;
+    };
+    filename = `polizia-${selectedDate}.txt`;
+    title = "Esporta Dati Polizia";
+    break;
+  case "istat":
+    getBlobAsync = async () => {
+      const response = await Api.fetchIstatDataAsync(selectedDate);
+      return response.data;
+    };
+    filename = `istat-${selectedDate}.pdf`;
+    title = "Esporta Dati ISTAT";
+    break;
+  }
+
   function exportFile() {
-    async function fetchPoliceDataAsync() {
+    async function fetchDataAsync() {
       try {
-        const response = await Api.fetchPoliceDataAsync(selectedDate);
+        const data = await getBlobAsync();
         if (anchorRef.current) {
-          if (response.data.size > 0) {
-            anchorRef.current.href = URL.createObjectURL(response.data);
-            anchorRef.current.download = `polizia-${selectedDate}.txt`;
+          if (data && data.size > 0) {
+            anchorRef.current.href = URL.createObjectURL(data);
+            anchorRef.current.download = filename;
             anchorRef.current.click();
 
             setDialogState("done");
@@ -57,7 +82,7 @@ function PoliceExportDialog(props: Props): JSX.Element {
         setDialogState("fill");
       }
     }
-    fetchPoliceDataAsync();
+    fetchDataAsync();
     setDialogState("loading");
   }
 
@@ -92,12 +117,12 @@ function PoliceExportDialog(props: Props): JSX.Element {
   return (
     <div
       ref={props.dialogRef}
-      className="police-export-dialog show"
+      className="export-dialog show"
       onClick={preventHideOnSelfClick}
       onAnimationEnd={props.onAnimationEnd}
     >
       <h3>
-        Esporta Dati Polizia
+        {title}
         <FontAwesomeIcon className="button close" icon={faXmark} onClick={props.fadeOutDialog} />
       </h3>
       <hr />
@@ -107,4 +132,4 @@ function PoliceExportDialog(props: Props): JSX.Element {
   );
 }
 
-export default hot(module)(PoliceExportDialog);
+export default hot(module)(ExportDialog);

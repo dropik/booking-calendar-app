@@ -4,7 +4,7 @@ import { hot } from "react-hot-loader";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import * as DialogSlice from "../redux/dialogSlice";
 
-import PoliceExportDialog from "./dialogs/PoliceExportDialog";
+import ExportDialog from "./dialogs/ExportDialog";
 
 import "./Dialog.css";
 
@@ -40,7 +40,8 @@ function Dialog(): JSX.Element {
 
   return (
     <div className="dialog-container" onClick={fadeOutDialog}>
-      <PoliceExportDialog
+      <ExportDialog
+        type={selectedDialog}
         dialogRef={dialogRef}
         fadeOutDialog={fadeOutDialog}
         onAnimationEnd={handleDialogAnimationEnd}

@@ -63,7 +63,7 @@ function Sidemenu(): JSX.Element {
           <span className="icon"><FontAwesomeIcon icon={faBuilding} /></span>
           Polizia
         </div>
-        <div className="menu-item button">
+        <div className="menu-item button" onClick={() => { showDialog("istat"); }}>
           <span className="icon"><FontAwesomeIcon icon={faChartColumn} /></span>
           ISTAT
         </div>
