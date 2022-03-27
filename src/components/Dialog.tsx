@@ -4,7 +4,8 @@ import { hot } from "react-hot-loader";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import * as DialogSlice from "../redux/dialogSlice";
 
-import ExportDialog from "./dialogs/ExportDialog";
+import DialogHeader from "./dialogs/DialogHeader";
+import ExportDialogBody from "./dialogs/ExportDialogBody";
 
 import "./Dialog.css";
 
@@ -34,18 +35,25 @@ function Dialog(): JSX.Element {
     }
   }
 
+  function preventHideOnSelfClick(event: React.MouseEvent<HTMLDivElement>) {
+    event.stopPropagation();
+  }
+
   if (!selectedDialog) {
     return <></>;
   }
 
   return (
     <div className="dialog-container" onClick={fadeOutDialog}>
-      <ExportDialog
-        type={selectedDialog}
-        dialogRef={dialogRef}
-        fadeOutDialog={fadeOutDialog}
+      <div
+        ref={dialogRef}
+        className="dialog show"
+        onClick={preventHideOnSelfClick}
         onAnimationEnd={handleDialogAnimationEnd}
-      />
+      >
+        <DialogHeader type={selectedDialog} fadeOutDialog={fadeOutDialog} />
+        <ExportDialogBody type={selectedDialog} fadeOutDialog={fadeOutDialog} />
+      </div>
     </div>
   );
 }

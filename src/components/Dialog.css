@@ -10,7 +10,7 @@
   justify-content: center;
 }
 
-.dialog-container > div {
+.dialog-container > .dialog {
   position: relative;
   background-color: white;
   border: 2px solid black;
@@ -28,15 +28,87 @@
   }
 }
 
-.dialog-container > div.show {
+.dialog-container > .dialog.show {
   animation-name: show-dialog;
   animation-duration: 0.2s;
   animation-fill-mode: forwards;
 }
 
-.dialog-container > div.hide {
+.dialog-container > .dialog.hide {
   animation-name: show-dialog;
   animation-duration: 0.2s;
   animation-fill-mode: forwards;
   animation-direction: reverse;
+}
+
+.dialog h3 {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.dialog hr {
+  border: none;
+  height: 2px;
+  background-color: black;
+  margin-bottom: 1rem;
+}
+
+.dialog .row {
+  display: flex;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.dialog .row>div {
+  margin-left: 1rem;
+}
+
+.dialog input {
+  line-height: calc(2rem + 2px);
+}
+
+.dialog a {
+  display: none;
+}
+
+.dialog .button {
+  margin-right: 1rem;
+  border: 2px solid black;
+  line-height: 2rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  background-color: #3d7deb;
+  color: white;
+}
+
+.dialog .button:hover {
+  background-color: #2e63bf;
+}
+
+.dialog .button:active {
+  background-color: #234a8d;
+}
+
+.dialog .button.close {
+  background-color: transparent;
+  color: black;
+  border: none;
+  float: right;
+  margin: 0;
+  padding: 0;
+  margin-left: 1rem;
+}
+
+.dialog .button.close:hover {
+  color: #3a3a3a;
+}
+
+.dialog .button.close:active {
+  color: #7e7e7e;
+}
+
+.dialog .message {
+  width: 100%;
+  margin-right: 1rem;
+  text-align: center;
 }
