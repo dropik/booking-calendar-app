@@ -48,6 +48,12 @@ module.exports = {
         }
       });
 
+      devServer.app.get("/api/export/istat", (request, response) => {
+        response.set("content-type", "application/pdf");
+        response.set("content-disposition", `attachment; filename="istat-${request.query["date"]}.pdf"`);
+        response.send("Exported!");
+      });
+
       return middlewares;
     }
   },
