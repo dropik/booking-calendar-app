@@ -11,3 +11,7 @@
   justify-content: center;
   padding-right: 0;
 }
+
+.react-datepicker-wrapper input.invalid {
+  box-shadow: 0 0 0 2px inset #c72323;
+}

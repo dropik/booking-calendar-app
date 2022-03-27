@@ -21,10 +21,25 @@ function TaxDialogBody(props: Props): JSX.Element {
   const [dialogState, setDialogState] = useState<DialogState>("fill");
   const [cityTaxData, setCityTaxData] = useState<Api.CityTaxData>();
   const [fromDate, setFromDate] = useState(currentDate);
-  const [toDate, setToDate] = useState(currentDate);
+  const dateObj = new Date(currentDate);
+  dateObj.setDate(dateObj.getDate() + 1);
+  const [toDate, setToDate] = useState(Utils.dateToString(dateObj));
 
-  function calculate() {
-    async function fetchDataAsync() {
+  const isValidated = Utils.daysBetweenDates(fromDate, toDate) > 0;
+
+  const datePickerClassName = !isValidated ? "invalid" : "";
+
+  function changeDate(date: Date, dateType: "from" | "to"): void {
+    const dateString = Utils.dateToString(date);
+    if (dateType === "from") {
+      setFromDate(dateString);
+    } else {
+      setToDate(dateString);
+    }
+  }
+
+  function calculate(): void {
+    async function fetchDataAsync(): Promise<void> {
       try {
         const response = await Api.fetchCityTaxAsync(fromDate, toDate);
         setCityTaxData(response.data);
@@ -34,8 +49,11 @@ function TaxDialogBody(props: Props): JSX.Element {
         setDialogState("fill");
       }
     }
-    fetchDataAsync();
-    setDialogState("loading");
+
+    if (isValidated) {
+      fetchDataAsync();
+      setDialogState("loading");
+    }
   }
 
   let content: JSX.Element;
@@ -46,19 +64,21 @@ function TaxDialogBody(props: Props): JSX.Element {
         <div>
           <span className="label">Da:</span>
           <DatePicker
+            className={datePickerClassName}
             locale="it"
             dateFormat="dd/MM/yyyy"
             selected={new Date(fromDate)}
-            onChange={(date: Date) => { setFromDate(Utils.dateToString(date)); }}
+            onChange={(date: Date) => { changeDate(date, "from"); }}
           />
         </div>
         <div>
           <span className="label">A:</span>
           <DatePicker
+            className={datePickerClassName}
             locale="it"
             dateFormat="dd/MM/yyyy"
             selected={new Date(toDate)}
-            onChange={(date: Date) => { setToDate(Utils.dateToString(date)); }}
+            onChange={(date: Date) => { changeDate(date, "to"); }}
           />
         </div>
         <div className="button" onClick={calculate}>Calcola</div>
