@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { hot } from "react-hot-loader";
 import DatePicker from "react-datepicker";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 import { useAppDispatch, useCurrentDate } from "../../redux/hooks";
 import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
@@ -27,16 +29,15 @@ function TaxDialogBody(props: Props): JSX.Element {
 
   const isValidated = Utils.daysBetweenDates(fromDate, toDate) > 0;
 
-  const datePickerClassName = !isValidated ? "invalid" : "";
-
-  function changeDate(date: Date, dateType: "from" | "to"): void {
-    const dateString = Utils.dateToString(date);
-    if (dateType === "from") {
-      setFromDate(dateString);
-    } else {
-      setToDate(dateString);
-    }
-  }
+  const datePickerClassName = isValidated ? "" : "invalid";
+  const errorLabel = isValidated ?
+    <></> :
+    (
+      <div className="error-label">
+        <FontAwesomeIcon icon={faCircleExclamation} />
+        Intervallo selezionato non corretto
+      </div>
+    );
 
   function calculate(): void {
     async function fetchDataAsync(): Promise<void> {
@@ -60,29 +61,32 @@ function TaxDialogBody(props: Props): JSX.Element {
   switch (dialogState) {
   case "fill":
     content = (
-      <div className="row">
-        <div>
-          <span className="label">Da:</span>
-          <DatePicker
-            className={datePickerClassName}
-            locale="it"
-            dateFormat="dd/MM/yyyy"
-            selected={new Date(fromDate)}
-            onChange={(date: Date) => { changeDate(date, "from"); }}
-          />
+      <>
+        {errorLabel}
+        <div className="row">
+          <div>
+            <span className="label">Da:</span>
+            <DatePicker
+              className={datePickerClassName}
+              locale="it"
+              dateFormat="dd/MM/yyyy"
+              selected={new Date(fromDate)}
+              onChange={(date: Date) => { setFromDate(Utils.dateToString(date)); }}
+            />
+          </div>
+          <div>
+            <span className="label">A:</span>
+            <DatePicker
+              className={datePickerClassName}
+              locale="it"
+              dateFormat="dd/MM/yyyy"
+              selected={new Date(toDate)}
+              onChange={(date: Date) => { setToDate(Utils.dateToString(date)); }}
+            />
+          </div>
+          <div className="button" onClick={calculate}>Calcola</div>
         </div>
-        <div>
-          <span className="label">A:</span>
-          <DatePicker
-            className={datePickerClassName}
-            locale="it"
-            dateFormat="dd/MM/yyyy"
-            selected={new Date(toDate)}
-            onChange={(date: Date) => { changeDate(date, "to"); }}
-          />
-        </div>
-        <div className="button" onClick={calculate}>Calcola</div>
-      </div>
+      </>
     );
     break;
 

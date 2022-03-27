@@ -15,3 +15,14 @@
 .react-datepicker-wrapper input.invalid {
   box-shadow: 0 0 0 2px inset #c72323;
 }
+
+.error-label {
+  margin-left: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+  color: #c72323;
+}
+
+.error-label > svg {
+  margin-right: 0.5rem;
+}
