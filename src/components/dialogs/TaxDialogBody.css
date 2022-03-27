@@ -2,12 +2,12 @@
   margin-right: 0.2rem;
 }
 
-.table .row {
+.dialog-table .row {
   justify-content: space-between;
   padding-right: 1rem;
 }
 
-.table .row.centered {
+.dialog-table .row.centered {
   justify-content: center;
   padding-right: 0;
 }

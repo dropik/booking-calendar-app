@@ -44,6 +44,13 @@ function Dialog(): JSX.Element {
     return <></>;
   }
 
+  let dialogBody: JSX.Element;
+  if (selectedDialog === "cityTax") {
+    dialogBody = <TaxDialogBody fadeOutDialog={fadeOutDialog} />;
+  } else {
+    dialogBody = <ExportDialogBody type={selectedDialog} fadeOutDialog={fadeOutDialog} />;
+  }
+
   return (
     <div className="dialog-container" onClick={fadeOutDialog}>
       <div
@@ -53,8 +60,7 @@ function Dialog(): JSX.Element {
         onAnimationEnd={handleDialogAnimationEnd}
       >
         <DialogHeader type={selectedDialog} fadeOutDialog={fadeOutDialog} />
-        {/* <ExportDialogBody type={selectedDialog} fadeOutDialog={fadeOutDialog} /> */}
-        <TaxDialogBody />
+        {dialogBody}
       </div>
     </div>
   );

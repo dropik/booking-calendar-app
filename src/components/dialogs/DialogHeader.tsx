@@ -19,6 +19,9 @@ function DialogHeader(props: Props): JSX.Element {
   case "istat":
     title = "Esporta Dati ISTAT";
     break;
+  case "cityTax":
+    title = "Calcola Tassa di Soggiorno";
+    break;
   }
 
   return (

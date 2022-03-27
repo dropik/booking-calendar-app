@@ -69,7 +69,7 @@ function Sidemenu(): JSX.Element {
         </div>
         <hr color="#252525" />
         <div className="group-label"> Calcola</div>
-        <div className="menu-item button">
+        <div className="menu-item button" onClick={() => { showDialog("cityTax"); }}>
           <span className="icon"><FontAwesomeIcon icon={faMoneyBill} /></span>
           Tassa di soggiorno
         </div>
