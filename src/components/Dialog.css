@@ -10,11 +10,13 @@
   justify-content: center;
 }
 
-.dialog-container > .dialog {
+.dialog {
   position: relative;
   background-color: white;
   border: 2px solid black;
   box-shadow: 0 0 16px 0px black;
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
 @keyframes show-dialog {
@@ -28,13 +30,13 @@
   }
 }
 
-.dialog-container > .dialog.show {
+.dialog.show {
   animation-name: show-dialog;
   animation-duration: 0.2s;
   animation-fill-mode: forwards;
 }
 
-.dialog-container > .dialog.hide {
+.dialog.hide {
   animation-name: show-dialog;
   animation-duration: 0.2s;
   animation-fill-mode: forwards;
@@ -57,6 +59,7 @@
   display: flex;
   margin-bottom: 1rem;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .dialog .row>div {

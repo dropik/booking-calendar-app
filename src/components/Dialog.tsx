@@ -6,6 +6,7 @@ import * as DialogSlice from "../redux/dialogSlice";
 
 import DialogHeader from "./dialogs/DialogHeader";
 import ExportDialogBody from "./dialogs/ExportDialogBody";
+import TaxDialogBody from "./dialogs/TaxDialogBody";
 
 import "./Dialog.css";
 
@@ -52,7 +53,8 @@ function Dialog(): JSX.Element {
         onAnimationEnd={handleDialogAnimationEnd}
       >
         <DialogHeader type={selectedDialog} fadeOutDialog={fadeOutDialog} />
-        <ExportDialogBody type={selectedDialog} fadeOutDialog={fadeOutDialog} />
+        {/* <ExportDialogBody type={selectedDialog} fadeOutDialog={fadeOutDialog} /> */}
+        <TaxDialogBody />
       </div>
     </div>
   );
