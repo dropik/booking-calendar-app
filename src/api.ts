@@ -3,6 +3,12 @@ import * as HotelSlice from "./redux/hotelSlice";
 import * as TilesSlice from "./redux/tilesSlice";
 import * as RoomTypesSlice from "./redux/roomTypesSlice";
 
+export type CityTaxData = {
+  standard: number,
+  children: number,
+  over10Days: number
+};
+
 export function fetchHotelDataAsync(): Promise<{ data: HotelSlice.HotelData }> {
   return new Promise((resolve) => {
     setTimeout(() => resolve({ data: Mocks.hotel }), 500);
@@ -49,5 +55,17 @@ export async function fetchIstatDataAsync(date: string): Promise<{ data: Blob }>
     throw new Error("Response error");
   }
   const data = await response.blob();
+  return { data };
+}
+
+export async function fetchCityTaxAsync(from: string, to: string): Promise<{ data: CityTaxData }> {
+  const response = await fetch(`/api/calc/tax?from=${from}&to=${to}`);
+  if (!response.ok) {
+    throw new Error("Response error");
+  }
+  const data = await response.json() as CityTaxData;
+  if (!data) {
+    throw new Error("Response error");
+  }
   return { data };
 }

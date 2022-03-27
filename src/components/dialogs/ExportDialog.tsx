@@ -37,13 +37,13 @@ function ExportDialog(props: Props): JSX.Element {
     setSelectedDate(Utils.dateToString(date));
   }
 
-  let getBlobAsync: () => Promise<Blob>;
+  let getDataAsync: () => Promise<Blob>;
   let filename: string;
   let title: string;
 
   switch (props.type) {
   case "police":
-    getBlobAsync = async () => {
+    getDataAsync = async () => {
       const response = await Api.fetchPoliceDataAsync(selectedDate);
       return response.data;
     };
@@ -51,7 +51,7 @@ function ExportDialog(props: Props): JSX.Element {
     title = "Esporta Dati Polizia";
     break;
   case "istat":
-    getBlobAsync = async () => {
+    getDataAsync = async () => {
       const response = await Api.fetchIstatDataAsync(selectedDate);
       return response.data;
     };
@@ -63,7 +63,7 @@ function ExportDialog(props: Props): JSX.Element {
   function exportFile() {
     async function fetchDataAsync() {
       try {
-        const data = await getBlobAsync();
+        const data = await getDataAsync();
         if (anchorRef.current) {
           if (data && data.size > 0) {
             anchorRef.current.href = URL.createObjectURL(data);

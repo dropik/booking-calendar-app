@@ -54,6 +54,14 @@ module.exports = {
         response.send("Exported!");
       });
 
+      devServer.app.get("/api/calc/tax", (request, response) => {
+        response.json({
+          standard: 100,
+          children: 12,
+          over10Days: 2
+        });
+      });
+
       return middlewares;
     }
   },
