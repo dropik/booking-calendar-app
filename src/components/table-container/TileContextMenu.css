@@ -15,3 +15,11 @@
 .tile-context-menu div:hover {
   background-color: #ebebeb;
 }
+
+.tile-context-menu svg {
+  margin-right: 0.5rem;
+}
+
+.tile-context-menu .remove {
+  color: #c72323;
+}

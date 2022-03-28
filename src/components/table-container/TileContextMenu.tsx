@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleInfo, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
@@ -26,7 +28,14 @@ function TileContextMenu(): JSX.Element {
 
   return (
     <div ref={ref} onMouseDown={onMouseDown} className="tile-context-menu">
-      <div onClick={clickHandler}>Rimuovere occupazione</div>
+      <div>
+        <FontAwesomeIcon icon={faCircleInfo} />
+        Informazioni
+      </div>
+      <div className="remove" onClick={clickHandler}>
+        <FontAwesomeIcon icon={faTrashCan} />
+        Rimuovere occupazione
+      </div>
     </div>
   );
 }
