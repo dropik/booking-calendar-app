@@ -9,6 +9,24 @@ export type CityTaxData = {
   over10Days: number
 };
 
+export type BookingData = {
+  id: string,
+  name: string,
+  from: string,
+  to: string,
+  rooms: {
+    id: string,
+    type: string,
+    entity: string,
+    guests: {
+      id: string,
+      name: string,
+      surname: string,
+      dateOfBirth: string
+    }[]
+  }[]
+};
+
 export function fetchHotelDataAsync(): Promise<{ data: HotelSlice.HotelData }> {
   return new Promise((resolve) => {
     setTimeout(() => resolve({ data: Mocks.hotel }), 500);
