@@ -51,13 +51,13 @@
   animation-fill-mode: forwards;
 }
 
-.dialog.show {
+.dialog-container.show > .dialog {
   animation-name: show-dialog;
   animation-duration: 0.2s;
   animation-fill-mode: forwards;
 }
 
-.dialog.hide {
+.dialog-container.hide > .dialog {
   animation-name: show-dialog;
   animation-duration: 0.2s;
   animation-fill-mode: forwards;

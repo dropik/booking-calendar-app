@@ -14,9 +14,7 @@ import "./Dialog.css";
 function Dialog(): JSX.Element {
   const dispatch = useAppDispatch();
   const selectedDialog = useAppSelector((state) => state.dialog.selectedDialog);
-  const dialogRef = useRef<HTMLDivElement>(null);
-  const dialogContainerRef = useRef<HTMLDivElement>(null);
-
+  const ref = useRef<HTMLDivElement>(null);
 
   function hideDialog() {
     dispatch(DialogSlice.hide());
@@ -32,11 +30,8 @@ function Dialog(): JSX.Element {
   }
 
   function fadeOutDialog() {
-    if (dialogRef.current) {
-      dialogRef.current.classList.add("hide");
-    }
-    if (dialogContainerRef.current) {
-      dialogContainerRef.current.classList.add("hide");
+    if (ref.current) {
+      ref.current.classList.add("hide");
     }
   }
 
@@ -66,17 +61,12 @@ function Dialog(): JSX.Element {
 
   return (
     <div
-      ref={dialogContainerRef}
+      ref={ref}
       className="dialog-container show"
       onClick={fadeOutDialog}
       onAnimationEnd={handleDialogAnimationEnd}
     >
-      <div
-        ref={dialogRef}
-        className="dialog show"
-        onClick={preventHideOnSelfClick}
-        onAnimationEnd={handleDialogAnimationEnd}
-      >
+      <div className="dialog" onClick={preventHideOnSelfClick}>
         {dialog}
       </div>
     </div>
