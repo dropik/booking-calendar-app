@@ -1,0 +1,49 @@
+.dialog .field-label {
+  flex-basis: 2rem;
+}
+
+.dialog h4 {
+  margin-left: 1rem;
+  margin-bottom: 0;
+}
+
+.dialog .room-name {
+  margin-left: 0;
+  margin-bottom: 1rem;
+}
+
+.dialog .rooms-container {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.dialog .persons-container {
+  margin-left: 1rem;
+  margin-right: 1rem;
+  padding-bottom: 0.7rem;
+}
+
+.dialog .row.person {
+  flex-wrap: nowrap;
+  margin-bottom: 0.3rem;
+  margin-right: 0;
+  border: 2px solid black;
+  padding-right: 1rem;
+  background-color: #e9e9e9;
+  color: black;
+}
+
+.dialog .row.person div {
+  width: 9rem;
+  text-align: center;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.dialog .row.person.button:hover {
+  background-color: #cdcdcd;
+}
+
+.dialog .row.person.button:active {
+  background-color: #a9a9a9;
+}

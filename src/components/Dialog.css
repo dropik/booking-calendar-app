@@ -18,6 +18,8 @@
   box-shadow: 0 0 16px 0px black;
   margin-left: 1rem;
   margin-right: 1rem;
+  max-height: 85%;
+  overflow-y: overlay;
 }
 
 @keyframes show-dialog-container {
