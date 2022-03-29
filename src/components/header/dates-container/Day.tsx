@@ -23,7 +23,7 @@ function Day(props: Props): JSX.Element {
   const mouseDownHandler = getMouseDownHandler(dispatch);
 
   let className = "day";
-  if (selected) {
+  if (selected && hasUnassignedTiles) {
     className += " selected";
   }
 
