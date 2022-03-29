@@ -17,6 +17,7 @@ function Dialog(): JSX.Element {
   const dispatch = useAppDispatch();
   const selectedDialog = useAppSelector((state) => state.dialog.selectedDialog);
   const dialogRef = useRef<HTMLDivElement>(null);
+  const dialogContainerRef = useRef<HTMLDivElement>(null);
   const [bookingData, setBookingData] = useState<Api.BookingData>();
 
   useEffect(() => {
@@ -56,20 +57,21 @@ function Dialog(): JSX.Element {
     setBookingData(undefined);
   }
 
-  function handleDialogAnimationEnd() {
-    if (dialogRef.current) {
-      const classList = dialogRef.current.classList;
-      if (classList.contains("show")) {
-        classList.remove("show");
-      } else if (classList.contains("hide")) {
-        hideDialog();
-      }
+  function handleDialogAnimationEnd(event: React.AnimationEvent<HTMLDivElement>) {
+    const classList = event.currentTarget.classList;
+    if (classList.contains("show")) {
+      classList.remove("show");
+    } else if (classList.contains("hide")) {
+      hideDialog();
     }
   }
 
   function fadeOutDialog() {
     if (dialogRef.current) {
       dialogRef.current.classList.add("hide");
+    }
+    if (dialogContainerRef.current) {
+      dialogContainerRef.current.classList.add("hide");
     }
   }
 
@@ -102,7 +104,12 @@ function Dialog(): JSX.Element {
   }
 
   return (
-    <div className="dialog-container" onClick={fadeOutDialog}>
+    <div
+      ref={dialogContainerRef}
+      className="dialog-container show"
+      onClick={fadeOutDialog}
+      onAnimationEnd={handleDialogAnimationEnd}
+    >
       <div
         ref={dialogRef}
         className="dialog show"
