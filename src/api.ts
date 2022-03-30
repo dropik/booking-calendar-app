@@ -90,3 +90,15 @@ export async function fetchCityTaxAsync(from: string, to: string): Promise<{ dat
   }
   return { data };
 }
+
+export async function fetchBookingByTile(tileId: string): Promise<{ data: BookingData }> {
+  const response = await fetch(`/api/get/booking?tileId=${tileId}`);
+  if (!response.ok) {
+    throw new Error("Response error");
+  }
+  const data = await response.json() as BookingData;
+  if (!data) {
+    throw new Error("Response error");
+  }
+  return { data };
+}

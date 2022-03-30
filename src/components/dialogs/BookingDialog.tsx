@@ -2,79 +2,52 @@ import React, { useEffect, useState } from "react";
 import { hot } from "react-hot-loader";
 import BookingDialogBody from "./BookingDialogBody";
 
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import * as Api from "../../api";
+import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
 
 import BookingDialogHeader from "./BookingDialogHeader";
+
+type DialogState = "idle" | "loading";
 
 type Props = {
   fadeOutDialog: () => void
 };
 
 function BookingDialog(props: Props): JSX.Element {
+  const dispatch = useAppDispatch();
+  const tileId = useAppSelector((state) => state.dialog.selectedTile);
+  const [dialogState, setDialogState] = useState<DialogState>("idle");
   const [bookingData, setBookingData] = useState<Api.BookingData>();
 
   useEffect(() => {
-    setBookingData({
-      id: "1",
-      name: "Vasya Pupkin",
-      from: "2022-02-02",
-      to: "2022-02-05",
-      rooms: [
-        {
-          id: "1",
-          type: "camera matrimoniale/doppia",
-          entity: "camera matrimoniale",
-          from: "2022-02-02",
-          to: "2022-02-05",
-          guests: [
-            {
-              id: "0",
-              name: "Vasya",
-              surname: "Pupkin",
-              dateOfBirth: "1985-05-06"
-            },
-            {
-              id: "1",
-              name: "Masha",
-              surname: "Pupkina",
-              dateOfBirth: "1987-07-20"
-            }
-          ]
-        },
-        {
-          id: "2",
-          type: "camera matrimoniale/doppia",
-          entity: "camera matrimoniale",
-          from: "2022-02-02",
-          to: "2022-02-05",
-          roomNumber: 5,
-          guests: [
-            {
-              id: "2",
-              name: "Ivan",
-              surname: "Petrov",
-              dateOfBirth: "1990-08-20"
-            },
-            {
-              id: "3",
-              name: "Natasha",
-              surname: "Petrova",
-              dateOfBirth: "1991-05-09"
-            }
-          ]
+    async function fetchData() {
+      try {
+        if (tileId) {
+          const response = await Api.fetchBookingByTile(tileId);
+          setBookingData(response.data);
+          setDialogState("idle");
         }
-      ]
-    });
-  }, []);
+      } catch (Error) {
+        dispatch(ConnectionErrorSlice.show());
+        setDialogState("idle");
+      }
+    }
+    fetchData();
+    setDialogState("loading");
+  }, [dispatch, tileId]);
 
-  const dialog = bookingData ?
-    (
+  let dialog: JSX.Element = <></>;
+  if (dialogState === "loading") {
+    dialog = <div className="message">Carico...</div>;
+  } else if (bookingData) {
+    dialog = (
       <>
         <BookingDialogHeader data={bookingData} fadeOutDialog={props.fadeOutDialog} />
         <BookingDialogBody data={bookingData} />
       </>
-    ) :
-    <></>;
+    );
+  }
 
   return dialog;
 }
