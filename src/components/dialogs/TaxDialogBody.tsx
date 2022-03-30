@@ -65,7 +65,7 @@ function TaxDialogBody(props: Props): JSX.Element {
         {errorLabel}
         <div className="row">
           <div>
-            <span className="label">Da:</span>
+            <span className="label">Dal:</span>
             <DatePicker
               className={datePickerClassName}
               locale="it"
@@ -75,7 +75,7 @@ function TaxDialogBody(props: Props): JSX.Element {
             />
           </div>
           <div>
-            <span className="label">A:</span>
+            <span className="label">Al:</span>
             <DatePicker
               className={datePickerClassName}
               locale="it"
