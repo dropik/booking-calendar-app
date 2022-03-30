@@ -37,7 +37,7 @@ function TilePart(props: Props): JSX.Element {
   function onContextMenu(event: React.MouseEvent<HTMLDivElement>) {
     event.preventDefault();
     event.stopPropagation();
-    dispatch(ContextMenuSlice.showTileContextMenu({ tileId, mouseX: event.pageX, mouseY: event.pageY }));
+    dispatch(ContextMenuSlice.show({ tileId, mouseX: event.pageX, mouseY: event.pageY }));
   }
 
   useBackgroundColourEffect(ref, props.tileData.colour);

@@ -56,7 +56,7 @@ function getClickHandler(
 function getMouseDownHandler(dispatch: React.Dispatch<AnyAction>): (event: React.MouseEvent<HTMLDivElement>) => void {
   return (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
-    dispatch(ContextMenuSlice.hideTileContextMenu());
+    dispatch(ContextMenuSlice.hide());
   };
 }
 

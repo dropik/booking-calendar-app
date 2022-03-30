@@ -7,6 +7,7 @@ import { faCircleInfo, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
 import * as ContextMenuSlice from "../../redux/contextMenuSlice";
+import * as DialogSlice from "../../redux/dialogSlice";
 
 import "./TileContextMenu.css";
 
@@ -24,15 +25,22 @@ function TileContextMenu(): JSX.Element {
     return <></>;
   }
 
-  const clickHandler = getClickHandler(dispatch, tileId);
+  function getInfo() {
+    if (tileId) {
+      dispatch(DialogSlice.showBookingDialog({ tileId }));
+    }
+    dispatch(ContextMenuSlice.hide());
+  }
+
+  const remove = getRemoveHandler(dispatch, tileId);
 
   return (
     <div ref={ref} onMouseDown={onMouseDown} className="tile-context-menu">
-      <div>
+      <div onClick={getInfo}>
         <FontAwesomeIcon icon={faCircleInfo} />
         Informazioni
       </div>
-      <div className="remove" onClick={clickHandler}>
+      <div className="remove" onClick={remove}>
         <FontAwesomeIcon icon={faTrashCan} />
         Rimuovere occupazione
       </div>
@@ -52,19 +60,19 @@ function useContextMenuPositionEffect(ref: React.RefObject<HTMLDivElement>, mous
 function useHideContextOnClickOutside(dispatch: React.Dispatch<AnyAction>): void {
   useEffect(() => {
     function onClickSomewhere() {
-      dispatch(ContextMenuSlice.hideTileContextMenu());
+      dispatch(ContextMenuSlice.hide());
     }
     window.addEventListener("mousedown", onClickSomewhere);
     return () => window.removeEventListener("mousedown", onClickSomewhere);
   }, [dispatch]);
 }
 
-function getClickHandler(dispatch: React.Dispatch<AnyAction>, tileId: string): () => void {
+function getRemoveHandler(dispatch: React.Dispatch<AnyAction>, tileId: string): () => void {
   return () => {
     if (tileId) {
       dispatch(TilesSlice.removeAssignment({ tileId }));
     }
-    dispatch(ContextMenuSlice.hideTileContextMenu());
+    dispatch(ContextMenuSlice.hide());
   };
 }
 

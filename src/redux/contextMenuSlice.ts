@@ -15,17 +15,17 @@ export const contextMenuSlice = createSlice({
   name: "contextMenu",
   initialState: initialState,
   reducers: {
-    showTileContextMenu: (state, action: PayloadAction<{ tileId: string, mouseX: number, mouseY: number }>) => {
+    show: (state, action: PayloadAction<{ tileId: string, mouseX: number, mouseY: number }>) => {
       state.tileId = action.payload.tileId;
       state.mouseX = action.payload.mouseX;
       state.mouseY = action.payload.mouseY;
     },
-    hideTileContextMenu: (state) => {
+    hide: (state) => {
       state.tileId = undefined;
     }
   }
 });
 
-export const { showTileContextMenu, hideTileContextMenu } = contextMenuSlice.actions;
+export const { show, hide } = contextMenuSlice.actions;
 
 export default contextMenuSlice.reducer;
