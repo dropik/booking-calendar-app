@@ -38,21 +38,41 @@ function BookingDialog(props: Props): JSX.Element {
               dateOfBirth: "1987-07-20"
             }
           ]
+        },
+        {
+          id: "2",
+          type: "camera matrimoniale/doppia",
+          entity: "camera matrimoniale",
+          roomNumber: 5,
+          guests: [
+            {
+              id: "2",
+              name: "Ivan",
+              surname: "Petrov",
+              dateOfBirth: "1990-08-20"
+            },
+            {
+              id: "3",
+              name: "Natasha",
+              surname: "Petrova",
+              dateOfBirth: "1991-05-09"
+            }
+          ]
         }
       ]
     });
   }, []);
 
-  const header = bookingData ?
-    <BookingDialogHeader data={bookingData} fadeOutDialog={props.fadeOutDialog} /> :
+  const dialog = bookingData ?
+    (
+      <>
+        <BookingDialogHeader data={bookingData} fadeOutDialog={props.fadeOutDialog} />
+        <BookingDialogBody data={bookingData} />
+      </>
+    ) :
     <></>;
 
-  return (
-    <>
-      {header}
-      <BookingDialogBody />
-    </>
-  );
+  return dialog;
 }
 
 export default hot(module)(BookingDialog);

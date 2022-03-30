@@ -75,7 +75,7 @@ function getContents(
   ) : (
     <div ref={ref} className={className}>
       <p className="occupation-info-header name">{tileData.name}</p>
-      <p className="occupation-info-header room-type">{getFullRoomType(tileData.entity, tileData.roomType)}</p>
+      <p className="occupation-info-header room-type">{Utils.getFullRoomType(tileData.entity, tileData.roomType)}</p>
       <div className="occupation-info-data">
         <p>Ospiti: {tileData.persons}</p>
         <p>Arrivo: {(new Date(tileData.from)).toLocaleDateString()}</p>
@@ -89,10 +89,6 @@ function getLocaleDepartureDate(from: string, nights: number): string {
   const date = new Date(from);
   date.setDate(date.getDate() + nights);
   return date.toLocaleDateString();
-}
-
-function getFullRoomType(entity: string, roomType: string): string {
-  return `${Utils.getFirstLetterUppercase(entity)} (${Utils.getFirstLetterUppercase(roomType)})`;
 }
 
 export default hot(module)(OccupationInfo);
