@@ -16,10 +16,9 @@
   background-color: white;
   border: 2px solid black;
   box-shadow: 0 0 16px 0px black;
-  margin-left: 1rem;
-  margin-right: 1rem;
+  max-width: 85%;
   max-height: 85%;
-  overflow-y: overlay;
+  overflow-y: auto;
 }
 
 @keyframes show-dialog-container {

@@ -28,8 +28,10 @@ function BookingDialogBody(props: Props): JSX.Element {
 
     return (
       <div key={room.id} className="room-container">
-        <div className="row">
-          <h4>{Utils.getFullRoomType(room.entity, room.type)} - {assigned}</h4>
+        <h4>{Utils.getFullRoomType(room.entity, room.type)}</h4>
+        <div className="room-info">
+          ({new Date(room.from).toLocaleDateString()} - {new Date(room.to).toLocaleDateString()}) -&nbsp;
+          {assigned}
         </div>
         {guests}
       </div>

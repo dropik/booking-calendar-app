@@ -24,6 +24,8 @@ function BookingDialog(props: Props): JSX.Element {
           id: "1",
           type: "camera matrimoniale/doppia",
           entity: "camera matrimoniale",
+          from: "2022-02-02",
+          to: "2022-02-05",
           guests: [
             {
               id: "0",
@@ -43,6 +45,8 @@ function BookingDialog(props: Props): JSX.Element {
           id: "2",
           type: "camera matrimoniale/doppia",
           entity: "camera matrimoniale",
+          from: "2022-02-02",
+          to: "2022-02-05",
           roomNumber: 5,
           guests: [
             {

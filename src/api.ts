@@ -18,6 +18,8 @@ export type BookingData = {
     id: string,
     type: string,
     entity: string,
+    from: string,
+    to: string,
     roomNumber?: number,
     guests: {
       id: string,
