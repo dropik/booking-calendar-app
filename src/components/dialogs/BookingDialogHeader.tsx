@@ -6,15 +6,17 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import * as Api from "../../api";
 
 type Props = {
-  data: Api.BookingData,
+  data: Api.BookingData | undefined,
   fadeOutDialog: () => void
 };
 
 function BookingDialogHeader(props: Props): JSX.Element {
+  const bookingDescription = props.data === undefined ? "" : `#${props.data.id} (${props.data.name})`;
+
   return (
     <>
       <h3>
-        {`Prenotazione #${props.data.id} (${props.data.name})`}
+        {`Prenotazione ${bookingDescription}`}
         <FontAwesomeIcon className="button close" icon={faXmark} onClick={props.fadeOutDialog} />
       </h3>
       <hr />

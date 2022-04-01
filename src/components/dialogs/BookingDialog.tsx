@@ -37,19 +37,12 @@ function BookingDialog(props: Props): JSX.Element {
     setDialogState("loading");
   }, [dispatch, tileId]);
 
-  let dialog: JSX.Element = <></>;
-  if (dialogState === "loading") {
-    dialog = <div className="message">Carico...</div>;
-  } else if (bookingData) {
-    dialog = (
-      <>
-        <BookingDialogHeader data={bookingData} fadeOutDialog={props.fadeOutDialog} />
-        <BookingDialogBody data={bookingData} />
-      </>
-    );
-  }
-
-  return dialog;
+  return (
+    <>
+      <BookingDialogHeader data={bookingData} fadeOutDialog={props.fadeOutDialog} />
+      <BookingDialogBody data={bookingData} dialogState={dialogState} />
+    </>
+  );
 }
 
 export default hot(module)(BookingDialog);
