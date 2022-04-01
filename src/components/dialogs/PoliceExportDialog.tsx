@@ -11,7 +11,7 @@ type Props = {
 function PoliceExportDialog(props: Props): JSX.Element {
   return (
     <>
-      <DialogHeader type={"police"} fadeOutDialog={props.fadeOutDialog} />;
+      <DialogHeader type={"police"} fadeOutDialog={props.fadeOutDialog} />
       <ExportDialogBody type={"police"} fadeOutDialog={props.fadeOutDialog} />
     </>
   );
