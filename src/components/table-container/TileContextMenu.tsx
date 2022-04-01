@@ -15,14 +15,25 @@ function TileContextMenu(): JSX.Element {
   const dispatch = useAppDispatch();
   const ref = useRef<HTMLDivElement>(null);
   const tileId = useAppSelector((state) => state.contextMenu.tileId);
+  const isUnassigned = useAppSelector((state) => {
+    if (tileId) {
+      const tile = state.tiles.data[tileId];
+      return tile.roomNumber === undefined;
+    }
+  });
   const mouseX = useAppSelector((state) => state.contextMenu.mouseX);
   const mouseY = useAppSelector((state) => state.contextMenu.mouseY);
 
   useContextMenuPositionEffect(ref, mouseX, mouseY);
   useHideContextOnClickOutside(dispatch);
 
-  if (!tileId) {
+  if (!tileId || (isUnassigned === undefined)) {
     return <></>;
+  }
+
+  let removeClassName = "button remove";
+  if (isUnassigned) {
+    removeClassName += " disabled";
   }
 
   function getInfo() {
@@ -32,15 +43,15 @@ function TileContextMenu(): JSX.Element {
     dispatch(ContextMenuSlice.hide());
   }
 
-  const remove = getRemoveHandler(dispatch, tileId);
+  const remove = getRemoveHandler(dispatch, tileId, isUnassigned);
 
   return (
     <div ref={ref} onMouseDown={onMouseDown} className="tile-context-menu">
-      <div onClick={getInfo}>
+      <div className="button" onClick={getInfo}>
         <FontAwesomeIcon icon={faCircleInfo} />
         Informazioni
       </div>
-      <div className="remove" onClick={remove}>
+      <div className={removeClassName} onClick={remove}>
         <FontAwesomeIcon icon={faTrashCan} />
         Rimuovere occupazione
       </div>
@@ -67,12 +78,14 @@ function useHideContextOnClickOutside(dispatch: React.Dispatch<AnyAction>): void
   }, [dispatch]);
 }
 
-function getRemoveHandler(dispatch: React.Dispatch<AnyAction>, tileId: string): () => void {
+function getRemoveHandler(dispatch: React.Dispatch<AnyAction>, tileId: string, isUnassigned: boolean): () => void {
   return () => {
-    if (tileId) {
-      dispatch(TilesSlice.removeAssignment({ tileId }));
+    if (!isUnassigned) {
+      if (tileId) {
+        dispatch(TilesSlice.removeAssignment({ tileId }));
+      }
+      dispatch(ContextMenuSlice.hide());
     }
-    dispatch(ContextMenuSlice.hide());
   };
 }
 

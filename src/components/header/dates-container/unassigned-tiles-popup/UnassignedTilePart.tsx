@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector, useColumns, useLeftmostDate } from "../
 import * as Utils from "../../../../utils";
 import * as TilesSlice from "../../../../redux/tilesSlice";
 import * as HoveredIdSlice from "../../../../redux/hoveredIdSlice";
+import * as ContextMenuSlice from "../../../../redux/contextMenuSlice";
 
 import "./UnassignedTilePart.css";
 
@@ -27,6 +28,13 @@ function UnassignedTilePart(props: Props): JSX.Element {
     return <></>;
   }
 
+  function onContextMenu(event: React.MouseEvent<HTMLDivElement>) {
+    console.log("context");
+    event.preventDefault();
+    event.stopPropagation();
+    dispatch(ContextMenuSlice.show({ tileId: props.tileId, mouseX: event.pageX, mouseY: event.pageY }));
+  }
+
   const outOfBound = isOutOfBound(tileData, leftmostDate, columns);
   const grabHandler = getGrabHandler(ref, dispatch, props.tileId, outOfBound);
   const enterHandler = getEnterHandler(dispatch, props.tileId);
@@ -36,12 +44,13 @@ function UnassignedTilePart(props: Props): JSX.Element {
   return (
     <div
       ref={ref}
+      className={className}
       onMouseDown={grabHandler}
       onMouseEnter={enterHandler}
       onMouseLeave={leaveHandler}
-      className={className}
+      onContextMenu={onContextMenu}
     >
-      <b>{tileData.persons}</b>
+      {tileData.persons}
     </div>
   );
 }
@@ -68,6 +77,8 @@ function getGrabHandler(
     dispatch(HoveredIdSlice.set(undefined));
     if (!outOfBound && ref.current && (event.button === 0)) {
       dispatch(TilesSlice.grab({ tileId: tileId, mouseY: event.pageY - ref.current.getBoundingClientRect().top }));
+    } else if (event.button === 2) {
+      event.stopPropagation();
     }
   };
 }
