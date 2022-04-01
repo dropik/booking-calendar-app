@@ -4,28 +4,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 type Props = {
-  type: "police" | "istat" | "cityTax",
+  title: string,
   fadeOutDialog: () => void
 };
 
 function DialogHeader(props: Props): JSX.Element {
-  let title: string;
-  switch (props.type) {
-  case "police":
-    title = "Esporta Dati Polizia";
-    break;
-  case "istat":
-    title = "Esporta Dati ISTAT";
-    break;
-  case "cityTax":
-    title = "Calcola Tassa di Soggiorno";
-    break;
-  }
-
   return (
     <>
       <h3>
-        {title}
+        {props.title}
         <FontAwesomeIcon className="button close" icon={faXmark} onClick={props.fadeOutDialog} />
       </h3>
       <hr />

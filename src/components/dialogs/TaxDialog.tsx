@@ -11,7 +11,7 @@ type Props = {
 function TaxDialog(props: Props): JSX.Element {
   return (
     <>
-      <DialogHeader type={"cityTax"} fadeOutDialog={props.fadeOutDialog} />
+      <DialogHeader title={"Calcola Tassa di Soggiorno"} fadeOutDialog={props.fadeOutDialog} />
       <TaxDialogBody fadeOutDialog={props.fadeOutDialog} />
     </>
   );
