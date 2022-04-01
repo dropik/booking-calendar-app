@@ -17,8 +17,10 @@ type PopupData = {
 function UnassignedTilesPopup(): JSX.Element {
   const dispatch = useAppDispatch();
   const popupData = usePopupData();
+  const isDialogShown = useAppSelector((state) => state.dialog.selectedDialog !== undefined);
+  const isContextMenuShown = useAppSelector((state) => state.contextMenu.tileId !== undefined);
 
-  useHideOnClickOutsidePopupEffect(dispatch);
+  useHideOnClickOutsidePopupEffect(dispatch, isDialogShown, isContextMenuShown);
 
   if (popupData && popupData.show) {
     return (
@@ -50,14 +52,24 @@ function usePopupData(): PopupData | undefined {
   });
 }
 
-function useHideOnClickOutsidePopupEffect(dispatch: React.Dispatch<AnyAction>): void {
+function useHideOnClickOutsidePopupEffect(
+  dispatch: React.Dispatch<AnyAction>,
+  isDialogShown: boolean,
+  isContextMenuShown: boolean
+): void {
   useEffect(() => {
     function hidePopup() {
       dispatch(TilesSlice.toggleDate({ date: undefined }));
     }
-    window.addEventListener("mousedown", hidePopup);
-    return () => window.removeEventListener("mousedown", hidePopup);
-  }, [dispatch]);
+    if (!isDialogShown && !isContextMenuShown) {
+      window.addEventListener("mousedown", hidePopup);
+    }
+    return () => {
+      if (!isDialogShown && !isContextMenuShown) {
+        window.removeEventListener("mousedown", hidePopup);
+      }
+    };
+  }, [dispatch, isDialogShown, isContextMenuShown]);
 }
 
 export default hot(module)(UnassignedTilesPopup);

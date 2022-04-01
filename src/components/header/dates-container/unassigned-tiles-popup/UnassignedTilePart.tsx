@@ -29,7 +29,6 @@ function UnassignedTilePart(props: Props): JSX.Element {
   }
 
   function onContextMenu(event: React.MouseEvent<HTMLDivElement>) {
-    console.log("context");
     event.preventDefault();
     event.stopPropagation();
     dispatch(ContextMenuSlice.show({ tileId: props.tileId, mouseX: event.pageX, mouseY: event.pageY }));
