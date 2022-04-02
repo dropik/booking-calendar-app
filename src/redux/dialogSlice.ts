@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export type DialogType = "police" | "istat" | "cityTax" | "booking";
+export type DialogType = "police" | "istat" | "cityTax" | "booking" | "findBooking";
 
 export type State = {
   selectedDialog?: DialogType,

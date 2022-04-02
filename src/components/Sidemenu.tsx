@@ -75,7 +75,7 @@ function Sidemenu(): JSX.Element {
         </div>
         <hr color="#252525" />
         <div className="group-label">Cerca</div>
-        <div className="menu-item button">
+        <div className="menu-item button" onClick={() => { showDialog("findBooking"); }}>
           <span className="icon"><FontAwesomeIcon icon={faKey} /></span>
           Prenotazione
         </div>

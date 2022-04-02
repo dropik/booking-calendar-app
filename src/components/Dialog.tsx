@@ -8,6 +8,7 @@ import PoliceExportDialog from "./dialogs/PoliceExportDialog";
 import IstatExportDialog from "./dialogs/IstatExportDialog";
 import TaxDialog from "./dialogs/TaxDialog";
 import BookingDialog from "./dialogs/BookingDialog";
+import FindBookingDialog from "./dialogs/FindBookingDialog";
 
 import "./Dialog.css";
 
@@ -56,6 +57,9 @@ function Dialog(): JSX.Element {
     break;
   case "booking":
     dialog = <BookingDialog fadeOutDialog={fadeOutDialog} />;
+    break;
+  case "findBooking":
+    dialog = <FindBookingDialog fadeOutDialog={fadeOutDialog} />;
     break;
   }
 

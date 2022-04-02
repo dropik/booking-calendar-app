@@ -11,7 +11,7 @@ type Props = {
 function IstatExportDialog(props: Props): JSX.Element {
   return (
     <>
-      <DialogHeader title={"Esporta Dati ISTAT"} fadeOutDialog={props.fadeOutDialog} />
+      <DialogHeader title="Esporta Dati ISTAT" fadeOutDialog={props.fadeOutDialog} />
       <ExportDialogBody type={"istat"} fadeOutDialog={props.fadeOutDialog} />
     </>
   );
