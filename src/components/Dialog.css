@@ -18,6 +18,9 @@
   box-shadow: 0 0 16px 0px black;
   max-width: 85%;
   max-height: 85%;
+}
+
+.dialog.scrollable {
   overflow-y: auto;
   overflow-x: clip;
 }
@@ -80,13 +83,13 @@
 
 .dialog .row {
   display: flex;
-  margin-bottom: 1rem;
   align-items: center;
   flex-wrap: wrap;
 }
 
 .dialog .row>div {
   margin-left: 1rem;
+  margin-bottom: 1rem;
 }
 
 .dialog input {

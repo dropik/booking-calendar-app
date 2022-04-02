@@ -3,7 +3,7 @@
 }
 
 .dialog .sub-header {
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
 
 .dialog .rooms-container {
@@ -50,12 +50,9 @@
   text-align: center;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
+  margin-bottom: 0;
 }
 
 .dialog .row.person.button:hover {
-  background-color: #ededed;
-}
-
-.dialog .row.person.button:active {
-  background-color: #cfcfcf;
+  color: white;
 }

@@ -45,6 +45,7 @@ function Dialog(): JSX.Element {
   }
 
   let dialog: JSX.Element;
+  let dialogClassName = "dialog";
   switch (selectedDialog) {
   case "police":
     dialog = <PoliceExportDialog fadeOutDialog={fadeOutDialog} />;
@@ -57,6 +58,7 @@ function Dialog(): JSX.Element {
     break;
   case "booking":
     dialog = <BookingDialog fadeOutDialog={fadeOutDialog} />;
+    dialogClassName += " scrollable";
     break;
   case "findBooking":
     dialog = <FindBookingDialog fadeOutDialog={fadeOutDialog} />;
@@ -70,7 +72,7 @@ function Dialog(): JSX.Element {
       onClick={fadeOutDialog}
       onAnimationEnd={handleDialogAnimationEnd}
     >
-      <div className="dialog" onClick={preventHideOnSelfClick}>
+      <div className={dialogClassName} onClick={preventHideOnSelfClick}>
         {dialog}
       </div>
     </div>
