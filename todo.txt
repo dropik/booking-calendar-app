@@ -1,13 +1,14 @@
 - Police data export. Istat export. City tax calculation. Find person.
 - Tile colour assignment.
+- Real API calls.
+- Input escaping.
+- Handle connection errors.
+- Handle waiting while fetch.
 - Enhance info popup positioning.
 - Grabbed tile above table.
 - Fix keep expanding left when scrolled by dragging scrollbar.
 - Handle touchscreen.
-- Handle connection errors.
-- Handle waiting while fetch.
 - Real-time backend synchronization for updating tiles.
 - Prettier interface.
-- Real API calls.
 - Table fragmentation system??
 - Police data sending directly to police web portal??

@@ -116,6 +116,41 @@ module.exports = {
         });
       });
 
+      devServer.app.get("/api/find/bookings", (request, response) => {
+        response.json([
+          {
+            id: "0",
+            name: "Ivan Petrov",
+            from: "2022-02-02",
+            to: "2022-02-05"
+          },
+          {
+            id: "1",
+            name: "Vasya Pupkin",
+            from: "2022-03-01",
+            to: "2022-03-04"
+          },
+          {
+            id: "2",
+            name: "Petr Sidorov",
+            from: "2022-03-16",
+            to: "2022-03-17"
+          },
+          {
+            id: "3",
+            name: "Petr Ivanov",
+            from: "2022-04-01",
+            to: "2022-04-03"
+          },
+          {
+            id: "4",
+            name: "Kirill Kirilov",
+            from: "2022-04-02",
+            to: "2022-04-03"
+          }
+        ]);
+      });
+
       return middlewares;
     }
   },

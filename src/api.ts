@@ -30,6 +30,13 @@ export type BookingData = {
   }[]
 };
 
+export type BookingShortData = {
+  id: string,
+  name: string,
+  from: string,
+  to: string
+};
+
 export function fetchHotelDataAsync(): Promise<{ data: HotelSlice.HotelData }> {
   return new Promise((resolve) => {
     setTimeout(() => resolve({ data: Mocks.hotel }), 500);
@@ -97,6 +104,18 @@ export async function fetchBookingByTile(tileId: string): Promise<{ data: Bookin
     throw new Error("Response error");
   }
   const data = await response.json() as BookingData;
+  if (!data) {
+    throw new Error("Response error");
+  }
+  return { data };
+}
+
+export async function fetchBookings(nameOrId: string, from: string, to: string): Promise<{ data: BookingShortData[] }> {
+  const response = await fetch(`/api/find/bookings?nameOrId=${nameOrId}&from=${from}&to=${to}`);
+  if (!response.ok) {
+    throw new Error("Response error");
+  }
+  const data = await response.json() as BookingShortData[];
   if (!data) {
     throw new Error("Response error");
   }
