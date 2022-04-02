@@ -62,6 +62,7 @@ function Dialog(): JSX.Element {
     break;
   case "findBooking":
     dialog = <FindBookingDialog fadeOutDialog={fadeOutDialog} />;
+    dialogClassName += " scrollable";
     break;
   }
 
