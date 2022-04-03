@@ -1,36 +1,73 @@
-import React from "react";
+import React, { useState } from "react";
 import { hot } from "react-hot-loader";
 import DatePicker from "react-datepicker";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
+
+import * as Utils from "../../utils";
+import { useCurrentDate } from "../../redux/hooks";
+
+import BookingsList from "./BookingsList";
 
 import "./FindBookingDialogBody.css";
 
 function FindBookingDialogBody(): JSX.Element {
+  const currentDate = useCurrentDate();
+  const toDateObj = new Date(currentDate);
+  toDateObj.setMonth(toDateObj.getMonth() + 1);
+  const [nameOrId, setNameOrId] = useState("");
+  const [fromDate, setFromDate] = useState(currentDate);
+  const [toDate, setToDate] = useState(Utils.dateToString(toDateObj));
+  const [forceFetchRequest, setForceFetchRequest] = useState(0);
+  const [isLiveUpdateEnabled, setLiveUpdateEnabled] = useState(false);
+
+  const isValidated = Utils.daysBetweenDates(fromDate, toDate) > 0;
+  const datePickerClassName = isValidated ? "" : "invalid";
+
+  const errorLabel = isValidated ?
+    <></> :
+    (
+      <div className="error-label">
+        <FontAwesomeIcon icon={faCircleExclamation} />
+        Intervallo selezionato non corretto
+      </div>
+    );
+
   return (
     <>
+      {errorLabel}
       <div className="row">
         <div>
           <span className="label">Nome / ID:</span>
-          <input type={"text"} />
+          <input type={"text"} value={nameOrId} onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            setNameOrId(event.target.value);
+            setLiveUpdateEnabled(true);
+          }} />
         </div>
         <div>
           <span className="label">Dal:</span>
           <DatePicker
+            className={datePickerClassName}
             locale="it"
             dateFormat="dd/MM/yyyy"
-            selected={new Date()}
-            onChange={() => []}
+            selected={new Date(fromDate)}
+            onChange={(date: Date) => { setFromDate(Utils.dateToString(date)); }}
           />
         </div>
         <div>
           <span className="label">Al:</span>
           <DatePicker
+            className={datePickerClassName}
             locale="it"
             dateFormat="dd/MM/yyyy"
-            selected={new Date()}
-            onChange={() => []}
+            selected={new Date(toDate)}
+            onChange={(date: Date) => { setToDate(Utils.dateToString(date)); }}
           />
         </div>
-        <div className="button">Cerca</div>
+        <div className="button" onClick={() => {
+          setForceFetchRequest(forceFetchRequest + 1);
+          setLiveUpdateEnabled(true);
+        }}>Cerca</div>
       </div>
       <hr className="search-field-border" />
       <div className="bookings-container">
@@ -40,13 +77,14 @@ function FindBookingDialogBody(): JSX.Element {
           <div className="from">Dal</div>
           <div className="to">Al</div>
         </div>
-        {/* <h3>Nessuna Prenotazione</h3> */}
-        <div className="row button">
-          <div className="id">#1234</div>
-          <div className="name">Ivan Petrov</div>
-          <div className="from">02/02/2022</div>
-          <div className="to">05/02/2022</div>
-        </div>
+        <BookingsList
+          nameOrId={nameOrId}
+          from={fromDate}
+          to={toDate}
+          forceFetchRequest={forceFetchRequest}
+          isLiveUpdateEnabled={isLiveUpdateEnabled}
+          isValidated={isValidated}
+        />
       </div>
     </>
   );
