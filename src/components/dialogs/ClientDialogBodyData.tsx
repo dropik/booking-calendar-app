@@ -2,12 +2,16 @@ import React from "react";
 import { hot } from "react-hot-loader";
 
 import * as Api from "../../api";
+import { useAppDispatch } from "../../redux/hooks";
+import * as DialogSlice from "../../redux/dialogSlice";
 
 type Props = {
   data: Api.ClientData
 };
 
 function BookingDialogBodyData(props: Props): JSX.Element {
+  const dispatch = useAppDispatch();
+
   const placeOfBirthString = props.data.placeOfBirth ? "" : `${props.data.placeOfBirth}, `;
 
   let documentTypeString: string;
@@ -21,6 +25,10 @@ function BookingDialogBodyData(props: Props): JSX.Element {
   case "passport":
     documentTypeString = "Passaporto";
     break;
+  }
+
+  function showBooking() {
+    dispatch(DialogSlice.showBookingDialog({ id: props.data.booking.id }));
   }
 
   return (
@@ -40,7 +48,7 @@ function BookingDialogBodyData(props: Props): JSX.Element {
       <h3 className="sub-header">Prenotazione</h3>
       <hr className="client-booking"/>
       <div className="bookings-container client-booking">
-        <div className="row button">
+        <div className="row button" onClick={showBooking}>
           <div className="id">#{props.data.booking.id}</div>
           <div className="name">{props.data.booking.name}</div>
           <div className="from">{new Date(props.data.booking.from).toLocaleDateString()}</div>
