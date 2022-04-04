@@ -69,65 +69,44 @@ export function postChangesAsync(changes: TilesSlice.ChangesMap): Promise<{ data
 }
 
 export async function fetchPoliceDataAsync(date: string): Promise<{ data: Blob }> {
-  const response = await fetch(`/api/export/police?date=${date}`);
-  if (!response.ok) {
-    throw new Error("Response error");
-  }
-  const data = await response.blob();
-  return { data };
+  return fetchBlobDataAsync(`/api/export/police?date=${date}`);
 }
 
 export async function fetchIstatDataAsync(date: string): Promise<{ data: Blob }> {
-  const response = await fetch(`/api/export/istat?date=${date}`);
+  return fetchBlobDataAsync(`/api/export/istat?date=${date}`);
+}
+
+export async function fetchCityTaxAsync(from: string, to: string): Promise<{ data: CityTaxData }> {
+  return fetchJsonDataAsync<CityTaxData>(`/api/calc/tax?from=${from}&to=${to}`);
+}
+
+export async function fetchBookingByTile(tileId: string): Promise<{ data: BookingData }> {
+  return fetchJsonDataAsync<BookingData>(`/api/get/booking?tileId=${tileId}`);
+}
+
+export async function fetchBookingById(bookingId: string): Promise<{ data: BookingData }> {
+  return fetchJsonDataAsync<BookingData>(`/api/get/booking?id=${bookingId}`);
+}
+
+export async function fetchBookings(nameOrId: string, from: string, to: string): Promise<{ data: BookingShortData[] }> {
+  return fetchJsonDataAsync<BookingShortData[]>(`/api/find/bookings?nameOrId=${nameOrId}&from=${from}&to=${to}`);
+}
+
+async function fetchBlobDataAsync(query: string): Promise<{ data: Blob }> {
+  const response = await fetch(query);
   if (!response.ok) {
-    throw new Error("Response error");
+    throw new Error("Resopnse error");
   }
   const data = await response.blob();
   return { data };
 }
 
-export async function fetchCityTaxAsync(from: string, to: string): Promise<{ data: CityTaxData }> {
-  const response = await fetch(`/api/calc/tax?from=${from}&to=${to}`);
+async function fetchJsonDataAsync<T>(query: string): Promise<{ data: T }> {
+  const response = await fetch(query);
   if (!response.ok) {
     throw new Error("Response error");
   }
-  const data = await response.json() as CityTaxData;
-  if (!data) {
-    throw new Error("Response error");
-  }
-  return { data };
-}
-
-export async function fetchBookingByTile(tileId: string): Promise<{ data: BookingData }> {
-  const response = await fetch(`/api/get/booking?tileId=${tileId}`);
-  if (!response.ok) {
-    throw new Error("Response error");
-  }
-  const data = await response.json() as BookingData;
-  if (!data) {
-    throw new Error("Response error");
-  }
-  return { data };
-}
-
-export async function fetchBookingById(bookingId: string): Promise<{ data: BookingData }> {
-  const response = await fetch(`/api/get/booking?id=${bookingId}`);
-  if (!response.ok) {
-    throw new Error("Response error");
-  }
-  const data = await response.json() as BookingData;
-  if (!data) {
-    throw new Error("Response error");
-  }
-  return { data };
-}
-
-export async function fetchBookings(nameOrId: string, from: string, to: string): Promise<{ data: BookingShortData[] }> {
-  const response = await fetch(`/api/find/bookings?nameOrId=${nameOrId}&from=${from}&to=${to}`);
-  if (!response.ok) {
-    throw new Error("Response error");
-  }
-  const data = await response.json() as BookingShortData[];
+  const data = await response.json() as T;
   if (!data) {
     throw new Error("Response error");
   }
