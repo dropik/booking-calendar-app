@@ -48,6 +48,7 @@ function Dialog(): JSX.Element {
     let component: JSX.Element;
     let dialogClassName = "dialog";
     let key: string;
+    const showGoBackButton = index !== 0;
 
     if (index < dialogs.length - 1) {
       dialogClassName += " hidden";
@@ -56,25 +57,25 @@ function Dialog(): JSX.Element {
     switch (dialog.type) {
     case "police":
       key = "police";
-      component = <PoliceExportDialog fadeOutDialog={fadeOutDialog} />;
+      component = <PoliceExportDialog showGoBackButton={showGoBackButton} fadeOutDialog={fadeOutDialog} />;
       break;
     case "istat":
       key="istat";
-      component = <IstatExportDialog fadeOutDialog={fadeOutDialog} />;
+      component = <IstatExportDialog showGoBackButton={showGoBackButton} fadeOutDialog={fadeOutDialog} />;
       break;
     case "cityTax":
       key="cityTax";
-      component = <TaxDialog fadeOutDialog={fadeOutDialog} />;
+      component = <TaxDialog showGoBackButton={showGoBackButton} fadeOutDialog={fadeOutDialog} />;
       break;
     case "booking":
       key=`booking#${dialog.tile}`;
       dialogClassName += " scrollable";
-      component = <BookingDialog bookingId={dialog.id} tileId={dialog.tile} fadeOutDialog={fadeOutDialog} />;
+      component = <BookingDialog bookingId={dialog.id} tileId={dialog.tile} showGoBackButton={showGoBackButton} fadeOutDialog={fadeOutDialog} />;
       break;
     case "findBooking":
       key="findBooking";
       dialogClassName += " scrollable";
-      component = <FindBookingDialog fadeOutDialog={fadeOutDialog} />;
+      component = <FindBookingDialog showGoBackButton={showGoBackButton} fadeOutDialog={fadeOutDialog} />;
       break;
     }
 

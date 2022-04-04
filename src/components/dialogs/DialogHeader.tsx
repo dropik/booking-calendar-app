@@ -5,14 +5,17 @@ import { faAngleLeft, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 type Props = {
   title: string,
+  showGoBackButton?: boolean,
   fadeOutDialog: () => void
 };
 
 function DialogHeader(props: Props): JSX.Element {
+  const goBackButton = props.showGoBackButton ? <FontAwesomeIcon className="button back" icon={faAngleLeft} /> : <></>;
+
   return (
     <>
       <h3>
-        <FontAwesomeIcon className="button back" icon={faAngleLeft} />
+        {goBackButton}
         {props.title}
         <FontAwesomeIcon className="button close" icon={faXmark} onClick={props.fadeOutDialog} />
       </h3>

@@ -13,6 +13,7 @@ type DialogState = "idle" | "loading";
 type Props = {
   tileId?: string,
   bookingId?: string,
+  showGoBackButton?: boolean,
   fadeOutDialog: () => void
 };
 
@@ -51,7 +52,7 @@ function BookingDialog(props: Props): JSX.Element {
 
   return (
     <>
-      <DialogHeader title={`Prenotazione ${bookingDescription}`} fadeOutDialog={props.fadeOutDialog} />
+      <DialogHeader title={`Prenotazione ${bookingDescription}`} showGoBackButton={props.showGoBackButton} fadeOutDialog={props.fadeOutDialog} />
       <BookingDialogBody data={bookingData} dialogState={dialogState} />
     </>
   );

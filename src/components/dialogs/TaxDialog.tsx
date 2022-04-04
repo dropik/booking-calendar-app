@@ -5,13 +5,14 @@ import DialogHeader from "./DialogHeader";
 import TaxDialogBody from "./TaxDialogBody";
 
 type Props = {
+  showGoBackButton?: boolean,
   fadeOutDialog: () => void
 };
 
 function TaxDialog(props: Props): JSX.Element {
   return (
     <>
-      <DialogHeader title="Calcola Tassa di Soggiorno" fadeOutDialog={props.fadeOutDialog} />
+      <DialogHeader title="Calcola Tassa di Soggiorno" showGoBackButton={props.showGoBackButton} fadeOutDialog={props.fadeOutDialog} />
       <TaxDialogBody fadeOutDialog={props.fadeOutDialog} />
     </>
   );

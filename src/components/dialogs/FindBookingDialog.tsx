@@ -5,13 +5,14 @@ import DialogHeader from "./DialogHeader";
 import FindBookingDialogBody from "./FindBookingDialogBody";
 
 type Props = {
+  showGoBackButton?: boolean,
   fadeOutDialog: () => void
 };
 
 function FindBookingDialog(props: Props): JSX.Element {
   return (
     <>
-      <DialogHeader title="Cerca Prenotazione" fadeOutDialog={props.fadeOutDialog} />
+      <DialogHeader title="Cerca Prenotazione" showGoBackButton={props.showGoBackButton} fadeOutDialog={props.fadeOutDialog} />
       <FindBookingDialogBody />
     </>
   );
