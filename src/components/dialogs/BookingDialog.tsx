@@ -11,7 +11,8 @@ import DialogHeader from "./DialogHeader";
 type DialogState = "idle" | "loading";
 
 type Props = {
-  tileId: string
+  tileId?: string,
+  bookingId?: string,
   fadeOutDialog: () => void
 };
 
@@ -25,17 +26,28 @@ function BookingDialog(props: Props): JSX.Element {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await Api.fetchBookingByTile(props.tileId);
-        setBookingData(response.data);
-        setDialogState("idle");
+        let data: Api.BookingData | undefined;
+
+        if (props.tileId) {
+          const response = await Api.fetchBookingByTile(props.tileId);
+          data = response.data;
+        } else if (props.bookingId) {
+          const response = await Api.fetchBookingById(props.bookingId);
+          data = response.data;
+        }
+
+        if (data) {
+          setBookingData(data);
+        }
       } catch (Error) {
         dispatch(ConnectionErrorSlice.show());
+      } finally {
         setDialogState("idle");
       }
     }
     fetchData();
     setDialogState("loading");
-  }, [dispatch, props.tileId]);
+  }, [dispatch, props.tileId, props.bookingId]);
 
   return (
     <>

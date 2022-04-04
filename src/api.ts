@@ -110,6 +110,18 @@ export async function fetchBookingByTile(tileId: string): Promise<{ data: Bookin
   return { data };
 }
 
+export async function fetchBookingById(bookingId: string): Promise<{ data: BookingData }> {
+  const response = await fetch(`/api/get/booking?id=${bookingId}`);
+  if (!response.ok) {
+    throw new Error("Response error");
+  }
+  const data = await response.json() as BookingData;
+  if (!data) {
+    throw new Error("Response error");
+  }
+  return { data };
+}
+
 export async function fetchBookings(nameOrId: string, from: string, to: string): Promise<{ data: BookingShortData[] }> {
   const response = await fetch(`/api/find/bookings?nameOrId=${nameOrId}&from=${from}&to=${to}`);
   if (!response.ok) {

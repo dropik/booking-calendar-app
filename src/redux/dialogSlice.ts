@@ -6,7 +6,8 @@ export type DialogDescriptor = {
   type: ZeroParameterDialog
 } | {
   type: "booking",
-  tile: string
+  id?: string,
+  tile?: string,
 };
 
 export type State = {
@@ -27,9 +28,10 @@ export const dialogSlice = createSlice({
     show: (state, action: PayloadAction<{ dialogType: ZeroParameterDialog }>) => {
       state.dialogs.push({ type: action.payload.dialogType });
     },
-    showBookingDialog: (state, action: PayloadAction<{ tileId: string }>) => {
+    showBookingDialog: (state, action: PayloadAction<{ id?: string, tileId?: string }>) => {
       state.dialogs.push({
         type: "booking",
+        id: action.payload.id,
         tile: action.payload.tileId
       });
     }

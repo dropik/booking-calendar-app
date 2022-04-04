@@ -25,6 +25,10 @@
   overflow-x: clip;
 }
 
+.dialog.hidden {
+  display: none;
+}
+
 @keyframes show-dialog-container {
   from {
     opacity: 0;

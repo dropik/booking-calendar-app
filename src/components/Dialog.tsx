@@ -44,10 +44,14 @@ function Dialog(): JSX.Element {
     return <></>;
   }
 
-  const dialogComponents: JSX.Element[] = dialogs.map((dialog) => {
+  const dialogComponents: JSX.Element[] = dialogs.map((dialog, index) => {
     let component: JSX.Element;
     let dialogClassName = "dialog";
     let key: string;
+
+    if (index < dialogs.length - 1) {
+      dialogClassName += " hidden";
+    }
 
     switch (dialog.type) {
     case "police":
@@ -65,7 +69,7 @@ function Dialog(): JSX.Element {
     case "booking":
       key=`booking#${dialog.tile}`;
       dialogClassName += " scrollable";
-      component = <BookingDialog tileId={dialog.tile} fadeOutDialog={fadeOutDialog} />;
+      component = <BookingDialog bookingId={dialog.id} tileId={dialog.tile} fadeOutDialog={fadeOutDialog} />;
       break;
     case "findBooking":
       key="findBooking";

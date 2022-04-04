@@ -38,15 +38,16 @@ function FindBookingDialogBody(): JSX.Element {
       {errorLabel}
       <div className="row">
         <div>
-          <span className="label">Nome / ID:</span>
-          <input type={"text"} value={nameOrId} onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+          <label htmlFor="nameOrId" className="label">Nome / ID:</label>
+          <input type={"text"} id="nameOrId" value={nameOrId} onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             setNameOrId(event.target.value);
             setLiveUpdateEnabled(true);
           }} />
         </div>
         <div>
-          <span className="label">Dal:</span>
+          <label htmlFor="from" className="label">Dal:</label>
           <DatePicker
+            id="from"
             className={datePickerClassName}
             locale="it"
             dateFormat="dd/MM/yyyy"
@@ -55,8 +56,9 @@ function FindBookingDialogBody(): JSX.Element {
           />
         </div>
         <div>
-          <span className="label">Al:</span>
+          <label htmlFor="to" className="label">Al:</label>
           <DatePicker
+            id="to"
             className={datePickerClassName}
             locale="it"
             dateFormat="dd/MM/yyyy"
