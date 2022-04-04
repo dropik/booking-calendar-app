@@ -6,7 +6,7 @@ import * as Utils from "../../utils";
 
 import { useAppDispatch, useAppSelector, useColumns, useLeftmostDate } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
-import * as HoveredIdSlice from "../../redux/hoveredIdSlice";
+import * as OccupationInfoSlice from "../../redux/occupationInfoSlice";
 import * as ContextMenuSlice from "../../redux/contextMenuSlice";
 
 import "./TilePart.css";
@@ -40,6 +40,10 @@ function TilePart(props: Props): JSX.Element {
     dispatch(ContextMenuSlice.show({ tileId, mouseX: event.pageX, mouseY: event.pageY }));
   }
 
+  function handleMouseMove(event: React.MouseEvent<HTMLDivElement>) {
+    dispatch(OccupationInfoSlice.move({ x: event.pageX, y: event.pageY }));
+  }
+
   useBackgroundColourEffect(ref, props.tileData.colour);
 
   return (
@@ -49,6 +53,7 @@ function TilePart(props: Props): JSX.Element {
       onMouseDown={grabHandler}
       onMouseEnter={enterHandler}
       onMouseLeave={leaveHandler}
+      onMouseMove={handleMouseMove}
       onContextMenu={onContextMenu}
     >
       <span className="tile-persons">{props.tileData.persons}</span>
@@ -93,12 +98,15 @@ function getGrabHandler(
   };
 }
 
-function getEnterHandler(dispatch: Dispatch<AnyAction>, tileId: string): () => void {
-  return () => dispatch(HoveredIdSlice.set(tileId));
+function getEnterHandler(
+  dispatch: Dispatch<AnyAction>,
+  tileId: string
+): (event: React.MouseEvent<HTMLDivElement>) => void {
+  return (event) => dispatch(OccupationInfoSlice.show({ hoveredId: tileId, x: event.pageX, y: event.pageY }));
 }
 
 function getLeaveHandler(dispatch: Dispatch<AnyAction>): () => void {
-  return () => dispatch(HoveredIdSlice.set(undefined));
+  return () => dispatch(OccupationInfoSlice.hide());
 }
 
 function isOutOfBound(tileData: TilesSlice.TileData, leftmostDate: string, columns: number): boolean {

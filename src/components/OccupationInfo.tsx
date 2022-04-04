@@ -1,4 +1,4 @@
-import React, { SetStateAction, useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import { hot } from "react-hot-loader";
 
 import { useAppSelector, useTileData } from "../redux/hooks";
@@ -7,22 +7,15 @@ import * as Utils from "../utils";
 
 import "./OccupationInfo.css";
 
-type MousePosition = {
-  x: number,
-  y: number
-};
-
 function OccupationInfo(): JSX.Element {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const ref = useRef<HTMLDivElement>(null);
+  const x = useAppSelector((state) => state.occupationInfo.x);
+  const y = useAppSelector((state) => state.occupationInfo.y);
   const hoveredId = useHoveredId();
   const tileData = useTileData(hoveredId);
   const canShow = useCanShow();
 
-  const show = canShow && (tileData !== undefined);
-
-  useUpdateMousePositionEffect(setMousePosition, show);
-  useUpdatePopupCoordsEffect(ref, mousePosition);
+  useUpdatePopupCoordsEffect(ref, x, y);
 
   const className = getClassName(hoveredId, canShow);
 
@@ -30,7 +23,7 @@ function OccupationInfo(): JSX.Element {
 }
 
 function useHoveredId() {
-  return useAppSelector(state => state.hoveredId.value);
+  return useAppSelector(state => state.occupationInfo.hoveredId);
 }
 
 function useCanShow(): boolean {
@@ -39,30 +32,15 @@ function useCanShow(): boolean {
 
 function useUpdatePopupCoordsEffect(
   ref: React.RefObject<HTMLDivElement>,
-  mousePosition: MousePosition
+  x: number,
+  y: number
 ): void {
   useLayoutEffect(() => {
     if (ref.current) {
-      ref.current.style.top = `${mousePosition.y + 10}px`;
-      ref.current.style.left = `${mousePosition.x + 20}px`;
+      ref.current.style.top = `${y + 10}px`;
+      ref.current.style.left = `${x + 20}px`;
     }
-  }, [ref, mousePosition]);
-}
-
-function useUpdateMousePositionEffect(dispatch: React.Dispatch<SetStateAction<MousePosition>>, show: boolean): void {
-  useEffect(() => {
-    function updateMousePosition(event: MouseEvent) {
-      dispatch({ x: event.x, y: event.y });
-    }
-    if (show) {
-      window.addEventListener("mousemove", updateMousePosition);
-    }
-    return () => {
-      if (show) {
-        window.removeEventListener("mousemove", updateMousePosition);
-      }
-    };
-  }, [dispatch, show]);
+  }, [ref, x, y]);
 }
 
 function getClassName(hoveredId: string | undefined, canShow: boolean): string {

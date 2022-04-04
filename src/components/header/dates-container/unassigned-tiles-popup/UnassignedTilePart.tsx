@@ -5,7 +5,7 @@ import { AnyAction } from "@reduxjs/toolkit";
 import { useAppDispatch, useAppSelector, useColumns, useLeftmostDate } from "../../../../redux/hooks";
 import * as Utils from "../../../../utils";
 import * as TilesSlice from "../../../../redux/tilesSlice";
-import * as HoveredIdSlice from "../../../../redux/hoveredIdSlice";
+import * as OccupationInfoSlice from "../../../../redux/occupationInfoSlice";
 import * as ContextMenuSlice from "../../../../redux/contextMenuSlice";
 
 import "./UnassignedTilePart.css";
@@ -34,6 +34,10 @@ function UnassignedTilePart(props: Props): JSX.Element {
     dispatch(ContextMenuSlice.show({ tileId: props.tileId, mouseX: event.pageX, mouseY: event.pageY }));
   }
 
+  function handleMouseMove(event: React.MouseEvent<HTMLDivElement>) {
+    dispatch(OccupationInfoSlice.move({ x: event.pageX, y: event.pageY }));
+  }
+
   const outOfBound = isOutOfBound(tileData, leftmostDate, columns);
   const grabHandler = getGrabHandler(ref, dispatch, props.tileId, outOfBound);
   const enterHandler = getEnterHandler(dispatch, props.tileId);
@@ -47,6 +51,7 @@ function UnassignedTilePart(props: Props): JSX.Element {
       onMouseDown={grabHandler}
       onMouseEnter={enterHandler}
       onMouseLeave={leaveHandler}
+      onMouseMove={handleMouseMove}
       onContextMenu={onContextMenu}
     >
       {tileData.persons}
@@ -72,8 +77,8 @@ function getGrabHandler(
   tileId: string,
   outOfBound: boolean
 ): (event: React.MouseEvent<HTMLDivElement>) => void {
-  return (event: React.MouseEvent<HTMLDivElement>) => {
-    dispatch(HoveredIdSlice.set(undefined));
+  return (event) => {
+    dispatch(OccupationInfoSlice.hide());
     if (!outOfBound && ref.current && (event.button === 0)) {
       dispatch(TilesSlice.grab({ tileId: tileId, mouseY: event.pageY - ref.current.getBoundingClientRect().top }));
     } else if (event.button === 2) {
@@ -82,12 +87,15 @@ function getGrabHandler(
   };
 }
 
-function getEnterHandler(dispatch: React.Dispatch<AnyAction>, tileId: string): () => void {
-  return () => dispatch(HoveredIdSlice.set(tileId));
+function getEnterHandler(
+  dispatch: React.Dispatch<AnyAction>,
+  tileId: string
+): (event: React.MouseEvent<HTMLDivElement>) => void {
+  return (event) => dispatch(OccupationInfoSlice.show({ hoveredId: tileId, x: event.pageX, y: event.pageY }));
 }
 
 function getLeaveHandler(dispatch: React.Dispatch<AnyAction>): () => void {
-  return () => dispatch(HoveredIdSlice.set(undefined));
+  return () => dispatch(OccupationInfoSlice.hide());
 }
 
 function isOutOfBound(tileData: TilesSlice.TileData, leftmostDate: string, columns: number): boolean {
