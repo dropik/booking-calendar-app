@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { hot } from "react-hot-loader";
 
 import DialogHeader from "./DialogHeader";
@@ -18,4 +18,4 @@ function FindBookingDialog(props: Props): JSX.Element {
   );
 }
 
-export default hot(module)(FindBookingDialog);
+export default memo(hot(module)(FindBookingDialog));

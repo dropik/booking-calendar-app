@@ -17,12 +17,14 @@ function OccupationInfo(): JSX.Element {
   const ref = useRef<HTMLDivElement>(null);
   const hoveredId = useHoveredId();
   const tileData = useTileData(hoveredId);
-  const show = useCanShow();
+  const canShow = useCanShow();
 
-  useUpdateMousePositionEffect(setMousePosition);
+  const show = canShow && (tileData !== undefined);
+
+  useUpdateMousePositionEffect(setMousePosition, show);
   useUpdatePopupCoordsEffect(ref, mousePosition);
 
-  const className = getClassName(hoveredId, show);
+  const className = getClassName(hoveredId, canShow);
 
   return getContents(tileData, ref, className);
 }
@@ -47,19 +49,25 @@ function useUpdatePopupCoordsEffect(
   }, [ref, mousePosition]);
 }
 
-function useUpdateMousePositionEffect(dispatch: React.Dispatch<SetStateAction<MousePosition>>): void {
+function useUpdateMousePositionEffect(dispatch: React.Dispatch<SetStateAction<MousePosition>>, show: boolean): void {
   useEffect(() => {
     function updateMousePosition(event: MouseEvent) {
       dispatch({ x: event.x, y: event.y });
     }
-    window.addEventListener("mousemove", updateMousePosition);
-    return () => window.removeEventListener("mousemove", updateMousePosition);
-  }, [dispatch]);
+    if (show) {
+      window.addEventListener("mousemove", updateMousePosition);
+    }
+    return () => {
+      if (show) {
+        window.removeEventListener("mousemove", updateMousePosition);
+      }
+    };
+  }, [dispatch, show]);
 }
 
-function getClassName(hoveredId: string | undefined, show: boolean): string {
+function getClassName(hoveredId: string | undefined, canShow: boolean): string {
   let className = "occupation-info";
-  if (!hoveredId || !show) {
+  if (!hoveredId || !canShow) {
     className += " hidden";
   }
   return className;
