@@ -22,7 +22,7 @@ function BookingDialog(props: Props): JSX.Element {
   const [dialogState, setDialogState] = useState<DialogState>("idle");
   const [bookingData, setBookingData] = useState<Api.BookingData>();
 
-  const bookingDescription = bookingData === undefined ? "" : `#${bookingData.id} (${bookingData.name})`;
+  const bookingTitle = bookingData === undefined ? "" : `#${bookingData.id} (${bookingData.name})`;
 
   useEffect(() => {
     async function fetchData() {
@@ -52,7 +52,7 @@ function BookingDialog(props: Props): JSX.Element {
 
   return (
     <>
-      <DialogHeader title={`Prenotazione ${bookingDescription}`} showGoBackButton={props.showGoBackButton} fadeOutDialog={props.fadeOutDialog} />
+      <DialogHeader title={`Prenotazione ${bookingTitle}`} showGoBackButton={props.showGoBackButton} fadeOutDialog={props.fadeOutDialog} />
       <BookingDialogBody data={bookingData} dialogState={dialogState} />
     </>
   );

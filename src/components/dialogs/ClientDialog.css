@@ -1,0 +1,12 @@
+.dialog .row.client-data div.field-label {
+  flex-basis: auto;
+  width: 8rem;
+}
+
+.dialog hr.client-booking {
+  margin-bottom: 0;
+}
+
+.dialog .bookings-container.client-booking {
+  min-height: auto;
+}

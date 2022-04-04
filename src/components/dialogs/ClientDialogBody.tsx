@@ -3,12 +3,12 @@ import { hot } from "react-hot-loader";
 
 import * as Api from "../../api";
 
-import BookingDialogBodyData from "./BookingDialogBodyData";
+import ClientDialogBodyData from "./ClientDialogBodyData";
 
 import "./DescriptiveDialog.css";
 
 type Props = {
-  data?: Api.BookingData,
+  data?: Api.ClientData,
   dialogState: "idle" | "loading"
 };
 
@@ -20,7 +20,7 @@ function BookingDialogBody(props: Props): JSX.Element {
       </div>
     );
   } else if (props.data) {
-    return <BookingDialogBodyData data={props.data} />;
+    return <ClientDialogBodyData data={props.data} />;
   }
 
   return <></>;

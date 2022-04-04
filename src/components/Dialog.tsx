@@ -11,6 +11,7 @@ import BookingDialog from "./dialogs/BookingDialog";
 import FindBookingDialog from "./dialogs/FindBookingDialog";
 
 import "./Dialog.css";
+import ClientDialog from "./dialogs/ClientDialog";
 
 function Dialog(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -56,26 +57,31 @@ function Dialog(): JSX.Element {
 
     switch (dialog.type) {
     case "police":
-      key = "police";
+      key = `police#${index}`;
       component = <PoliceExportDialog showGoBackButton={showGoBackButton} fadeOutDialog={fadeOutDialog} />;
       break;
     case "istat":
-      key="istat";
+      key=`istat#${index}`;
       component = <IstatExportDialog showGoBackButton={showGoBackButton} fadeOutDialog={fadeOutDialog} />;
       break;
     case "cityTax":
-      key="cityTax";
+      key=`cityTax#${index}`;
       component = <TaxDialog showGoBackButton={showGoBackButton} fadeOutDialog={fadeOutDialog} />;
       break;
     case "booking":
-      key=`booking#${dialog.tile}`;
+      key=`booking-${dialog.tile}#${index}`;
       dialogClassName += " scrollable";
       component = <BookingDialog bookingId={dialog.id} tileId={dialog.tile} showGoBackButton={showGoBackButton} fadeOutDialog={fadeOutDialog} />;
       break;
     case "findBooking":
-      key="findBooking";
+      key=`findBooking#${index}`;
       dialogClassName += " scrollable";
       component = <FindBookingDialog showGoBackButton={showGoBackButton} fadeOutDialog={fadeOutDialog} />;
+      break;
+    case "client":
+      key=`client-${dialog.clientId}#${index}`;
+      dialogClassName += " scrollable";
+      component = <ClientDialog bookingId={dialog.bookingId} clientId={dialog.clientId} showGoBackButton={showGoBackButton} fadeOutDialog={fadeOutDialog} />;
       break;
     }
 

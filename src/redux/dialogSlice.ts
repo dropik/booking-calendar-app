@@ -8,6 +8,10 @@ export type DialogDescriptor = {
   type: "booking",
   id?: string,
   tile?: string,
+} | {
+  type: "client",
+  bookingId: string,
+  clientId: string
 };
 
 export type State = {
@@ -37,10 +41,17 @@ export const dialogSlice = createSlice({
         id: action.payload.id,
         tile: action.payload.tileId
       });
+    },
+    showClientDialog: (state, action: PayloadAction<{ bookingId: string, clientId: string }>) => {
+      state.dialogs.push({
+        type: "client",
+        bookingId: action.payload.bookingId,
+        clientId: action.payload.clientId
+      });
     }
   }
 });
 
-export const { closeAll, goBack, show, showBookingDialog } = dialogSlice.actions;
+export const { closeAll, goBack, show, showBookingDialog, showClientDialog } = dialogSlice.actions;
 
 export default dialogSlice.reducer;
