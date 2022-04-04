@@ -14,11 +14,11 @@ import "./Dialog.css";
 
 function Dialog(): JSX.Element {
   const dispatch = useAppDispatch();
-  const selectedDialog = useAppSelector((state) => state.dialog.selectedDialog);
+  const dialogs = useAppSelector((state) => state.dialog.dialogs);
   const ref = useRef<HTMLDivElement>(null);
 
-  function hideDialog() {
-    dispatch(DialogSlice.hide());
+  function closeAllDialogs() {
+    dispatch(DialogSlice.closeAll());
   }
 
   function handleDialogAnimationEnd(event: React.AnimationEvent<HTMLDivElement>) {
@@ -26,7 +26,7 @@ function Dialog(): JSX.Element {
     if (classList.contains("show")) {
       classList.remove("show");
     } else if (classList.contains("hide")) {
-      hideDialog();
+      closeAllDialogs();
     }
   }
 
@@ -40,31 +40,47 @@ function Dialog(): JSX.Element {
     event.stopPropagation();
   }
 
-  if (!selectedDialog) {
+  if (dialogs.length === 0) {
     return <></>;
   }
 
-  let dialog: JSX.Element;
-  let dialogClassName = "dialog";
-  switch (selectedDialog) {
-  case "police":
-    dialog = <PoliceExportDialog fadeOutDialog={fadeOutDialog} />;
-    break;
-  case "istat":
-    dialog = <IstatExportDialog fadeOutDialog={fadeOutDialog} />;
-    break;
-  case "cityTax":
-    dialog = <TaxDialog fadeOutDialog={fadeOutDialog} />;
-    break;
-  case "booking":
-    dialog = <BookingDialog fadeOutDialog={fadeOutDialog} />;
-    dialogClassName += " scrollable";
-    break;
-  case "findBooking":
-    dialog = <FindBookingDialog fadeOutDialog={fadeOutDialog} />;
-    dialogClassName += " scrollable";
-    break;
-  }
+  const dialogComponents: JSX.Element[] = dialogs.map((dialog) => {
+    let component: JSX.Element;
+    let dialogClassName = "dialog";
+    let key: string;
+
+    switch (dialog.type) {
+    case "police":
+      key = "police";
+      component = <PoliceExportDialog fadeOutDialog={fadeOutDialog} />;
+      break;
+    case "istat":
+      key="istat";
+      component = <IstatExportDialog fadeOutDialog={fadeOutDialog} />;
+      break;
+    case "cityTax":
+      key="cityTax";
+      component = <TaxDialog fadeOutDialog={fadeOutDialog} />;
+      break;
+    case "booking":
+      key=`booking#${dialog.tile}`;
+      dialogClassName += " scrollable";
+      component = <BookingDialog tileId={dialog.tile} fadeOutDialog={fadeOutDialog} />;
+      break;
+    case "findBooking":
+      key="findBooking";
+      dialogClassName += " scrollable";
+      component = <FindBookingDialog fadeOutDialog={fadeOutDialog} />;
+      break;
+    }
+
+    return (
+      <div key={key} className={dialogClassName} onClick={preventHideOnSelfClick}>
+        {component}
+      </div>
+    );
+  });
+
 
   return (
     <div
@@ -73,9 +89,7 @@ function Dialog(): JSX.Element {
       onClick={fadeOutDialog}
       onAnimationEnd={handleDialogAnimationEnd}
     >
-      <div className={dialogClassName} onClick={preventHideOnSelfClick}>
-        {dialog}
-      </div>
+      {dialogComponents}
     </div>
   );
 }

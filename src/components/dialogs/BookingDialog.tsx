@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { hot } from "react-hot-loader";
 import BookingDialogBody from "./BookingDialogBody";
 
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { useAppDispatch } from "../../redux/hooks";
 import * as Api from "../../api";
 import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
 
@@ -11,12 +11,12 @@ import DialogHeader from "./DialogHeader";
 type DialogState = "idle" | "loading";
 
 type Props = {
+  tileId: string
   fadeOutDialog: () => void
 };
 
 function BookingDialog(props: Props): JSX.Element {
   const dispatch = useAppDispatch();
-  const tileId = useAppSelector((state) => state.dialog.selectedTile);
   const [dialogState, setDialogState] = useState<DialogState>("idle");
   const [bookingData, setBookingData] = useState<Api.BookingData>();
 
@@ -25,11 +25,9 @@ function BookingDialog(props: Props): JSX.Element {
   useEffect(() => {
     async function fetchData() {
       try {
-        if (tileId) {
-          const response = await Api.fetchBookingByTile(tileId);
-          setBookingData(response.data);
-          setDialogState("idle");
-        }
+        const response = await Api.fetchBookingByTile(props.tileId);
+        setBookingData(response.data);
+        setDialogState("idle");
       } catch (Error) {
         dispatch(ConnectionErrorSlice.show());
         setDialogState("idle");
@@ -37,7 +35,7 @@ function BookingDialog(props: Props): JSX.Element {
     }
     fetchData();
     setDialogState("loading");
-  }, [dispatch, tileId]);
+  }, [dispatch, props.tileId]);
 
   return (
     <>

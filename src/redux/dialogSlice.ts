@@ -1,32 +1,41 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export type DialogType = "police" | "istat" | "cityTax" | "booking" | "findBooking";
+export type ZeroParameterDialog = "police" | "istat" | "cityTax" | "findBooking";
+
+export type DialogDescriptor = {
+  type: ZeroParameterDialog
+} | {
+  type: "booking",
+  tile: string
+};
 
 export type State = {
-  selectedDialog?: DialogType,
-  selectedTile?: string
+  dialogs: DialogDescriptor[]
 }
 
-const initialState: State = { };
+const initialState: State = {
+  dialogs: []
+};
 
 export const dialogSlice = createSlice({
   name: "dialog",
   initialState: initialState,
   reducers: {
-    hide: (state) => {
-      state.selectedDialog = undefined;
-      state.selectedTile = undefined;
+    closeAll: (state) => {
+      state.dialogs = [];
     },
-    show: (state, action: PayloadAction<{ dialogType: DialogType }>) => {
-      state.selectedDialog = action.payload.dialogType;
+    show: (state, action: PayloadAction<{ dialogType: ZeroParameterDialog }>) => {
+      state.dialogs.push({ type: action.payload.dialogType });
     },
     showBookingDialog: (state, action: PayloadAction<{ tileId: string }>) => {
-      state.selectedDialog = "booking";
-      state.selectedTile = action.payload.tileId;
+      state.dialogs.push({
+        type: "booking",
+        tile: action.payload.tileId
+      });
     }
   }
 });
 
-export const { hide, show, showBookingDialog } = dialogSlice.actions;
+export const { closeAll, show, showBookingDialog } = dialogSlice.actions;
 
 export default dialogSlice.reducer;

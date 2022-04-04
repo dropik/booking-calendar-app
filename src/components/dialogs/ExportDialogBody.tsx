@@ -6,7 +6,6 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 import { useAppDispatch, useCurrentDate } from "../../redux/hooks";
 import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
-import * as DialogSlice from "../../redux/dialogSlice";
 import * as Utils from "../../utils";
 import * as Api from "../../api";
 
@@ -15,7 +14,7 @@ import "react-datepicker/dist/react-datepicker.css";
 type DialogState = "fill" | "loading" | "done" | "no data";
 
 type Props = {
-  type: DialogSlice.DialogType,
+  type: "police" | "istat",
   fadeOutDialog: () => void
 }
 

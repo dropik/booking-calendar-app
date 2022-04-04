@@ -41,7 +41,7 @@ function Sidemenu(): JSX.Element {
     }
   }
 
-  function showDialog(dialog: DialogSlice.DialogType) {
+  function showDialog(dialog: DialogSlice.ZeroParameterDialog) {
     dispatch(DialogSlice.show({ dialogType: dialog }));
   }
 
