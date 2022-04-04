@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import * as Api from "../../api";
 import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
 
-import BookingDialogHeader from "./BookingDialogHeader";
+import DialogHeader from "./DialogHeader";
 
 type DialogState = "idle" | "loading";
 
@@ -19,6 +19,8 @@ function BookingDialog(props: Props): JSX.Element {
   const tileId = useAppSelector((state) => state.dialog.selectedTile);
   const [dialogState, setDialogState] = useState<DialogState>("idle");
   const [bookingData, setBookingData] = useState<Api.BookingData>();
+
+  const bookingDescription = bookingData === undefined ? "" : `#${bookingData.id} (${bookingData.name})`;
 
   useEffect(() => {
     async function fetchData() {
@@ -39,7 +41,7 @@ function BookingDialog(props: Props): JSX.Element {
 
   return (
     <>
-      <BookingDialogHeader data={bookingData} fadeOutDialog={props.fadeOutDialog} />
+      <DialogHeader title={`Prenotazione ${bookingDescription}`} fadeOutDialog={props.fadeOutDialog} />
       <BookingDialogBody data={bookingData} dialogState={dialogState} />
     </>
   );
