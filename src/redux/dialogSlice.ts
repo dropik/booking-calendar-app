@@ -25,6 +25,9 @@ export const dialogSlice = createSlice({
     closeAll: (state) => {
       state.dialogs = [];
     },
+    goBack: (state) => {
+      state.dialogs.pop();
+    },
     show: (state, action: PayloadAction<{ dialogType: ZeroParameterDialog }>) => {
       state.dialogs.push({ type: action.payload.dialogType });
     },
@@ -38,6 +41,6 @@ export const dialogSlice = createSlice({
   }
 });
 
-export const { closeAll, show, showBookingDialog } = dialogSlice.actions;
+export const { closeAll, goBack, show, showBookingDialog } = dialogSlice.actions;
 
 export default dialogSlice.reducer;

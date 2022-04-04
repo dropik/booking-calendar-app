@@ -122,22 +122,29 @@
   background-color: #234a8d;
 }
 
-.dialog .button.close {
-  background-color: transparent;
+.dialog h3 .button {
+  background-color: transparent !important;
   color: black;
   border: none;
-  float: right;
   margin: 0;
   padding: 0;
-  margin-left: 1rem;
 }
 
-.dialog .button.close:hover {
+.dialog h3 .button:hover {
   color: #3a3a3a;
 }
 
-.dialog .button.close:active {
+.dialog h3 .button:active {
   color: #7e7e7e;
+}
+
+.dialog .button.close {
+  float: right;
+  margin-left: 1rem;
+}
+
+.dialog .button.back {
+  margin-right: 1rem;
 }
 
 .dialog .message {
