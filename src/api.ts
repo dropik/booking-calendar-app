@@ -37,6 +37,18 @@ export type BookingShortData = {
   to: string
 };
 
+export type ClientData = {
+  id: string,
+  name: string,
+  surname: string,
+  dateOfBirth: string,
+  placeOfBirth?: string,
+  stateOfBirth: string,
+  documentNumber: string,
+  documentType: "identityCard" | "drivingLicense" | "passport",
+  booking: BookingShortData
+}
+
 export function fetchHotelDataAsync(): Promise<{ data: HotelSlice.HotelData }> {
   return new Promise((resolve) => {
     setTimeout(() => resolve({ data: Mocks.hotel }), 500);
@@ -68,6 +80,18 @@ export function postChangesAsync(changes: TilesSlice.ChangesMap): Promise<{ data
   });
 }
 
+export async function fetchBookingByTile(tileId: string): Promise<{ data: BookingData }> {
+  return fetchJsonDataAsync<BookingData>(`/api/get/booking?tileId=${tileId}`);
+}
+
+export async function fetchBookingById(bookingId: string): Promise<{ data: BookingData }> {
+  return fetchJsonDataAsync<BookingData>(`/api/get/booking?id=${bookingId}`);
+}
+
+export async function fetchClient(bookingId: string, clientId: string): Promise<{ data: ClientData }> {
+  return fetchJsonDataAsync<ClientData>(`/api/get/client?bookingId=${bookingId}&clientId=${clientId}`);
+}
+
 export async function fetchPoliceDataAsync(date: string): Promise<{ data: Blob }> {
   return fetchBlobDataAsync(`/api/export/police?date=${date}`);
 }
@@ -78,14 +102,6 @@ export async function fetchIstatDataAsync(date: string): Promise<{ data: Blob }>
 
 export async function fetchCityTaxAsync(from: string, to: string): Promise<{ data: CityTaxData }> {
   return fetchJsonDataAsync<CityTaxData>(`/api/calc/tax?from=${from}&to=${to}`);
-}
-
-export async function fetchBookingByTile(tileId: string): Promise<{ data: BookingData }> {
-  return fetchJsonDataAsync<BookingData>(`/api/get/booking?tileId=${tileId}`);
-}
-
-export async function fetchBookingById(bookingId: string): Promise<{ data: BookingData }> {
-  return fetchJsonDataAsync<BookingData>(`/api/get/booking?id=${bookingId}`);
 }
 
 export async function fetchBookings(nameOrId: string, from: string, to: string): Promise<{ data: BookingShortData[] }> {

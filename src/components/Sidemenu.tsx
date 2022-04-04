@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { hot } from "react-hot-loader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleLeft, faBuilding, faChartColumn, faKey, faMoneyBill, faPerson } from "@fortawesome/free-solid-svg-icons";
+import { faAngleLeft, faBookOpen, faBuilding, faChartColumn, faMoneyBill, faPerson } from "@fortawesome/free-solid-svg-icons";
 
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import * as SidemenuSlice from "../redux/sidemenuSlice";
@@ -76,12 +76,12 @@ function Sidemenu(): JSX.Element {
         <hr color="#252525" />
         <div className="group-label">Cerca</div>
         <div className="menu-item button" onClick={() => { showDialog("findBooking"); }}>
-          <span className="icon"><FontAwesomeIcon icon={faKey} /></span>
+          <span className="icon"><FontAwesomeIcon icon={faBookOpen} /></span>
           Prenotazione
         </div>
         <div className="menu-item button">
           <span className="icon"><FontAwesomeIcon icon={faPerson} /></span>
-          Persona
+          Cliente
         </div>
       </div>
       <div className="fallback" onClick={hideMenu}></div>

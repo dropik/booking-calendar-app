@@ -151,6 +151,25 @@ module.exports = {
         ]);
       });
 
+      devServer.app.get("/api/get/client", (request, response) => {
+        response.json({
+          id: "0",
+          name: "Ivan",
+          surname: "Petrov",
+          dateOfBirth: "1986-05-04",
+          placeOfBirth: "Canazei",
+          stateOfBirth: "Italia",
+          documentNumber: "000000",
+          documentType: "identityCard",
+          booking: {
+            id: "0",
+            name: "Ivan Petrov",
+            from: "2022-02-02",
+            to: "2022-02-05"
+          }
+        });
+      });
+
       return middlewares;
     }
   },
