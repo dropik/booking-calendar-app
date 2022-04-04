@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { hot } from "react-hot-loader";
 
 import * as Api from "../../api";
@@ -61,4 +61,4 @@ function BookingsList(props: Props): JSX.Element {
   return <>{list}</>;
 }
 
-export default hot(module)(BookingsList);
+export default memo(hot(module)(BookingsList));
