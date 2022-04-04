@@ -5,7 +5,7 @@ import * as Api from "../../api";
 
 import BookingDialogBodyData from "./BookingDialogBodyData";
 
-import "./BookingDialogBody.css";
+import "./DescriptiveDialog.css";
 
 type Props = {
   data: Api.BookingData | undefined,

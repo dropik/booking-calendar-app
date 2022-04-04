@@ -9,8 +9,6 @@ import { useCurrentDate } from "../../redux/hooks";
 
 import BookingsList from "./BookingsList";
 
-import "./FindBookingDialogBody.css";
-
 function FindBookingDialogBody(): JSX.Element {
   const currentDate = useCurrentDate();
   const toDateObj = new Date(currentDate);

@@ -9,8 +9,6 @@ import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
 import * as Api from "../../api";
 import * as Utils from "../../utils";
 
-import "./TaxDialogBody.css";
-
 type DialogState = "fill" | "loading" | "done";
 
 type Props = {
