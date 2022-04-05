@@ -47,7 +47,16 @@ export type ClientData = {
   documentNumber: string,
   documentType: "identityCard" | "drivingLicense" | "passport",
   booking: BookingShortData
-}
+};
+
+export type ClientShortData = {
+  id: string,
+  bookingId: string,
+  bookingName: string,
+  name: string,
+  surname: string,
+  dateOfBirth: string
+};
 
 export function fetchHotelDataAsync(): Promise<{ data: HotelSlice.HotelData }> {
   return new Promise((resolve) => {
@@ -106,6 +115,10 @@ export async function fetchCityTaxAsync(from: string, to: string): Promise<{ dat
 
 export async function fetchBookings(nameOrId: string, from: string, to: string): Promise<{ data: BookingShortData[] }> {
   return fetchJsonDataAsync<BookingShortData[]>(`/api/find/bookings?nameOrId=${nameOrId}&from=${from}&to=${to}`);
+}
+
+export async function fetchClients(name: string, surname: string): Promise<{ data: ClientShortData[] }> {
+  return fetchJsonDataAsync<ClientShortData[]>(`/api/find/clients?name=${name}&surname=${surname}`);
 }
 
 async function fetchBlobDataAsync(query: string): Promise<{ data: Blob }> {
