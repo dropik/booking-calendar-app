@@ -9,9 +9,10 @@ import IstatExportDialog from "./dialogs/IstatExportDialog";
 import TaxDialog from "./dialogs/TaxDialog";
 import BookingDialog from "./dialogs/BookingDialog";
 import FindBookingDialog from "./dialogs/FindBookingDialog";
+import ClientDialog from "./dialogs/ClientDialog";
+import FindClientDialog from "./dialogs/FindClientDialog";
 
 import "./Dialog.css";
-import ClientDialog from "./dialogs/ClientDialog";
 
 function Dialog(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -82,6 +83,11 @@ function Dialog(): JSX.Element {
       key=`client-${dialog.clientId}#${index}`;
       dialogClassName += " scrollable";
       component = <ClientDialog bookingId={dialog.bookingId} clientId={dialog.clientId} showGoBackButton={showGoBackButton} fadeOutDialog={fadeOutDialog} />;
+      break;
+    case "findClient":
+      key=`findClient#${index}`;
+      dialogClassName += " scrollable";
+      component = <FindClientDialog showGoBackButton={showGoBackButton} fadeOutDialog={fadeOutDialog} />;
       break;
     }
 

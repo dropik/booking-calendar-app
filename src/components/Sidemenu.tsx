@@ -79,7 +79,7 @@ function Sidemenu(): JSX.Element {
           <span className="icon"><FontAwesomeIcon icon={faBookOpen} /></span>
           Prenotazione
         </div>
-        <div className="menu-item button">
+        <div className="menu-item button" onClick={() => { showDialog("findClient"); }}>
           <span className="icon"><FontAwesomeIcon icon={faPerson} /></span>
           Cliente
         </div>

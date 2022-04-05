@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export type ZeroParameterDialog = "police" | "istat" | "cityTax" | "findBooking";
+export type ZeroParameterDialog = "police" | "istat" | "cityTax" | "findBooking" | "findClient";
 
 export type DialogDescriptor = {
   type: ZeroParameterDialog

@@ -9,7 +9,7 @@ import { useCurrentDate } from "../../redux/hooks";
 
 import BookingsList from "./BookingsList";
 
-import "./FindDialog.css";
+import "./DialogWithList.css";
 
 function FindBookingDialogBody(): JSX.Element {
   const currentDate = useCurrentDate();
@@ -72,7 +72,7 @@ function FindBookingDialogBody(): JSX.Element {
         }}>Cerca</div>
       </div>
       <hr className="search-field-border" />
-      <div className="bookings-container">
+      <div className="list-container">
         <div className="row list-header">
           <div className="id">ID</div>
           <div className="name">Nome</div>

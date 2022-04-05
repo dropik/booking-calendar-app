@@ -167,7 +167,14 @@
   padding-right: 0;
 }
 
-.react-datepicker-wrapper input.invalid {
+.dialog input {
+  font-weight: bold;
+  text-align: center;
+  border: 0;
+  box-shadow: 0 0 0 2px inset black;
+}
+
+.dialog input.invalid {
   box-shadow: 0 0 0 2px inset #c72323;
 }
 

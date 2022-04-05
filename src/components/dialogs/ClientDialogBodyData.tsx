@@ -47,7 +47,7 @@ function BookingDialogBodyData(props: Props): JSX.Element {
       </div>
       <h3 className="sub-header">Prenotazione</h3>
       <hr className="client-booking"/>
-      <div className="bookings-container client-booking">
+      <div className="list-container client-booking">
         <div className="row button" onClick={showBooking}>
           <div className="id">#{props.data.booking.id}</div>
           <div className="name">{props.data.booking.name}</div>
