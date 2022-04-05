@@ -29,7 +29,7 @@ function FindClientDialogBody(): JSX.Element {
   return (
     <>
       {errorLabel}
-      <div className="row">
+      <div className="row form-input">
         <div>
           <label htmlFor="name" className="label">Nome:</label>
           <input type={"text"} id="name" className={inputClassName} value={name} onChange={(event: React.ChangeEvent<HTMLInputElement>) => {

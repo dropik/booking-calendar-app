@@ -36,7 +36,7 @@ function FindBookingDialogBody(): JSX.Element {
   return (
     <>
       {errorLabel}
-      <div className="row">
+      <div className="row form-input">
         <div>
           <label htmlFor="nameOrId" className="label">Nome / ID:</label>
           <input type={"text"} id="nameOrId" value={nameOrId} onChange={(event: React.ChangeEvent<HTMLInputElement>) => {

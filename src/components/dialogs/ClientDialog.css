@@ -3,10 +3,13 @@
   width: 8rem;
 }
 
-.dialog hr.client-booking {
-  margin-bottom: 0;
-}
-
 .dialog .list-container.client-booking {
   min-height: auto;
+}
+
+.dialog .list-container.client-booking .row {
+  margin-left: 1rem;
+  margin-right: 1rem;
+  box-shadow: 0 0 4px 1px black;
+  border: 0;
 }

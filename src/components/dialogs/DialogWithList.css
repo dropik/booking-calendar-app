@@ -1,3 +1,7 @@
+.dialog .row.form-input {
+  justify-content: center;
+}
+
 .dialog .search-field-border {
   margin-top: 0;
   margin-bottom: 0.5rem;

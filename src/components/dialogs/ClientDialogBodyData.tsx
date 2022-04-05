@@ -46,7 +46,7 @@ function BookingDialogBodyData(props: Props): JSX.Element {
         <div><b>{`${documentTypeString} - ${props.data.documentNumber}`}</b></div>
       </div>
       <h3 className="sub-header">Prenotazione</h3>
-      <hr className="client-booking"/>
+      <hr />
       <div className="list-container client-booking">
         <div className="row button" onClick={showBooking}>
           <div className="id">#{props.data.booking.id}</div>
