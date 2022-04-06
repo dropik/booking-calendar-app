@@ -5,7 +5,7 @@ import { faAngleLeft, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 import { useAppDispatch } from "../../redux/hooks";
 import * as DialogSlice from "../../redux/dialogSlice";
-import { DialogContext } from "../Dialog";
+import { DialogContext } from "../DialogContainer";
 
 type Props = {
   title: string
@@ -19,7 +19,7 @@ function DialogHeader(props: Props): JSX.Element {
     dispatch(DialogSlice.goBack());
   }
 
-  const goBackButton = context.showGoBackButton ?
+  const goBackButton = context.index !== 0 ?
     <FontAwesomeIcon className="button back" icon={faAngleLeft} onClick={goBack} /> :
     <></>;
 

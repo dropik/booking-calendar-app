@@ -4,17 +4,19 @@ import { hot } from "react-hot-loader";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import * as DialogSlice from "../redux/dialogSlice";
 
+import Dialog from "./dialogs/Dialog";
 import DialogSwitch from "./dialogs/DialogSwitch";
 
 import "./Dialog.css";
 
 export type DialogContextType = {
-  showGoBackButton: boolean,
+  index: number,
+  lastIndex: number,
   fadeOutDialog: () => void
 };
-export const DialogContext = createContext<DialogContextType>({ showGoBackButton: false, fadeOutDialog: () => void 0 });
+export const DialogContext = createContext<DialogContextType>({ index: 0, lastIndex: 0, fadeOutDialog: () => void 0 });
 
-function Dialog(): JSX.Element {
+function DialogContainer(): JSX.Element {
   const dispatch = useAppDispatch();
   const dialogs = useAppSelector((state) => state.dialog.dialogs);
   const ref = useRef<HTMLDivElement>(null);
@@ -38,30 +40,18 @@ function Dialog(): JSX.Element {
     }
   }
 
-  function preventHideOnSelfClick(event: React.MouseEvent<HTMLDivElement>) {
-    event.stopPropagation();
-  }
 
   if (dialogs.length === 0) {
     return <></>;
   }
 
-  const dialogComponents: JSX.Element[] = dialogs.map((dialog, index) => {
-    const contextValue = { showGoBackButton: index !== 0, fadeOutDialog };
-
-    let dialogClassName = "dialog";
-    if (index < dialogs.length - 1) {
-      dialogClassName += " hidden";
-    }
-
-    return (
-      <div key={index} className={dialogClassName} onClick={preventHideOnSelfClick}>
-        <DialogContext.Provider value={contextValue}>
-          <DialogSwitch dialog={dialog} />
-        </DialogContext.Provider>
-      </div>
-    );
-  });
+  const dialogComponents: JSX.Element[] = dialogs.map((dialog, index) => (
+    <DialogContext.Provider key={index} value={{ index: index, lastIndex: dialogs.length - 1, fadeOutDialog }}>
+      <Dialog>
+        <DialogSwitch dialog={dialog} />
+      </Dialog>
+    </DialogContext.Provider>
+  ));
 
 
   return (
@@ -76,4 +66,4 @@ function Dialog(): JSX.Element {
   );
 }
 
-export default hot(module)(Dialog);
+export default hot(module)(DialogContainer);

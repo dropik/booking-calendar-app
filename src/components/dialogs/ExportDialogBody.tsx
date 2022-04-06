@@ -10,7 +10,7 @@ import * as Utils from "../../utils";
 import * as Api from "../../api";
 
 import "react-datepicker/dist/react-datepicker.css";
-import { DialogContext } from "../Dialog";
+import { DialogContext } from "../DialogContainer";
 
 type DialogState = "fill" | "loading" | "done" | "no data";
 

@@ -8,7 +8,7 @@ import { useAppDispatch, useCurrentDate } from "../../redux/hooks";
 import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
 import * as Api from "../../api";
 import * as Utils from "../../utils";
-import { DialogContext } from "../Dialog";
+import { DialogContext } from "../DialogContainer";
 
 type DialogState = "fill" | "loading" | "done";
 
