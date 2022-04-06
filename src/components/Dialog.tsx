@@ -55,7 +55,6 @@ function Dialog(): JSX.Element {
   const dialogComponents: JSX.Element[] = dialogs.map((dialog, index) => {
     let component: JSX.Element;
     let dialogClassName = "dialog";
-    let key: string;
     const showGoBackButton = index !== 0;
 
     if (index < dialogs.length - 1) {
@@ -64,31 +63,24 @@ function Dialog(): JSX.Element {
 
     switch (dialog.type) {
     case "police":
-      key = `police#${index}`;
       component = <PoliceExportDialog />;
       break;
     case "istat":
-      key=`istat#${index}`;
       component = <IstatExportDialog />;
       break;
     case "cityTax":
-      key=`cityTax#${index}`;
       component = <TaxDialog />;
       break;
     case "booking":
-      key=`booking-${dialog.tile}#${index}`;
       component = <BookingDialog bookingId={dialog.id} tileId={dialog.tile} />;
       break;
     case "findBooking":
-      key=`findBooking#${index}`;
       component = <FindBookingDialog />;
       break;
     case "client":
-      key=`client-${dialog.clientId}#${index}`;
       component = <ClientDialog bookingId={dialog.bookingId} clientId={dialog.clientId} />;
       break;
     case "findClient":
-      key=`findClient#${index}`;
       component = <FindClientDialog />;
       break;
     }
@@ -96,7 +88,7 @@ function Dialog(): JSX.Element {
     const contextValue = { showGoBackButton: showGoBackButton, fadeOutDialog: fadeOutDialog };
 
     return (
-      <div key={key} className={dialogClassName} onClick={preventHideOnSelfClick}>
+      <div key={index} className={dialogClassName} onClick={preventHideOnSelfClick}>
         <DialogContext.Provider value={contextValue}>
           {component}
         </DialogContext.Provider>
