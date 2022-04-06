@@ -9,8 +9,9 @@ import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
 import * as Utils from "../../utils";
 import * as Api from "../../api";
 
+import { DialogContainerContext } from "./DialogContainer";
+
 import "react-datepicker/dist/react-datepicker.css";
-import { DialogContext } from "../DialogContainer";
 
 type DialogState = "fill" | "loading" | "done" | "no data";
 
@@ -24,7 +25,7 @@ function ExportDialogBody(props: Props): JSX.Element {
   const [selectedDate, setSelectedDate] = useState(currentDate);
   const [dialogState, setDialogState] = useState<DialogState>("fill");
   const anchorRef = useRef<HTMLAnchorElement>(null);
-  const context = useContext(DialogContext);
+  const context = useContext(DialogContainerContext);
 
   function onDateChange(date: Date) {
     setSelectedDate(Utils.dateToString(date));

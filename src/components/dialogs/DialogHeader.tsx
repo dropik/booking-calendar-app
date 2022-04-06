@@ -5,7 +5,9 @@ import { faAngleLeft, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 import { useAppDispatch } from "../../redux/hooks";
 import * as DialogSlice from "../../redux/dialogSlice";
-import { DialogContext } from "../DialogContainer";
+
+import { DialogContext } from "../Dialog";
+import { DialogContainerContext } from "./DialogContainer";
 
 type Props = {
   title: string
@@ -13,13 +15,14 @@ type Props = {
 
 function DialogHeader(props: Props): JSX.Element {
   const dispatch = useAppDispatch();
-  const context = useContext(DialogContext);
+  const dialogContext = useContext(DialogContext);
+  const dialogContainerContext = useContext(DialogContainerContext);
 
   function goBack() {
     dispatch(DialogSlice.goBack());
   }
 
-  const goBackButton = context.index !== 0 ?
+  const goBackButton = dialogContext.index !== 0 ?
     <FontAwesomeIcon className="button back" icon={faAngleLeft} onClick={goBack} /> :
     <></>;
 
@@ -28,7 +31,7 @@ function DialogHeader(props: Props): JSX.Element {
       <h3>
         {goBackButton}
         {props.title}
-        <FontAwesomeIcon className="button close" icon={faXmark} onClick={context.fadeOutDialog} />
+        <FontAwesomeIcon className="button close" icon={faXmark} onClick={dialogContainerContext.fadeOutDialog} />
       </h3>
       <hr />
     </>

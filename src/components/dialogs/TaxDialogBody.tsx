@@ -8,7 +8,8 @@ import { useAppDispatch, useCurrentDate } from "../../redux/hooks";
 import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
 import * as Api from "../../api";
 import * as Utils from "../../utils";
-import { DialogContext } from "../DialogContainer";
+
+import { DialogContainerContext } from "./DialogContainer";
 
 type DialogState = "fill" | "loading" | "done";
 
@@ -21,7 +22,7 @@ function TaxDialogBody(): JSX.Element {
   const dateObj = new Date(currentDate);
   dateObj.setDate(dateObj.getDate() + 1);
   const [toDate, setToDate] = useState(Utils.dateToString(dateObj));
-  const context = useContext(DialogContext);
+  const context = useContext(DialogContainerContext);
 
   const isValidated = Utils.daysBetweenDates(fromDate, toDate) > 0;
 

@@ -1,7 +1,7 @@
 import React, { ReactNode, useContext } from "react";
 import { hot } from "react-hot-loader";
 
-import { DialogContext } from "../DialogContainer";
+import { DialogContext } from "../Dialog";
 
 type Props = {
   children: ReactNode
