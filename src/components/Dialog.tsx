@@ -25,17 +25,17 @@ function DialogMaster(): JSX.Element {
     return <></>;
   }
 
-  const dialogElements: JSX.Element[] = dialogs.map((dialog, index) => (
-    <DialogContext.Provider key={index} value={{ index: index, lastIndex: dialogs.length - 1 }}>
-      <Dialog>
-        <DialogSwitch dialog={dialog} />
-      </Dialog>
-    </DialogContext.Provider>
-  ));
-
   return (
     <DialogContainer>
-      {dialogElements}
+      {
+        dialogs.map((dialog, index) => (
+          <DialogContext.Provider key={index} value={{ index: index, lastIndex: dialogs.length - 1 }}>
+            <Dialog>
+              <DialogSwitch dialog={dialog} />
+            </Dialog>
+          </DialogContext.Provider>
+        ))
+      }
     </DialogContainer>
   );
 }
