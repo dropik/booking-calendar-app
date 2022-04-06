@@ -49,10 +49,10 @@ function BookingDialog(props: Props): JSX.Element {
   }, [dispatch, props.tileId, props.bookingId]);
 
   return (
-    <>
+    <div className="scrollable">
       <DialogHeader title={`Prenotazione ${bookingTitle}`} />
       <BookingDialogBody data={bookingData} dialogState={dialogState} />
-    </>
+    </div>
   );
 }
 

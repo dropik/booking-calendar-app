@@ -77,22 +77,18 @@ function Dialog(): JSX.Element {
       break;
     case "booking":
       key=`booking-${dialog.tile}#${index}`;
-      dialogClassName += " scrollable";
       component = <BookingDialog bookingId={dialog.id} tileId={dialog.tile} />;
       break;
     case "findBooking":
       key=`findBooking#${index}`;
-      dialogClassName += " scrollable";
       component = <FindBookingDialog />;
       break;
     case "client":
       key=`client-${dialog.clientId}#${index}`;
-      dialogClassName += " scrollable";
       component = <ClientDialog bookingId={dialog.bookingId} clientId={dialog.clientId} />;
       break;
     case "findClient":
       key=`findClient#${index}`;
-      dialogClassName += " scrollable";
       component = <FindClientDialog />;
       break;
     }

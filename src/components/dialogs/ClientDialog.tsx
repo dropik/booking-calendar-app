@@ -40,10 +40,10 @@ function ClientDialog(props: Props): JSX.Element {
   }, [dispatch, props.bookingId, props.clientId]);
 
   return (
-    <>
+    <div className="scrollable">
       <DialogHeader title={`Cliente ${clientTitle}`} />
       <ClientDialogBody data={clientData} dialogState={dialogState} />
-    </>
+    </div>
   );
 }
 
