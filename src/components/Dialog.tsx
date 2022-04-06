@@ -53,14 +53,14 @@ function Dialog(): JSX.Element {
   }
 
   const dialogComponents: JSX.Element[] = dialogs.map((dialog, index) => {
-    let component: JSX.Element;
-    let dialogClassName = "dialog";
-    const showGoBackButton = index !== 0;
+    const contextValue = { showGoBackButton: index !== 0, fadeOutDialog };
 
+    let dialogClassName = "dialog";
     if (index < dialogs.length - 1) {
       dialogClassName += " hidden";
     }
 
+    let component: JSX.Element;
     switch (dialog.type) {
     case "police":
       component = <PoliceExportDialog />;
@@ -84,8 +84,6 @@ function Dialog(): JSX.Element {
       component = <FindClientDialog />;
       break;
     }
-
-    const contextValue = { showGoBackButton: showGoBackButton, fadeOutDialog: fadeOutDialog };
 
     return (
       <div key={index} className={dialogClassName} onClick={preventHideOnSelfClick}>
