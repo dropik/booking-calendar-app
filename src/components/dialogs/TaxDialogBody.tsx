@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { hot } from "react-hot-loader";
 import DatePicker from "react-datepicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,14 +8,11 @@ import { useAppDispatch, useCurrentDate } from "../../redux/hooks";
 import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
 import * as Api from "../../api";
 import * as Utils from "../../utils";
+import { DialogContext } from "../Dialog";
 
 type DialogState = "fill" | "loading" | "done";
 
-type Props = {
-  fadeOutDialog: () => void
-};
-
-function TaxDialogBody(props: Props): JSX.Element {
+function TaxDialogBody(): JSX.Element {
   const dispatch = useAppDispatch();
   const currentDate = useCurrentDate();
   const [dialogState, setDialogState] = useState<DialogState>("fill");
@@ -24,6 +21,7 @@ function TaxDialogBody(props: Props): JSX.Element {
   const dateObj = new Date(currentDate);
   dateObj.setDate(dateObj.getDate() + 1);
   const [toDate, setToDate] = useState(Utils.dateToString(dateObj));
+  const context = useContext(DialogContext);
 
   const isValidated = Utils.daysBetweenDates(fromDate, toDate) > 0;
 
@@ -112,7 +110,7 @@ function TaxDialogBody(props: Props): JSX.Element {
           <div><b>{cityTaxData?.over10Days}</b></div>
         </div>
         <div className="row centered">
-          <div className="button" onClick={props.fadeOutDialog}>OK</div>
+          <div className="button" onClick={context.fadeOutDialog}>OK</div>
         </div>
       </div>
     );

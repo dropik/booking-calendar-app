@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { createContext, useRef } from "react";
 import { hot } from "react-hot-loader";
 
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
@@ -13,6 +13,12 @@ import ClientDialog from "./dialogs/ClientDialog";
 import FindClientDialog from "./dialogs/FindClientDialog";
 
 import "./Dialog.css";
+
+export type DialogContextType = {
+  showGoBackButton: boolean,
+  fadeOutDialog: () => void
+};
+export const DialogContext = createContext<DialogContextType>({ showGoBackButton: false, fadeOutDialog: () => void 0 });
 
 function Dialog(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -59,41 +65,45 @@ function Dialog(): JSX.Element {
     switch (dialog.type) {
     case "police":
       key = `police#${index}`;
-      component = <PoliceExportDialog showGoBackButton={showGoBackButton} fadeOutDialog={fadeOutDialog} />;
+      component = <PoliceExportDialog />;
       break;
     case "istat":
       key=`istat#${index}`;
-      component = <IstatExportDialog showGoBackButton={showGoBackButton} fadeOutDialog={fadeOutDialog} />;
+      component = <IstatExportDialog />;
       break;
     case "cityTax":
       key=`cityTax#${index}`;
-      component = <TaxDialog showGoBackButton={showGoBackButton} fadeOutDialog={fadeOutDialog} />;
+      component = <TaxDialog />;
       break;
     case "booking":
       key=`booking-${dialog.tile}#${index}`;
       dialogClassName += " scrollable";
-      component = <BookingDialog bookingId={dialog.id} tileId={dialog.tile} showGoBackButton={showGoBackButton} fadeOutDialog={fadeOutDialog} />;
+      component = <BookingDialog bookingId={dialog.id} tileId={dialog.tile} />;
       break;
     case "findBooking":
       key=`findBooking#${index}`;
       dialogClassName += " scrollable";
-      component = <FindBookingDialog showGoBackButton={showGoBackButton} fadeOutDialog={fadeOutDialog} />;
+      component = <FindBookingDialog />;
       break;
     case "client":
       key=`client-${dialog.clientId}#${index}`;
       dialogClassName += " scrollable";
-      component = <ClientDialog bookingId={dialog.bookingId} clientId={dialog.clientId} showGoBackButton={showGoBackButton} fadeOutDialog={fadeOutDialog} />;
+      component = <ClientDialog bookingId={dialog.bookingId} clientId={dialog.clientId} />;
       break;
     case "findClient":
       key=`findClient#${index}`;
       dialogClassName += " scrollable";
-      component = <FindClientDialog showGoBackButton={showGoBackButton} fadeOutDialog={fadeOutDialog} />;
+      component = <FindClientDialog />;
       break;
     }
 
+    const contextValue = { showGoBackButton: showGoBackButton, fadeOutDialog: fadeOutDialog };
+
     return (
       <div key={key} className={dialogClassName} onClick={preventHideOnSelfClick}>
-        {component}
+        <DialogContext.Provider value={contextValue}>
+          {component}
+        </DialogContext.Provider>
       </div>
     );
   });

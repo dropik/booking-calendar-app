@@ -4,15 +4,10 @@ import { hot } from "react-hot-loader";
 import DialogHeader from "./DialogHeader";
 import FindClientDialogBody from "./FindClientDialogBody";
 
-type Props = {
-  showGoBackButton?: boolean,
-  fadeOutDialog: () => void
-};
-
-function FindClientDialog(props: Props): JSX.Element {
+function FindClientDialog(): JSX.Element {
   return (
     <>
-      <DialogHeader title="Cerca Cliente" showGoBackButton={props.showGoBackButton} fadeOutDialog={props.fadeOutDialog} />
+      <DialogHeader title="Cerca Cliente" />
       <FindClientDialogBody />
     </>
   );

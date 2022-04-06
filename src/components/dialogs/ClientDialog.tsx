@@ -14,9 +14,7 @@ type DialogState = "idle" | "loading";
 
 type Props = {
   bookingId: string,
-  clientId: string,
-  showGoBackButton?: boolean,
-  fadeOutDialog: () => void
+  clientId: string
 };
 
 function ClientDialog(props: Props): JSX.Element {
@@ -43,7 +41,7 @@ function ClientDialog(props: Props): JSX.Element {
 
   return (
     <>
-      <DialogHeader title={`Cliente ${clientTitle}`} showGoBackButton={props.showGoBackButton} fadeOutDialog={props.fadeOutDialog} />
+      <DialogHeader title={`Cliente ${clientTitle}`} />
       <ClientDialogBody data={clientData} dialogState={dialogState} />
     </>
   );

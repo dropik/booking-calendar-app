@@ -1,25 +1,25 @@
-import React from "react";
+import React, { useContext } from "react";
 import { hot } from "react-hot-loader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 import { useAppDispatch } from "../../redux/hooks";
 import * as DialogSlice from "../../redux/dialogSlice";
+import { DialogContext } from "../Dialog";
 
 type Props = {
-  title: string,
-  showGoBackButton?: boolean,
-  fadeOutDialog: () => void
+  title: string
 };
 
 function DialogHeader(props: Props): JSX.Element {
   const dispatch = useAppDispatch();
+  const context = useContext(DialogContext);
 
   function goBack() {
     dispatch(DialogSlice.goBack());
   }
 
-  const goBackButton = props.showGoBackButton ?
+  const goBackButton = context.showGoBackButton ?
     <FontAwesomeIcon className="button back" icon={faAngleLeft} onClick={goBack} /> :
     <></>;
 
@@ -28,7 +28,7 @@ function DialogHeader(props: Props): JSX.Element {
       <h3>
         {goBackButton}
         {props.title}
-        <FontAwesomeIcon className="button close" icon={faXmark} onClick={props.fadeOutDialog} />
+        <FontAwesomeIcon className="button close" icon={faXmark} onClick={context.fadeOutDialog} />
       </h3>
       <hr />
     </>

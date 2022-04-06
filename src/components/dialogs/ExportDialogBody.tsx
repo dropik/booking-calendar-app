@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { hot } from "react-hot-loader";
 import DatePicker from "react-datepicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,12 +10,12 @@ import * as Utils from "../../utils";
 import * as Api from "../../api";
 
 import "react-datepicker/dist/react-datepicker.css";
+import { DialogContext } from "../Dialog";
 
 type DialogState = "fill" | "loading" | "done" | "no data";
 
 type Props = {
-  type: "police" | "istat",
-  fadeOutDialog: () => void
+  type: "police" | "istat"
 }
 
 function ExportDialogBody(props: Props): JSX.Element {
@@ -24,6 +24,7 @@ function ExportDialogBody(props: Props): JSX.Element {
   const [selectedDate, setSelectedDate] = useState(currentDate);
   const [dialogState, setDialogState] = useState<DialogState>("fill");
   const anchorRef = useRef<HTMLAnchorElement>(null);
+  const context = useContext(DialogContext);
 
   function onDateChange(date: Date) {
     setSelectedDate(Utils.dateToString(date));
@@ -60,7 +61,7 @@ function ExportDialogBody(props: Props): JSX.Element {
             anchorRef.current.click();
 
             setDialogState("done");
-            setTimeout(props.fadeOutDialog, 1000);
+            setTimeout(context.fadeOutDialog, 1000);
           } else {
             setDialogState("no data");
             setTimeout(() => { setDialogState("fill"); }, 1000);
