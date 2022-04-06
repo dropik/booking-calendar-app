@@ -4,13 +4,7 @@ import { hot } from "react-hot-loader";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import * as DialogSlice from "../redux/dialogSlice";
 
-import PoliceExportDialog from "./dialogs/PoliceExportDialog";
-import IstatExportDialog from "./dialogs/IstatExportDialog";
-import TaxDialog from "./dialogs/TaxDialog";
-import BookingDialog from "./dialogs/BookingDialog";
-import FindBookingDialog from "./dialogs/FindBookingDialog";
-import ClientDialog from "./dialogs/ClientDialog";
-import FindClientDialog from "./dialogs/FindClientDialog";
+import DialogSwitch from "./dialogs/DialogSwitch";
 
 import "./Dialog.css";
 
@@ -60,35 +54,10 @@ function Dialog(): JSX.Element {
       dialogClassName += " hidden";
     }
 
-    let component: JSX.Element;
-    switch (dialog.type) {
-    case "police":
-      component = <PoliceExportDialog />;
-      break;
-    case "istat":
-      component = <IstatExportDialog />;
-      break;
-    case "cityTax":
-      component = <TaxDialog />;
-      break;
-    case "booking":
-      component = <BookingDialog bookingId={dialog.id} tileId={dialog.tile} />;
-      break;
-    case "findBooking":
-      component = <FindBookingDialog />;
-      break;
-    case "client":
-      component = <ClientDialog bookingId={dialog.bookingId} clientId={dialog.clientId} />;
-      break;
-    case "findClient":
-      component = <FindClientDialog />;
-      break;
-    }
-
     return (
       <div key={index} className={dialogClassName} onClick={preventHideOnSelfClick}>
         <DialogContext.Provider value={contextValue}>
-          {component}
+          <DialogSwitch dialog={dialog} />
         </DialogContext.Provider>
       </div>
     );
