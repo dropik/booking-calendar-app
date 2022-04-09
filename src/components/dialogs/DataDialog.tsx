@@ -12,16 +12,16 @@ import LoadingDataWrapper from "./LoadingDataWrapper";
 type Props<T extends Api.BookingData | Api.ClientData> = {
   children: (data: T) => JSX.Element,
   header: (data: T | undefined) => string,
-  onTryFetchDataAsync: () => Promise<{ data: T }>,
+  tryFetchDataAsync: () => Promise<{ data: T }>,
 }
 
 function DataDialog<T extends Api.BookingData | Api.ClientData>(
-  { children, header, onTryFetchDataAsync }: Props<T>
+  { children, header, tryFetchDataAsync }: Props<T>
 ): JSX.Element {
   const dispatch = useAppDispatch();
   const [data, setData] = useState<T>();
 
-  useFetchDataEffect(dispatch, setData, onTryFetchDataAsync);
+  useFetchDataEffect(dispatch, setData, tryFetchDataAsync);
 
   return (
     <div className="scrollable">

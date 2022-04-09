@@ -7,14 +7,14 @@ import DataDialog from "./DataDialog";
 import BookingDialogBody from "./BookingDialogBody";
 
 type Props = {
-  onTryFetchBookingDataAsync: () => Promise<{ data: Api.BookingData }>
+  tryFetchBookingDataAsync: () => Promise<{ data: Api.BookingData }>
 };
 
-function BookingDialog({ onTryFetchBookingDataAsync }: Props): JSX.Element {
+function BookingDialog({ tryFetchBookingDataAsync }: Props): JSX.Element {
   return (
     <DataDialog
       header={(data) => `Prenotazione ${getTitleFromBookingData(data)}`}
-      onTryFetchDataAsync={onTryFetchBookingDataAsync}
+      tryFetchDataAsync={tryFetchBookingDataAsync}
     >
       {(data) => <BookingDialogBody data={data} />}
     </DataDialog>

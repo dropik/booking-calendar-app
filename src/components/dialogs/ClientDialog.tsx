@@ -20,7 +20,7 @@ function ClientDialog({ bookingId, clientId }: Props): JSX.Element {
   return (
     <DataDialog
       header={(data) => `Cliente ${getTitleFromClientData(data)}`}
-      onTryFetchDataAsync={tryFetchDataAsync}
+      tryFetchDataAsync={tryFetchDataAsync}
     >
       {(data) => <ClientDialogBody data={data} />}
     </DataDialog>

@@ -11,7 +11,7 @@ type Props = {
 
 function BookingByTileIdDialog({ tileId }: Props): JSX.Element {
   const tryFetchDataAsync = useCallback<() => Promise<{ data: Api.BookingData }>>(() => Api.fetchBookingByTile(tileId), [tileId]);
-  return <BookingDialog onTryFetchBookingDataAsync={tryFetchDataAsync} />;
+  return <BookingDialog tryFetchBookingDataAsync={tryFetchDataAsync} />;
 }
 
 export default hot(module)(BookingByTileIdDialog);

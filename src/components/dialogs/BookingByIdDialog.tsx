@@ -10,7 +10,7 @@ type Props = {
 
 function BookingByIdDialog({ id }: Props): JSX.Element {
   const tryFetchDataAsync = useCallback<() => Promise<{ data: Api.BookingData }>>(() => Api.fetchBookingById(id), [id]);
-  return <BookingDialog onTryFetchBookingDataAsync={tryFetchDataAsync} />;
+  return <BookingDialog tryFetchBookingDataAsync={tryFetchDataAsync} />;
 }
 
 export default hot(module)(BookingByIdDialog);
