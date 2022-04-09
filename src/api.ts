@@ -9,6 +9,13 @@ export type CityTaxData = {
   over10Days: number
 };
 
+export type GuestData = {
+  id: string,
+  name: string,
+  surname: string,
+  dateOfBirth: string
+};
+
 export type BookingData = {
   id: string,
   name: string,
@@ -21,12 +28,7 @@ export type BookingData = {
     from: string,
     to: string,
     roomNumber?: number,
-    guests: {
-      id: string,
-      name: string,
-      surname: string,
-      dateOfBirth: string
-    }[]
+    guests: GuestData[]
   }[]
 };
 
