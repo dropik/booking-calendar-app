@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { hot } from "react-hot-loader";
 
 import * as Api from "../../api";
@@ -7,8 +7,7 @@ import DataDialog from "./DataDialog";
 import BookingDialogBody from "./BookingDialogBody";
 
 type Props = {
-  tileId?: string,
-  bookingId?: string
+  onTryFetchBookingDataAsync: () => Promise<{ data: Api.BookingData }>
 };
 
 const initialData: Api.BookingData = {
@@ -19,9 +18,13 @@ const initialData: Api.BookingData = {
   rooms: []
 };
 
-function BookingDialog({ tileId, bookingId }: Props): JSX.Element {
+function BookingDialog({ onTryFetchBookingDataAsync }: Props): JSX.Element {
   const [bookingData, setBookingData] = useState<Api.BookingData>(initialData);
-  const tryFetchDataAsync = useTryFetchDataAsyncCallback(tileId, bookingId, setBookingData);
+
+  const tryFetchDataAsync = useCallback<() => Promise<void>>(async () => {
+    const response = await onTryFetchBookingDataAsync();
+    setBookingData(response.data);
+  }, [onTryFetchBookingDataAsync]);
 
   const bookingTitle = getTitleFromBookingData(bookingData);
 
@@ -34,28 +37,6 @@ function BookingDialog({ tileId, bookingId }: Props): JSX.Element {
       <BookingDialogBody data={bookingData} />
     </DataDialog>
   );
-}
-
-function useTryFetchDataAsyncCallback(
-  tileId: string | undefined,
-  bookingId: string | undefined,
-  setBookingData: Dispatch<SetStateAction<Api.BookingData>>
-): () => Promise<void> {
-  return useCallback<() => Promise<void>>(async () => {
-    let data: Api.BookingData | undefined;
-
-    if (tileId) {
-      const response = await Api.fetchBookingByTile(tileId);
-      data = response.data;
-    } else if (bookingId) {
-      const response = await Api.fetchBookingById(bookingId);
-      data = response.data;
-    }
-
-    if (data) {
-      setBookingData(data);
-    }
-  }, [tileId, bookingId, setBookingData]);
 }
 
 function getTitleFromBookingData(data: Api.BookingData): string {

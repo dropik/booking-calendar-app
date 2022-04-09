@@ -6,8 +6,10 @@ export type DialogDescriptor = {
   type: ZeroParameterDialog
 } | {
   type: "booking",
-  id?: string,
-  tile?: string,
+  id: string
+} | {
+  type: "booking",
+  tile: string
 } | {
   type: "client",
   bookingId: string,
@@ -35,12 +37,18 @@ export const dialogSlice = createSlice({
     show: (state, action: PayloadAction<{ dialogType: ZeroParameterDialog }>) => {
       state.dialogs.push({ type: action.payload.dialogType });
     },
-    showBookingDialog: (state, action: PayloadAction<{ id?: string, tileId?: string }>) => {
-      state.dialogs.push({
-        type: "booking",
-        id: action.payload.id,
-        tile: action.payload.tileId
-      });
+    showBookingDialog: (state, action: PayloadAction<{ id: string } | { tileId: string }>) => {
+      if ("id" in action.payload) {
+        state.dialogs.push({
+          type: "booking",
+          id: action.payload.id
+        });
+      } else {
+        state.dialogs.push({
+          type: "booking",
+          tile: action.payload.tileId
+        });
+      }
     },
     showClientDialog: (state, action: PayloadAction<{ bookingId: string, clientId: string }>) => {
       state.dialogs.push({

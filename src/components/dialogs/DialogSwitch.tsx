@@ -2,8 +2,9 @@ import React from "react";
 import { hot } from "react-hot-loader";
 
 import * as DialogSlice from "../../redux/dialogSlice";
+import BookingByIdDialog from "./BookingByIdDialog";
+import BookingByTileIdDialog from "./BookingByTileIdDialog";
 
-import BookingDialog from "./BookingDialog";
 import ClientDialog from "./ClientDialog";
 import FindBookingDialog from "./FindBookingDialog";
 import FindClientDialog from "./FindClientDialog";
@@ -24,7 +25,11 @@ function DialogSwitch(props: Props): JSX.Element {
   case "cityTax":
     return <TaxDialog />;
   case "booking":
-    return <BookingDialog bookingId={props.dialog.id} tileId={props.dialog.tile} />;
+    if ("id" in props.dialog) {
+      return <BookingByIdDialog id={props.dialog.id} />;
+    } else {
+      return <BookingByTileIdDialog tileId={props.dialog.tile} />;
+    }
   case "findBooking":
     return <FindBookingDialog />;
   case "client":
