@@ -7,7 +7,7 @@ import FindBookingDialogBody from "./FindBookingDialogBody";
 function FindBookingDialog(): JSX.Element {
   return (
     <div className="scrollable">
-      <DialogHeader title="Cerca Prenotazione" />
+      <DialogHeader>Cerca Prenotazione</DialogHeader>
       <FindBookingDialogBody />
     </div>
   );

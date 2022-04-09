@@ -35,7 +35,7 @@ function BookingDialog(props: Props): JSX.Element {
 
   return (
     <div className="scrollable">
-      <DialogHeader title={`Prenotazione ${bookingTitle}`} />
+      <DialogHeader>Prenotazione {bookingTitle}</DialogHeader>
       <LoadingDataWrapper isLoaded={bookingData.id.length > 0}>
         <DescriptionRow name="Dal" value={new Date(bookingData.from).toLocaleDateString()} />
         <DescriptionRow name="Al" value={new Date(bookingData.to).toLocaleDateString()} />

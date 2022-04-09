@@ -7,7 +7,7 @@ import FindClientDialogBody from "./FindClientDialogBody";
 function FindClientDialog(): JSX.Element {
   return (
     <div className="scrollable">
-      <DialogHeader title="Cerca Cliente" />
+      <DialogHeader>Cerca Cliente</DialogHeader>
       <FindClientDialogBody />
     </div>
   );

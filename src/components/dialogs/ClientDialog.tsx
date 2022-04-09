@@ -26,7 +26,7 @@ function ClientDialog(props: Props): JSX.Element {
 
   return (
     <div className="scrollable">
-      <DialogHeader title={`Cliente ${clientTitle}`} />
+      <DialogHeader>Cliente {clientTitle}</DialogHeader>
       <ClientDialogBody data={clientData} />
     </div>
   );

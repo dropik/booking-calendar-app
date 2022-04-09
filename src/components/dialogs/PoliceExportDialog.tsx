@@ -7,7 +7,7 @@ import ExportDialogBody from "./ExportDialogBody";
 function PoliceExportDialog(): JSX.Element {
   return (
     <>
-      <DialogHeader title="Esporta Dati Polizia" />
+      <DialogHeader>Esporta Dati Polizia</DialogHeader>
       <ExportDialogBody type={"police"} />
     </>
   );

@@ -7,7 +7,7 @@ import ExportDialogBody from "./ExportDialogBody";
 function IstatExportDialog(): JSX.Element {
   return (
     <>
-      <DialogHeader title="Esporta Dati ISTAT" />
+      <DialogHeader>Esporta Dati ISTAT</DialogHeader>
       <ExportDialogBody type={"istat"} />
     </>
   );

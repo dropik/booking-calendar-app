@@ -7,7 +7,7 @@ import TaxDialogBody from "./TaxDialogBody";
 function TaxDialog(): JSX.Element {
   return (
     <>
-      <DialogHeader title="Calcola Tassa di Soggiorno" />
+      <DialogHeader>Calcola Tassa di Soggiorno</DialogHeader>
       <TaxDialogBody />
     </>
   );

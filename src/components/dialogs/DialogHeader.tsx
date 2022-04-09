@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { ReactNode, useContext } from "react";
 import { hot } from "react-hot-loader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -10,7 +10,7 @@ import { DialogContext } from "../Dialog";
 import { DialogContainerContext } from "./DialogContainer";
 
 type Props = {
-  title: string
+  children: ReactNode
 };
 
 function DialogHeader(props: Props): JSX.Element {
@@ -30,7 +30,7 @@ function DialogHeader(props: Props): JSX.Element {
     <>
       <h3>
         {goBackButton}
-        {props.title}
+        {props.children}
         <FontAwesomeIcon className="button close" icon={faXmark} onClick={dialogContainerContext.fadeOutDialog} />
       </h3>
       <hr />
