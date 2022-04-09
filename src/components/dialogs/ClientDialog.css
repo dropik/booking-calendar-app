@@ -1,13 +1,13 @@
-.dialog .row.client-data div.field-label {
+.dialog .client-dialog-body div.field-label {
   flex-basis: auto;
   width: 8rem;
 }
 
-.dialog .list-container.client-booking {
+.dialog .client-dialog-body .list-container {
   min-height: auto;
 }
 
-.dialog .list-container.client-booking .row {
+.dialog .client-dialog-body .list-container .row {
   margin-left: 1rem;
   margin-right: 1rem;
   box-shadow: 0 0 4px 1px black;

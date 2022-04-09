@@ -27,16 +27,16 @@ function ClientDialogBodyData(props: Props): JSX.Element {
   }
 
   return (
-    <>
+    <div className="client-dialog-body">
       <DescriptionRow name="Data di nascita" value={new Date(props.data.dateOfBirth).toLocaleDateString()} />
       <DescriptionRow name="Luogo di nascita" value={`${placeOfBirthString}${props.data.stateOfBirth}`} />
       <DescriptionRow name="Documento" value={`${documentTypeString} - ${props.data.documentNumber}`} />
       <h3 className="sub-header">Prenotazione</h3>
       <hr />
-      <div className="list-container client-booking">
+      <div className="list-container">
         <BookingRow data={props.data.booking} />
       </div>
-    </>
+    </div>
   );
 }
 
