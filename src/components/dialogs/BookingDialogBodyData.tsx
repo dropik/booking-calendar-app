@@ -2,32 +2,15 @@ import React from "react";
 import { hot } from "react-hot-loader";
 
 import * as Api from "../../api";
-import * as Utils from "../../utils";
 
 import GuestRow from "./GuestRow";
+import RoomContainer from "./RoomContainer";
 
 type Props = {
   data: Api.BookingData
 };
 
 function BookingDialogBodyData(props: Props): JSX.Element {
-  const rooms: JSX.Element[] = props.data.rooms.map(room => {
-    const assigned = room.roomNumber === undefined ?
-      "Non assegnata" :
-      `Camera ${room.roomNumber}`;
-
-    return (
-      <div key={room.id} className="room-container">
-        <h4>{Utils.getFullRoomType(room.entity, room.type)}</h4>
-        <div className="room-info">
-          ({new Date(room.from).toLocaleDateString()} - {new Date(room.to).toLocaleDateString()}) -&nbsp;
-          {assigned}
-        </div>
-        {room.guests.map(guest => <GuestRow key={guest.id} data={guest}/>)}
-      </div>
-    );
-  });
-
   return (
     <>
       <div className="row">
@@ -41,7 +24,11 @@ function BookingDialogBodyData(props: Props): JSX.Element {
       <h3 className="sub-header">Stanze</h3>
       <hr />
       <div className="rooms-container">
-        {rooms}
+        {props.data.rooms.map(room => (
+          <RoomContainer key={room.id} data={room}>
+            {room.guests.map(guest => <GuestRow key={guest.id} data={guest}/>)}
+          </RoomContainer>
+        ))}
       </div>
     </>
   );

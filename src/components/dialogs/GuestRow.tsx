@@ -1,12 +1,16 @@
 import React from "react";
 import { hot } from "react-hot-loader";
 
-import * as Api from "../../api";
 import { useAppDispatch } from "../../redux/hooks";
 import * as DialogSlice from "../../redux/dialogSlice";
 
 type Props = {
-  data: Api.GuestData
+  data: {
+    id: string,
+    name: string,
+    surname: string,
+    dateOfBirth: string
+  }
 };
 
 function GuestRow(props: Props): JSX.Element {
