@@ -9,8 +9,6 @@ import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
 
 import BookingDialogBody from "./BookingDialogBody";
 
-type DialogState = "idle" | "loading";
-
 type Props = {
   tileId?: string,
   bookingId?: string
@@ -18,17 +16,16 @@ type Props = {
 
 function BookingDialog(props: Props): JSX.Element {
   const dispatch = useAppDispatch();
-  const [dialogState, setDialogState] = useState<DialogState>("idle");
   const [bookingData, setBookingData] = useState<Api.BookingData>();
 
   const bookingTitle = getTitleFromBookingData(bookingData);
 
-  useFetchDataEffect(props.tileId, props.bookingId, dispatch, setBookingData, setDialogState);
+  useFetchDataEffect(props.tileId, props.bookingId, dispatch, setBookingData);
 
   return (
     <div className="scrollable">
       <DialogHeader title={`Prenotazione ${bookingTitle}`} />
-      <BookingDialogBody data={bookingData} dialogState={dialogState} />
+      <BookingDialogBody data={bookingData} />
     </div>
   );
 }
@@ -41,8 +38,7 @@ function useFetchDataEffect(
   tileId: string | undefined,
   bookingId: string | undefined,
   dispatch: Dispatch<AnyAction>,
-  setBookingData: React.Dispatch<React.SetStateAction<Api.BookingData | undefined>>,
-  setDialogState: React.Dispatch<React.SetStateAction<DialogState>>
+  setBookingData: React.Dispatch<React.SetStateAction<Api.BookingData | undefined>>
 ): void {
   useEffect(() => {
     async function fetchData() {
@@ -62,13 +58,10 @@ function useFetchDataEffect(
         }
       } catch (Error) {
         dispatch(ConnectionErrorSlice.show());
-      } finally {
-        setDialogState("idle");
       }
     }
     fetchData();
-    setDialogState("loading");
-  }, [dispatch, tileId, bookingId, setBookingData, setDialogState]);
+  }, [dispatch, tileId, bookingId, setBookingData]);
 }
 
 export default hot(module)(BookingDialog);

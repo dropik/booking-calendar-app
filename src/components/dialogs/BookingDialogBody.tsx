@@ -8,22 +8,19 @@ import BookingDialogBodyData from "./BookingDialogBodyData";
 import "./DescriptiveDialog.css";
 
 type Props = {
-  data?: Api.BookingData,
-  dialogState: "idle" | "loading"
+  data?: Api.BookingData
 };
 
 function BookingDialogBody(props: Props): JSX.Element {
-  if (props.dialogState === "loading") {
+  if (!props.data) {
     return (
       <div className="row">
         <div className="message">Carico...</div>
       </div>
     );
-  } else if (props.data) {
-    return <BookingDialogBodyData data={props.data} />;
   }
 
-  return <></>;
+  return <BookingDialogBodyData data={props.data} />;
 }
 
 export default hot(module)(BookingDialogBody);
