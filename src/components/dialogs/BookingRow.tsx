@@ -9,7 +9,7 @@ type Props = {
   data: Api.BookingShortData
 };
 
-function BookingRow(props: Props): JSX.Element {
+function BookingRow({ data }: Props): JSX.Element {
   const dispatch = useAppDispatch();
 
   function showBooking(id: string) {
@@ -17,11 +17,11 @@ function BookingRow(props: Props): JSX.Element {
   }
 
   return (
-    <div className="row button" onClick={() => { showBooking(props.data.id); }}>
-      <div className="id">#{props.data.id}</div>
-      <div className="name">{props.data.name}</div>
-      <div className="from">{new Date(props.data.from).toLocaleDateString()}</div>
-      <div className="to">{new Date(props.data.to).toLocaleDateString()}</div>
+    <div className="row button" onClick={() => { showBooking(data.id); }}>
+      <div className="id">#{data.id}</div>
+      <div className="name">{data.name}</div>
+      <div className="from">{new Date(data.from).toLocaleDateString()}</div>
+      <div className="to">{new Date(data.to).toLocaleDateString()}</div>
     </div>
   );
 }

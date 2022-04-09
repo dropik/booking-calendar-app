@@ -17,11 +17,11 @@ type Props = {
   isValidated: boolean
 };
 
-function BookingsList(props: Props): JSX.Element {
+function BookingsList({ nameOrId, from, to, forceFetchRequest, isLiveUpdateEnabled, isValidated }: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const [bookings, setBookings] = useState<Api.BookingShortData[]>();
 
-  useFetchListEffect(props, dispatch, setBookings);
+  useFetchListEffect({ nameOrId, from, to, forceFetchRequest, isLiveUpdateEnabled, isValidated }, dispatch, setBookings);
 
   if (!bookings || (bookings.length === 0)) {
     return <h3 key="placeholder">Nessuna Prenotazione</h3>;
@@ -29,17 +29,15 @@ function BookingsList(props: Props): JSX.Element {
 
   return (
     <>
-      {
-        bookings.map((booking) => (
-          <BookingRow key={booking.id} data={booking} />
-        ))
-      }
+      {bookings.map((booking) => (
+        <BookingRow key={booking.id} data={booking} />
+      ))}
     </>
   );
 }
 
 function useFetchListEffect(
-  props: Props,
+  { nameOrId, from, to, forceFetchRequest, isLiveUpdateEnabled, isValidated }: Props,
   dispatch: Dispatch<AnyAction>,
   setBookings: Dispatch<SetStateAction<Api.BookingShortData[] | undefined>>
 ): void {
@@ -48,7 +46,7 @@ function useFetchListEffect(
 
     async function fetchDataAsync() {
       try {
-        const response = await Api.fetchBookings(props.nameOrId, props.from, props.to);
+        const response = await Api.fetchBookings(nameOrId, from, to);
         if (isSubscribed) {
           setBookings(response.data);
         }
@@ -57,12 +55,12 @@ function useFetchListEffect(
       }
     }
 
-    if (props.isLiveUpdateEnabled && props.isValidated) {
+    if (isLiveUpdateEnabled && isValidated) {
       fetchDataAsync();
     }
 
     return () => { isSubscribed = false; };
-  }, [dispatch, props, setBookings]);
+  }, [nameOrId, from, to, forceFetchRequest, isLiveUpdateEnabled, isValidated, dispatch, setBookings]);
 }
 
 export default memo(hot(module)(BookingsList));

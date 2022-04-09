@@ -32,9 +32,6 @@
 
 .dialog .room-container > .row {
   margin-bottom: 0;
-}
-
-.dialog .row.person {
   flex-wrap: nowrap;
   margin-right: 0;
   padding-right: 0;
@@ -45,7 +42,7 @@
   color: black;
 }
 
-.dialog .row.person div {
+.dialog .room-container > .row div {
   width: 9rem;
   text-align: center;
   padding-top: 0.5rem;
@@ -53,6 +50,6 @@
   margin-bottom: 0;
 }
 
-.dialog .row.person.button:hover {
+.dialog .room-container > .row.button:hover {
   color: white;
 }
