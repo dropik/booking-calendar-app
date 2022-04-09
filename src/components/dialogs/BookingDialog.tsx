@@ -1,13 +1,9 @@
-import React, { Dispatch, useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { hot } from "react-hot-loader";
-import DialogHeader from "./DialogHeader";
-import { AnyAction } from "@reduxjs/toolkit";
 
-import { useAppDispatch } from "../../redux/hooks";
 import * as Api from "../../api";
-import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
 
-import LoadingDataWrapper from "./LoadingDataWrapper";
+import DataDialog from "./DataDialog";
 import BookingDialogBody from "./BookingDialogBody";
 
 type Props = {
@@ -23,56 +19,47 @@ const initialData: Api.BookingData = {
   rooms: []
 };
 
-function BookingDialog(props: Props): JSX.Element {
-  const dispatch = useAppDispatch();
+function BookingDialog({ tileId, bookingId }: Props): JSX.Element {
   const [bookingData, setBookingData] = useState<Api.BookingData>(initialData);
+  const tryFetchDataAsync = useTryFetchDataAsyncCallback(tileId, bookingId, setBookingData);
 
   const bookingTitle = getTitleFromBookingData(bookingData);
 
-  useFetchDataEffect(props.tileId, props.bookingId, dispatch, setBookingData);
-
   return (
-    <div className="scrollable">
-      <DialogHeader>Prenotazione {bookingTitle}</DialogHeader>
-      <LoadingDataWrapper isLoaded={bookingData.id.length > 0}>
-        <BookingDialogBody data={bookingData} />
-      </LoadingDataWrapper>
-    </div>
+    <DataDialog
+      header={`Prenotazione ${bookingTitle}`}
+      data={bookingData}
+      onTryFetchDataAsync={tryFetchDataAsync}
+    >
+      <BookingDialogBody data={bookingData} />
+    </DataDialog>
   );
+}
+
+function useTryFetchDataAsyncCallback(
+  tileId: string | undefined,
+  bookingId: string | undefined,
+  setBookingData: Dispatch<SetStateAction<Api.BookingData>>
+): () => Promise<void> {
+  return useCallback<() => Promise<void>>(async () => {
+    let data: Api.BookingData | undefined;
+
+    if (tileId) {
+      const response = await Api.fetchBookingByTile(tileId);
+      data = response.data;
+    } else if (bookingId) {
+      const response = await Api.fetchBookingById(bookingId);
+      data = response.data;
+    }
+
+    if (data) {
+      setBookingData(data);
+    }
+  }, [tileId, bookingId, setBookingData]);
 }
 
 function getTitleFromBookingData(data: Api.BookingData): string {
   return data.id.length === 0 ? "" : `#${data.id} (${data.name})`;
-}
-
-function useFetchDataEffect(
-  tileId: string | undefined,
-  bookingId: string | undefined,
-  dispatch: Dispatch<AnyAction>,
-  setBookingData: React.Dispatch<React.SetStateAction<Api.BookingData>>
-): void {
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        let data: Api.BookingData | undefined;
-
-        if (tileId) {
-          const response = await Api.fetchBookingByTile(tileId);
-          data = response.data;
-        } else if (bookingId) {
-          const response = await Api.fetchBookingById(bookingId);
-          data = response.data;
-        }
-
-        if (data) {
-          setBookingData(data);
-        }
-      } catch (Error) {
-        dispatch(ConnectionErrorSlice.show());
-      }
-    }
-    fetchData();
-  }, [dispatch, tileId, bookingId, setBookingData]);
 }
 
 export default hot(module)(BookingDialog);
