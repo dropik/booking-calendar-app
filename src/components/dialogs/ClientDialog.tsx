@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { hot } from "react-hot-loader";
+import { AnyAction } from "@reduxjs/toolkit";
 
 import { useAppDispatch } from "../../redux/hooks";
 import * as Api from "../../api";
@@ -10,8 +11,6 @@ import ClientDialogBody from "./ClientDialogBody";
 
 import "./ClientDialog.css";
 
-type DialogState = "idle" | "loading";
-
 type Props = {
   bookingId: string,
   clientId: string
@@ -19,11 +18,29 @@ type Props = {
 
 function ClientDialog(props: Props): JSX.Element {
   const dispatch = useAppDispatch();
-  const [dialogState, setDialogState] = useState<DialogState>("idle");
   const [clientData, setClientData] = useState<Api.ClientData>();
 
-  const clientTitle = clientData === undefined ? "" : `${clientData.name} ${clientData.surname}`;
+  const clientTitle = getTitleFromClientData(clientData);
 
+  useFetchDataEffect(props, dispatch, setClientData);
+
+  return (
+    <div className="scrollable">
+      <DialogHeader title={`Cliente ${clientTitle}`} />
+      <ClientDialogBody data={clientData} />
+    </div>
+  );
+}
+
+function getTitleFromClientData(data: Api.ClientData | undefined): string {
+  return data === undefined ? "" : `${data.name} ${data.surname}`;
+}
+
+function useFetchDataEffect(
+  props: Props,
+  dispatch: Dispatch<AnyAction>,
+  setClientData: Dispatch<SetStateAction<Api.ClientData | undefined>>
+): void {
   useEffect(() => {
     async function fetchData() {
       try {
@@ -31,20 +48,10 @@ function ClientDialog(props: Props): JSX.Element {
         setClientData(response.data);
       } catch (Error) {
         dispatch(ConnectionErrorSlice.show());
-      } finally {
-        setDialogState("idle");
       }
     }
     fetchData();
-    setDialogState("loading");
-  }, [dispatch, props.bookingId, props.clientId]);
-
-  return (
-    <div className="scrollable">
-      <DialogHeader title={`Cliente ${clientTitle}`} />
-      <ClientDialogBody data={clientData} dialogState={dialogState} />
-    </div>
-  );
+  }, [props, dispatch, setClientData]);
 }
 
 export default hot(module)(ClientDialog);
