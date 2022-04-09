@@ -2,16 +2,15 @@ import React from "react";
 import { hot } from "react-hot-loader";
 
 import * as Api from "../../api";
-import { useAppDispatch } from "../../redux/hooks";
-import * as DialogSlice from "../../redux/dialogSlice";
+
+import DescriptionRow from "./DescriptionRow";
+import BookingRow from "./BookingRow";
 
 type Props = {
   data: Api.ClientData
 };
 
-function BookingDialogBodyData(props: Props): JSX.Element {
-  const dispatch = useAppDispatch();
-
+function ClientDialogBodyData(props: Props): JSX.Element {
   const placeOfBirthString = props.data.placeOfBirth ? "" : `${props.data.placeOfBirth}, `;
 
   let documentTypeString: string;
@@ -27,36 +26,18 @@ function BookingDialogBodyData(props: Props): JSX.Element {
     break;
   }
 
-  function showBooking() {
-    dispatch(DialogSlice.showBookingDialog({ id: props.data.booking.id }));
-  }
-
   return (
     <>
-      <div className="row client-data">
-        <div className="field-label">Data di nascita:</div>
-        <div><b>{new Date(props.data.dateOfBirth).toLocaleDateString()}</b></div>
-      </div>
-      <div className="row client-data">
-        <div className="field-label">Luogo di nascita:</div>
-        <div><b>{`${placeOfBirthString}${props.data.stateOfBirth}`}</b></div>
-      </div>
-      <div className="row client-data">
-        <div className="field-label">Documento:</div>
-        <div><b>{`${documentTypeString} - ${props.data.documentNumber}`}</b></div>
-      </div>
+      <DescriptionRow name="Data di nascita" value={new Date(props.data.dateOfBirth).toLocaleDateString()} />
+      <DescriptionRow name="Luogo di nascita" value={`${placeOfBirthString}${props.data.stateOfBirth}`} />
+      <DescriptionRow name="Documento" value={`${documentTypeString} - ${props.data.documentNumber}`} />
       <h3 className="sub-header">Prenotazione</h3>
       <hr />
       <div className="list-container client-booking">
-        <div className="row button" onClick={showBooking}>
-          <div className="id">#{props.data.booking.id}</div>
-          <div className="name">{props.data.booking.name}</div>
-          <div className="from">{new Date(props.data.booking.from).toLocaleDateString()}</div>
-          <div className="to">{new Date(props.data.booking.to).toLocaleDateString()}</div>
-        </div>
+        <BookingRow data={props.data.booking} />
       </div>
     </>
   );
 }
 
-export default hot(module)(BookingDialogBodyData);
+export default hot(module)(ClientDialogBodyData);
