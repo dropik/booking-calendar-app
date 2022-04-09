@@ -8,9 +8,7 @@ import * as Api from "../../api";
 import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
 
 import LoadingDataWrapper from "./LoadingDataWrapper";
-import DescriptionRow from "./DescriptionRow";
-import RoomContainer from "./RoomContainer";
-import GuestRow from "./GuestRow";
+import BookingDialogBody from "./BookingDialogBody";
 
 type Props = {
   tileId?: string,
@@ -37,19 +35,7 @@ function BookingDialog(props: Props): JSX.Element {
     <div className="scrollable">
       <DialogHeader>Prenotazione {bookingTitle}</DialogHeader>
       <LoadingDataWrapper isLoaded={bookingData.id.length > 0}>
-        <DescriptionRow name="Dal" value={new Date(bookingData.from).toLocaleDateString()} />
-        <DescriptionRow name="Al" value={new Date(bookingData.to).toLocaleDateString()} />
-        <h3 className="sub-header">Stanze</h3>
-        <hr />
-        <div className="rooms-container">
-          {bookingData.rooms.map(room => (
-            <RoomContainer key={room.id} data={room}>
-              {room.guests.map(guest => (
-                <GuestRow key={guest.id} data={guest}/>
-              ))}
-            </RoomContainer>
-          ))}
-        </div>
+        <BookingDialogBody data={bookingData} />
       </LoadingDataWrapper>
     </div>
   );
