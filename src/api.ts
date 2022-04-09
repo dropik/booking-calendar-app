@@ -37,15 +37,17 @@ export type BookingShortData = {
   to: string
 };
 
+export type DocumentType = "identityCard" | "drivingLicense" | "passport";
+
 export type ClientData = {
   id: string,
   name: string,
   surname: string,
   dateOfBirth: string,
-  placeOfBirth?: string,
+  placeOfBirth: string,
   stateOfBirth: string,
   documentNumber: string,
-  documentType: "identityCard" | "drivingLicense" | "passport",
+  documentType: DocumentType,
   booking: BookingShortData
 };
 
