@@ -3,7 +3,9 @@ import { hot } from "react-hot-loader";
 
 import * as Api from "../../api";
 
-import BookingDialogBodyData from "./BookingDialogBodyData";
+import DescriptionRow from "./DescriptionRow";
+import RoomContainer from "./RoomContainer";
+import GuestRow from "./GuestRow";
 
 import "./DescriptiveDialog.css";
 
@@ -20,7 +22,23 @@ function BookingDialogBody(props: Props): JSX.Element {
     );
   }
 
-  return <BookingDialogBodyData data={props.data} />;
+  return (
+    <>
+      <DescriptionRow name="Dal" value={new Date(props.data.from).toLocaleDateString()} />
+      <DescriptionRow name="Al" value={new Date(props.data.to).toLocaleDateString()} />
+      <h3 className="sub-header">Stanze</h3>
+      <hr />
+      <div className="rooms-container">
+        {props.data.rooms.map(room => (
+          <RoomContainer key={room.id} data={room}>
+            {room.guests.map(guest => (
+              <GuestRow key={guest.id} data={guest}/>
+            ))}
+          </RoomContainer>
+        ))}
+      </div>
+    </>
+  );
 }
 
 export default hot(module)(BookingDialogBody);
