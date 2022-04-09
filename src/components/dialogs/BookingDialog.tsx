@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
 import { hot } from "react-hot-loader";
 
 import * as Api from "../../api";
@@ -10,37 +10,19 @@ type Props = {
   onTryFetchBookingDataAsync: () => Promise<{ data: Api.BookingData }>
 };
 
-const initialData: Api.BookingData = {
-  id: "",
-  name: "",
-  from: "",
-  to: "",
-  rooms: []
-};
-
 function BookingDialog({ onTryFetchBookingDataAsync }: Props): JSX.Element {
-  const [bookingData, setBookingData] = useState<Api.BookingData>(initialData);
-
-  const tryFetchDataAsync = useCallback<() => Promise<void>>(async () => {
-    const response = await onTryFetchBookingDataAsync();
-    setBookingData(response.data);
-  }, [onTryFetchBookingDataAsync]);
-
-  const bookingTitle = getTitleFromBookingData(bookingData);
-
   return (
     <DataDialog
-      header={`Prenotazione ${bookingTitle}`}
-      data={bookingData}
-      onTryFetchDataAsync={tryFetchDataAsync}
+      header={(data) => `Prenotazione ${getTitleFromBookingData(data)}`}
+      onTryFetchDataAsync={onTryFetchBookingDataAsync}
     >
-      <BookingDialogBody data={bookingData} />
+      {(data) => <BookingDialogBody data={data} />}
     </DataDialog>
   );
 }
 
-function getTitleFromBookingData(data: Api.BookingData): string {
-  return data.id.length === 0 ? "" : `#${data.id} (${data.name})`;
+function getTitleFromBookingData(data: Api.BookingData | undefined): string {
+  return data === undefined ? "" : `#${data.id} (${data.name})`;
 }
 
 export default hot(module)(BookingDialog);

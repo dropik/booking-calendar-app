@@ -1,13 +1,13 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import { hot } from "react-hot-loader";
 
-type Props = {
-  isLoaded: boolean,
-  children: ReactNode
+type Props<T> = {
+  children: (data: T) => JSX.Element,
+  data: T | undefined
 };
 
-function LoadingDataWrapper(props: Props): JSX.Element {
-  if (!props.isLoaded) {
+function LoadingDataWrapper<T>({ data, children }: Props<T>): JSX.Element {
+  if (!data) {
     return (
       <div className="row">
         <div className="message">Carico...</div>
@@ -15,7 +15,7 @@ function LoadingDataWrapper(props: Props): JSX.Element {
     );
   }
 
-  return <>{props.children}</>;
+  return <>{children(data)}</>;
 }
 
 export default hot(module)(LoadingDataWrapper);

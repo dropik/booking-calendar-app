@@ -1,65 +1,33 @@
-import React, { Dispatch, SetStateAction, useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import { hot } from "react-hot-loader";
 
 import * as Api from "../../api";
 
+import DataDialog from "./DataDialog";
 import ClientDialogBody from "./ClientDialogBody";
 
 import "./DescriptiveDialog.css";
 import "./ClientDialog.css";
-import DataDialog from "./DataDialog";
 
 type Props = {
   bookingId: string,
   clientId: string
 };
 
-const initialData: Api.ClientData = {
-  id: "",
-  name: "",
-  surname: "",
-  dateOfBirth: "",
-  stateOfBirth: "",
-  placeOfBirth: "",
-  documentNumber: "",
-  documentType: "passport",
-  booking: {
-    id: "",
-    name: "",
-    from: "",
-    to: ""
-  }
-};
-
 function ClientDialog({ bookingId, clientId }: Props): JSX.Element {
-  const [clientData, setClientData] = useState<Api.ClientData>(initialData);
-  const tryFetchDataAsync = useTryFetchDataAsyncCallback(bookingId, clientId, setClientData);
-
-  const clientTitle = getTitleFromClientData(clientData);
+  const tryFetchDataAsync = useCallback(() => Api.fetchClient(bookingId, clientId), [bookingId, clientId]);
 
   return (
     <DataDialog
-      header={`Cliente ${clientTitle}`}
-      data={clientData}
+      header={(data) => `Cliente ${getTitleFromClientData(data)}`}
       onTryFetchDataAsync={tryFetchDataAsync}
     >
-      <ClientDialogBody data={clientData} />
+      {(data) => <ClientDialogBody data={data} />}
     </DataDialog>
   );
 }
 
-function useTryFetchDataAsyncCallback(
-  bookingId: string,
-  clientId: string,
-  setClientData: Dispatch<SetStateAction<Api.ClientData>>
-): () => Promise<void> {
-  return useCallback<() => Promise<void>>(async () => {
-    const response = await Api.fetchClient(bookingId, clientId);
-    setClientData(response.data);
-  }, [bookingId, clientId, setClientData]);
-}
-
-function getTitleFromClientData(data: Api.ClientData): string {
+function getTitleFromClientData(data: Api.ClientData | undefined): string {
   return data === undefined ? "" : `${data.name} ${data.surname}`;
 }
 
