@@ -1,10 +1,12 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { Dispatch, memo, SetStateAction, useEffect, useState } from "react";
 import { hot } from "react-hot-loader";
+import { AnyAction } from "@reduxjs/toolkit";
 
 import * as Api from "../../api";
 import { useAppDispatch } from "../../redux/hooks";
 import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
-import * as DialogSlice from "../../redux/dialogSlice";
+
+import BookingRow from "./BookingRow";
 
 type Props = {
   nameOrId: string,
@@ -19,6 +21,28 @@ function BookingsList(props: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const [bookings, setBookings] = useState<Api.BookingShortData[]>();
 
+  useFetchListEffect(props, dispatch, setBookings);
+
+  if (!bookings || (bookings.length === 0)) {
+    return <h3 key="placeholder">Nessuna Prenotazione</h3>;
+  }
+
+  return (
+    <>
+      {
+        bookings.map((booking) => (
+          <BookingRow key={booking.id} data={booking} />
+        ))
+      }
+    </>
+  );
+}
+
+function useFetchListEffect(
+  props: Props,
+  dispatch: Dispatch<AnyAction>,
+  setBookings: Dispatch<SetStateAction<Api.BookingShortData[] | undefined>>
+): void {
   useEffect(() => {
     let isSubscribed = true;
 
@@ -38,27 +62,7 @@ function BookingsList(props: Props): JSX.Element {
     }
 
     return () => { isSubscribed = false; };
-  }, [dispatch, props]);
-
-  function showBooking(id: string) {
-    dispatch(DialogSlice.showBookingDialog({ id }));
-  }
-
-  let list: JSX.Element[] = [<h3 key="placeholder">Nessuna Prenotazione</h3>];
-  if (bookings && bookings.length > 0) {
-    list = bookings.map((booking) => {
-      return (
-        <div key={booking.id} className="row button" onClick={() => { showBooking(booking.id); }}>
-          <div className="id">#{booking.id}</div>
-          <div className="name">{booking.name}</div>
-          <div className="from">{new Date(booking.from).toLocaleDateString()}</div>
-          <div className="to">{new Date(booking.to).toLocaleDateString()}</div>
-        </div>
-      );
-    });
-  }
-
-  return <>{list}</>;
+  }, [dispatch, props, setBookings]);
 }
 
 export default memo(hot(module)(BookingsList));
