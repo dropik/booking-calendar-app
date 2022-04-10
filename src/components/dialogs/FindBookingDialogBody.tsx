@@ -4,19 +4,27 @@ import { hot } from "react-hot-loader";
 import * as Utils from "../../utils";
 import { useCurrentDate } from "../../redux/hooks";
 
+import ErrorLabel from "./ErrorLabel";
 import LabeledTextInput from "./LabeledTextInput";
 import LabeledDateInput from "./LabeledDateInput";
 import ButtonInput from "./ButtonInput";
 import BookingsList from "./BookingsList";
 
 import "./DialogWithList.css";
-import ErrorLabel from "./ErrorLabel";
 
 export type FindBookingDialogContextType = {
-  enableLiveUpdate: () => void
+  enableLiveUpdate: () => void,
+  forceFetchRequest: number,
+  isLiveUpdateEnabled: boolean,
+  isValidated: boolean
 };
 
-export const FindBookingDialogContext = createContext<FindBookingDialogContextType>({ enableLiveUpdate: () => void 0 });
+export const FindBookingDialogContext = createContext<FindBookingDialogContextType>({
+  enableLiveUpdate: () => void 0,
+  forceFetchRequest: 0,
+  isLiveUpdateEnabled: false,
+  isValidated: true
+});
 
 function FindBookingDialogBody(): JSX.Element {
   const currentDate = useCurrentDate();
@@ -30,7 +38,7 @@ function FindBookingDialogBody(): JSX.Element {
   const enableLiveUpdate = useCallback(() => setLiveUpdateEnabled(true), []);
 
   const isValidated = Utils.daysBetweenDates(fromDate, toDate) > 0;
-  const context: FindBookingDialogContextType = { enableLiveUpdate };
+  const context: FindBookingDialogContextType = { enableLiveUpdate, forceFetchRequest, isLiveUpdateEnabled, isValidated };
 
   return (
     <FindBookingDialogContext.Provider value={context}>
@@ -49,14 +57,7 @@ function FindBookingDialogBody(): JSX.Element {
           <div className="from">Dal</div>
           <div className="to">Al</div>
         </div>
-        <BookingsList
-          nameOrId={nameOrId}
-          from={fromDate}
-          to={toDate}
-          forceFetchRequest={forceFetchRequest}
-          isLiveUpdateEnabled={isLiveUpdateEnabled}
-          isValidated={isValidated}
-        />
+        <BookingsList nameOrId={nameOrId} from={fromDate} to={toDate} />
       </div>
     </FindBookingDialogContext.Provider>
   );
