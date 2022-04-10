@@ -3,7 +3,7 @@ import { hot } from "react-hot-loader";
 
 import * as Api from "../../api";
 
-import BookingRow from "./BookingRow";
+import BookingButtonRow from "./BookingButtonRow";
 import DialogList from "./DialogList";
 import { FindBookingDialogContext } from "./FindBookingDialogBody";
 
@@ -25,7 +25,7 @@ function BookingsList({ nameOrId, from, to }: Props): JSX.Element {
       forceFetchRequest={forceFetchRequest}
     >
       {(item) => (
-        <BookingRow key={item.id} data={item} />
+        <BookingButtonRow key={item.id} data={item} />
       )}
     </DialogList>
   );

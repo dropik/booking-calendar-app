@@ -4,7 +4,7 @@ import { hot } from "react-hot-loader";
 import * as Api from "../../api";
 
 import DescriptionRow from "./DescriptionRow";
-import BookingRow from "./BookingRow";
+import BookingButtonRow from "./BookingButtonRow";
 
 type Props = {
   data: Api.ClientData
@@ -23,7 +23,7 @@ function ClientDialogBody(props: Props): JSX.Element {
       <h3 className="sub-header">Prenotazione</h3>
       <hr />
       <div className="list-container">
-        <BookingRow data={props.data.booking} />
+        <BookingButtonRow data={props.data.booking} />
       </div>
     </div>
   );

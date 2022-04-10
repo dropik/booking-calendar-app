@@ -3,7 +3,7 @@ import { hot } from "react-hot-loader";
 
 import * as Api from "../../api";
 
-import ClientRow from "./ClientRow";
+import ClientButtonRow from "./ClientButtonRow";
 import DialogList from "./DialogList";
 
 type Props = {
@@ -25,7 +25,7 @@ function ClientsList({ name, surname, forceFetchRequest, isLiveUpdateEnabled, is
       forceFetchRequest={forceFetchRequest}
     >
       {(item) => (
-        <ClientRow key={item.id} bookingId={item.bookingId} client={item} bookingName={item.bookingName} />
+        <ClientButtonRow key={item.id} bookingId={item.bookingId} client={item} bookingName={item.bookingName} />
       )}
     </DialogList>
   );

@@ -4,7 +4,7 @@ import { hot } from "react-hot-loader";
 import * as Api from "../../api";
 
 import DescriptionRow from "./DescriptionRow";
-import ClientRow from "./ClientRow";
+import ClientButtonRow from "./ClientButtonRow";
 import RoomContainer from "./RoomContainer";
 
 type Props = {
@@ -25,7 +25,7 @@ function BookingDialogBody({ data }: Props): JSX.Element {
         {data.rooms.map(room => (
           <RoomContainer key={room.id} data={room}>
             {room.guests.map(guest => (
-              <ClientRow key={guest.id} bookingId={data.id} client={guest}/>
+              <ClientButtonRow key={guest.id} bookingId={data.id} client={guest}/>
             ))}
           </RoomContainer>
         ))}
