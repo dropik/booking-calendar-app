@@ -1,7 +1,7 @@
-import React, { ReactNode, useContext } from "react";
+import React, { ReactNode } from "react";
 import { hot } from "react-hot-loader";
 
-import { FindBookingDialogContext } from "./FindBookingDialogBody";
+import LiveUpdateInput from "./LiveUpdateInput";
 
 type Props = {
   children: ReactNode,
@@ -9,15 +9,12 @@ type Props = {
 };
 
 function ButtonInput({ children, onClick }: Props): JSX.Element {
-  const { enableLiveUpdate } = useContext(FindBookingDialogContext);
-
   return (
-    <div className="button" onClick={() => {
-      onClick();
-      enableLiveUpdate();
-    }}>
-      {children}
-    </div>
+    <LiveUpdateInput>
+      <div className="button" onClick={onClick}>
+        {children}
+      </div>
+    </LiveUpdateInput>
   );
 }
 
