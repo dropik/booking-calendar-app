@@ -3,7 +3,6 @@ import { hot } from "react-hot-loader";
 
 import { useAppDispatch, useCurrentDate } from "../../redux/hooks";
 import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
-import * as Api from "../../api";
 import { DialogContainerContext } from "./DialogContainer";
 
 import ExportDialogStateSwitch from "./ExportDialogStateSwitch";
@@ -13,10 +12,11 @@ import DateInput from "./DateInput";
 export type ExportDialogState = "fill" | "loading" | "done" | "no data";
 
 type Props = {
-  type: "police" | "istat"
-}
+  onTryFetchDataAsync: (date: string) => Promise<{ data: Blob }>,
+  onFilenameSet: (date: string) => string
+};
 
-function ExportDialogBody({ type }: Props): JSX.Element {
+function ExportDialogBody({ onTryFetchDataAsync, onFilenameSet }: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const currentDate = useCurrentDate();
   const [selectedDate, setSelectedDate] = useState(currentDate);
@@ -24,34 +24,15 @@ function ExportDialogBody({ type }: Props): JSX.Element {
   const anchorRef = useRef<HTMLAnchorElement>(null);
   const context = useContext(DialogContainerContext);
 
-  let getDataAsync: () => Promise<Blob>;
-  let filename: string;
-
-  switch (type) {
-  case "police":
-    getDataAsync = async () => {
-      const response = await Api.fetchPoliceDataAsync(selectedDate);
-      return response.data;
-    };
-    filename = `polizia-${selectedDate}.txt`;
-    break;
-  case "istat":
-    getDataAsync = async () => {
-      const response = await Api.fetchIstatDataAsync(selectedDate);
-      return response.data;
-    };
-    filename = `istat-${selectedDate}.pdf`;
-    break;
-  }
-
   function exportFile() {
     async function fetchDataAsync() {
       try {
-        const data = await getDataAsync();
+        const response = await onTryFetchDataAsync(selectedDate);
+        const data = response.data;
         if (anchorRef.current) {
           if (data && data.size > 0) {
             anchorRef.current.href = URL.createObjectURL(data);
-            anchorRef.current.download = filename;
+            anchorRef.current.download = onFilenameSet(selectedDate);
             anchorRef.current.click();
 
             setDialogState("done");
