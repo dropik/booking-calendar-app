@@ -9,6 +9,8 @@ import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
 import DialogHeader from "./DialogHeader";
 import LoadingDataWrapper from "./LoadingDataWrapper";
 
+import "./DescriptiveDialog.css";
+
 type Props<T extends Api.BookingData | Api.ClientData> = {
   children: (data: T) => JSX.Element,
   header: (data: T | undefined) => string,

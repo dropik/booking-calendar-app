@@ -6,11 +6,11 @@ type Props = {
   value: string
 };
 
-function DescriptionRow(props: Props): JSX.Element {
+function DescriptionRow({ name, value }: Props): JSX.Element {
   return (
     <div className="row">
-      <div className="field-label">{props.name}:</div>
-      <div><b>{props.value}</b></div>
+      <div className="field-label">{name}:</div>
+      <div><b>{value}</b></div>
     </div>
   );
 }

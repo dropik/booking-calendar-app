@@ -13,7 +13,7 @@ type Props = {
   children: ReactNode
 };
 
-function DialogHeader(props: Props): JSX.Element {
+function DialogHeader({ children }: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const dialogContext = useContext(DialogContext);
   const dialogContainerContext = useContext(DialogContainerContext);
@@ -30,7 +30,7 @@ function DialogHeader(props: Props): JSX.Element {
     <>
       <h3>
         {goBackButton}
-        {props.children}
+        {children}
         <FontAwesomeIcon className="button close" icon={faXmark} onClick={dialogContainerContext.fadeOutDialog} />
       </h3>
       <hr />

@@ -19,7 +19,7 @@ type Props = {
   type: "police" | "istat"
 }
 
-function ExportDialogBody(props: Props): JSX.Element {
+function ExportDialogBody({ type }: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const currentDate = useCurrentDate();
   const [selectedDate, setSelectedDate] = useState(currentDate);
@@ -34,7 +34,7 @@ function ExportDialogBody(props: Props): JSX.Element {
   let getDataAsync: () => Promise<Blob>;
   let filename: string;
 
-  switch (props.type) {
+  switch (type) {
   case "police":
     getDataAsync = async () => {
       const response = await Api.fetchPoliceDataAsync(selectedDate);

@@ -10,10 +10,10 @@ type Props = {
   data: Api.ClientData
 };
 
-function ClientDialogBody(props: Props): JSX.Element {
-  const dateOfBirthString = new Date(props.data.dateOfBirth).toLocaleDateString();
-  const placeOfBirthString = getFullPlaceOfBirthString(props.data.stateOfBirth, props.data.placeOfBirth);
-  const documentString = getFullDocumentString(props.data.documentType, props.data.documentNumber);
+function ClientDialogBody({ data }: Props): JSX.Element {
+  const dateOfBirthString = new Date(data.dateOfBirth).toLocaleDateString();
+  const placeOfBirthString = getFullPlaceOfBirthString(data.stateOfBirth, data.placeOfBirth);
+  const documentString = getFullDocumentString(data.documentType, data.documentNumber);
 
   return (
     <div className="client-dialog-body">
@@ -23,7 +23,7 @@ function ClientDialogBody(props: Props): JSX.Element {
       <h3 className="sub-header">Prenotazione</h3>
       <hr />
       <div className="list-container">
-        <BookingButtonRow data={props.data.booking} />
+        <BookingButtonRow data={data.booking} />
       </div>
     </div>
   );

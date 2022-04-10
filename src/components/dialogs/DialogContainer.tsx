@@ -13,7 +13,7 @@ type Props = {
   children: ReactNode
 }
 
-function DialogContainer(props: Props): JSX.Element {
+function DialogContainer({ children }: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const ref = useRef<HTMLDivElement>(null);
 
@@ -44,7 +44,7 @@ function DialogContainer(props: Props): JSX.Element {
         onClick={fadeOutDialog}
         onAnimationEnd={handleDialogAnimationEnd}
       >
-        {props.children}
+        {children}
       </div>
     </DialogContainerContext.Provider>
   );

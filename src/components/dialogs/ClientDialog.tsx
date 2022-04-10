@@ -6,7 +6,6 @@ import * as Api from "../../api";
 import DataDialog from "./DataDialog";
 import ClientDialogBody from "./ClientDialogBody";
 
-import "./DescriptiveDialog.css";
 import "./ClientDialog.css";
 
 type Props = {

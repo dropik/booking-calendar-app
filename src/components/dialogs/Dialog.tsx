@@ -7,7 +7,7 @@ type Props = {
   children: ReactNode
 };
 
-function Dialog(props: Props): JSX.Element {
+function Dialog({ children }: Props): JSX.Element {
   const context = useContext(DialogContext);
 
   function preventHideOnSelfClick(event: React.MouseEvent<HTMLDivElement>) {
@@ -21,7 +21,7 @@ function Dialog(props: Props): JSX.Element {
 
   return (
     <div className={dialogClassName} onClick={preventHideOnSelfClick}>
-      {props.children}
+      {children}
     </div>
   );
 }
