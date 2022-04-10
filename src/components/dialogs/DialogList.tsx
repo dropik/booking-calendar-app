@@ -9,17 +9,22 @@ import { FindDialogContext } from "./FindDialogBody";
 
 type Props<T extends Api.BookingShortData | Api.ClientShortData> = {
   children: (item: T) => JSX.Element,
-  tryFetchDataAsync: () => Promise<{ data: T[] }>
+  tryFetchDataAsync: () => Promise<{ data: T[] }>,
+  dataPlaceholder: string
 }
 
 function DialogList<T extends Api.BookingShortData | Api.ClientShortData>(
-  { children, tryFetchDataAsync }: Props<T>
+  { children, tryFetchDataAsync, dataPlaceholder }: Props<T>
 ): JSX.Element {
   const dispatch = useAppDispatch();
   const { isLiveUpdateEnabled, isValidated, forceFetchRequest } = useContext(FindDialogContext);
   const [data, setData] = useState<T[]>([]);
 
   useFetchDataEffect(dispatch, setData, tryFetchDataAsync, isLiveUpdateEnabled, isValidated, forceFetchRequest);
+
+  if (data.length === 0) {
+    return <h3 className="placeholder">{dataPlaceholder}</h3>;
+  }
 
   return (
     <>

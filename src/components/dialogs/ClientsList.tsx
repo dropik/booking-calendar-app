@@ -15,7 +15,7 @@ function ClientsList({ name, surname }: Props): JSX.Element {
   const tryFetchDataAsync = useCallback(() => Api.fetchClients(name, surname), [name, surname]);
 
   return (
-    <DialogList tryFetchDataAsync={tryFetchDataAsync}>
+    <DialogList tryFetchDataAsync={tryFetchDataAsync} dataPlaceholder="Nessun Cliente">
       {(item) => (
         <ClientButtonRow key={item.id} bookingId={item.bookingId} client={item} bookingName={item.bookingName} />
       )}

@@ -16,7 +16,7 @@ function BookingsList({ nameOrId, from, to }: Props): JSX.Element {
   const tryFetchDataAsync = useCallback(() => Api.fetchBookings(nameOrId, from, to), [nameOrId, from, to]);
 
   return (
-    <DialogList tryFetchDataAsync={tryFetchDataAsync}>
+    <DialogList tryFetchDataAsync={tryFetchDataAsync} dataPlaceholder="Nessuna Prenotazione">
       {(item) => (
         <BookingButtonRow key={item.id} data={item} />
       )}
