@@ -1,6 +1,7 @@
 import React, { ReactNode, useContext, useEffect } from "react";
 import { hot } from "react-hot-loader";
-import { FindBookingDialogContext } from "./FindBookingDialogBody";
+
+import { FindDialogContext } from "./FindDialogBody";
 
 type Props<T> = {
   children: ReactNode,
@@ -8,7 +9,7 @@ type Props<T> = {
 };
 
 function LiveUpdateInput<T>({ children, value }: Props<T>): JSX.Element {
-  const { enableLiveUpdate } = useContext(FindBookingDialogContext);
+  const { enableLiveUpdate } = useContext(FindDialogContext);
 
   useEffect(() => {
     return enableLiveUpdate;

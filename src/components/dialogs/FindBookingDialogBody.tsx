@@ -1,33 +1,14 @@
-import React, { createContext, useCallback, useState } from "react";
+import React, { useState } from "react";
 import { hot } from "react-hot-loader";
 
 import * as Utils from "../../utils";
 import { useCurrentDate } from "../../redux/hooks";
 
-import ErrorLabel from "./ErrorLabel";
+import FindDialogBody from "./FindDialogBody";
 import LabeledTextInput from "./LabeledTextInput";
 import LabeledDateInput from "./LabeledDateInput";
-import ButtonInput from "./ButtonInput";
-import HeaderRow from "./HeaderRow";
 import BookingRowContent from "./BookingRowContent";
 import BookingsList from "./BookingsList";
-
-import "./DialogWithList.css";
-import LiveUpdateInput from "./LiveUpdateInput";
-
-export type FindBookingDialogContextType = {
-  enableLiveUpdate: () => void,
-  forceFetchRequest: number,
-  isLiveUpdateEnabled: boolean,
-  isValidated: boolean
-};
-
-export const FindBookingDialogContext = createContext<FindBookingDialogContextType>({
-  enableLiveUpdate: () => void 0,
-  forceFetchRequest: 0,
-  isLiveUpdateEnabled: false,
-  isValidated: true
-});
 
 function FindBookingDialogBody(): JSX.Element {
   const currentDate = useCurrentDate();
@@ -36,33 +17,23 @@ function FindBookingDialogBody(): JSX.Element {
   const [nameOrId, setNameOrId] = useState("");
   const [fromDate, setFromDate] = useState(currentDate);
   const [toDate, setToDate] = useState(Utils.dateToString(toDateObj));
-  const [forceFetchRequest, setForceFetchRequest] = useState(0);
-  const [isLiveUpdateEnabled, setLiveUpdateEnabled] = useState(false);
-  const enableLiveUpdate = useCallback(() => setLiveUpdateEnabled(true), []);
 
   const isValidated = Utils.daysBetweenDates(fromDate, toDate) > 0;
-  const showError = !isValidated && isLiveUpdateEnabled;
-  const context: FindBookingDialogContextType = { enableLiveUpdate, forceFetchRequest, isLiveUpdateEnabled, isValidated };
 
   return (
-    <FindBookingDialogContext.Provider value={context}>
-      <ErrorLabel show={showError} text="Intervallo selezionato non corretto" />
-      <div className="row form-input">
-        <LabeledTextInput id="nameOrId" label="Nome / ID" value={nameOrId} onChange={setNameOrId} />
-        <LabeledDateInput id="from" label="Dal" isValid={!showError} value={fromDate} onChange={setFromDate} />
-        <LabeledDateInput id="to" label="Al" isValid={!showError} value={toDate} onChange={setToDate} />
-        <LiveUpdateInput value={forceFetchRequest}>
-          <ButtonInput onClick={() => setForceFetchRequest(forceFetchRequest + 1)}>Cerca</ButtonInput>
-        </LiveUpdateInput>
-      </div>
-      <hr className="search-field-border" />
-      <div className="list-container">
-        <HeaderRow>
-          <BookingRowContent data={{ id: "ID", name: "Nome", from: "Dal", to: "Al" }} />
-        </HeaderRow>
-        <BookingsList nameOrId={nameOrId} from={fromDate} to={toDate} />
-      </div>
-    </FindBookingDialogContext.Provider>
+    <FindDialogBody
+      isValidated={isValidated}
+      errorText="Intervallo selezionato non corretto"
+      formInputs={(showError) => (
+        <>
+          <LabeledTextInput id="nameOrId" label="Nome / ID" value={nameOrId} onChange={setNameOrId} />
+          <LabeledDateInput id="from" label="Dal" isValid={!showError} value={fromDate} onChange={setFromDate} />
+          <LabeledDateInput id="to" label="Al" isValid={!showError} value={toDate} onChange={setToDate} />
+        </>
+      )}
+      headerContent={() => <BookingRowContent data={{ id: "ID", name: "Nome", from: "Dal", to: "Al" }} />}
+      list={() => <BookingsList nameOrId={nameOrId} from={fromDate} to={toDate} />}
+    />
   );
 }
 
