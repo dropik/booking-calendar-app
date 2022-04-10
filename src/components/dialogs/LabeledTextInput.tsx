@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
+import React from "react";
 import { hot } from "react-hot-loader";
 
-import { FindBookingDialogContext } from "./FindBookingDialogBody";
+import LiveUpdateInput from "./LiveUpdateInput";
 
 type Props = {
   id: string,
@@ -11,16 +11,16 @@ type Props = {
 };
 
 function LabeledTextInput({ id, name, value, onChange }: Props): JSX.Element {
-  const { enableLiveUpdate } = useContext(FindBookingDialogContext);
 
   return (
-    <div>
-      <label htmlFor={id} className="label">{name}:</label>
-      <input type={"text"} id={id} value={value} onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-        onChange(event.target.value);
-        enableLiveUpdate();
-      }} />
-    </div>
+    <LiveUpdateInput>
+      <div>
+        <label htmlFor={id} className="label">{name}:</label>
+        <input type={"text"} id={id} value={value} onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+          onChange(event.target.value);
+        }} />
+      </div>
+    </LiveUpdateInput>
   );
 }
 
