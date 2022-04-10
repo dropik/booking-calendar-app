@@ -1,17 +1,15 @@
 import React, { useContext, useRef, useState } from "react";
 import { hot } from "react-hot-loader";
-import DatePicker from "react-datepicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 import { useAppDispatch, useCurrentDate } from "../../redux/hooks";
 import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
-import * as Utils from "../../utils";
 import * as Api from "../../api";
-
 import { DialogContainerContext } from "./DialogContainer";
 
-import "react-datepicker/dist/react-datepicker.css";
+import ButtonInput from "./ButtonInput";
+import DateInput from "./DateInput";
 
 type DialogState = "fill" | "loading" | "done" | "no data";
 
@@ -26,10 +24,6 @@ function ExportDialogBody({ type }: Props): JSX.Element {
   const [dialogState, setDialogState] = useState<DialogState>("fill");
   const anchorRef = useRef<HTMLAnchorElement>(null);
   const context = useContext(DialogContainerContext);
-
-  function onDateChange(date: Date) {
-    setSelectedDate(Utils.dateToString(date));
-  }
 
   let getDataAsync: () => Promise<Blob>;
   let filename: string;
@@ -82,15 +76,8 @@ function ExportDialogBody({ type }: Props): JSX.Element {
   case "fill":
     dialogRow = (
       <>
-        <div>
-          <DatePicker
-            locale="it"
-            dateFormat="dd/MM/yyyy"
-            selected={new Date(selectedDate)}
-            onChange={onDateChange}
-          />
-        </div>
-        <div className="button" onClick={exportFile}>Esporta</div>
+        <DateInput value={selectedDate} onChange={setSelectedDate} />
+        <ButtonInput onClick={exportFile}>Esporta</ButtonInput>
       </>
     );
     break;
