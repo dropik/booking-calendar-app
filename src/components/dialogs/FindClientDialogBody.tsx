@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { hot } from "react-hot-loader";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
+import ErrorLabel from "./ErrorLabel";
 import ClientsList from "./ClientsList";
 
 import "./DialogWithList.css";
@@ -17,18 +16,9 @@ function FindClientDialogBody(): JSX.Element {
   const showError = !isValidated && isLiveUpdateEnabled;
   const inputClassName = !showError ? "" : "invalid";
 
-  const errorLabel = !showError ?
-    <></> :
-    (
-      <div className="error-label">
-        <FontAwesomeIcon icon={faCircleExclamation} />
-        Almeno uno dei campi deve essere non vuoto
-      </div>
-    );
-
   return (
     <>
-      {errorLabel}
+      <ErrorLabel show={showError} text="Almeno uno dei campi deve essere non vuoto" />
       <div className="row form-input">
         <div>
           <label htmlFor="name" className="label">Nome:</label>
