@@ -8,6 +8,7 @@ import { useCurrentDate } from "../../redux/hooks";
 
 import LabeledTextInput from "./LabeledTextInput";
 import LabeledDateInput from "./LabeledDateInput";
+import ButtonInput from "./ButtonInput";
 import BookingsList from "./BookingsList";
 
 import "./DialogWithList.css";
@@ -48,10 +49,7 @@ function FindBookingDialogBody(): JSX.Element {
         <LabeledTextInput id="nameOrId" name="Nome / ID" value={nameOrId} onChange={setNameOrId} />
         <LabeledDateInput id="from" name="Dal" isValid={isValidated} value={fromDate} onChange={setFromDate} />
         <LabeledDateInput id="to" name="Al" isValid={isValidated} value={toDate} onChange={setToDate} />
-        <div className="button" onClick={() => {
-          setForceFetchRequest(forceFetchRequest + 1);
-          setLiveUpdateEnabled(true);
-        }}>Cerca</div>
+        <ButtonInput onClick={() => setForceFetchRequest(forceFetchRequest + 1)}>Cerca</ButtonInput>
       </div>
       <hr className="search-field-border" />
       <div className="list-container">
