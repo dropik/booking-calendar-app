@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { hot } from "react-hot-loader";
 
 import ErrorLabel from "./ErrorLabel";
+import LabeledTextInput from "./LabeledTextInput";
+import ButtonInput from "./ButtonInput";
+import HeaderRow from "./HeaderRow";
+import ClientRowContent from "./ClientRowContent";
 import ClientsList from "./ClientsList";
 
 import "./DialogWithList.css";
@@ -14,39 +18,20 @@ function FindClientDialogBody(): JSX.Element {
 
   const isValidated = (name.length > 0) || (surname.length > 0);
   const showError = !isValidated && isLiveUpdateEnabled;
-  const inputClassName = !showError ? "" : "invalid";
 
   return (
     <>
       <ErrorLabel show={showError} text="Almeno uno dei campi deve essere non vuoto" />
       <div className="row form-input">
-        <div>
-          <label htmlFor="name" className="label">Nome:</label>
-          <input type={"text"} id="name" className={inputClassName} value={name} onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            setName(event.target.value);
-            setLiveUpdateEnabled(true);
-          }} />
-        </div>
-        <div>
-          <label htmlFor="surname" className="label">Cognome:</label>
-          <input type={"text"} id="surname" className={inputClassName} value={surname} onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            setSurname(event.target.value);
-            setLiveUpdateEnabled(true);
-          }} />
-        </div>
-        <div className="button" onClick={() => {
-          setForceFetchRequest(forceFetchRequest + 1);
-          setLiveUpdateEnabled(true);
-        }}>Cerca</div>
+        <LabeledTextInput id="name" label="Nome" isValid={!showError} value={name} onChange={setName} />
+        <LabeledTextInput id="surname" label="Cognome" isValid={!showError} value={surname} onChange={setSurname} />
+        <ButtonInput onClick={() => setForceFetchRequest(forceFetchRequest + 1)}>Cerca</ButtonInput>
       </div>
       <hr className="search-field-border" />
       <div className="list-container">
-        <div className="row list-header">
-          <div className="first-name">Nome</div>
-          <div className="last-name">Cognome</div>
-          <div className="date-of-birth">DN</div>
-          <div className="booking-name">Prenotazione</div>
-        </div>
+        <HeaderRow>
+          <ClientRowContent client={{ name: "Nome", surname: "Cognome", dateOfBirth: "DN" }} bookingName="Prenotazione" />
+        </HeaderRow>
         <ClientsList
           name={name}
           surname={surname}

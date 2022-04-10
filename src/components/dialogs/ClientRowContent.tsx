@@ -3,7 +3,6 @@ import { hot } from "react-hot-loader";
 
 type Props = {
   client: {
-    id: string,
     name: string,
     surname: string,
     dateOfBirth: string

@@ -40,15 +40,16 @@ function FindBookingDialogBody(): JSX.Element {
   const enableLiveUpdate = useCallback(() => setLiveUpdateEnabled(true), []);
 
   const isValidated = Utils.daysBetweenDates(fromDate, toDate) > 0;
+  const showError = !isValidated && isLiveUpdateEnabled;
   const context: FindBookingDialogContextType = { enableLiveUpdate, forceFetchRequest, isLiveUpdateEnabled, isValidated };
 
   return (
     <FindBookingDialogContext.Provider value={context}>
-      <ErrorLabel show={!isValidated} text="Intervallo selezionato non corretto" />
+      <ErrorLabel show={showError} text="Intervallo selezionato non corretto" />
       <div className="row form-input">
         <LabeledTextInput id="nameOrId" label="Nome / ID" value={nameOrId} onChange={setNameOrId} />
-        <LabeledDateInput id="from" label="Dal" isValid={isValidated} value={fromDate} onChange={setFromDate} />
-        <LabeledDateInput id="to" label="Al" isValid={isValidated} value={toDate} onChange={setToDate} />
+        <LabeledDateInput id="from" label="Dal" isValid={!showError} value={fromDate} onChange={setFromDate} />
+        <LabeledDateInput id="to" label="Al" isValid={!showError} value={toDate} onChange={setToDate} />
         <ButtonInput onClick={() => setForceFetchRequest(forceFetchRequest + 1)}>Cerca</ButtonInput>
       </div>
       <hr className="search-field-border" />
