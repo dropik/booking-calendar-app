@@ -14,7 +14,7 @@ type Props = {
 function LabeledTextInput({ id, label, isValid, value, onChange }: Props): JSX.Element {
 
   return (
-    <LiveUpdateInput>
+    <LiveUpdateInput value={value}>
       <div>
         <label htmlFor={id} className="label">{label}:</label>
         <input

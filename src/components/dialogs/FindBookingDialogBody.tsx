@@ -13,6 +13,7 @@ import BookingRowContent from "./BookingRowContent";
 import BookingsList from "./BookingsList";
 
 import "./DialogWithList.css";
+import LiveUpdateInput from "./LiveUpdateInput";
 
 export type FindBookingDialogContextType = {
   enableLiveUpdate: () => void,
@@ -50,7 +51,9 @@ function FindBookingDialogBody(): JSX.Element {
         <LabeledTextInput id="nameOrId" label="Nome / ID" value={nameOrId} onChange={setNameOrId} />
         <LabeledDateInput id="from" label="Dal" isValid={!showError} value={fromDate} onChange={setFromDate} />
         <LabeledDateInput id="to" label="Al" isValid={!showError} value={toDate} onChange={setToDate} />
-        <ButtonInput onClick={() => setForceFetchRequest(forceFetchRequest + 1)}>Cerca</ButtonInput>
+        <LiveUpdateInput value={forceFetchRequest}>
+          <ButtonInput onClick={() => setForceFetchRequest(forceFetchRequest + 1)}>Cerca</ButtonInput>
+        </LiveUpdateInput>
       </div>
       <hr className="search-field-border" />
       <div className="list-container">
