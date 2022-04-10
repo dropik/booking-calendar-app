@@ -3,27 +3,19 @@ import { hot } from "react-hot-loader";
 
 import * as Api from "../../api";
 
-import ClientButtonRow from "./ClientButtonRow";
 import DialogList from "./DialogList";
+import ClientButtonRow from "./ClientButtonRow";
 
 type Props = {
   name: string,
-  surname: string,
-  forceFetchRequest: number,
-  isLiveUpdateEnabled: boolean,
-  isValidated: boolean
+  surname: string
 };
 
-function ClientsList({ name, surname, forceFetchRequest, isLiveUpdateEnabled, isValidated }: Props): JSX.Element {
+function ClientsList({ name, surname }: Props): JSX.Element {
   const tryFetchDataAsync = useCallback(() => Api.fetchClients(name, surname), [name, surname]);
 
   return (
-    <DialogList
-      tryFetchDataAsync={tryFetchDataAsync}
-      isLiveUpdateEnabled={isLiveUpdateEnabled}
-      isValidated={isValidated}
-      forceFetchRequest={forceFetchRequest}
-    >
+    <DialogList tryFetchDataAsync={tryFetchDataAsync}>
       {(item) => (
         <ClientButtonRow key={item.id} bookingId={item.bookingId} client={item} bookingName={item.bookingName} />
       )}

@@ -26,11 +26,11 @@ type Props = {
   isValidated: boolean,
   errorText: string,
   formInputs: (showError: boolean) => JSX.Element,
-  headerContent: () => JSX.Element,
+  header: () => JSX.Element,
   list: () => JSX.Element
 };
 
-function FindDialogBody({ isValidated, errorText, formInputs, headerContent, list }: Props): JSX.Element {
+function FindDialogBody({ isValidated, errorText, formInputs, header, list }: Props): JSX.Element {
   const [forceFetchRequest, setForceFetchRequest] = useState(0);
   const [isLiveUpdateEnabled, setLiveUpdateEnabled] = useState(false);
   const enableLiveUpdate = useCallback(() => setLiveUpdateEnabled(true), []);
@@ -50,7 +50,7 @@ function FindDialogBody({ isValidated, errorText, formInputs, headerContent, lis
       <hr className="search-field-border" />
       <div className="list-container">
         <HeaderRow>
-          {headerContent()}
+          {header()}
         </HeaderRow>
         {list()}
       </div>

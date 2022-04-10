@@ -31,7 +31,7 @@ function FindBookingDialogBody(): JSX.Element {
           <LabeledDateInput id="to" label="Al" isValid={!showError} value={toDate} onChange={setToDate} />
         </>
       )}
-      headerContent={() => <BookingRowContent data={{ id: "ID", name: "Nome", from: "Dal", to: "Al" }} />}
+      header={() => <BookingRowContent data={{ id: "ID", name: "Nome", from: "Dal", to: "Al" }} />}
       list={() => <BookingsList nameOrId={nameOrId} from={fromDate} to={toDate} />}
     />
   );

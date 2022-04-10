@@ -1,8 +1,7 @@
-import React, { memo, useCallback, useContext } from "react";
+import React, { memo, useCallback } from "react";
 import { hot } from "react-hot-loader";
 
 import * as Api from "../../api";
-import { FindDialogContext } from "./FindDialogBody";
 
 import BookingButtonRow from "./BookingButtonRow";
 import DialogList from "./DialogList";
@@ -14,16 +13,10 @@ type Props = {
 };
 
 function BookingsList({ nameOrId, from, to }: Props): JSX.Element {
-  const { isLiveUpdateEnabled, isValidated, forceFetchRequest } = useContext(FindDialogContext);
   const tryFetchDataAsync = useCallback(() => Api.fetchBookings(nameOrId, from, to), [nameOrId, from, to]);
 
   return (
-    <DialogList
-      tryFetchDataAsync={tryFetchDataAsync}
-      isLiveUpdateEnabled={isLiveUpdateEnabled}
-      isValidated={isValidated}
-      forceFetchRequest={forceFetchRequest}
-    >
+    <DialogList tryFetchDataAsync={tryFetchDataAsync}>
       {(item) => (
         <BookingButtonRow key={item.id} data={item} />
       )}
