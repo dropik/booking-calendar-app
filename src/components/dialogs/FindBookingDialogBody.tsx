@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { createContext, useCallback, useState } from "react";
 import { hot } from "react-hot-loader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
@@ -12,6 +12,12 @@ import BookingsList from "./BookingsList";
 
 import "./DialogWithList.css";
 
+export type FindBookingDialogContextType = {
+  enableLiveUpdate: () => void
+};
+
+export const FindBookingDialogContext = createContext<FindBookingDialogContextType>({ enableLiveUpdate: () => void 0 });
+
 function FindBookingDialogBody(): JSX.Element {
   const currentDate = useCurrentDate();
   const toDateObj = new Date(currentDate);
@@ -21,12 +27,10 @@ function FindBookingDialogBody(): JSX.Element {
   const [toDate, setToDate] = useState(Utils.dateToString(toDateObj));
   const [forceFetchRequest, setForceFetchRequest] = useState(0);
   const [isLiveUpdateEnabled, setLiveUpdateEnabled] = useState(false);
+  const enableLiveUpdate = useCallback(() => setLiveUpdateEnabled(true), []);
 
   const isValidated = Utils.daysBetweenDates(fromDate, toDate) > 0;
-
-  function enableLiveUpdate() {
-    setLiveUpdateEnabled(true);
-  }
+  const context: FindBookingDialogContextType = { enableLiveUpdate };
 
   const errorLabel = isValidated ?
     <></> :
@@ -38,12 +42,12 @@ function FindBookingDialogBody(): JSX.Element {
     );
 
   return (
-    <>
+    <FindBookingDialogContext.Provider value={context}>
       {errorLabel}
       <div className="row form-input">
-        <LabeledTextInput id="nameOrId" name="Nome / ID" value={nameOrId} setValue={setNameOrId} enableLiveUpdate={enableLiveUpdate} />
-        <LabeledDateInput id="from" name="Dal" isValid={isValidated} value={fromDate} setValue={setFromDate} />
-        <LabeledDateInput id="to" name="Al" isValid={isValidated} value={toDate} setValue={setToDate} />
+        <LabeledTextInput id="nameOrId" name="Nome / ID" value={nameOrId} onChange={setNameOrId} />
+        <LabeledDateInput id="from" name="Dal" isValid={isValidated} value={fromDate} onChange={setFromDate} />
+        <LabeledDateInput id="to" name="Al" isValid={isValidated} value={toDate} onChange={setToDate} />
         <div className="button" onClick={() => {
           setForceFetchRequest(forceFetchRequest + 1);
           setLiveUpdateEnabled(true);
@@ -66,7 +70,7 @@ function FindBookingDialogBody(): JSX.Element {
           isValidated={isValidated}
         />
       </div>
-    </>
+    </FindBookingDialogContext.Provider>
   );
 }
 

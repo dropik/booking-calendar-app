@@ -1,20 +1,23 @@
-import React from "react";
+import React, { useContext } from "react";
 import { hot } from "react-hot-loader";
+
+import { FindBookingDialogContext } from "./FindBookingDialogBody";
 
 type Props = {
   id: string,
   name: string,
   value: string,
-  setValue: (newValue: string) => void,
-  enableLiveUpdate: () => void
+  onChange: (newValue: string) => void
 };
 
-function LabeledTextInput({ id, name, value, setValue, enableLiveUpdate }: Props): JSX.Element {
+function LabeledTextInput({ id, name, value, onChange }: Props): JSX.Element {
+  const { enableLiveUpdate } = useContext(FindBookingDialogContext);
+
   return (
     <div>
       <label htmlFor={id} className="label">{name}:</label>
       <input type={"text"} id={id} value={value} onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-        setValue(event.target.value);
+        onChange(event.target.value);
         enableLiveUpdate();
       }} />
     </div>

@@ -9,10 +9,10 @@ type Props = {
   name: string,
   isValid: boolean,
   value: string,
-  setValue: (newValue: string) => void
+  onChange: (newValue: string) => void
 };
 
-function LabeledDateInput({ id, name, isValid, value, setValue}: Props): JSX.Element {
+function LabeledDateInput({ id, name, isValid, value, onChange}: Props): JSX.Element {
   return (
     <div>
       <label htmlFor={id} className="label">{name}:</label>
@@ -22,7 +22,7 @@ function LabeledDateInput({ id, name, isValid, value, setValue}: Props): JSX.Ele
         locale="it"
         dateFormat="dd/MM/yyyy"
         selected={new Date(value)}
-        onChange={(date: Date) => { setValue(Utils.dateToString(date)); }}
+        onChange={(date: Date) => { onChange(Utils.dateToString(date)); }}
       />
     </div>
   );
