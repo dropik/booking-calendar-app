@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { hot } from "react-hot-loader";
-import DatePicker from "react-datepicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 import * as Utils from "../../utils";
 import { useCurrentDate } from "../../redux/hooks";
 
+import LabeledDateInput from "./LabeledDateInput";
 import BookingsList from "./BookingsList";
 
 import "./DialogWithList.css";
@@ -22,7 +22,6 @@ function FindBookingDialogBody(): JSX.Element {
   const [isLiveUpdateEnabled, setLiveUpdateEnabled] = useState(false);
 
   const isValidated = Utils.daysBetweenDates(fromDate, toDate) > 0;
-  const datePickerClassName = isValidated ? "" : "invalid";
 
   const errorLabel = isValidated ?
     <></> :
@@ -44,28 +43,8 @@ function FindBookingDialogBody(): JSX.Element {
             setLiveUpdateEnabled(true);
           }} />
         </div>
-        <div>
-          <label htmlFor="from" className="label">Dal:</label>
-          <DatePicker
-            id="from"
-            className={datePickerClassName}
-            locale="it"
-            dateFormat="dd/MM/yyyy"
-            selected={new Date(fromDate)}
-            onChange={(date: Date) => { setFromDate(Utils.dateToString(date)); }}
-          />
-        </div>
-        <div>
-          <label htmlFor="to" className="label">Al:</label>
-          <DatePicker
-            id="to"
-            className={datePickerClassName}
-            locale="it"
-            dateFormat="dd/MM/yyyy"
-            selected={new Date(toDate)}
-            onChange={(date: Date) => { setToDate(Utils.dateToString(date)); }}
-          />
-        </div>
+        <LabeledDateInput id="from" name="Dal" isValid={isValidated} value={fromDate} setValue={setFromDate} />
+        <LabeledDateInput id="to" name="Al" isValid={isValidated} value={toDate} setValue={setToDate} />
         <div className="button" onClick={() => {
           setForceFetchRequest(forceFetchRequest + 1);
           setLiveUpdateEnabled(true);
