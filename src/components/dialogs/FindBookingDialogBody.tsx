@@ -46,9 +46,9 @@ function FindBookingDialogBody(): JSX.Element {
     <FindBookingDialogContext.Provider value={context}>
       <ErrorLabel show={!isValidated} text="Intervallo selezionato non corretto" />
       <div className="row form-input">
-        <LabeledTextInput id="nameOrId" name="Nome / ID" value={nameOrId} onChange={setNameOrId} />
-        <LabeledDateInput id="from" name="Dal" isValid={isValidated} value={fromDate} onChange={setFromDate} />
-        <LabeledDateInput id="to" name="Al" isValid={isValidated} value={toDate} onChange={setToDate} />
+        <LabeledTextInput id="nameOrId" label="Nome / ID" value={nameOrId} onChange={setNameOrId} />
+        <LabeledDateInput id="from" label="Dal" isValid={isValidated} value={fromDate} onChange={setFromDate} />
+        <LabeledDateInput id="to" label="Al" isValid={isValidated} value={toDate} onChange={setToDate} />
         <ButtonInput onClick={() => setForceFetchRequest(forceFetchRequest + 1)}>Cerca</ButtonInput>
       </div>
       <hr className="search-field-border" />

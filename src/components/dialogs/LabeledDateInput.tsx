@@ -6,16 +6,16 @@ import * as Utils from "../../utils";
 
 type Props = {
   id: string,
-  name: string,
+  label: string,
   isValid: boolean,
   value: string,
   onChange: (newValue: string) => void
 };
 
-function LabeledDateInput({ id, name, isValid, value, onChange}: Props): JSX.Element {
+function LabeledDateInput({ id, label, isValid, value, onChange}: Props): JSX.Element {
   return (
     <div>
-      <label htmlFor={id} className="label">{name}:</label>
+      <label htmlFor={id} className="label">{label}:</label>
       <DatePicker
         id={id}
         className={isValid ? "" : "invalid"}
