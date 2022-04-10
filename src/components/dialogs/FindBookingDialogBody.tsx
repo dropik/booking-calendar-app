@@ -1,7 +1,5 @@
 import React, { createContext, useCallback, useState } from "react";
 import { hot } from "react-hot-loader";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 import * as Utils from "../../utils";
 import { useCurrentDate } from "../../redux/hooks";
@@ -12,6 +10,7 @@ import ButtonInput from "./ButtonInput";
 import BookingsList from "./BookingsList";
 
 import "./DialogWithList.css";
+import ErrorLabel from "./ErrorLabel";
 
 export type FindBookingDialogContextType = {
   enableLiveUpdate: () => void
@@ -33,18 +32,9 @@ function FindBookingDialogBody(): JSX.Element {
   const isValidated = Utils.daysBetweenDates(fromDate, toDate) > 0;
   const context: FindBookingDialogContextType = { enableLiveUpdate };
 
-  const errorLabel = isValidated ?
-    <></> :
-    (
-      <div className="error-label">
-        <FontAwesomeIcon icon={faCircleExclamation} />
-        Intervallo selezionato non corretto
-      </div>
-    );
-
   return (
     <FindBookingDialogContext.Provider value={context}>
-      {errorLabel}
+      <ErrorLabel show={!isValidated} text="Intervallo selezionato non corretto" />
       <div className="row form-input">
         <LabeledTextInput id="nameOrId" name="Nome / ID" value={nameOrId} onChange={setNameOrId} />
         <LabeledDateInput id="from" name="Dal" isValid={isValidated} value={fromDate} onChange={setFromDate} />
