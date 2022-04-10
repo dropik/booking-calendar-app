@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { useCallback } from "react";
 import { hot } from "react-hot-loader";
 
 import * as Api from "../../api";
@@ -23,4 +23,4 @@ function ClientsList({ name, surname }: Props): JSX.Element {
   );
 }
 
-export default memo(hot(module)(ClientsList));
+export default hot(module)(ClientsList);
