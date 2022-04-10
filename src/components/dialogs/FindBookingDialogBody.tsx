@@ -8,6 +8,7 @@ import ErrorLabel from "./ErrorLabel";
 import LabeledTextInput from "./LabeledTextInput";
 import LabeledDateInput from "./LabeledDateInput";
 import ButtonInput from "./ButtonInput";
+import BookingHeaderRow from "./BookingHeaderRow";
 import BookingsList from "./BookingsList";
 
 import "./DialogWithList.css";
@@ -51,12 +52,7 @@ function FindBookingDialogBody(): JSX.Element {
       </div>
       <hr className="search-field-border" />
       <div className="list-container">
-        <div className="row list-header">
-          <div className="id">ID</div>
-          <div className="name">Nome</div>
-          <div className="from">Dal</div>
-          <div className="to">Al</div>
-        </div>
+        <BookingHeaderRow />
         <BookingsList nameOrId={nameOrId} from={fromDate} to={toDate} />
       </div>
     </FindBookingDialogContext.Provider>
