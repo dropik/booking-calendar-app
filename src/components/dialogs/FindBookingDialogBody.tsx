@@ -6,6 +6,7 @@ import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import * as Utils from "../../utils";
 import { useCurrentDate } from "../../redux/hooks";
 
+import LabeledTextInput from "./LabeledTextInput";
 import LabeledDateInput from "./LabeledDateInput";
 import BookingsList from "./BookingsList";
 
@@ -23,6 +24,10 @@ function FindBookingDialogBody(): JSX.Element {
 
   const isValidated = Utils.daysBetweenDates(fromDate, toDate) > 0;
 
+  function enableLiveUpdate() {
+    setLiveUpdateEnabled(true);
+  }
+
   const errorLabel = isValidated ?
     <></> :
     (
@@ -36,13 +41,7 @@ function FindBookingDialogBody(): JSX.Element {
     <>
       {errorLabel}
       <div className="row form-input">
-        <div>
-          <label htmlFor="nameOrId" className="label">Nome / ID:</label>
-          <input type={"text"} id="nameOrId" value={nameOrId} onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            setNameOrId(event.target.value);
-            setLiveUpdateEnabled(true);
-          }} />
-        </div>
+        <LabeledTextInput id="nameOrId" name="Nome / ID" value={nameOrId} setValue={setNameOrId} enableLiveUpdate={enableLiveUpdate} />
         <LabeledDateInput id="from" name="Dal" isValid={isValidated} value={fromDate} setValue={setFromDate} />
         <LabeledDateInput id="to" name="Al" isValid={isValidated} value={toDate} setValue={setToDate} />
         <div className="button" onClick={() => {
