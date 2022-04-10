@@ -3,8 +3,9 @@ import { hot } from "react-hot-loader";
 
 import { useAppDispatch } from "../../redux/hooks";
 import * as DialogSlice from "../../redux/dialogSlice";
+
 import ClientRowContent from "./ClientRowContent";
-import ButtonRow from "./ButtonRow";
+import ButtonInput from "./ButtonInput";
 
 type Props = {
   bookingId: string,
@@ -25,9 +26,9 @@ function ClientButtonRow({ bookingId, client, bookingName }: Props): JSX.Element
   }
 
   return (
-    <ButtonRow onClick={showClient}>
+    <ButtonInput className="row" onClick={showClient}>
       <ClientRowContent client={client} bookingName={bookingName} />
-    </ButtonRow>
+    </ButtonInput>
   );
 }
 

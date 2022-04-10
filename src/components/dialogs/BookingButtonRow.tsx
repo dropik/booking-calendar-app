@@ -5,7 +5,7 @@ import * as Api from "../../api";
 import { useAppDispatch } from "../../redux/hooks";
 import * as DialogSlice from "../../redux/dialogSlice";
 
-import ButtonRow from "./ButtonRow";
+import ButtonInput from "./ButtonInput";
 import BookingRowContent from "./BookingRowContent";
 
 type Props = {
@@ -20,9 +20,9 @@ function BookingButtonRow({ data }: Props): JSX.Element {
   }
 
   return (
-    <ButtonRow onClick={() => { showBooking(data.id); }}>
+    <ButtonInput className="row" onClick={() => { showBooking(data.id); }}>
       <BookingRowContent data={data} />
-    </ButtonRow>
+    </ButtonInput>
   );
 }
 

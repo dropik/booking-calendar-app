@@ -3,12 +3,13 @@ import { hot } from "react-hot-loader";
 
 type Props = {
   children: ReactNode,
+  className?: string,
   onClick: () => void
 };
 
-function ButtonInput({ children, onClick }: Props): JSX.Element {
+function ButtonInput({ children, className, onClick }: Props): JSX.Element {
   return (
-    <div className="button" onClick={onClick}>
+    <div className={`button ${className ? className : ""}`} onClick={onClick}>
       {children}
     </div>
   );
