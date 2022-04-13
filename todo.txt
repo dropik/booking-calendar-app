@@ -1,4 +1,3 @@
-- Police data export. Istat export. City tax calculation. Find person.
 - Tile colour assignment.
 - Real API calls.
 - Input escaping.
