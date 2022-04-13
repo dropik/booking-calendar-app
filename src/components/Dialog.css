@@ -163,6 +163,10 @@
   padding-right: 1rem;
 }
 
+.dialog-table .row .field-label {
+  flex-basis: auto;
+}
+
 .dialog-table .row.centered {
   justify-content: center;
   padding-right: 0;
