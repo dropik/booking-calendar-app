@@ -4,9 +4,11 @@ import { hot } from "react-hot-loader";
 import Header from "./components/Header";
 import Hotel from "./components/Hotel";
 import TableContainer from "./components/TableContainer";
+import OccupationInfo from "./components/OccupationInfo";
+import Sidemenu from "./components/Sidemenu";
+import Dialog from "./components/Dialog";
 
 import "./App.css";
-import OccupationInfo from "./components/OccupationInfo";
 
 function App(): JSX.Element {
   useWindowCursorGrabbingEffect();
@@ -17,6 +19,8 @@ function App(): JSX.Element {
       <Hotel />
       <TableContainer />
       <OccupationInfo />
+      <Sidemenu />
+      <Dialog />
     </div>
   );
 }

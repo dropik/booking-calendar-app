@@ -1,0 +1,84 @@
+.dialog .row.form-input {
+  justify-content: center;
+}
+
+.dialog .search-field-border {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.dialog .list-container {
+  min-height: 12rem;
+  margin-bottom: 1rem;
+}
+
+.dialog .list-container h3 {
+  text-align: center;
+  color: #c9c9c9;
+  font-weight: normal;
+  line-height: 11rem;
+}
+
+.dialog .list-container .row {
+  justify-content: center;
+  line-height: initial;
+  margin-right: 0;
+  margin-left: 0;
+  padding-left: 0;
+  padding-right: 0;
+  border: 0;
+  border-bottom: 1px solid black;
+  background-color: white;
+  color: black;
+}
+
+.dialog .list-container .row.button:hover {
+  color: white;
+}
+
+.dialog .row.list-header {
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.dialog .list-container .row div {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.dialog .list-container .row.list-header div {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.dialog .list-container .id {
+  width: 8rem;
+}
+
+.dialog .list-container .name {
+  width: 14rem;
+}
+
+.dialog .list-container .from {
+  width: 8rem;
+}
+
+.dialog .list-container .to {
+  width: 8rem;
+}
+
+.dialog .list-container .first-name {
+  width: 8rem;
+}
+
+.dialog .list-container .last-name {
+  width: 8rem;
+}
+
+.dialog .list-container .date-of-birth {
+  width: 8rem;
+}
+
+.dialog .list-container .booking-name {
+  width: 14rem;
+}

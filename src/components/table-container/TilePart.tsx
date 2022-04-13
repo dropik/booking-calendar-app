@@ -1,66 +1,77 @@
-import React, { Dispatch, useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import { hot } from "react-hot-loader";
-import { AnyAction } from "@reduxjs/toolkit";
 
 import * as Utils from "../../utils";
 
 import { useAppDispatch, useAppSelector, useColumns, useLeftmostDate } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
-import * as HoveredIdSlice from "../../redux/hoveredIdSlice";
+import * as OccupationInfoSlice from "../../redux/occupationInfoSlice";
 import * as ContextMenuSlice from "../../redux/contextMenuSlice";
 
-import "./TilePart.css";
 import TilePartAlert from "./TilePartAlert";
 
+import "./TilePart.css";
+
 type Props = {
-  x: string,
   y: number,
   tileData: TilesSlice.TileData
 };
 
-function TilePart(props: Props): JSX.Element {
+function TilePart({ y, tileData }: Props): JSX.Element {
   const dispatch = useAppDispatch();
-  const tileId = props.tileData.id;
-  const grabbed = useIsGrabbedTile(tileId);
+  const tileId = tileData.id;
+  const isGrabbed = useAppSelector(state => state.tiles.grabbedMap[tileId]);
   const ref = useRef<HTMLDivElement>(null);
   const leftmostDate = useLeftmostDate();
   const columns = useColumns();
-  const roomType = useRoomTypeByNumber(props.y);
-  const personsInRoomType = usePersonsInRoomType(roomType);
+  const roomType = useRoomTypeByNumber(y);
+  const personsInRoomType = useAppSelector(state => state.roomTypes.data[roomType]);
 
-  const outOfBound = isOutOfBound(props.tileData, leftmostDate, columns);
-  const grabHandler = getGrabHandler(ref, dispatch, tileId, outOfBound);
-  const enterHandler = getEnterHandler(dispatch, tileId);
-  const leaveHandler = getLeaveHandler(dispatch);
-  const className = getClassName(grabbed, outOfBound);
+  const outOfBound = isOutOfBound(tileData, leftmostDate, columns);
+  const className = getClassName(isGrabbed, outOfBound);
 
-  function onContextMenu(event: React.MouseEvent<HTMLDivElement>) {
+  function grabTile(event: React.MouseEvent<HTMLDivElement>) {
     event.preventDefault();
-    event.stopPropagation();
-    dispatch(ContextMenuSlice.showTileContextMenu({ tileId, mouseX: event.pageX, mouseY: event.pageY }));
+    if ((event.button == 0) && !outOfBound && ref.current) {
+      dispatch(TilesSlice.grab({ tileId, mouseY: event.pageY - ref.current.getBoundingClientRect().top }));
+    }
   }
 
-  useBackgroundColourEffect(ref, props.tileData.colour);
+  function showContextMenu(event: React.MouseEvent<HTMLDivElement>) {
+    event.preventDefault();
+    event.stopPropagation();
+    dispatch(ContextMenuSlice.show({ tileId, mouseX: event.pageX, mouseY: event.pageY }));
+  }
+
+  function showInfo(event: React.MouseEvent<HTMLDivElement>) {
+    dispatch(OccupationInfoSlice.show({ hoveredId: tileId, x: event.pageX, y: event.pageY }));
+  }
+
+  function moveInfo(event: React.MouseEvent<HTMLDivElement>) {
+    dispatch(OccupationInfoSlice.move({ x: event.pageX, y: event.pageY }));
+  }
+
+  function hideInfo() {
+    dispatch(OccupationInfoSlice.hide());
+  }
+
+  useBackgroundColourEffect(ref, tileData.colour);
 
   return (
     <div
       ref={ref}
       className={className}
-      onMouseDown={grabHandler}
-      onMouseEnter={enterHandler}
-      onMouseLeave={leaveHandler}
-      onContextMenu={onContextMenu}
+      onMouseDown={grabTile}
+      onMouseEnter={showInfo}
+      onMouseLeave={hideInfo}
+      onMouseMove={moveInfo}
+      onContextMenu={showContextMenu}
     >
-      <span className="tile-persons">{props.tileData.persons}</span>
-      <TilePartAlert personsInRoomType={personsInRoomType} roomType={roomType} tileData={props.tileData} />
+      <span className="tile-persons">{tileData.persons}</span>
+      <TilePartAlert personsInRoomType={personsInRoomType} roomType={roomType} tileData={tileData} />
     </div>
   );
 }
-
-function useIsGrabbedTile(id: string) {
-  return useAppSelector(state => state.tiles.grabbedMap[id]);
-}
-
 
 function useRoomTypeByNumber(roomNumber: number): string {
   return useAppSelector((state) => {
@@ -73,32 +84,6 @@ function useRoomTypeByNumber(roomNumber: number): string {
     }
     return "";
   });
-}
-
-function usePersonsInRoomType(type: string) {
-  return useAppSelector(state => state.roomTypes.data[type]);
-}
-
-function getGrabHandler(
-  ref: React.RefObject<HTMLDivElement>,
-  dispatch: React.Dispatch<AnyAction>,
-  tileId: string,
-  outOfBound: boolean
-): (event: React.MouseEvent<HTMLDivElement>) => void {
-  return (event: React.MouseEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    if ((event.button == 0) && !outOfBound && ref.current) {
-      dispatch(TilesSlice.grab({ tileId, mouseY: event.pageY - ref.current.getBoundingClientRect().top }));
-    }
-  };
-}
-
-function getEnterHandler(dispatch: Dispatch<AnyAction>, tileId: string): () => void {
-  return () => dispatch(HoveredIdSlice.set(tileId));
-}
-
-function getLeaveHandler(dispatch: Dispatch<AnyAction>): () => void {
-  return () => dispatch(HoveredIdSlice.set(undefined));
 }
 
 function isOutOfBound(tileData: TilesSlice.TileData, leftmostDate: string, columns: number): boolean {

@@ -8,10 +8,27 @@
 
 .tile-context-menu div {
   padding: 0.5rem;
-  cursor: pointer;
   border-bottom: 2px solid black;
 }
 
 .tile-context-menu div:hover {
+  background-color: #ebebeb;
+}
+
+.tile-context-menu svg {
+  margin-right: 0.5rem;
+}
+
+.tile-context-menu .remove {
+  color: #c72323;
+}
+
+.tile-context-menu .remove.disabled {
+  cursor: default;
+  color: #c5a4a4;
+  background-color: #ebebeb;
+}
+
+.tile-context-menu .remove.disabled:hover {
   background-color: #ebebeb;
 }

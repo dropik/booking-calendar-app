@@ -12,12 +12,12 @@ type Props = {
   x: string
 };
 
-function UnassignedCell(props: Props): JSX.Element {
-  const hasTilePart = useHasTilePart(props.x, props.tileId);
+function UnassignedCell({ tileId, x }: Props): JSX.Element {
+  const hasTilePart = useHasTilePart(x, tileId);
 
   return (
     <div className="unassigned-cell">
-      <UnassignedTilePart tileId={props.tileId} hasTilePart={hasTilePart} />
+      <UnassignedTilePart tileId={tileId} hasTilePart={hasTilePart} />
     </div>
   );
 }

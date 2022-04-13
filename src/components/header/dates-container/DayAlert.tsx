@@ -9,8 +9,8 @@ type Props = {
   hasUnassignedTiles: boolean
 };
 
-function DayAlert(props: Props): JSX.Element {
-  return props.hasUnassignedTiles ?
+function DayAlert({ hasUnassignedTiles }: Props): JSX.Element {
+  return hasUnassignedTiles ?
     <span
       className="day-alert"
       title="Ci sono occupazioni non assegnati"

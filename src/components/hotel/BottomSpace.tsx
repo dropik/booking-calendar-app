@@ -7,8 +7,8 @@ import "./BottomSpace.css";
 
 function BottomSpace(): JSX.Element {
   const ref = useRef<HTMLDivElement>(null);
-  const offsetHeight = useTableOffsetHeight();
-  const clientHeight = useTableClientHeight();
+  const offsetHeight = useAppSelector(state => state.table.offsetHeight);
+  const clientHeight = useAppSelector(state => state.table.clientHeight);
   const scrollbarWidth = offsetHeight - clientHeight - 1;
 
   useLayoutEffect(() => {
@@ -21,14 +21,6 @@ function BottomSpace(): JSX.Element {
     return (<div ref={ref} className="scrollbar-space"></div>);
   }
   return <></>;
-}
-
-function useTableOffsetHeight() {
-  return useAppSelector(state => state.table.offsetHeight);
-}
-
-function useTableClientHeight() {
-  return useAppSelector(state => state.table.clientHeight);
 }
 
 export default hot(module)(BottomSpace);

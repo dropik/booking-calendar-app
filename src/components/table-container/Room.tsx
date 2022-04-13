@@ -1,6 +1,5 @@
 import React from "react";
 import { hot } from "react-hot-loader";
-import { AnyAction } from "@reduxjs/toolkit";
 
 import { useAppDispatch, useDates } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
@@ -15,16 +14,21 @@ type Props = {
   isLast: boolean
 };
 
-function Room(props: Props): JSX.Element {
+function Room({ y, isFirst, isLast }: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const dates = useDates();
 
-  const cells = getCells(dates, props.y);
-  const dropHandler = getDropHandler(dispatch, props.y);
-  const className = getClassName(props.isFirst, props.isLast);
+  const cells = getCells(dates, y);
+  const className = getClassName(isFirst, isLast);
+
+  function tryDropTile(event: React.MouseEvent<HTMLDivElement>) {
+    if (event.button == 0) {
+      dispatch(TilesSlice.move({ newY: y }));
+    }
+  }
 
   return (
-    <div className={className} onMouseUp={dropHandler}>{cells}</div>
+    <div className={className} onMouseUp={tryDropTile}>{cells}</div>
   );
 }
 
@@ -40,17 +44,6 @@ function getCells(dates: Generator<string, void, void>, y: number): JSX.Element[
     );
   }
   return cells;
-}
-
-function getDropHandler(
-  dispatch: React.Dispatch<AnyAction>,
-  y: number
-): (event: React.MouseEvent<HTMLDivElement>) => void {
-  return (event: React.MouseEvent<HTMLDivElement>) => {
-    if (event.button == 0) {
-      dispatch(TilesSlice.move({ newY: y }));
-    }
-  };
 }
 
 function getClassName(isFirst: boolean, isLast: boolean): string {

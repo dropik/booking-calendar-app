@@ -9,7 +9,7 @@
 
 .date-input {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   height: 4rem;
   line-height: 4rem;
 }

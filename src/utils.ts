@@ -22,3 +22,7 @@ export function getDateShift(date: string | Date, shift: number): string {
 export function getFirstLetterUppercase(str: string): string {
   return str[0].toLocaleUpperCase() + str.substring(1, str.length);
 }
+
+export function getFullRoomType(entity: string, roomType: string): string {
+  return `${getFirstLetterUppercase(entity)} (${getFirstLetterUppercase(roomType)})`;
+}

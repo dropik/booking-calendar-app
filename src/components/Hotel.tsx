@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useMemo, useRef } from "react";
+import React, { Fragment, useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import { hot } from "react-hot-loader";
 
 import { useAppDispatch, useAppSelector, useHotelData } from "../redux/hooks";
@@ -14,7 +14,7 @@ import "./Hotel.css";
 function Hotel(): JSX.Element {
   const dispatch = useAppDispatch();
   const hotelData = useHotelData();
-  const scrollTop = useScrollTop();
+  const scrollTop = useAppSelector(state => state.scroll.top);
   const rows = useRowsMemo(hotelData);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -26,33 +26,26 @@ function Hotel(): JSX.Element {
     <div className="hotel-container">
       <div ref={ref} className="hotel">
         {rows}
+        <BottomSpace key="bottom-space" />
       </div>
     </div>)
   ;
 }
 
-function useScrollTop() {
-  return useAppSelector(state => state.scroll.top);
-}
-
 function useRowsMemo(hotelData: HotelSlice.HotelData): JSX.Element[] {
-  return useMemo(() => {
-    const rows: JSX.Element[] = [];
-
-    hotelData.floors.forEach((floor, floorIndex) => {
-      rows.push(
-        <Floor key={floor.name} name={floor.name} isFollowing={floorIndex > 0} />
-      );
-
-      floor.rooms.forEach((room, roomIndex) => {
-        const isLast = (floorIndex === hotelData.floors.length - 1) && (roomIndex === floor.rooms.length - 1);
-        rows.push(<RoomNumber number={room.number} key={room.number} isLast={isLast} />);
-      });
-    });
-    rows.push(<BottomSpace key="bottom-space" />);
-
-    return rows;
-  }, [hotelData.floors]);
+  return useMemo(() => (
+    hotelData.floors.map((floor, floorIndex) => (
+      <Fragment key={floor.name}>
+        <Floor name={floor.name} isFollowing={floorIndex > 0} />
+        {
+          floor.rooms.map((room, roomIndex) => {
+            const isLast = (floorIndex === hotelData.floors.length - 1) && (roomIndex === floor.rooms.length - 1);
+            return (<RoomNumber key={room.number} number={room.number} isLast={isLast} />);
+          })
+        }
+      </Fragment>
+    ))
+  ), [hotelData.floors]);
 }
 
 function useHotelDataFetchingEffect(dispatch: React.Dispatch<HotelSlice.FetchAsyncAction>): void {

@@ -1,0 +1,15 @@
+.dialog .client-dialog-body div.field-label {
+  flex-basis: auto;
+  width: 8rem;
+}
+
+.dialog .client-dialog-body .list-container {
+  min-height: auto;
+}
+
+.dialog .client-dialog-body .list-container .row {
+  margin-left: 1rem;
+  margin-right: 1rem;
+  box-shadow: 0 0 4px 1px black;
+  border: 0;
+}

@@ -1,16 +1,31 @@
-import React from "react";
+import React, { useRef } from "react";
 import { hot } from "react-hot-loader";
 
-import { useAppSelector } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
 
 import "./ConnectionError.css";
 
 function ConnectionError(): JSX.Element {
-  const saveStatus = useAppSelector((state) => state.saveChanges.status);
+  const dispatch = useAppDispatch();
+  const showError = useAppSelector((state) => state.connectionError.showError);
+  const ref = useRef<HTMLDivElement>(null);
 
-  if (saveStatus === "failed") {
-    return <div className="connection-error">Errore di connessione</div>;
+  function handleAnimationEnd() {
+    if (ref.current) {
+      const classList = ref.current.classList;
+      if (classList.contains("clip1")) {
+        classList.remove("clip1");
+      } else if (classList.contains("clip2")) {
+        dispatch(ConnectionErrorSlice.hide());
+      }
+    }
   }
+
+  if (showError) {
+    return <div ref={ref} onAnimationEnd={handleAnimationEnd} className="connection-error clip1 clip2">Errore di connessione</div>;
+  }
+
   return <></>;
 }
 

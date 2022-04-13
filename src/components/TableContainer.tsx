@@ -13,9 +13,9 @@ import Table from "./table-container/Table";
 import FetchTiles from "./table-container/FetchTiles";
 import GrabbedTile from "./table-container/GrabbedTile";
 import TileContextMenu from "./table-container/TileContextMenu";
+import ConnectionError from "./table-container/ConnectionError";
 
 import "./TableContainer.css";
-import ConnectionError from "./table-container/ConnectionError";
 
 function TableContainer(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -23,29 +23,9 @@ function TableContainer(): JSX.Element {
   const hotelData = useHotelData();
   const leftmostDate = useLeftmostDate();
   const fetchReason = useFetchReason();
-
-  const scrollHanlder = getScrollHandler(dispatch);
-
-  useTableDimentionsUpdateEffect(ref, dispatch, hotelData);
-  useInitialScrollLeftEffect(ref, hotelData, leftmostDate, fetchReason);
-
   const tableContents = useTableContentsMemo();
 
-  return (
-    <div ref={ref} className="table-container" onScroll={scrollHanlder}>
-      {tableContents}
-    </div>
-  );
-}
-
-function useFetchReason(): "changeDate" | "expand" {
-  return useAppSelector((state) => state.table.fetchReason);
-}
-
-function getScrollHandler(
-  dispatch: React.Dispatch<AnyAction>
-): (event: React.UIEvent<HTMLDivElement>) => void {
-  return (event: React.UIEvent<HTMLDivElement>) => {
+  function handleScroll(event: React.UIEvent<HTMLDivElement>) {
     const scrollTop = event.currentTarget.scrollTop;
     const scrollLeft = event.currentTarget.scrollLeft;
 
@@ -61,7 +41,20 @@ function getScrollHandler(
     ) {
       dispatch(TableSlice.expandRight());
     }
-  };
+  }
+
+  useTableDimentionsUpdateEffect(ref, dispatch, hotelData);
+  useInitialScrollLeftEffect(ref, hotelData, leftmostDate, fetchReason);
+
+  return (
+    <div ref={ref} className="table-container" onScroll={handleScroll}>
+      {tableContents}
+    </div>
+  );
+}
+
+function useFetchReason(): "changeDate" | "expand" {
+  return useAppSelector((state) => state.table.fetchReason);
 }
 
 function useInitialScrollLeftEffect(

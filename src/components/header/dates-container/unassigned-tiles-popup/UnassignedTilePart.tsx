@@ -1,11 +1,11 @@
 import React, { useLayoutEffect, useRef } from "react";
 import { hot } from "react-hot-loader";
-import { AnyAction } from "@reduxjs/toolkit";
 
 import { useAppDispatch, useAppSelector, useColumns, useLeftmostDate } from "../../../../redux/hooks";
 import * as Utils from "../../../../utils";
 import * as TilesSlice from "../../../../redux/tilesSlice";
-import * as HoveredIdSlice from "../../../../redux/hoveredIdSlice";
+import * as OccupationInfoSlice from "../../../../redux/occupationInfoSlice";
+import * as ContextMenuSlice from "../../../../redux/contextMenuSlice";
 
 import "./UnassignedTilePart.css";
 
@@ -14,40 +14,69 @@ type Props = {
   tileId: string
 };
 
-function UnassignedTilePart(props: Props): JSX.Element {
+function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.Element {
   const dispatch = useAppDispatch();
-  const tileData = useTileData(props.tileId);
+  const tileData = useAppSelector((state) => state.tiles.data[tileId]);
   const leftmostDate = useLeftmostDate();
   const columns = useColumns();
   const ref = useRef<HTMLDivElement>(null);
 
   useBackgroundColorEffect(ref, tileData);
 
-  if (!props.hasTilePart) {
+  if (!hasTilePart) {
     return <></>;
   }
 
   const outOfBound = isOutOfBound(tileData, leftmostDate, columns);
-  const grabHandler = getGrabHandler(ref, dispatch, props.tileId, outOfBound);
-  const enterHandler = getEnterHandler(dispatch, props.tileId);
-  const leaveHandler = getLeaveHandler(dispatch);
   const className = getClassName(outOfBound);
+
+  function showContextMenu(event: React.MouseEvent<HTMLDivElement>) {
+    event.preventDefault();
+    event.stopPropagation();
+    dispatch(ContextMenuSlice.show({
+      tileId,
+      mouseX: event.pageX,
+      mouseY: event.pageY
+    }));
+  }
+
+  function grabTile(event: React.MouseEvent<HTMLDivElement>) {
+    dispatch(OccupationInfoSlice.hide());
+    if (!outOfBound && ref.current && (event.button === 0)) {
+      dispatch(TilesSlice.grab({
+        tileId,
+        mouseY: event.pageY - ref.current.getBoundingClientRect().top
+      }));
+    } else if (event.button === 2) {
+      event.stopPropagation();
+    }
+  }
+
+  function showInfo(event: React.MouseEvent<HTMLDivElement>) {
+    dispatch(OccupationInfoSlice.show({ hoveredId: tileId, x: event.pageX, y: event.pageY }));
+  }
+
+  function updateInfoPos(event: React.MouseEvent<HTMLDivElement>) {
+    dispatch(OccupationInfoSlice.move({ x: event.pageX, y: event.pageY }));
+  }
+
+  function hideInfo() {
+    dispatch(OccupationInfoSlice.hide());
+  }
 
   return (
     <div
       ref={ref}
-      onMouseDown={grabHandler}
-      onMouseEnter={enterHandler}
-      onMouseLeave={leaveHandler}
       className={className}
+      onMouseDown={grabTile}
+      onMouseEnter={showInfo}
+      onMouseLeave={hideInfo}
+      onMouseMove={updateInfoPos}
+      onContextMenu={showContextMenu}
     >
-      <b>{tileData.persons}</b>
+      {tileData.persons}
     </div>
   );
-}
-
-function useTileData(tileId: string): TilesSlice.TileData {
-  return useAppSelector((state) => state.tiles.data[tileId]);
 }
 
 function useBackgroundColorEffect(ref: React.RefObject<HTMLDivElement>, tileData: TilesSlice.TileData): void {
@@ -56,28 +85,6 @@ function useBackgroundColorEffect(ref: React.RefObject<HTMLDivElement>, tileData
       ref.current.style.backgroundColor = tileData.colour;
     }
   }, [ref, tileData]);
-}
-
-function getGrabHandler(
-  ref: React.RefObject<HTMLDivElement>,
-  dispatch: React.Dispatch<AnyAction>,
-  tileId: string,
-  outOfBound: boolean
-): (event: React.MouseEvent<HTMLDivElement>) => void {
-  return (event: React.MouseEvent<HTMLDivElement>) => {
-    if (!outOfBound && ref.current) {
-      dispatch(HoveredIdSlice.set(undefined));
-      dispatch(TilesSlice.grab({ tileId: tileId, mouseY: event.pageY - ref.current.getBoundingClientRect().top }));
-    }
-  };
-}
-
-function getEnterHandler(dispatch: React.Dispatch<AnyAction>, tileId: string): () => void {
-  return () => dispatch(HoveredIdSlice.set(tileId));
-}
-
-function getLeaveHandler(dispatch: React.Dispatch<AnyAction>): () => void {
-  return () => dispatch(HoveredIdSlice.set(undefined));
 }
 
 function isOutOfBound(tileData: TilesSlice.TileData, leftmostDate: string, columns: number): boolean {
