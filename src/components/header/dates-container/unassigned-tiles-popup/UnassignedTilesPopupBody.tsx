@@ -12,10 +12,10 @@ type Props = {
   tilesPerSelectedDay: { [key: string]: string }
 }
 
-function UnassignedTilesPopupBody(props: Props): JSX.Element {
-  const left = useLeftShift(props.leftmostSelectedTileDate);
+function UnassignedTilesPopupBody({ leftmostSelectedTileDate, tilesPerSelectedDay }: Props): JSX.Element {
+  const left = useLeftShift(leftmostSelectedTileDate);
   const ref = useRef<HTMLDivElement>(null);
-  const rows = useRowsMemo(props.tilesPerSelectedDay, props.leftmostSelectedTileDate);
+  const rows = useRowsMemo(tilesPerSelectedDay, leftmostSelectedTileDate);
 
   useScrollEffect(ref, left);
 

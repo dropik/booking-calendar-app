@@ -6,7 +6,7 @@ import Hotel from "./components/Hotel";
 import TableContainer from "./components/TableContainer";
 import OccupationInfo from "./components/OccupationInfo";
 import Sidemenu from "./components/Sidemenu";
-import DialogMaster from "./components/Dialog";
+import Dialog from "./components/Dialog";
 
 import "./App.css";
 
@@ -20,7 +20,7 @@ function App(): JSX.Element {
       <TableContainer />
       <OccupationInfo />
       <Sidemenu />
-      <DialogMaster />
+      <Dialog />
     </div>
   );
 }

@@ -29,12 +29,7 @@ function useDayCellsMemo(dates: Generator<string, void, void>): JSX.Element[] {
   return useMemo(() => {
     const dayCells: JSX.Element[] = [];
     for (const date of dates) {
-      dayCells.push(
-        <Day
-          key={date}
-          x={date}
-        />
-      );
+      dayCells.push(<Day key={date} x={date} />);
     }
     return dayCells;
   }, [dates]);

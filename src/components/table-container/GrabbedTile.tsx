@@ -10,8 +10,8 @@ import "./GrabbedTile.css";
 
 function GrabbedTile(): JSX.Element {
   const dispatch = useAppDispatch();
-  const grabbedTileId = useGrabbedTile();
-  const grabbedMouseY = useGrabbedMouseY();
+  const grabbedTileId = useAppSelector(state => state.tiles.grabbedTile);
+  const grabbedMouseY = useAppSelector(state => state.tiles.mouseYOnGrab);
   const tileData = useTileData(grabbedTileId);
   const left = useLeftShift(tileData?.from);
   const ref = useRef<HTMLDivElement>(null);
@@ -27,14 +27,6 @@ function GrabbedTile(): JSX.Element {
   const cells = getCells(tileData);
 
   return (<div ref={ref} className="grabbed-tile">{cells}</div>);
-}
-
-function useGrabbedTile(): string | undefined {
-  return useAppSelector(state => state.tiles.grabbedTile);
-}
-
-function useGrabbedMouseY(): number {
-  return useAppSelector(state => state.tiles.mouseYOnGrab);
 }
 
 function useBackgroundColorEffect(ref: React.RefObject<HTMLDivElement>, tileData: TilesSlice.TileData | undefined): void {

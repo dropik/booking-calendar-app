@@ -8,14 +8,14 @@ type Props = {
   isFollowing: boolean
 };
 
-function Floor(props: Props): JSX.Element {
+function Floor({ name, isFollowing }: Props): JSX.Element {
   let className = "floor";
-  if (props.isFollowing) {
+  if (isFollowing) {
     className += " floor-following";
   }
-  const name = props.name[0].toLocaleUpperCase() + props.name.substring(1, props.name.length);
+  const fullName = name[0].toLocaleUpperCase() + name.substring(1, name.length);
 
-  return <div className={className}>{name}</div>;
+  return <div className={className}>{fullName}</div>;
 }
 
 export default hot(module)(Floor);

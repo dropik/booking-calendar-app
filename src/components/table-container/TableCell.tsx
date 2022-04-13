@@ -13,22 +13,22 @@ type Props = {
   y: number
 };
 
-function TableCell(props: Props): JSX.Element {
-  const tileData = useTileDataAt(props.x, props.y);
+function TableCell({ x, y }: Props): JSX.Element {
+  const tileData = useTileDataAt(x, y);
 
-  const tile: JSX.Element[] = [];
-  if (tileData !== undefined) {
-    tile.push(
-      <TilePart
-        key="tile"
-        x={props.x}
-        y={props.y}
-        tileData={tileData}
-      />
-    );
-  }
-
-  return <div className="table-cell">{tile}</div>;
+  return (
+    <div className="table-cell">
+      {
+        tileData ?
+          <TilePart
+            key="tile"
+            y={y}
+            tileData={tileData}
+          /> :
+          <></>
+      }
+    </div>
+  );
 }
 
 function useTileDataAt(x: string, y: number): TilesSlice.TileData | undefined {

@@ -11,7 +11,7 @@ function ConnectionError(): JSX.Element {
   const showError = useAppSelector((state) => state.connectionError.showError);
   const ref = useRef<HTMLDivElement>(null);
 
-  function onAnimationEnd() {
+  function handleAnimationEnd() {
     if (ref.current) {
       const classList = ref.current.classList;
       if (classList.contains("clip1")) {
@@ -23,7 +23,7 @@ function ConnectionError(): JSX.Element {
   }
 
   if (showError) {
-    return <div ref={ref} onAnimationEnd={onAnimationEnd} className="connection-error clip1 clip2">Errore di connessione</div>;
+    return <div ref={ref} onAnimationEnd={handleAnimationEnd} className="connection-error clip1 clip2">Errore di connessione</div>;
   }
 
   return <></>;

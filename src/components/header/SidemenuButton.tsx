@@ -11,13 +11,13 @@ import "./SidemenuButton.css";
 function SidemenuButton(): JSX.Element {
   const dispatch = useAppDispatch();
 
-  function onClick() {
+  function showSidemenu() {
     dispatch(SidemenuSlice.show());
   }
 
   return (
     <div className="sidemenu-button">
-      <FontAwesomeIcon className="button" icon={faBars} onClick={onClick} />
+      <FontAwesomeIcon className="button" icon={faBars} onClick={showSidemenu} />
     </div>
   );
 }

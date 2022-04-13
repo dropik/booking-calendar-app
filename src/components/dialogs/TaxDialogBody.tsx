@@ -5,8 +5,8 @@ import { useAppDispatch, useCurrentDate } from "../../redux/hooks";
 import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
 import * as Api from "../../api";
 import * as Utils from "../../utils";
-
 import { DialogContainerContext } from "./DialogContainer";
+
 import ErrorLabel from "./ErrorLabel";
 import LabeledDateInput from "./LabeledDateInput";
 import ButtonInput from "./ButtonInput";
@@ -45,10 +45,9 @@ function TaxDialogBody(): JSX.Element {
     }
   }
 
-  let content: JSX.Element;
   switch (dialogState) {
   case "fill":
-    content = (
+    return (
       <>
         <ErrorLabel show={!isValidated} text="Intervallo selezionato non corretto" />
         <div className="row">
@@ -58,10 +57,9 @@ function TaxDialogBody(): JSX.Element {
         </div>
       </>
     );
-    break;
 
   case "loading":
-    content = (
+    return (
       <LoadingDataWrapper data={cityTaxData}>
         {(data) => (
           <div className="dialog-table">
@@ -75,10 +73,7 @@ function TaxDialogBody(): JSX.Element {
         )}
       </LoadingDataWrapper>
     );
-    break;
   }
-
-  return content;
 }
 
 export default hot(module)(TaxDialogBody);

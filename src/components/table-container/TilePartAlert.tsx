@@ -13,12 +13,12 @@ type Props = {
   tileData: TilesSlice.TileData
 }
 
-function TilePartAlert(props: Props): JSX.Element {
+function TilePartAlert({ personsInRoomType, roomType, tileData }: Props): JSX.Element {
   let className = "tile-alert";
   let title = "";
 
-  if (props.personsInRoomType.includes(props.tileData.persons)) {
-    if (props.roomType !== props.tileData.roomType) {
+  if (personsInRoomType.includes(tileData.persons)) {
+    if (roomType !== tileData.roomType) {
       className += " warning";
       title = "Tipologia della stanza diversa da quella prenotata";
     } else return <></>;

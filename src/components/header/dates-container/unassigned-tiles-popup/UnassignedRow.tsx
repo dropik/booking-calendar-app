@@ -13,11 +13,11 @@ type Props = {
   leftmostSelectedTileDate: string,
 };
 
-function UnassignedRow(props: Props): JSX.Element {
+function UnassignedRow({ tileId, leftmostSelectedTileDate }: Props): JSX.Element {
   const rightmostSelectedTileDate = useRightmostSelectedTileDate();
 
-  const days = getDaysCount(props.leftmostSelectedTileDate, rightmostSelectedTileDate);
-  const cells = useCellsMemo(props.tileId, props.leftmostSelectedTileDate, days);
+  const days = getDaysCount(leftmostSelectedTileDate, rightmostSelectedTileDate);
+  const cells = useCellsMemo(tileId, leftmostSelectedTileDate, days);
 
   return (<div className="unassigned-row">{cells}</div>);
 }

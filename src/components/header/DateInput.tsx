@@ -1,6 +1,5 @@
 import React from "react";
 import { hot } from "react-hot-loader";
-import { AnyAction } from "@reduxjs/toolkit";
 import DatePicker, { registerLocale } from "react-datepicker";
 import it from "date-fns/locale/it";
 
@@ -20,7 +19,11 @@ function DateInput(): JSX.Element {
   const dispatch = useAppDispatch();
   const currentDate = useCurrentDate();
 
-  const dateChangeHandler = getDateChangeHandler(dispatch);
+  function changeTableDate(date: Date) {
+    if (date !== null) {
+      dispatch(TableSlice.changeDate({ date: Utils.dateToString(date) }));
+    }
+  }
 
   return (
     <>
@@ -30,20 +33,12 @@ function DateInput(): JSX.Element {
           locale="it"
           dateFormat="dd/MM/yyyy"
           selected={new Date(currentDate)}
-          onChange={dateChangeHandler}
+          onChange={changeTableDate}
         />
       </div>
       <SaveAndReset />
     </>
   );
-}
-
-function getDateChangeHandler(dispatch: React.Dispatch<AnyAction>): (date: Date) => void {
-  return (date: Date) => {
-    if (date !== null) {
-      dispatch(TableSlice.changeDate({ date: Utils.dateToString(date) }));
-    }
-  };
 }
 
 export default hot(module)(DateInput);

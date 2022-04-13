@@ -15,12 +15,7 @@ function TileContextMenu(): JSX.Element {
   const dispatch = useAppDispatch();
   const ref = useRef<HTMLDivElement>(null);
   const tileId = useAppSelector((state) => state.contextMenu.tileId);
-  const isUnassigned = useAppSelector((state) => {
-    if (tileId) {
-      const tile = state.tiles.data[tileId];
-      return tile.roomNumber === undefined;
-    }
-  });
+  const isUnassigned = useIsUnassigned(tileId);
   const mouseX = useAppSelector((state) => state.contextMenu.mouseX);
   const mouseY = useAppSelector((state) => state.contextMenu.mouseY);
 
@@ -31,32 +26,45 @@ function TileContextMenu(): JSX.Element {
     return <></>;
   }
 
-  let removeClassName = "button remove";
-  if (isUnassigned) {
-    removeClassName += " disabled";
-  }
+  const removeClassName = getRemoveClassName(isUnassigned);
 
-  function getInfo() {
+  function showInfoDialog() {
     if (tileId) {
       dispatch(DialogSlice.showBookingDialog({ tileId }));
     }
     dispatch(ContextMenuSlice.hide());
   }
 
-  const remove = getRemoveHandler(dispatch, tileId, isUnassigned);
+  function removeOccupation() {
+    if (!isUnassigned) {
+      if (tileId) {
+        dispatch(TilesSlice.removeAssignment({ tileId }));
+      }
+      dispatch(ContextMenuSlice.hide());
+    }
+  }
 
   return (
-    <div ref={ref} onMouseDown={onMouseDown} className="tile-context-menu">
-      <div className="button" onClick={getInfo}>
+    <div ref={ref} onMouseDown={stopMouseEventPropagation} className="tile-context-menu">
+      <div className="button" onClick={showInfoDialog}>
         <FontAwesomeIcon icon={faCircleInfo} />
         Informazioni
       </div>
-      <div className={removeClassName} onClick={remove}>
+      <div className={removeClassName} onClick={removeOccupation}>
         <FontAwesomeIcon icon={faTrashCan} />
         Rimuovere occupazione
       </div>
     </div>
   );
+}
+
+function useIsUnassigned(tileId: string | undefined): boolean | undefined {
+  return useAppSelector((state) => {
+    if (tileId) {
+      const tile = state.tiles.data[tileId];
+      return tile.roomNumber === undefined;
+    }
+  });
 }
 
 function useContextMenuPositionEffect(ref: React.RefObject<HTMLDivElement>, mouseX: number, mouseY: number): void {
@@ -78,18 +86,15 @@ function useHideContextOnClickOutside(dispatch: React.Dispatch<AnyAction>): void
   }, [dispatch]);
 }
 
-function getRemoveHandler(dispatch: React.Dispatch<AnyAction>, tileId: string, isUnassigned: boolean): () => void {
-  return () => {
-    if (!isUnassigned) {
-      if (tileId) {
-        dispatch(TilesSlice.removeAssignment({ tileId }));
-      }
-      dispatch(ContextMenuSlice.hide());
-    }
-  };
+function getRemoveClassName(isUnassigned: boolean): string {
+  let removeClassName = "button remove";
+  if (isUnassigned) {
+    removeClassName += " disabled";
+  }
+  return removeClassName;
 }
 
-function onMouseDown(event: React.MouseEvent<HTMLDivElement>): void {
+function stopMouseEventPropagation(event: React.MouseEvent<HTMLDivElement>): void {
   event.stopPropagation();
 }
 
