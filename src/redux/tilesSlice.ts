@@ -21,8 +21,10 @@ export type TileData = {
 
 export type ChangesMap = {
   [key: string]: {
-    originalRoom: number | undefined,
-    newRoom: number | undefined
+    originalRoom?: number,
+    newRoom?: number,
+    originalColour?: string,
+    newColour?: string
   }
 };
 
@@ -44,6 +46,9 @@ export type State = {
   grabbedMap: {
     [key: string]: boolean
   },
+  bookingsMap: {
+    [key: string]: string[]
+  },
   changesMap: ChangesMap,
   grabbedTile?: string,
   selectedDate?: string
@@ -56,6 +61,7 @@ const initialState: State = {
   assignedMap: { },
   unassignedMap: { },
   grabbedMap: { },
+  bookingsMap: { },
   changesMap: { },
   mouseYOnGrab: 0
 };
@@ -103,6 +109,21 @@ export const tilesSlice = createSlice({
     undoChanges: (state) => {
       unassignChangedTiles(state);
       reassignTiles(state);
+    },
+    setColour: (state, action: PayloadAction<{ tileId: string, colour: string }>) => {
+      const booking = state.data[action.payload.tileId].bookingId;
+      state.bookingsMap[booking].forEach((tileId) => {
+        if (state.changesMap[tileId] === undefined) {
+          state.changesMap[tileId] = {
+            originalColour: state.data[tileId].colour
+          };
+        } else if (state.changesMap[tileId].originalColour === undefined) {
+          state.changesMap[tileId].originalColour = state.data[tileId].colour;
+        }
+        state.changesMap[tileId].newColour = action.payload.colour;
+        state.data[tileId].colour = action.payload.colour;
+        checkChangeReturnedToOriginal(state, tileId);
+      });
     }
   },
   extraReducers: (builder) => {
@@ -128,6 +149,10 @@ function addFetchedTiles(state: WritableDraft<State>, tiles: TileData[]): void {
   tiles.forEach(tile => {
     state.data[tile.id] = tile;
     state.grabbedMap[tile.id] = false;
+    if (state.bookingsMap[tile.bookingId] === undefined) {
+      state.bookingsMap[tile.bookingId] = [];
+    }
+    state.bookingsMap[tile.bookingId].push(tile.id);
     const roomNumber = tile.roomNumber;
     if (roomNumber !== undefined) {
       if (state.assignedMap[roomNumber] === undefined) {
@@ -190,7 +215,7 @@ function tryRemoveAssignment(state: WritableDraft<State>, action: PayloadAction<
       dateCounter.setDate(dateCounter.getDate() + 1);
     }
 
-    setChange(state, tileId, tileData.roomNumber, undefined);
+    saveRoomChange(state, tileId, tileData.roomNumber, undefined);
     tileData.roomNumber = undefined;
   }
 }
@@ -235,6 +260,11 @@ function reassignTiles(state: WritableDraft<State>): void {
       }
     }
 
+    const originalColour = state.changesMap[tileId].originalColour;
+    if (originalColour) {
+      state.data[tileId].colour = originalColour;
+    }
+
     delete state.changesMap[tileId];
   }
 }
@@ -242,7 +272,8 @@ function reassignTiles(state: WritableDraft<State>): void {
 function checkChangeReturnedToOriginal(state: WritableDraft<State>, tileId: string): void {
   if (
     state.changesMap[tileId] &&
-    (state.changesMap[tileId].originalRoom === state.changesMap[tileId].newRoom)
+    (state.changesMap[tileId].originalRoom === state.changesMap[tileId].newRoom) &&
+    (state.changesMap[tileId].originalColour === state.changesMap[tileId].newColour)
   ) {
     delete state.changesMap[tileId];
   }
@@ -271,7 +302,7 @@ function moveTile(
     dateCounter.setDate(dateCounter.getDate() + 1);
   }
 
-  setChange(state, tileId, state.data[tileId].roomNumber, newY);
+  saveRoomChange(state, tileId, state.data[tileId].roomNumber, newY);
   state.data[tileId].roomNumber = newY;
 }
 
@@ -303,11 +334,11 @@ function assignTile(state: WritableDraft<State>, tileId: string, newY: number): 
     dateCounter.setDate(dateCounter.getDate() + 1);
   }
 
-  setChange(state, tileId, state.data[tileId].roomNumber, newY);
+  saveRoomChange(state, tileId, state.data[tileId].roomNumber, newY);
   state.data[tileId].roomNumber = newY;
 }
 
-function setChange(state: WritableDraft<State>, tileId: string, prevY: number | undefined, newY: number | undefined): void {
+function saveRoomChange(state: WritableDraft<State>, tileId: string, prevY: number | undefined, newY: number | undefined): void {
   if (!state.changesMap[tileId]) {
     state.changesMap[tileId] = {
       originalRoom: prevY,
