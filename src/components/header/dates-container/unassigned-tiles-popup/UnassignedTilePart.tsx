@@ -90,7 +90,7 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
       }
       {
         isShowContextMenu ?
-          <TileContextMenu tileId={tileId} x={mousePos.x} y={mousePos.y} onHide={contextMenuHideCallback} /> :
+          <TileContextMenu tileId={tileId} x={mousePos.x} y={mousePos.y} onHide={contextMenuHideCallback} isOutOfBound={outOfBound} /> :
           <></>
       }
     </div>

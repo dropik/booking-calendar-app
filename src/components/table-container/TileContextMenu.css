@@ -16,6 +16,15 @@
   background-color: #ebebeb;
 }
 
+.tile-context-menu div.disabled {
+  cursor: default;
+  background-color: #ebebeb;
+}
+
+.tile-context-menu div.disabled:hover {
+  background-color: #ebebeb;
+}
+
 .tile-context-menu svg {
   margin-right: 0.5rem;
 }
@@ -25,11 +34,17 @@
 }
 
 .tile-context-menu .remove.disabled {
-  cursor: default;
   color: #c5a4a4;
-  background-color: #ebebeb;
 }
 
-.tile-context-menu .remove.disabled:hover {
-  background-color: #ebebeb;
+.tile-context-menu .assign-colour .icon {
+  border-radius: 1rem;
+  display: inline-block;
+  border: 2px solid black;
+  margin-right: 0.5rem;
+  vertical-align: bottom;
+}
+
+.tile-context-menu .assign-colour.disabled {
+  color: gray;
 }

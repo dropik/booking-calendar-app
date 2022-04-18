@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo, faTrashCan } from "@fortawesome/free-solid-svg-icons";
@@ -14,13 +14,16 @@ type Props = {
   tileId: string,
   x: number,
   y: number,
-  onHide: () => void
+  onHide: () => void,
+  isOutOfBound: boolean
 };
 
-export default function TileContextMenu({ tileId, x, y, onHide }: Props): JSX.Element {
+export default function TileContextMenu({ tileId, x, y, onHide, isOutOfBound }: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const ref = useRef<HTMLDivElement>(null);
+  const assignColourIconRef = useRef<HTMLDivElement>(null);
   const isUnassigned = useIsUnassigned(tileId);
+  const colour = useAppSelector((state) => state.tiles.data[tileId].colour);
 
   function hideMenu() {
     onHide();
@@ -28,9 +31,15 @@ export default function TileContextMenu({ tileId, x, y, onHide }: Props): JSX.El
   }
 
   useContextMenuPositionEffect(ref, x, y);
+  useAssignColourIconBackgroundColourEffect(assignColourIconRef, colour);
   useHideContextOnClickOutside(dispatch, hideMenu);
 
   const removeClassName = getRemoveClassName(isUnassigned);
+
+  let assignColourClassName = "button assign-colour";
+  if (isOutOfBound) {
+    assignColourClassName += " disabled";
+  }
 
   function showInfoDialog() {
     if (tileId) {
@@ -52,9 +61,13 @@ export default function TileContextMenu({ tileId, x, y, onHide }: Props): JSX.El
         <FontAwesomeIcon icon={faCircleInfo} />
         Informazioni
       </div>
+      <div className={assignColourClassName}>
+        <div ref={assignColourIconRef} className="icon"></div>
+        Assegna colore
+      </div>
       <div className={removeClassName} onClick={removeOccupation}>
         <FontAwesomeIcon icon={faTrashCan} />
-        Rimuovere occupazione
+        Rimuovi occupazione
       </div>
     </div>
   );
@@ -74,6 +87,14 @@ function useContextMenuPositionEffect(ref: React.RefObject<HTMLDivElement>, mous
       ref.current.style.left = `${mouseX + 10}px`;
     }
   }, [ref, mouseX, mouseY]);
+}
+
+function useAssignColourIconBackgroundColourEffect(ref: React.RefObject<HTMLDivElement>, colour: string) {
+  useLayoutEffect(() => {
+    if (ref.current) {
+      ref.current.style.backgroundColor = colour;
+    }
+  }, [ref, colour]);
 }
 
 function useHideContextOnClickOutside(dispatch: React.Dispatch<AnyAction>, hideMenu: () => void): void {

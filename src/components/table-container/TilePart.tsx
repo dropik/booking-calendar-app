@@ -88,7 +88,7 @@ export default function TilePart({ y, tileData }: Props): JSX.Element {
       }
       {
         isShowContextMenu ?
-          <TileContextMenu tileId={tileId} x={mousePos.x} y={mousePos.y} onHide={contextMenuHideCallback} /> :
+          <TileContextMenu tileId={tileId} x={mousePos.x} y={mousePos.y} onHide={contextMenuHideCallback} isOutOfBound={outOfBound} /> :
           <></>
       }
     </div>
