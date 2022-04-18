@@ -74,7 +74,7 @@ export const tiles: TilesSlice.TileData[] = [
     roomType: "camera matrimoniale/doppia",
     entity: "camera doppia",
     persons: 2,
-    colour: "rgba(208, 217, 73, 0.69)",
+    colour: "#ffa4a2",
     roomNumber: 3
   },
   {
@@ -85,7 +85,7 @@ export const tiles: TilesSlice.TileData[] = [
     roomType: "camera matrimoniale/doppia",
     entity: "camera doppia",
     persons: 2,
-    colour: "rgba(217, 73, 73, 0.69)",
+    colour: "#c7a4ff",
     roomNumber: 2
   },
   {
@@ -96,7 +96,7 @@ export const tiles: TilesSlice.TileData[] = [
     roomType: "camera matrimoniale/doppia",
     entity: "camera doppia",
     persons: 2,
-    colour: "rgba(73, 122, 217, 0.69)",
+    colour: "#8bf6ff",
     roomNumber: 6
   },
   {
@@ -107,7 +107,7 @@ export const tiles: TilesSlice.TileData[] = [
     roomType: "camera tripla",
     entity: "camera tripla",
     persons: 3,
-    colour: "rgba(73, 122, 217, 0.69)"
+    colour: "#b2fab4"
   },
   {
     id: "4",
@@ -117,7 +117,7 @@ export const tiles: TilesSlice.TileData[] = [
     roomType: "camera singola",
     entity: "camera singola",
     persons: 1,
-    colour: "rgba(217, 73, 73, 0.69)"
+    colour: "#ffffa8"
   },
   {
     id: "5",
@@ -127,7 +127,18 @@ export const tiles: TilesSlice.TileData[] = [
     roomType: "camera matrimoniale/doppia",
     entity: "camera doppia",
     persons: 2,
-    colour: "rgba(208, 217, 73, 0.69)"
+    colour: "#ffbb93"
+  },
+  {
+    id: "6",
+    name: "Sasha Smirnov",
+    from: "2022-02-25",
+    nights: 2,
+    roomType: "camera matrimoniale/doppia",
+    entity: "camera doppia",
+    persons: 2,
+    colour: "#c7a4ff",
+    roomNumber: 5
   }
 ];
 

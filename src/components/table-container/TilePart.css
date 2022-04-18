@@ -15,6 +15,7 @@
 }
 
 .tile.out-of-bound {
-  filter: grayscale(0.7);
+  background-color: rgba(19, 18, 18, 0.12) !important;
+  color: rgba(19, 18, 18, 0.38);
   cursor: auto;
 }

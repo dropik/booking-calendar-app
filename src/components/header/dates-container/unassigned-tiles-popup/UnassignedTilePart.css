@@ -7,6 +7,7 @@
 }
 
 .unassigned-tile-part.out-of-bound {
-  filter: grayscale(0.7);
+  background-color: rgba(28, 27, 31, 0.12) !important;
+  color: rgba(28, 27, 31, 0.38);
   cursor: auto;
 }
