@@ -1,12 +1,12 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 
 import * as Utils from "../../utils";
 
 import { useAppDispatch, useAppSelector, useColumns, useLeftmostDate } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
-import * as OccupationInfoSlice from "../../redux/occupationInfoSlice";
 import * as ContextMenuSlice from "../../redux/contextMenuSlice";
 
+import OccupationInfo from "../OccupationInfo";
 import TilePartAlert from "./TilePartAlert";
 
 import "./TilePart.css";
@@ -25,6 +25,9 @@ export default function TilePart({ y, tileData }: Props): JSX.Element {
   const columns = useColumns();
   const roomType = useRoomTypeByNumber(y);
   const personsInRoomType = useAppSelector(state => state.roomTypes.data[roomType]);
+  const [isShowInfo, setIsShowInfo] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const contextTileId = useAppSelector((state) => state.contextMenu.tileId);
 
   const outOfBound = isOutOfBound(tileData, leftmostDate, columns);
   const className = getClassName(isGrabbed, outOfBound);
@@ -39,19 +42,25 @@ export default function TilePart({ y, tileData }: Props): JSX.Element {
   function showContextMenu(event: React.MouseEvent<HTMLDivElement>) {
     event.preventDefault();
     event.stopPropagation();
+    setIsShowInfo(false);
     dispatch(ContextMenuSlice.show({ tileId, mouseX: event.pageX, mouseY: event.pageY }));
   }
 
   function showInfo(event: React.MouseEvent<HTMLDivElement>) {
-    dispatch(OccupationInfoSlice.show({ hoveredId: tileId, x: event.pageX, y: event.pageY }));
+    if (!contextTileId) {
+      setIsShowInfo(true);
+      setMousePos({ x: event.pageX, y: event.pageY });
+    }
   }
 
   function moveInfo(event: React.MouseEvent<HTMLDivElement>) {
-    dispatch(OccupationInfoSlice.move({ x: event.pageX, y: event.pageY }));
+    if (isShowInfo) {
+      setMousePos({ x: event.pageX, y: event.pageY });
+    }
   }
 
   function hideInfo() {
-    dispatch(OccupationInfoSlice.hide());
+    setIsShowInfo(false);
   }
 
   useBackgroundColourEffect(ref, tileData.colour);
@@ -68,6 +77,11 @@ export default function TilePart({ y, tileData }: Props): JSX.Element {
     >
       <span className="tile-persons">{tileData.persons}</span>
       <TilePartAlert personsInRoomType={personsInRoomType} roomType={roomType} tileData={tileData} />
+      {
+        isShowInfo ?
+          <OccupationInfo tileId={tileId} x={mousePos.x} y={mousePos.y} /> :
+          <></>
+      }
     </div>
   );
 }

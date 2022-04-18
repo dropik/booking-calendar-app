@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import Header from "./components/Header";
 import Hotel from "./components/Hotel";
 import TableContainer from "./components/TableContainer";
-import OccupationInfo from "./components/OccupationInfo";
 import Sidemenu from "./components/Sidemenu";
 import Dialog from "./components/Dialog";
 
@@ -21,7 +20,6 @@ export default function App(): JSX.Element {
       <Header />
       <Hotel />
       <TableContainer />
-      <OccupationInfo />
       <Sidemenu />
       <Dialog />
     </div>

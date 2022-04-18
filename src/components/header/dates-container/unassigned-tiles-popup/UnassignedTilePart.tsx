@@ -1,10 +1,11 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 
 import { useAppDispatch, useAppSelector, useColumns, useLeftmostDate } from "../../../../redux/hooks";
 import * as Utils from "../../../../utils";
 import * as TilesSlice from "../../../../redux/tilesSlice";
-import * as OccupationInfoSlice from "../../../../redux/occupationInfoSlice";
 import * as ContextMenuSlice from "../../../../redux/contextMenuSlice";
+
+import OccupationInfo from "../../../OccupationInfo";
 
 import "./UnassignedTilePart.css";
 
@@ -19,6 +20,9 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
   const leftmostDate = useLeftmostDate();
   const columns = useColumns();
   const ref = useRef<HTMLDivElement>(null);
+  const [isShowInfo, setIsShowInfo] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const contextTileId = useAppSelector((state) => state.contextMenu.tileId);
 
   useBackgroundColorEffect(ref, tileData);
 
@@ -32,6 +36,7 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
   function showContextMenu(event: React.MouseEvent<HTMLDivElement>) {
     event.preventDefault();
     event.stopPropagation();
+    setIsShowInfo(false);
     dispatch(ContextMenuSlice.show({
       tileId,
       mouseX: event.pageX,
@@ -40,7 +45,6 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
   }
 
   function grabTile(event: React.MouseEvent<HTMLDivElement>) {
-    dispatch(OccupationInfoSlice.hide());
     if (!outOfBound && ref.current && (event.button === 0)) {
       dispatch(TilesSlice.grab({
         tileId,
@@ -52,15 +56,20 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
   }
 
   function showInfo(event: React.MouseEvent<HTMLDivElement>) {
-    dispatch(OccupationInfoSlice.show({ hoveredId: tileId, x: event.pageX, y: event.pageY }));
+    if (!contextTileId) {
+      setIsShowInfo(true);
+      setMousePos({ x: event.pageX, y: event.pageY });
+    }
   }
 
-  function updateInfoPos(event: React.MouseEvent<HTMLDivElement>) {
-    dispatch(OccupationInfoSlice.move({ x: event.pageX, y: event.pageY }));
+  function moveInfo(event: React.MouseEvent<HTMLDivElement>) {
+    if (isShowInfo) {
+      setMousePos({ x: event.pageX, y: event.pageY });
+    }
   }
 
   function hideInfo() {
-    dispatch(OccupationInfoSlice.hide());
+    setIsShowInfo(false);
   }
 
   return (
@@ -70,10 +79,15 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
       onMouseDown={grabTile}
       onMouseEnter={showInfo}
       onMouseLeave={hideInfo}
-      onMouseMove={updateInfoPos}
+      onMouseMove={moveInfo}
       onContextMenu={showContextMenu}
     >
-      {tileData.persons}
+      <span className="tile-persons">{tileData.persons}</span>
+      {
+        isShowInfo ?
+          <OccupationInfo tileId={tileId} x={mousePos.x} y={mousePos.y} /> :
+          <></>
+      }
     </div>
   );
 }
