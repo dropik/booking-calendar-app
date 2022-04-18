@@ -8,6 +8,7 @@ import * as TableSlice from "./tableSlice";
 
 export type TileData = {
   id: string,
+  bookingId: string,
   name: string,
   from: string,
   nights: number,

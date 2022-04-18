@@ -68,6 +68,7 @@ export const hotel: HotelSlice.HotelData = {
 export const tiles: TilesSlice.TileData[] = [
   {
     id: "0",
+    bookingId: "0",
     name: "Petr Ivanov",
     from: "2022-02-15",
     nights: 40,
@@ -79,6 +80,7 @@ export const tiles: TilesSlice.TileData[] = [
   },
   {
     id: "1",
+    bookingId: "1",
     name: "Ivan Petrov",
     from: "2022-02-25",
     nights: 2,
@@ -90,6 +92,7 @@ export const tiles: TilesSlice.TileData[] = [
   },
   {
     id: "2",
+    bookingId: "2",
     name: "Vasya Pupkin",
     from: "2022-02-20",
     nights: 3,
@@ -101,6 +104,7 @@ export const tiles: TilesSlice.TileData[] = [
   },
   {
     id: "3",
+    bookingId: "3",
     name: "Petr Petrov",
     from: "2022-03-01",
     nights: 4,
@@ -111,6 +115,7 @@ export const tiles: TilesSlice.TileData[] = [
   },
   {
     id: "4",
+    bookingId: "4",
     name: "Ivan Vasiliev",
     from: "2022-02-28",
     nights: 4,
@@ -121,6 +126,7 @@ export const tiles: TilesSlice.TileData[] = [
   },
   {
     id: "5",
+    bookingId: "5",
     name: "Vasya Ivanov",
     from: "2022-03-01",
     nights: 60,
@@ -131,6 +137,7 @@ export const tiles: TilesSlice.TileData[] = [
   },
   {
     id: "6",
+    bookingId: "1",
     name: "Sasha Smirnov",
     from: "2022-02-25",
     nights: 2,
