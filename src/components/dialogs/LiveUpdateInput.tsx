@@ -1,5 +1,4 @@
 import React, { ReactNode, useContext, useEffect } from "react";
-import { hot } from "react-hot-loader";
 
 import { FindDialogContext } from "./FindDialogBody";
 
@@ -8,7 +7,7 @@ type Props<T> = {
   value: T
 };
 
-function LiveUpdateInput<T>({ children, value }: Props<T>): JSX.Element {
+export default function LiveUpdateInput<T>({ children, value }: Props<T>): JSX.Element {
   const { enableLiveUpdate } = useContext(FindDialogContext);
 
   useEffect(() => {
@@ -17,5 +16,3 @@ function LiveUpdateInput<T>({ children, value }: Props<T>): JSX.Element {
 
   return <>{children}</>;
 }
-
-export default hot(module)(LiveUpdateInput);

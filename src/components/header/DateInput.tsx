@@ -1,5 +1,4 @@
 import React from "react";
-import { hot } from "react-hot-loader";
 import DatePicker, { registerLocale } from "react-datepicker";
 import it from "date-fns/locale/it";
 
@@ -15,7 +14,7 @@ import "./DateInput.css";
 
 registerLocale("it", it);
 
-function DateInput(): JSX.Element {
+export default function DateInput(): JSX.Element {
   const dispatch = useAppDispatch();
   const currentDate = useCurrentDate();
 
@@ -40,5 +39,3 @@ function DateInput(): JSX.Element {
     </>
   );
 }
-
-export default hot(module)(DateInput);

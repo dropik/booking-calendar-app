@@ -1,12 +1,11 @@
 import React from "react";
-import { hot } from "react-hot-loader";
 
 import { useCurrentDate } from "../../../redux/hooks";
 import * as Utils from "../../../utils";
 
 import "./MonthYear.css";
 
-function MonthYear(): JSX.Element {
+export default function MonthYear(): JSX.Element {
   const currentDate = useCurrentDate();
 
   const currentDateObj = new Date(currentDate);
@@ -27,5 +26,3 @@ function MonthYear(): JSX.Element {
     </div>
   );
 }
-
-export default hot(module)(MonthYear);

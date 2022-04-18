@@ -1,5 +1,4 @@
 import React from "react";
-import { hot } from "react-hot-loader";
 
 import * as Api from "../../api";
 
@@ -7,7 +6,7 @@ type Props = {
   data: Api.BookingShortData
 };
 
-function BookingRowContent({ data }: Props): JSX.Element {
+export default function BookingRowContent({ data }: Props): JSX.Element {
   return (
     <>
       <div className="id">#{data.id}</div>
@@ -17,5 +16,3 @@ function BookingRowContent({ data }: Props): JSX.Element {
     </>
   );
 }
-
-export default hot(module)(BookingRowContent);

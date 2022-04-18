@@ -1,5 +1,4 @@
 import React, { createContext } from "react";
-import { hot } from "react-hot-loader";
 
 import { useAppSelector } from "../redux/hooks";
 
@@ -18,7 +17,7 @@ export const DialogContext = createContext<DialogContextType>({
   lastIndex: 0
 });
 
-function DialogMaster(): JSX.Element {
+export default function DialogMaster(): JSX.Element {
   const dialogs = useAppSelector((state) => state.dialog.dialogs);
 
   if (dialogs.length === 0) {
@@ -39,5 +38,3 @@ function DialogMaster(): JSX.Element {
     </DialogContainer>
   );
 }
-
-export default hot(module)(DialogMaster);

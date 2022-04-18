@@ -1,5 +1,4 @@
 import React, { ReactNode, useContext } from "react";
-import { hot } from "react-hot-loader";
 
 import { DialogContext } from "../Dialog";
 
@@ -7,7 +6,7 @@ type Props = {
   children: ReactNode
 };
 
-function Dialog({ children }: Props): JSX.Element {
+export default function Dialog({ children }: Props): JSX.Element {
   const context = useContext(DialogContext);
 
   function preventHideOnSelfClick(event: React.MouseEvent<HTMLDivElement>) {
@@ -25,5 +24,3 @@ function Dialog({ children }: Props): JSX.Element {
     </div>
   );
 }
-
-export default hot(module)(Dialog);

@@ -1,5 +1,4 @@
 import React, { Fragment, useEffect, useLayoutEffect, useMemo, useRef } from "react";
-import { hot } from "react-hot-loader";
 
 import { useAppDispatch, useAppSelector, useHotelData } from "../redux/hooks";
 import * as HotelSlice from "../redux/hotelSlice";
@@ -11,7 +10,7 @@ import BottomSpace from "./hotel/BottomSpace";
 
 import "./Hotel.css";
 
-function Hotel(): JSX.Element {
+export default function Hotel(): JSX.Element {
   const dispatch = useAppDispatch();
   const hotelData = useHotelData();
   const scrollTop = useAppSelector(state => state.scroll.top);
@@ -67,5 +66,3 @@ function useScrollEffect(ref: React.RefObject<HTMLDivElement>, scrollTop: number
     }
   }, [ref, scrollTop]);
 }
-
-export default hot(module)(Hotel);

@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { hot } from "react-hot-loader";
 
 import Header from "./components/Header";
 import Hotel from "./components/Hotel";
@@ -10,7 +9,7 @@ import Dialog from "./components/Dialog";
 
 import "./App.css";
 
-function App(): JSX.Element {
+export default function App(): JSX.Element {
   useWindowCursorGrabbingEffect();
 
   return (
@@ -44,5 +43,3 @@ function useWindowCursorGrabbingEffect(): void {
     };
   }, []);
 }
-
-export default hot(module)(App);

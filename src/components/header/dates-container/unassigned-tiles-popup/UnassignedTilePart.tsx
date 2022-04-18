@@ -1,5 +1,4 @@
 import React, { useLayoutEffect, useRef } from "react";
-import { hot } from "react-hot-loader";
 
 import { useAppDispatch, useAppSelector, useColumns, useLeftmostDate } from "../../../../redux/hooks";
 import * as Utils from "../../../../utils";
@@ -14,7 +13,7 @@ type Props = {
   tileId: string
 };
 
-function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.Element {
+export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const tileData = useAppSelector((state) => state.tiles.data[tileId]);
   const leftmostDate = useLeftmostDate();
@@ -99,5 +98,3 @@ function getClassName(outOfBound: boolean): string {
   }
   return className;
 }
-
-export default hot(module)(UnassignedTilePart);

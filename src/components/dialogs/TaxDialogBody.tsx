@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-import { hot } from "react-hot-loader";
 
 import { useAppDispatch, useCurrentDate } from "../../redux/hooks";
 import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
@@ -15,7 +14,7 @@ import LoadingDataWrapper from "./LoadingDataWrapper";
 
 type DialogState = "fill" | "loading";
 
-function TaxDialogBody(): JSX.Element {
+export default function TaxDialogBody(): JSX.Element {
   const dispatch = useAppDispatch();
   const currentDate = useCurrentDate();
   const [dialogState, setDialogState] = useState<DialogState>("fill");
@@ -75,5 +74,3 @@ function TaxDialogBody(): JSX.Element {
     );
   }
 }
-
-export default hot(module)(TaxDialogBody);

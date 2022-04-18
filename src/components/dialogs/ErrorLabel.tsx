@@ -1,5 +1,4 @@
 import React from "react";
-import { hot } from "react-hot-loader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
@@ -8,7 +7,7 @@ type Props = {
   text: string
 };
 
-function ErrorLabel({ show, text }: Props): JSX.Element {
+export default function ErrorLabel({ show, text }: Props): JSX.Element {
   if (!show) {
     return <></>;
   }
@@ -20,5 +19,3 @@ function ErrorLabel({ show, text }: Props): JSX.Element {
     </div>
   );
 }
-
-export default hot(module)(ErrorLabel);

@@ -1,5 +1,4 @@
 import React from "react";
-import { hot } from "react-hot-loader";
 
 type Props = {
   client: {
@@ -10,7 +9,7 @@ type Props = {
   bookingName?: string
 };
 
-function ClientRowContent({ client, bookingName }: Props): JSX.Element {
+export default function ClientRowContent({ client, bookingName }: Props): JSX.Element {
   return (
     <>
       <div className="first-name">{client.name}</div>
@@ -20,5 +19,3 @@ function ClientRowContent({ client, bookingName }: Props): JSX.Element {
     </>
   );
 }
-
-export default hot(module)(ClientRowContent);

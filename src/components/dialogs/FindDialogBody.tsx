@@ -1,5 +1,4 @@
 import React, { createContext, useCallback, useState } from "react";
-import { hot } from "react-hot-loader";
 
 import ButtonInput from "./ButtonInput";
 import ErrorLabel from "./ErrorLabel";
@@ -30,7 +29,7 @@ type Props = {
   list: () => JSX.Element
 };
 
-function FindDialogBody({ isValidated, errorText, formInputs, header, list }: Props): JSX.Element {
+export default function FindDialogBody({ isValidated, errorText, formInputs, header, list }: Props): JSX.Element {
   const [forceFetchRequest, setForceFetchRequest] = useState(0);
   const [isLiveUpdateEnabled, setLiveUpdateEnabled] = useState(false);
   const enableLiveUpdate = useCallback(() => setLiveUpdateEnabled(true), []);
@@ -57,5 +56,3 @@ function FindDialogBody({ isValidated, errorText, formInputs, header, list }: Pr
     </FindDialogContext.Provider>
   );
 }
-
-export default hot(module)(FindDialogBody);

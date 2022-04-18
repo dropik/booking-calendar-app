@@ -1,5 +1,4 @@
 import React from "react";
-import { hot } from "react-hot-loader";
 
 import * as Api from "../../api";
 import { useAppDispatch } from "../../redux/hooks";
@@ -12,7 +11,7 @@ type Props = {
   data: Api.BookingShortData
 };
 
-function BookingButtonRow({ data }: Props): JSX.Element {
+export default function BookingButtonRow({ data }: Props): JSX.Element {
   const dispatch = useAppDispatch();
 
   function showBooking(id: string) {
@@ -25,5 +24,3 @@ function BookingButtonRow({ data }: Props): JSX.Element {
     </ButtonInput>
   );
 }
-
-export default hot(module)(BookingButtonRow);

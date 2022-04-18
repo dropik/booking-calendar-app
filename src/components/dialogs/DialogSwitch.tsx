@@ -1,5 +1,4 @@
 import React from "react";
-import { hot } from "react-hot-loader";
 
 import * as DialogSlice from "../../redux/dialogSlice";
 
@@ -16,7 +15,7 @@ type Props = {
   dialog: DialogSlice.DialogDescriptor
 };
 
-function DialogSwitch({ dialog }: Props): JSX.Element {
+export default function DialogSwitch({ dialog }: Props): JSX.Element {
   switch (dialog.type) {
   case "police":
     return <PoliceExportDialog />;
@@ -38,5 +37,3 @@ function DialogSwitch({ dialog }: Props): JSX.Element {
     return <FindClientDialog />;
   }
 }
-
-export default hot(module)(DialogSwitch);

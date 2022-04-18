@@ -1,5 +1,4 @@
 import React, { useLayoutEffect, useRef } from "react";
-import { hot } from "react-hot-loader";
 
 import * as Utils from "../../utils";
 
@@ -17,7 +16,7 @@ type Props = {
   tileData: TilesSlice.TileData
 };
 
-function TilePart({ y, tileData }: Props): JSX.Element {
+export default function TilePart({ y, tileData }: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const tileId = tileData.id;
   const isGrabbed = useAppSelector(state => state.tiles.grabbedMap[tileId]);
@@ -112,5 +111,3 @@ function useBackgroundColourEffect(
     }
   }, [ref, colour]);
 }
-
-export default hot(module)(TilePart);

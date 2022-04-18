@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faRotateLeft } from "@fortawesome/free-solid-svg-icons";
@@ -14,7 +13,7 @@ import "./SaveAndReset.css";
 
 type Status = "idle" | "loading" | "fulfilled";
 
-function SaveAndReset(): JSX.Element {
+export default function SaveAndReset(): JSX.Element {
   const dispatch = useAppDispatch();
   const hasChanges = useHasChanges();
   const changes = useAppSelector((state) => state.tiles.changesMap);
@@ -69,5 +68,3 @@ function getBody(saveStatus: Status, hasChanges: boolean, resetHandler: () => vo
     </>
   );
 }
-
-export default hot(module)(SaveAndReset);

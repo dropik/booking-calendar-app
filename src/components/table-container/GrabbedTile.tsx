@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from "react";
-import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
 import { useAppDispatch, useAppSelector, useLeftShift, useTileData } from "../../redux/hooks";
@@ -8,7 +7,7 @@ import * as TilesSlice from "../../redux/tilesSlice";
 
 import "./GrabbedTile.css";
 
-function GrabbedTile(): JSX.Element {
+export default function GrabbedTile(): JSX.Element {
   const dispatch = useAppDispatch();
   const grabbedTileId = useAppSelector(state => state.tiles.grabbedTile);
   const grabbedMouseY = useAppSelector(state => state.tiles.mouseYOnGrab);
@@ -87,5 +86,3 @@ function getCells(tileData: TilesSlice.TileData): JSX.Element[] {
   }
   return cells;
 }
-
-export default hot(module)(GrabbedTile);

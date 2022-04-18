@@ -1,5 +1,4 @@
 import React from "react";
-import { hot } from "react-hot-loader";
 
 import LiveUpdateInput from "./LiveUpdateInput";
 
@@ -11,7 +10,7 @@ type Props = {
   onChange: (newValue: string) => void
 };
 
-function LabeledTextInput({ id, label, isValid, value, onChange }: Props): JSX.Element {
+export default function LabeledTextInput({ id, label, isValid, value, onChange }: Props): JSX.Element {
 
   return (
     <LiveUpdateInput value={value}>
@@ -28,5 +27,3 @@ function LabeledTextInput({ id, label, isValid, value, onChange }: Props): JSX.E
     </LiveUpdateInput>
   );
 }
-
-export default hot(module)(LabeledTextInput);

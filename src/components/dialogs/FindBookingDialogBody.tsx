@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { hot } from "react-hot-loader";
 
 import * as Utils from "../../utils";
 import { useCurrentDate } from "../../redux/hooks";
@@ -10,7 +9,7 @@ import LabeledDateInput from "./LabeledDateInput";
 import BookingRowContent from "./BookingRowContent";
 import BookingsList from "./BookingsList";
 
-function FindBookingDialogBody(): JSX.Element {
+export default function FindBookingDialogBody(): JSX.Element {
   const currentDate = useCurrentDate();
   const toDateObj = new Date(currentDate);
   toDateObj.setMonth(toDateObj.getMonth() + 1);
@@ -36,5 +35,3 @@ function FindBookingDialogBody(): JSX.Element {
     />
   );
 }
-
-export default hot(module)(FindBookingDialogBody);

@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { hot } from "react-hot-loader";
 
 import FindDialogBody from "./FindDialogBody";
 import LabeledTextInput from "./LabeledTextInput";
 import ClientRowContent from "./ClientRowContent";
 import ClientsList from "./ClientsList";
 
-function FindClientDialogBody(): JSX.Element {
+export default function FindClientDialogBody(): JSX.Element {
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
 
@@ -27,5 +26,3 @@ function FindClientDialogBody(): JSX.Element {
     />
   );
 }
-
-export default hot(module)(FindClientDialogBody);

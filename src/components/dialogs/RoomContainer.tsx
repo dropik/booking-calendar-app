@@ -1,5 +1,4 @@
 import React, { ReactNode } from "react";
-import { hot } from "react-hot-loader";
 
 import * as Utils from "../../utils";
 
@@ -15,7 +14,7 @@ type Props = {
   }
 };
 
-function RoomContainer({ children, data }: Props): JSX.Element {
+export default function RoomContainer({ children, data }: Props): JSX.Element {
   const assigned = data.roomNumber === undefined ?
     "Non assegnata" :
     `Camera ${data.roomNumber}`;
@@ -31,5 +30,3 @@ function RoomContainer({ children, data }: Props): JSX.Element {
     </div>
   );
 }
-
-export default hot(module)(RoomContainer);

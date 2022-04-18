@@ -1,5 +1,4 @@
 import React, { useLayoutEffect, useMemo, useRef } from "react";
-import { hot } from "react-hot-loader";
 
 import { useDates, useAppSelector } from "../../../redux/hooks";
 
@@ -7,7 +6,7 @@ import Day from "./Day";
 
 import "./Dates.css";
 
-function Dates(): JSX.Element {
+export default function Dates(): JSX.Element {
   const scrollLeft = useScrollLeft();
   const dates = useDates();
   const ref = useRef<HTMLDivElement>(null);
@@ -42,5 +41,3 @@ function useScrollEffect(ref: React.RefObject<HTMLDivElement>, scrollLeft: numbe
     }
   }, [ref, scrollLeft]);
 }
-
-export default hot(module)(Dates);

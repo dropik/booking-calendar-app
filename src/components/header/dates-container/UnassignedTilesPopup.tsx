@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
@@ -14,7 +13,7 @@ type PopupData = {
   tilesPerSelectedDay: { [key: string]: string }
 }
 
-function UnassignedTilesPopup(): JSX.Element {
+export default function UnassignedTilesPopup(): JSX.Element {
   const dispatch = useAppDispatch();
   const popupData = usePopupData();
   const isDialogShown = useAppSelector((state) => state.dialog.dialogs.length > 0);
@@ -71,5 +70,3 @@ function useHideOnClickOutsidePopupEffect(
     };
   }, [dispatch, isDialogShown, isContextMenuShown]);
 }
-
-export default hot(module)(UnassignedTilesPopup);

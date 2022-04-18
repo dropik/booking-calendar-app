@@ -1,5 +1,4 @@
 import React from "react";
-import { hot } from "react-hot-loader";
 
 import * as Api from "../../api";
 
@@ -10,7 +9,7 @@ type Props = {
   tryFetchBookingDataAsync: () => Promise<{ data: Api.BookingData }>
 };
 
-function BookingDialog({ tryFetchBookingDataAsync }: Props): JSX.Element {
+export default function BookingDialog({ tryFetchBookingDataAsync }: Props): JSX.Element {
   return (
     <DataDialog
       header={(data) => `Prenotazione ${getTitleFromBookingData(data)}`}
@@ -24,5 +23,3 @@ function BookingDialog({ tryFetchBookingDataAsync }: Props): JSX.Element {
 function getTitleFromBookingData(data: Api.BookingData | undefined): string {
   return data === undefined ? "" : `#${data.id} (${data.name})`;
 }
-
-export default hot(module)(BookingDialog);

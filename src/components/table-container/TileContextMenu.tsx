@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from "react";
-import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo, faTrashCan } from "@fortawesome/free-solid-svg-icons";
@@ -11,7 +10,7 @@ import * as DialogSlice from "../../redux/dialogSlice";
 
 import "./TileContextMenu.css";
 
-function TileContextMenu(): JSX.Element {
+export default function TileContextMenu(): JSX.Element {
   const dispatch = useAppDispatch();
   const ref = useRef<HTMLDivElement>(null);
   const tileId = useAppSelector((state) => state.contextMenu.tileId);
@@ -97,5 +96,3 @@ function getRemoveClassName(isUnassigned: boolean): string {
 function stopMouseEventPropagation(event: React.MouseEvent<HTMLDivElement>): void {
   event.stopPropagation();
 }
-
-export default hot(module)(TileContextMenu);

@@ -1,12 +1,11 @@
 import React, { useRef } from "react";
-import { hot } from "react-hot-loader";
 
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
 
 import "./ConnectionError.css";
 
-function ConnectionError(): JSX.Element {
+export default function ConnectionError(): JSX.Element {
   const dispatch = useAppDispatch();
   const showError = useAppSelector((state) => state.connectionError.showError);
   const ref = useRef<HTMLDivElement>(null);
@@ -28,5 +27,3 @@ function ConnectionError(): JSX.Element {
 
   return <></>;
 }
-
-export default hot(module)(ConnectionError);

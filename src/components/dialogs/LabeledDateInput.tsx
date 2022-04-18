@@ -1,5 +1,4 @@
 import React from "react";
-import { hot } from "react-hot-loader";
 import DatePicker from "react-datepicker";
 
 import * as Utils from "../../utils";
@@ -12,7 +11,7 @@ type Props = {
   onChange: (newValue: string) => void
 };
 
-function LabeledDateInput({ id, label, isValid, value, onChange}: Props): JSX.Element {
+export default function LabeledDateInput({ id, label, isValid, value, onChange}: Props): JSX.Element {
   return (
     <div>
       <label htmlFor={id} className="label">{label}:</label>
@@ -27,5 +26,3 @@ function LabeledDateInput({ id, label, isValid, value, onChange}: Props): JSX.El
     </div>
   );
 }
-
-export default hot(module)(LabeledDateInput);

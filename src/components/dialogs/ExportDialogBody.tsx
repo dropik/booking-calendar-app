@@ -1,6 +1,4 @@
 import React, { useContext, useRef, useState } from "react";
-import { hot } from "react-hot-loader";
-
 import { useAppDispatch, useCurrentDate } from "../../redux/hooks";
 import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
 import { DialogContainerContext } from "./DialogContainer";
@@ -16,7 +14,7 @@ type Props = {
   onFilenameSet: (date: string) => string
 };
 
-function ExportDialogBody({ onTryFetchDataAsync, onFilenameSet }: Props): JSX.Element {
+export default function ExportDialogBody({ onTryFetchDataAsync, onFilenameSet }: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const currentDate = useCurrentDate();
   const [selectedDate, setSelectedDate] = useState(currentDate);
@@ -63,5 +61,3 @@ function ExportDialogBody({ onTryFetchDataAsync, onFilenameSet }: Props): JSX.El
     </>
   );
 }
-
-export default hot(module)(ExportDialogBody);

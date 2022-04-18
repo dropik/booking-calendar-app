@@ -1,5 +1,4 @@
 import React, { memo } from "react";
-import { hot } from "react-hot-loader";
 
 import { useAppSelector } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
@@ -13,7 +12,7 @@ type Props = {
   y: number
 };
 
-function TableCell({ x, y }: Props): JSX.Element {
+export default memo(function TableCell({ x, y }: Props): JSX.Element {
   const tileData = useTileDataAt(x, y);
 
   return (
@@ -29,7 +28,7 @@ function TableCell({ x, y }: Props): JSX.Element {
       }
     </div>
   );
-}
+});
 
 function useTileDataAt(x: string, y: number): TilesSlice.TileData | undefined {
   return useAppSelector(state => {
@@ -37,5 +36,3 @@ function useTileDataAt(x: string, y: number): TilesSlice.TileData | undefined {
     return (tilesForRoom === undefined) ? undefined : state.tiles.data[tilesForRoom[x] as string];
   });
 }
-
-export default memo(hot(module)(TableCell));

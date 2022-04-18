@@ -1,5 +1,4 @@
 import React from "react";
-import { hot } from "react-hot-loader";
 import DatePicker from "react-datepicker";
 
 import * as Utils from "../../utils";
@@ -9,7 +8,7 @@ type Props = {
   onChange: (newValue: string) => void
 };
 
-function DateInput({ value, onChange }: Props): JSX.Element {
+export default function DateInput({ value, onChange }: Props): JSX.Element {
   return (
     <div>
       <DatePicker
@@ -21,5 +20,3 @@ function DateInput({ value, onChange }: Props): JSX.Element {
     </div>
   );
 }
-
-export default hot(module)(DateInput);

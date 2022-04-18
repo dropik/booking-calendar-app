@@ -1,5 +1,4 @@
 import React from "react";
-import { hot } from "react-hot-loader";
 
 import * as Api from "../../api";
 
@@ -10,7 +9,7 @@ type Props = {
   data: Api.ClientData
 };
 
-function ClientDialogBody({ data }: Props): JSX.Element {
+export default function ClientDialogBody({ data }: Props): JSX.Element {
   const dateOfBirthString = new Date(data.dateOfBirth).toLocaleDateString();
   const placeOfBirthString = getFullPlaceOfBirthString(data.stateOfBirth, data.placeOfBirth);
   const documentString = getFullDocumentString(data.documentType, data.documentNumber);
@@ -47,5 +46,3 @@ function getDocumentTypeString(type: Api.DocumentType): string {
     return "Passaporto";
   }
 }
-
-export default hot(module)(ClientDialogBody);

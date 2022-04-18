@@ -1,5 +1,4 @@
 import React, { useLayoutEffect, useMemo, useRef } from "react";
-import { hot } from "react-hot-loader";
 
 import { useLeftShift } from "../../../../redux/hooks";
 
@@ -12,7 +11,7 @@ type Props = {
   tilesPerSelectedDay: { [key: string]: string }
 }
 
-function UnassignedTilesPopupBody({ leftmostSelectedTileDate, tilesPerSelectedDay }: Props): JSX.Element {
+export default function UnassignedTilesPopupBody({ leftmostSelectedTileDate, tilesPerSelectedDay }: Props): JSX.Element {
   const left = useLeftShift(leftmostSelectedTileDate);
   const ref = useRef<HTMLDivElement>(null);
   const rows = useRowsMemo(tilesPerSelectedDay, leftmostSelectedTileDate);
@@ -39,5 +38,3 @@ function useScrollEffect(ref: React.RefObject<HTMLDivElement>, left: number): vo
     }
   }, [ref, left]);
 }
-
-export default hot(module)(UnassignedTilesPopupBody);

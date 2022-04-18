@@ -1,5 +1,4 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef } from "react";
-import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
 import * as Utils from "../utils";
@@ -17,7 +16,7 @@ import ConnectionError from "./table-container/ConnectionError";
 
 import "./TableContainer.css";
 
-function TableContainer(): JSX.Element {
+export default function TableContainer(): JSX.Element {
   const dispatch = useAppDispatch();
   const ref = useRef<HTMLDivElement>(null);
   const hotelData = useHotelData();
@@ -103,5 +102,3 @@ function useTableContentsMemo(): JSX.Element {
     </>
   ), []);
 }
-
-export default hot(module)(TableContainer);

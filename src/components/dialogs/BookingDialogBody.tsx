@@ -1,5 +1,4 @@
 import React from "react";
-import { hot } from "react-hot-loader";
 
 import * as Api from "../../api";
 
@@ -11,7 +10,7 @@ type Props = {
   data: Api.BookingData
 };
 
-function BookingDialogBody({ data }: Props): JSX.Element {
+export default function BookingDialogBody({ data }: Props): JSX.Element {
   const fromDateString = new Date(data.from).toLocaleDateString();
   const toDateString = new Date(data.to).toLocaleDateString();
 
@@ -33,5 +32,3 @@ function BookingDialogBody({ data }: Props): JSX.Element {
     </>
   );
 }
-
-export default hot(module)(BookingDialogBody);
