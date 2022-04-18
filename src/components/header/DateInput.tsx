@@ -1,6 +1,6 @@
 import React from "react";
-import DatePicker, { registerLocale } from "react-datepicker";
-import it from "date-fns/locale/it";
+import { DatePicker } from "@mui/x-date-pickers";
+import { TextField } from "@mui/material";
 
 import * as Utils from "../../utils";
 import { useAppDispatch, useCurrentDate } from "../../redux/hooks";
@@ -9,16 +9,11 @@ import * as TableSlice from "../../redux/tableSlice";
 import SidemenuButton from "./SidemenuButton";
 import SaveAndReset from "./SaveAndReset";
 
-import "react-datepicker/dist/react-datepicker.css";
-import "./DateInput.css";
-
-registerLocale("it", it);
-
 export default function DateInput(): JSX.Element {
   const dispatch = useAppDispatch();
   const currentDate = useCurrentDate();
 
-  function changeTableDate(date: Date) {
+  function changeTableDate(date: Date | null) {
     if (date !== null) {
       dispatch(TableSlice.changeDate({ date: Utils.dateToString(date) }));
     }
@@ -29,10 +24,9 @@ export default function DateInput(): JSX.Element {
       <SidemenuButton />
       <div>
         <DatePicker
-          locale="it"
-          dateFormat="dd/MM/yyyy"
-          selected={new Date(currentDate)}
+          value={new Date(currentDate)}
           onChange={changeTableDate}
+          renderInput={(props) => <TextField {...props} />}
         />
       </div>
       <SaveAndReset />

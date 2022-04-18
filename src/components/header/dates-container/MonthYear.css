@@ -1,5 +1,5 @@
 .month-year {
-  z-index: 999;
+  z-index: 1;
   height: 4rem;
   width: 6rem;
   border-right: 2px solid black;

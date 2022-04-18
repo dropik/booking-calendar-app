@@ -1,6 +1,6 @@
 .tile-context-menu {
   position: fixed;
-  z-index: 9999;
+  z-index: 1500;
   background-color: white;
   border: 2px solid black;
   border-bottom: 0;
