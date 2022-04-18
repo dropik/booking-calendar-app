@@ -9,6 +9,7 @@
 .tile-context-menu div {
   padding: 0.5rem;
   border-bottom: 2px solid black;
+  color: initial;
 }
 
 .tile-context-menu div:hover {

@@ -1,27 +1,22 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 export type State = {
-  tileId?: string,
-  mouseX: number,
-  mouseY: number
+  isShown: boolean,
 };
 
 const initialState: State = {
-  mouseX: 0,
-  mouseY: 0
+  isShown: false
 };
 
 export const contextMenuSlice = createSlice({
   name: "contextMenu",
   initialState: initialState,
   reducers: {
-    show: (state, action: PayloadAction<{ tileId: string, mouseX: number, mouseY: number }>) => {
-      state.tileId = action.payload.tileId;
-      state.mouseX = action.payload.mouseX;
-      state.mouseY = action.payload.mouseY;
+    show: (state) => {
+      state.isShown = true;
     },
     hide: (state) => {
-      state.tileId = undefined;
+      state.isShown = false;
     }
   }
 });

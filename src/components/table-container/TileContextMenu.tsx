@@ -5,25 +5,30 @@ import { faCircleInfo, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
-import * as ContextMenuSlice from "../../redux/contextMenuSlice";
 import * as DialogSlice from "../../redux/dialogSlice";
+import * as ContextMenuSlice from "../../redux/contextMenuSlice";
 
 import "./TileContextMenu.css";
 
-export default function TileContextMenu(): JSX.Element {
+type Props = {
+  tileId: string,
+  x: number,
+  y: number,
+  onHide: () => void
+};
+
+export default function TileContextMenu({ tileId, x, y, onHide }: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const ref = useRef<HTMLDivElement>(null);
-  const tileId = useAppSelector((state) => state.contextMenu.tileId);
   const isUnassigned = useIsUnassigned(tileId);
-  const mouseX = useAppSelector((state) => state.contextMenu.mouseX);
-  const mouseY = useAppSelector((state) => state.contextMenu.mouseY);
 
-  useContextMenuPositionEffect(ref, mouseX, mouseY);
-  useHideContextOnClickOutside(dispatch);
-
-  if (!tileId || (isUnassigned === undefined)) {
-    return <></>;
+  function hideMenu() {
+    onHide();
+    dispatch(ContextMenuSlice.hide());
   }
+
+  useContextMenuPositionEffect(ref, x, y);
+  useHideContextOnClickOutside(dispatch, hideMenu);
 
   const removeClassName = getRemoveClassName(isUnassigned);
 
@@ -31,15 +36,13 @@ export default function TileContextMenu(): JSX.Element {
     if (tileId) {
       dispatch(DialogSlice.showBookingDialog({ tileId }));
     }
-    dispatch(ContextMenuSlice.hide());
+    hideMenu();
   }
 
   function removeOccupation() {
     if (!isUnassigned) {
-      if (tileId) {
-        dispatch(TilesSlice.removeAssignment({ tileId }));
-      }
-      dispatch(ContextMenuSlice.hide());
+      dispatch(TilesSlice.removeAssignment({ tileId }));
+      hideMenu();
     }
   }
 
@@ -57,12 +60,10 @@ export default function TileContextMenu(): JSX.Element {
   );
 }
 
-function useIsUnassigned(tileId: string | undefined): boolean | undefined {
+function useIsUnassigned(tileId: string): boolean {
   return useAppSelector((state) => {
-    if (tileId) {
-      const tile = state.tiles.data[tileId];
-      return tile.roomNumber === undefined;
-    }
+    const tile = state.tiles.data[tileId];
+    return tile.roomNumber === undefined;
   });
 }
 
@@ -75,14 +76,15 @@ function useContextMenuPositionEffect(ref: React.RefObject<HTMLDivElement>, mous
   }, [ref, mouseX, mouseY]);
 }
 
-function useHideContextOnClickOutside(dispatch: React.Dispatch<AnyAction>): void {
+function useHideContextOnClickOutside(dispatch: React.Dispatch<AnyAction>, hideMenu: () => void): void {
   useEffect(() => {
     function onClickSomewhere() {
+      hideMenu();
       dispatch(ContextMenuSlice.hide());
     }
     window.addEventListener("mousedown", onClickSomewhere);
     return () => window.removeEventListener("mousedown", onClickSomewhere);
-  }, [dispatch]);
+  }, [dispatch, hideMenu]);
 }
 
 function getRemoveClassName(isUnassigned: boolean): string {

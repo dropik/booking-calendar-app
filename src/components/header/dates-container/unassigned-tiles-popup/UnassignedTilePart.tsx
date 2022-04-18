@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 
 import { useAppDispatch, useAppSelector, useColumns, useLeftmostDate } from "../../../../redux/hooks";
 import * as Utils from "../../../../utils";
@@ -6,6 +6,7 @@ import * as TilesSlice from "../../../../redux/tilesSlice";
 import * as ContextMenuSlice from "../../../../redux/contextMenuSlice";
 
 import OccupationInfo from "../../../OccupationInfo";
+import TileContextMenu from "../../../table-container/TileContextMenu";
 
 import "./UnassignedTilePart.css";
 
@@ -21,8 +22,9 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
   const columns = useColumns();
   const ref = useRef<HTMLDivElement>(null);
   const [isShowInfo, setIsShowInfo] = useState(false);
+  const [isShowContextMenu, setIsShowContextMenu] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const contextTileId = useAppSelector((state) => state.contextMenu.tileId);
+  const contextMenuHideCallback = useCallback(() => setIsShowContextMenu(false), []);
 
   useBackgroundColorEffect(ref, tileData);
 
@@ -37,11 +39,9 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
     event.preventDefault();
     event.stopPropagation();
     setIsShowInfo(false);
-    dispatch(ContextMenuSlice.show({
-      tileId,
-      mouseX: event.pageX,
-      mouseY: event.pageY
-    }));
+    setIsShowContextMenu(true);
+    setMousePos({ x: event.pageX, y: event.pageY });
+    dispatch(ContextMenuSlice.show());
   }
 
   function grabTile(event: React.MouseEvent<HTMLDivElement>) {
@@ -56,7 +56,7 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
   }
 
   function showInfo(event: React.MouseEvent<HTMLDivElement>) {
-    if (!contextTileId) {
+    if (!isShowContextMenu) {
       setIsShowInfo(true);
       setMousePos({ x: event.pageX, y: event.pageY });
     }
@@ -86,6 +86,11 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
       {
         isShowInfo ?
           <OccupationInfo tileId={tileId} x={mousePos.x} y={mousePos.y} /> :
+          <></>
+      }
+      {
+        isShowContextMenu ?
+          <TileContextMenu tileId={tileId} x={mousePos.x} y={mousePos.y} onHide={contextMenuHideCallback} /> :
           <></>
       }
     </div>

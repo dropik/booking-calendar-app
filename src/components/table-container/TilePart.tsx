@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 
 import * as Utils from "../../utils";
 
@@ -6,8 +6,9 @@ import { useAppDispatch, useAppSelector, useColumns, useLeftmostDate } from "../
 import * as TilesSlice from "../../redux/tilesSlice";
 import * as ContextMenuSlice from "../../redux/contextMenuSlice";
 
-import OccupationInfo from "../OccupationInfo";
 import TilePartAlert from "./TilePartAlert";
+import OccupationInfo from "../OccupationInfo";
+import TileContextMenu from "./TileContextMenu";
 
 import "./TilePart.css";
 
@@ -26,8 +27,9 @@ export default function TilePart({ y, tileData }: Props): JSX.Element {
   const roomType = useRoomTypeByNumber(y);
   const personsInRoomType = useAppSelector(state => state.roomTypes.data[roomType]);
   const [isShowInfo, setIsShowInfo] = useState(false);
+  const [isShowContextMenu, setIsShowContextMenu] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const contextTileId = useAppSelector((state) => state.contextMenu.tileId);
+  const contextMenuHideCallback = useCallback(() => setIsShowContextMenu(false), []);
 
   const outOfBound = isOutOfBound(tileData, leftmostDate, columns);
   const className = getClassName(isGrabbed, outOfBound);
@@ -43,11 +45,13 @@ export default function TilePart({ y, tileData }: Props): JSX.Element {
     event.preventDefault();
     event.stopPropagation();
     setIsShowInfo(false);
-    dispatch(ContextMenuSlice.show({ tileId, mouseX: event.pageX, mouseY: event.pageY }));
+    setIsShowContextMenu(true);
+    setMousePos({ x: event.pageX, y: event.pageY });
+    dispatch(ContextMenuSlice.show());
   }
 
   function showInfo(event: React.MouseEvent<HTMLDivElement>) {
-    if (!contextTileId) {
+    if (!isShowContextMenu) {
       setIsShowInfo(true);
       setMousePos({ x: event.pageX, y: event.pageY });
     }
@@ -80,6 +84,11 @@ export default function TilePart({ y, tileData }: Props): JSX.Element {
       {
         isShowInfo ?
           <OccupationInfo tileId={tileId} x={mousePos.x} y={mousePos.y} /> :
+          <></>
+      }
+      {
+        isShowContextMenu ?
+          <TileContextMenu tileId={tileId} x={mousePos.x} y={mousePos.y} onHide={contextMenuHideCallback} /> :
           <></>
       }
     </div>
