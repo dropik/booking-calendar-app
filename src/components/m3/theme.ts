@@ -1,3 +1,4 @@
+import React from "react";
 import { createTheme } from "@mui/material/styles";
 
 declare module "@mui/material/styles" {
@@ -67,6 +68,62 @@ declare module "@mui/material/styles" {
     inverseSurface?: PaletteOptions["colourBackground"];
     inverseOnSurface?: PaletteOptions["colourBackground"];
     inversePrimary?: PaletteOptions["primary"];
+  }
+
+  interface TypographyVariants {
+    displayLarge: React.CSSProperties;
+    displayMedium: React.CSSProperties;
+    displaySmall: React.CSSProperties;
+    headlineLarge: React.CSSProperties;
+    headlineMedium: React.CSSProperties;
+    headlineSmall: React.CSSProperties;
+    titleLarge: React.CSSProperties;
+    titleMedium: React.CSSProperties;
+    titleSmall: React.CSSProperties;
+    labelLarge: React.CSSProperties;
+    labelMedium: React.CSSProperties;
+    labelSmall: React.CSSProperties;
+    bodyLarge: React.CSSProperties;
+    bodyMedium: React.CSSProperties;
+    bodySmall: React.CSSProperties;
+  }
+
+  interface TypographyVariantsOptions {
+    displayLarge?: React.CSSProperties;
+    displayMedium?: React.CSSProperties;
+    displaySmall?: React.CSSProperties;
+    headlineLarge?: React.CSSProperties;
+    headlineMedium?: React.CSSProperties;
+    headlineSmall?: React.CSSProperties;
+    titleLarge?: React.CSSProperties;
+    titleMedium?: React.CSSProperties;
+    titleSmall?: React.CSSProperties;
+    labelLarge?: React.CSSProperties;
+    labelMedium?: React.CSSProperties;
+    labelSmall?: React.CSSProperties;
+    bodyLarge?: React.CSSProperties;
+    bodyMedium?: React.CSSProperties;
+    bodySmall?: React.CSSProperties;
+  }
+}
+
+declare module "@mui/material/Typography" {
+  interface TypographyPropsVariantOverrides {
+    displayLarge: true,
+    displayMedium: true,
+    displaySmall: true,
+    headlineLarge: true,
+    headlineMedium: true,
+    headlineSmall: true,
+    titleLarge: true,
+    titleMedium: true,
+    titleSmall: true,
+    labelLarge: true
+    labelMedium: true,
+    labelSmall: true,
+    bodyLarge: true,
+    bodyMedium: true,
+    bodySmall: true
   }
 }
 
@@ -217,6 +274,98 @@ const theme = createTheme({
       main: "#D0BCFF",
       light: "#D0BCFF",
       dark: "#6750A4"
+    }
+  },
+  typography: {
+    displayLarge: {
+      lineHeight: "4rem",
+      fontSize: "3.5625rem",
+      fontWeight: "400",
+      letterSpacing: "0"
+    },
+    displayMedium: {
+      lineHeight: "3.25rem",
+      fontSize: "2.8125rem",
+      fontWeight: "400",
+      letterSpacing: "0"
+    },
+    displaySmall: {
+      lineHeight: "2.75rem",
+      fontSize: "2.25rem",
+      fontWeight: "400",
+      letterSpacing: "0"
+    },
+    headlineLarge: {
+      lineHeight: "2.5rem",
+      fontSize: "2rem",
+      fontWeight: "400",
+      letterSpacing: "0"
+    },
+    headlineMedium: {
+      lineHeight: "2.25rem",
+      fontSize: "1.75rem",
+      fontWeight: "400",
+      letterSpacing: "0"
+    },
+    headlineSmall: {
+      lineHeight: "2rem",
+      fontSize: "1.5rem",
+      fontWeight: "400",
+      letterSpacing: "0"
+    },
+    titleLarge: {
+      lineHeight: "1.75rem",
+      fontSize: "1.375rem",
+      fontWeight: "400",
+      letterSpacing: "0"
+    },
+    titleMedium: {
+      lineHeight: "1.5rem",
+      fontSize: "1rem",
+      fontWeight: "500",
+      letterSpacing: "0.0094rem"
+    },
+    titleSmall: {
+      lineHeight: "1.25rem",
+      fontSize: "0.875rem",
+      fontWeight: "500",
+      letterSpacing: "0.0071rem"
+    },
+    labelLarge: {
+      lineHeight: "1.25rem",
+      fontSize: "0.875rem",
+      fontWeight: "500",
+      letterSpacing: "0.0071rem"
+    },
+    labelMedium: {
+      lineHeight: "1rem",
+      fontSize: "0.75rem",
+      fontWeight: "500",
+      letterSpacing: "0.0417rem"
+    },
+    labelSmall: {
+      lineHeight: "0.375rem",
+      fontSize: "0.6875rem",
+      fontWeight: "500",
+      letterSpacing: "0.0455rem"
+    },
+    bodyLarge: {
+      lineHeight: "1.5rem",
+      fontSize: "1rem",
+      fontWeight: "400",
+      letterSpacing: "0.0094rem"
+    },
+    bodyMedium: {
+      lineHeight: "1.25rem",
+      fontSize: "0.875rem",
+      fontWeight: "400",
+      letterSpacing: "0.0179rem"
+    },
+    bodySmall: {
+      lineHeight: "1rem",
+      fontSize: "0.75rem",
+      fontWeight: "400",
+      letterSpacing: "0.0333rem"
     }
   }
 });
