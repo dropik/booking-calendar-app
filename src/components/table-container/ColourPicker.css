@@ -7,3 +7,7 @@
   border: 2px solid black;
   transform: translate(calc(-86px + 1.5rem), 10px);
 }
+
+.unassigned-tiles-popup-body .colour-picker {
+  position: fixed;
+}
