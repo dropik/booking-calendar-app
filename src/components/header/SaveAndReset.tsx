@@ -4,6 +4,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import RestoreIcon from "@mui/icons-material/Restore";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
+import ButtonGroup from "@mui/material/ButtonGroup";
 
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
@@ -66,7 +67,7 @@ function getBody(saveStatus: Status, hasChanges: boolean, resetHandler: () => vo
   }
   return (
     <>
-      <IconButton onClick={resetHandler}>
+      <IconButton onClick={resetHandler} sx={{ mr: 1 }}>
         <RestoreIcon />
       </IconButton>
       <FilledButton onClick={saveHandler}>Salva</FilledButton>
