@@ -1,4 +1,4 @@
-- Tile colour assignment.
+- Prettier interface.
 - Real API calls.
 - Input escaping.
 - Handle connection errors.
@@ -8,6 +8,5 @@
 - Fix keep expanding left when scrolled by dragging scrollbar.
 - Handle touchscreen.
 - Real-time backend synchronization for updating tiles.
-- Prettier interface.
 - Table fragmentation system??
 - Police data sending directly to police web portal??

@@ -1,9 +1,8 @@
 import React, { memo } from "react";
-import { hot } from "react-hot-loader";
 
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import * as TilesSlice from "../../../redux/tilesSlice";
-import * as ContextMenuSlice from "../../../redux/contextMenuSlice";
+import * as ContextMenuSlice from "../../../redux/poppersSlice";
 
 import DayAlert from "./DayAlert";
 
@@ -13,7 +12,7 @@ type Props = {
   x: string
 };
 
-function Day({ x }: Props): JSX.Element {
+export default memo(function Day({ x }: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const hasUnassignedTiles = useHasUnassignedTiles(x);
   const selected = useAppSelector((state) => state.tiles.selectedDate === x);
@@ -41,7 +40,7 @@ function Day({ x }: Props): JSX.Element {
       <DayAlert hasUnassignedTiles={hasUnassignedTiles} />
     </div>
   );
-}
+});
 
 function useHasUnassignedTiles(x: string) {
   return useAppSelector(state => (state.tiles.unassignedMap[x] !== undefined) && (Object.keys(state.tiles.unassignedMap[x]).length > 0));
@@ -57,5 +56,3 @@ function getClassName(selected: boolean, hasUnassignedTiles: boolean): string {
   }
   return className;
 }
-
-export default memo(hot(module)(Day));

@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-import { hot } from "react-hot-loader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faBookOpen, faBuilding, faChartColumn, faMoneyBill, faPerson } from "@fortawesome/free-solid-svg-icons";
 
@@ -10,7 +9,7 @@ import * as DialogSlice from "../redux/dialogSlice";
 import "../globals.css";
 import "./Sidemenu.css";
 
-function Sidemenu(): JSX.Element {
+export default function Sidemenu(): JSX.Element {
   const dispatch = useAppDispatch();
   const showed = useAppSelector((state) => state.sidemenu.showed);
   const sidemenuRef = useRef<HTMLDivElement>(null);
@@ -88,5 +87,3 @@ function Sidemenu(): JSX.Element {
     </div>
   );
 }
-
-export default hot(module)(Sidemenu);

@@ -1,5 +1,4 @@
 import React, { memo, useMemo } from "react";
-import { hot } from "react-hot-loader";
 
 import { useAppSelector } from "../../../../redux/hooks";
 import * as Utils from "../../../../utils";
@@ -13,14 +12,14 @@ type Props = {
   leftmostSelectedTileDate: string,
 };
 
-function UnassignedRow({ tileId, leftmostSelectedTileDate }: Props): JSX.Element {
+export default memo(function UnassignedRow({ tileId, leftmostSelectedTileDate }: Props): JSX.Element {
   const rightmostSelectedTileDate = useRightmostSelectedTileDate();
 
   const days = getDaysCount(leftmostSelectedTileDate, rightmostSelectedTileDate);
   const cells = useCellsMemo(tileId, leftmostSelectedTileDate, days);
 
   return (<div className="unassigned-row">{cells}</div>);
-}
+});
 
 function useRightmostSelectedTileDate(): string | undefined {
   return useAppSelector((state) => {
@@ -59,5 +58,3 @@ function useCellsMemo(tileId: string, leftmostSelectedTileDate: string, days: nu
     return cells;
   }, [tileId, leftmostSelectedTileDate, days]);
 }
-
-export default memo(hot(module)(UnassignedRow));

@@ -1,5 +1,4 @@
 import React, { ReactNode, useContext } from "react";
-import { hot } from "react-hot-loader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faXmark } from "@fortawesome/free-solid-svg-icons";
 
@@ -13,7 +12,7 @@ type Props = {
   children: ReactNode
 };
 
-function DialogHeader({ children }: Props): JSX.Element {
+export default function DialogHeader({ children }: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const dialogContext = useContext(DialogContext);
   const dialogContainerContext = useContext(DialogContainerContext);
@@ -37,5 +36,3 @@ function DialogHeader({ children }: Props): JSX.Element {
     </>
   );
 }
-
-export default hot(module)(DialogHeader);

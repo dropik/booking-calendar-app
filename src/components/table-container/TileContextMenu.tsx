@@ -1,46 +1,63 @@
-import React, { useEffect, useRef } from "react";
-import { hot } from "react-hot-loader";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
-import * as ContextMenuSlice from "../../redux/contextMenuSlice";
 import * as DialogSlice from "../../redux/dialogSlice";
+import * as ContextMenuSlice from "../../redux/poppersSlice";
 
 import "./TileContextMenu.css";
 
-function TileContextMenu(): JSX.Element {
+type Props = {
+  tileId: string,
+  x: number,
+  y: number,
+  onHide: () => void,
+  isOutOfBound: boolean,
+  onColourPickerShow: () => void
+};
+
+export default function TileContextMenu({ tileId, x, y, onHide, isOutOfBound, onColourPickerShow }: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const ref = useRef<HTMLDivElement>(null);
-  const tileId = useAppSelector((state) => state.contextMenu.tileId);
+  const assignColourIconRef = useRef<HTMLDivElement>(null);
   const isUnassigned = useIsUnassigned(tileId);
-  const mouseX = useAppSelector((state) => state.contextMenu.mouseX);
-  const mouseY = useAppSelector((state) => state.contextMenu.mouseY);
+  const colour = useAppSelector((state) => state.tiles.data[tileId].colour);
 
-  useContextMenuPositionEffect(ref, mouseX, mouseY);
-  useHideContextOnClickOutside(dispatch);
-
-  if (!tileId || (isUnassigned === undefined)) {
-    return <></>;
+  function hideMenu() {
+    onHide();
+    dispatch(ContextMenuSlice.hide());
   }
 
+  useContextMenuPositionEffect(ref, x, y);
+  useAssignColourIconBackgroundColourEffect(assignColourIconRef, colour);
+  useHideContextOnClickOutside(dispatch, hideMenu);
+
   const removeClassName = getRemoveClassName(isUnassigned);
+
+  let assignColourClassName = "button assign-colour";
+  if (isOutOfBound) {
+    assignColourClassName += " disabled";
+  }
 
   function showInfoDialog() {
     if (tileId) {
       dispatch(DialogSlice.showBookingDialog({ tileId }));
     }
-    dispatch(ContextMenuSlice.hide());
+    hideMenu();
+  }
+
+  function showColourPicker() {
+    onColourPickerShow();
+    onHide();
   }
 
   function removeOccupation() {
     if (!isUnassigned) {
-      if (tileId) {
-        dispatch(TilesSlice.removeAssignment({ tileId }));
-      }
-      dispatch(ContextMenuSlice.hide());
+      dispatch(TilesSlice.removeAssignment({ tileId }));
+      hideMenu();
     }
   }
 
@@ -50,20 +67,22 @@ function TileContextMenu(): JSX.Element {
         <FontAwesomeIcon icon={faCircleInfo} />
         Informazioni
       </div>
+      <div className={assignColourClassName} onClick={showColourPicker}>
+        <div ref={assignColourIconRef} className="icon"></div>
+        Assegna colore
+      </div>
       <div className={removeClassName} onClick={removeOccupation}>
         <FontAwesomeIcon icon={faTrashCan} />
-        Rimuovere occupazione
+        Rimuovi occupazione
       </div>
     </div>
   );
 }
 
-function useIsUnassigned(tileId: string | undefined): boolean | undefined {
+function useIsUnassigned(tileId: string): boolean {
   return useAppSelector((state) => {
-    if (tileId) {
-      const tile = state.tiles.data[tileId];
-      return tile.roomNumber === undefined;
-    }
+    const tile = state.tiles.data[tileId];
+    return tile.roomNumber === undefined;
   });
 }
 
@@ -76,14 +95,23 @@ function useContextMenuPositionEffect(ref: React.RefObject<HTMLDivElement>, mous
   }, [ref, mouseX, mouseY]);
 }
 
-function useHideContextOnClickOutside(dispatch: React.Dispatch<AnyAction>): void {
+function useAssignColourIconBackgroundColourEffect(ref: React.RefObject<HTMLDivElement>, colour: string) {
+  useLayoutEffect(() => {
+    if (ref.current) {
+      ref.current.style.backgroundColor = colour;
+    }
+  }, [ref, colour]);
+}
+
+function useHideContextOnClickOutside(dispatch: React.Dispatch<AnyAction>, hideMenu: () => void): void {
   useEffect(() => {
     function onClickSomewhere() {
+      hideMenu();
       dispatch(ContextMenuSlice.hide());
     }
     window.addEventListener("mousedown", onClickSomewhere);
     return () => window.removeEventListener("mousedown", onClickSomewhere);
-  }, [dispatch]);
+  }, [dispatch, hideMenu]);
 }
 
 function getRemoveClassName(isUnassigned: boolean): string {
@@ -97,5 +125,3 @@ function getRemoveClassName(isUnassigned: boolean): string {
 function stopMouseEventPropagation(event: React.MouseEvent<HTMLDivElement>): void {
   event.stopPropagation();
 }
-
-export default hot(module)(TileContextMenu);

@@ -1,5 +1,4 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef } from "react";
-import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
 import * as Utils from "../utils";
@@ -12,12 +11,11 @@ import * as TableSlice from "../redux/tableSlice";
 import Table from "./table-container/Table";
 import FetchTiles from "./table-container/FetchTiles";
 import GrabbedTile from "./table-container/GrabbedTile";
-import TileContextMenu from "./table-container/TileContextMenu";
 import ConnectionError from "./table-container/ConnectionError";
 
 import "./TableContainer.css";
 
-function TableContainer(): JSX.Element {
+export default function TableContainer(): JSX.Element {
   const dispatch = useAppDispatch();
   const ref = useRef<HTMLDivElement>(null);
   const hotelData = useHotelData();
@@ -98,10 +96,7 @@ function useTableContentsMemo(): JSX.Element {
       <Table />
       <FetchTiles />
       <GrabbedTile />
-      <TileContextMenu />
       <ConnectionError />
     </>
   ), []);
 }
-
-export default hot(module)(TableContainer);

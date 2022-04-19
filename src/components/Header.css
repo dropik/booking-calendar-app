@@ -4,7 +4,7 @@
   left: 0.5rem;
   right: 0.5rem;
   background-color: white;
-  z-index: 9999;
+  z-index: 1100;
 }
 
 .date-input {

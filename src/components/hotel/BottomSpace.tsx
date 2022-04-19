@@ -1,11 +1,10 @@
 import React, { useLayoutEffect, useRef } from "react";
-import { hot } from "react-hot-loader";
 
 import { useAppSelector } from "../../redux/hooks";
 
 import "./BottomSpace.css";
 
-function BottomSpace(): JSX.Element {
+export default function BottomSpace(): JSX.Element {
   const ref = useRef<HTMLDivElement>(null);
   const offsetHeight = useAppSelector(state => state.table.offsetHeight);
   const clientHeight = useAppSelector(state => state.table.clientHeight);
@@ -22,5 +21,3 @@ function BottomSpace(): JSX.Element {
   }
   return <></>;
 }
-
-export default hot(module)(BottomSpace);

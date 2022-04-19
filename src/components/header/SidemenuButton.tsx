@@ -1,5 +1,4 @@
 import React from "react";
-import { hot } from "react-hot-loader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 
@@ -8,7 +7,7 @@ import * as SidemenuSlice from "../../redux/sidemenuSlice";
 
 import "./SidemenuButton.css";
 
-function SidemenuButton(): JSX.Element {
+export default function SidemenuButton(): JSX.Element {
   const dispatch = useAppDispatch();
 
   function showSidemenu() {
@@ -21,5 +20,3 @@ function SidemenuButton(): JSX.Element {
     </div>
   );
 }
-
-export default hot(module)(SidemenuButton);

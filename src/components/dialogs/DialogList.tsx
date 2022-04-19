@@ -1,5 +1,4 @@
 import React, { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
-import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
 import * as Api from "../../api";
@@ -13,7 +12,7 @@ type Props<T extends Api.BookingShortData | Api.ClientShortData> = {
   dataPlaceholder: string
 }
 
-function DialogList<T extends Api.BookingShortData | Api.ClientShortData>(
+export default function DialogList<T extends Api.BookingShortData | Api.ClientShortData>(
   { children, tryFetchDataAsync, dataPlaceholder }: Props<T>
 ): JSX.Element {
   const dispatch = useAppDispatch();
@@ -62,5 +61,3 @@ function useFetchDataEffect<T>(
     return () => { isSubscribed = false; };
   }, [dispatch, setData, tryFetchDataAsync, isLiveUpdateEnabled, isValidated, forceFetchRequest]);
 }
-
-export default hot(module)(DialogList);

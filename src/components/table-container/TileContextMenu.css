@@ -1,6 +1,6 @@
 .tile-context-menu {
   position: fixed;
-  z-index: 9999;
+  z-index: 1500;
   background-color: white;
   border: 2px solid black;
   border-bottom: 0;
@@ -9,9 +9,19 @@
 .tile-context-menu div {
   padding: 0.5rem;
   border-bottom: 2px solid black;
+  color: initial;
 }
 
 .tile-context-menu div:hover {
+  background-color: #ebebeb;
+}
+
+.tile-context-menu div.disabled {
+  cursor: default;
+  background-color: #ebebeb;
+}
+
+.tile-context-menu div.disabled:hover {
   background-color: #ebebeb;
 }
 
@@ -24,11 +34,17 @@
 }
 
 .tile-context-menu .remove.disabled {
-  cursor: default;
   color: #c5a4a4;
-  background-color: #ebebeb;
 }
 
-.tile-context-menu .remove.disabled:hover {
-  background-color: #ebebeb;
+.tile-context-menu .assign-colour .icon {
+  border-radius: 1rem;
+  display: inline-block;
+  border: 2px solid black;
+  margin-right: 0.5rem;
+  vertical-align: bottom;
+}
+
+.tile-context-menu .assign-colour.disabled {
+  color: gray;
 }

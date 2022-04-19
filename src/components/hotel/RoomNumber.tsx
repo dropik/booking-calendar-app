@@ -1,5 +1,4 @@
 import React from "react";
-import { hot } from "react-hot-loader";
 
 import "./RoomNumber.css";
 
@@ -8,7 +7,7 @@ type Props = {
   isLast: boolean
 };
 
-function RoomNumber({ number, isLast }: Props): JSX.Element {
+export default function RoomNumber({ number, isLast }: Props): JSX.Element {
   let className = "room-number";
   if (isLast) {
     className += " room-number-last";
@@ -20,5 +19,3 @@ function RoomNumber({ number, isLast }: Props): JSX.Element {
     </div>
   );
 }
-
-export default hot(module)(RoomNumber);

@@ -1,5 +1,4 @@
 import React from "react";
-import { hot } from "react-hot-loader";
 
 import "./Floor.css";
 
@@ -8,7 +7,7 @@ type Props = {
   isFollowing: boolean
 };
 
-function Floor({ name, isFollowing }: Props): JSX.Element {
+export default function Floor({ name, isFollowing }: Props): JSX.Element {
   let className = "floor";
   if (isFollowing) {
     className += " floor-following";
@@ -17,5 +16,3 @@ function Floor({ name, isFollowing }: Props): JSX.Element {
 
   return <div className={className}>{fullName}</div>;
 }
-
-export default hot(module)(Floor);

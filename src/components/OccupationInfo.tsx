@@ -1,18 +1,20 @@
 import React, { useLayoutEffect, useRef } from "react";
-import { hot } from "react-hot-loader";
 
 import { useAppSelector, useTileData } from "../redux/hooks";
 import * as Utils from "../utils";
 
 import "./OccupationInfo.css";
 
-function OccupationInfo(): JSX.Element {
+type Props = {
+  tileId: string,
+  x: number,
+  y: number
+};
+
+export default function OccupationInfo({ tileId, x, y }: Props): JSX.Element {
   const ref = useRef<HTMLDivElement>(null);
-  const x = useAppSelector((state) => state.occupationInfo.x);
-  const y = useAppSelector((state) => state.occupationInfo.y);
-  const hoveredId = useAppSelector(state => state.occupationInfo.hoveredId);
-  const tileData = useTileData(hoveredId);
-  const canShow = useCanShow();
+  const tileData = useTileData(tileId);
+  const canShow = useAppSelector((state) => (state.tiles.grabbedTile === undefined) && (!state.poppers.isShown));
 
   useUpdatePopupCoordsEffect(ref, x, y);
 
@@ -29,10 +31,6 @@ function OccupationInfo(): JSX.Element {
       </div>
     ) :
     <></>;
-}
-
-function useCanShow(): boolean {
-  return useAppSelector(state => (state.tiles.grabbedTile === undefined) && (state.contextMenu.tileId === undefined));
 }
 
 function useUpdatePopupCoordsEffect(
@@ -53,5 +51,3 @@ function getLocaleDepartureDate(from: string, nights: number): string {
   date.setDate(date.getDate() + nights);
   return date.toLocaleDateString();
 }
-
-export default hot(module)(OccupationInfo);

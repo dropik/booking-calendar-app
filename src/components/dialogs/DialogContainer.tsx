@@ -1,5 +1,4 @@
 import React, { createContext, ReactNode, useRef } from "react";
-import { hot } from "react-hot-loader";
 
 import { useAppDispatch } from "../../redux/hooks";
 import * as DialogSlice from "../../redux/dialogSlice";
@@ -13,7 +12,7 @@ type Props = {
   children: ReactNode
 }
 
-function DialogContainer({ children }: Props): JSX.Element {
+export default function DialogContainer({ children }: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const ref = useRef<HTMLDivElement>(null);
 
@@ -49,5 +48,3 @@ function DialogContainer({ children }: Props): JSX.Element {
     </DialogContainerContext.Provider>
   );
 }
-
-export default hot(module)(DialogContainer);

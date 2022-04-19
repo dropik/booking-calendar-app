@@ -1,5 +1,4 @@
 import React from "react";
-import { hot } from "react-hot-loader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 
@@ -13,7 +12,7 @@ type Props = {
   tileData: TilesSlice.TileData
 }
 
-function TilePartAlert({ personsInRoomType, roomType, tileData }: Props): JSX.Element {
+export default function TilePartAlert({ personsInRoomType, roomType, tileData }: Props): JSX.Element {
   let className = "tile-alert";
   let title = "";
 
@@ -33,5 +32,3 @@ function TilePartAlert({ personsInRoomType, roomType, tileData }: Props): JSX.El
     </span>
   );
 }
-
-export default hot(module)(TilePartAlert);

@@ -1,5 +1,4 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { hot } from "react-hot-loader";
 import { AnyAction } from "@reduxjs/toolkit";
 
 import * as Api from "../../api";
@@ -17,7 +16,7 @@ type Props<T extends Api.BookingData | Api.ClientData> = {
   tryFetchDataAsync: () => Promise<{ data: T }>,
 }
 
-function DataDialog<T extends Api.BookingData | Api.ClientData>(
+export default function DataDialog<T extends Api.BookingData | Api.ClientData>(
   { children, header, tryFetchDataAsync }: Props<T>
 ): JSX.Element {
   const dispatch = useAppDispatch();
@@ -52,5 +51,3 @@ function useFetchDataEffect<T>(
     fetchData();
   }, [dispatch, setData, onTryFetchDataAsync]);
 }
-
-export default hot(module)(DataDialog);

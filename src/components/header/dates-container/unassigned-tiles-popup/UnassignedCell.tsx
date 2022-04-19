@@ -1,5 +1,4 @@
 import React, { memo } from "react";
-import { hot } from "react-hot-loader";
 
 import { useAppSelector } from "../../../../redux/hooks";
 
@@ -12,7 +11,7 @@ type Props = {
   x: string
 };
 
-function UnassignedCell({ tileId, x }: Props): JSX.Element {
+export default memo(function UnassignedCell({ tileId, x }: Props): JSX.Element {
   const hasTilePart = useHasTilePart(x, tileId);
 
   return (
@@ -20,12 +19,10 @@ function UnassignedCell({ tileId, x }: Props): JSX.Element {
       <UnassignedTilePart tileId={tileId} hasTilePart={hasTilePart} />
     </div>
   );
-}
+});
 
 function useHasTilePart(x: string, tileId: string): boolean {
   return useAppSelector((state) => {
     return (state.tiles.unassignedMap[x] !== undefined) && (state.tiles.unassignedMap[x][tileId] !== undefined);
   });
 }
-
-export default memo(hot(module)(UnassignedCell));

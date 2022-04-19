@@ -1,5 +1,4 @@
 import React, { useCallback } from "react";
-import { hot } from "react-hot-loader";
 
 import * as Api from "../../api";
 
@@ -12,7 +11,7 @@ type Props = {
   to: string
 };
 
-function BookingsList({ nameOrId, from, to }: Props): JSX.Element {
+export default function BookingsList({ nameOrId, from, to }: Props): JSX.Element {
   const tryFetchDataAsync = useCallback(() => Api.fetchBookings(nameOrId, from, to), [nameOrId, from, to]);
 
   return (
@@ -23,5 +22,3 @@ function BookingsList({ nameOrId, from, to }: Props): JSX.Element {
     </DialogList>
   );
 }
-
-export default hot(module)(BookingsList);

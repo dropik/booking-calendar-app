@@ -1,16 +1,18 @@
 import React, { useEffect } from "react";
-import { hot } from "react-hot-loader";
 
 import Header from "./components/Header";
 import Hotel from "./components/Hotel";
 import TableContainer from "./components/TableContainer";
-import OccupationInfo from "./components/OccupationInfo";
 import Sidemenu from "./components/Sidemenu";
 import Dialog from "./components/Dialog";
 
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
 import "./App.css";
 
-function App(): JSX.Element {
+export default function App(): JSX.Element {
   useWindowCursorGrabbingEffect();
 
   return (
@@ -18,7 +20,6 @@ function App(): JSX.Element {
       <Header />
       <Hotel />
       <TableContainer />
-      <OccupationInfo />
       <Sidemenu />
       <Dialog />
     </div>
@@ -44,5 +45,3 @@ function useWindowCursorGrabbingEffect(): void {
     };
   }, []);
 }
-
-export default hot(module)(App);

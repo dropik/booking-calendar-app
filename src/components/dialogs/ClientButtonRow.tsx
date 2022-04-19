@@ -1,5 +1,4 @@
 import React from "react";
-import { hot } from "react-hot-loader";
 
 import { useAppDispatch } from "../../redux/hooks";
 import * as DialogSlice from "../../redux/dialogSlice";
@@ -18,7 +17,7 @@ type Props = {
   bookingName?: string
 };
 
-function ClientButtonRow({ bookingId, client, bookingName }: Props): JSX.Element {
+export default function ClientButtonRow({ bookingId, client, bookingName }: Props): JSX.Element {
   const dispatch = useAppDispatch();
 
   function showClient() {
@@ -31,5 +30,3 @@ function ClientButtonRow({ bookingId, client, bookingName }: Props): JSX.Element
     </ButtonInput>
   );
 }
-
-export default hot(module)(ClientButtonRow);

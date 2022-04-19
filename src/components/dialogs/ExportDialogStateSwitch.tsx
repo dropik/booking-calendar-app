@@ -1,5 +1,4 @@
 import React, { ReactNode } from "react";
-import { hot } from "react-hot-loader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
@@ -10,7 +9,7 @@ type Props = {
   state: ExportDialogState
 };
 
-function ExportDialogStateSwitch({ children, state }: Props): JSX.Element {
+export default function ExportDialogStateSwitch({ children, state }: Props): JSX.Element {
   switch (state) {
   case "fill":
     return <>{children}</>;
@@ -22,5 +21,3 @@ function ExportDialogStateSwitch({ children, state }: Props): JSX.Element {
     return <div className="message">Nessun dato da esportare!</div>;
   }
 }
-
-export default hot(module)(ExportDialogStateSwitch);

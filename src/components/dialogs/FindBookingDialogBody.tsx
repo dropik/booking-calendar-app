@@ -1,16 +1,15 @@
 import React, { useState } from "react";
-import { hot } from "react-hot-loader";
 
 import * as Utils from "../../utils";
 import { useCurrentDate } from "../../redux/hooks";
 
 import FindDialogBody from "./FindDialogBody";
 import LabeledTextInput from "./LabeledTextInput";
-import LabeledDateInput from "./LabeledDateInput";
+import DateInput from "./DateInput";
 import BookingRowContent from "./BookingRowContent";
 import BookingsList from "./BookingsList";
 
-function FindBookingDialogBody(): JSX.Element {
+export default function FindBookingDialogBody(): JSX.Element {
   const currentDate = useCurrentDate();
   const toDateObj = new Date(currentDate);
   toDateObj.setMonth(toDateObj.getMonth() + 1);
@@ -24,11 +23,11 @@ function FindBookingDialogBody(): JSX.Element {
     <FindDialogBody
       isValidated={isValidated}
       errorText="Intervallo selezionato non corretto"
-      formInputs={(showError) => (
+      formInputs={() => (
         <>
           <LabeledTextInput id="nameOrId" label="Nome / ID" value={nameOrId} onChange={setNameOrId} />
-          <LabeledDateInput id="from" label="Dal" isValid={!showError} value={fromDate} onChange={setFromDate} />
-          <LabeledDateInput id="to" label="Al" isValid={!showError} value={toDate} onChange={setToDate} />
+          <DateInput label="Dal" value={fromDate} onChange={setFromDate} maxValue={toDate} />
+          <DateInput label="Al" value={toDate} onChange={setToDate} minValue={fromDate} />
         </>
       )}
       header={() => <BookingRowContent data={{ id: "ID", name: "Nome", from: "Dal", to: "Al" }} />}
@@ -36,5 +35,3 @@ function FindBookingDialogBody(): JSX.Element {
     />
   );
 }
-
-export default hot(module)(FindBookingDialogBody);

@@ -14,7 +14,7 @@
   animation-delay: 0s, 4s;
   animation-direction: normal, reverse;
   animation-fill-mode: forwards, forwards;
-  z-index: 99999;
+  z-index: 1400;
 }
 
 @keyframes show-error {

@@ -1,5 +1,4 @@
 import React from "react";
-import { hot } from "react-hot-loader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
@@ -9,7 +8,7 @@ type Props = {
   hasUnassignedTiles: boolean
 };
 
-function DayAlert({ hasUnassignedTiles }: Props): JSX.Element {
+export default function DayAlert({ hasUnassignedTiles }: Props): JSX.Element {
   return hasUnassignedTiles ?
     <span
       className="day-alert"
@@ -19,5 +18,3 @@ function DayAlert({ hasUnassignedTiles }: Props): JSX.Element {
     </span> :
     <></>;
 }
-
-export default hot(module)(DayAlert);

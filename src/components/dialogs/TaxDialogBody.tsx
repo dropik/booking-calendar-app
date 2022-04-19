@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-import { hot } from "react-hot-loader";
 
 import { useAppDispatch, useCurrentDate } from "../../redux/hooks";
 import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
@@ -8,14 +7,14 @@ import * as Utils from "../../utils";
 import { DialogContainerContext } from "./DialogContainer";
 
 import ErrorLabel from "./ErrorLabel";
-import LabeledDateInput from "./LabeledDateInput";
+import DateInput from "./DateInput";
 import ButtonInput from "./ButtonInput";
 import DescriptionRow from "./DescriptionRow";
 import LoadingDataWrapper from "./LoadingDataWrapper";
 
 type DialogState = "fill" | "loading";
 
-function TaxDialogBody(): JSX.Element {
+export default function TaxDialogBody(): JSX.Element {
   const dispatch = useAppDispatch();
   const currentDate = useCurrentDate();
   const [dialogState, setDialogState] = useState<DialogState>("fill");
@@ -51,8 +50,8 @@ function TaxDialogBody(): JSX.Element {
       <>
         <ErrorLabel show={!isValidated} text="Intervallo selezionato non corretto" />
         <div className="row">
-          <LabeledDateInput id="from" label="Dal" isValid={isValidated} value={fromDate} onChange={setFromDate} />
-          <LabeledDateInput id="to" label="Al" isValid={isValidated} value={toDate} onChange={setToDate} />
+          <DateInput label="Dal" value={fromDate} onChange={setFromDate} maxValue={toDate} />
+          <DateInput label="Al" value={toDate} onChange={setToDate} minValue={fromDate} />
           <ButtonInput onClick={calculate}>Calcola</ButtonInput>
         </div>
       </>
@@ -75,5 +74,3 @@ function TaxDialogBody(): JSX.Element {
     );
   }
 }
-
-export default hot(module)(TaxDialogBody);

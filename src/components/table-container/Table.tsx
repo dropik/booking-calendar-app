@@ -1,5 +1,4 @@
 import React from "react";
-import { hot } from "react-hot-loader";
 
 import { useHotelData } from "../../redux/hooks";
 
@@ -7,7 +6,7 @@ import Room from "./Room";
 
 import "./Table.css";
 
-function Table(): JSX.Element {
+export default function Table(): JSX.Element {
   const hotelData = useHotelData();
 
   return (
@@ -30,5 +29,3 @@ function Table(): JSX.Element {
     </div>
   );
 }
-
-export default hot(module)(Table);

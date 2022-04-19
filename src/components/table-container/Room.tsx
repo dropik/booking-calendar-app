@@ -1,5 +1,4 @@
 import React from "react";
-import { hot } from "react-hot-loader";
 
 import { useAppDispatch, useDates } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
@@ -14,7 +13,7 @@ type Props = {
   isLast: boolean
 };
 
-function Room({ y, isFirst, isLast }: Props): JSX.Element {
+export default function Room({ y, isFirst, isLast }: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const dates = useDates();
 
@@ -56,5 +55,3 @@ function getClassName(isFirst: boolean, isLast: boolean): string {
   }
   return className;
 }
-
-export default hot(module)(Room);
