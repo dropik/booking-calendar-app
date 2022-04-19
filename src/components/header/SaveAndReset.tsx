@@ -2,16 +2,19 @@ import React, { useState } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import CheckIcon from "@mui/icons-material/Check";
 import RestoreIcon from "@mui/icons-material/Restore";
+import CircularProgress from "@mui/material/CircularProgress";
+import Typography from "@mui/material/Typography";
 
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
 import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
 import * as Api from "../../api";
 
-import "../../globals.css";
-import "./SaveAndReset.css";
 import FilledButton from "../m3/FilledButton";
 import IconButton from "../m3/IconButton";
+
+import "../../globals.css";
+import "./SaveAndReset.css";
 
 type Status = "idle" | "loading" | "fulfilled";
 
@@ -55,9 +58,9 @@ function getResetHandler(dispatch: React.Dispatch<AnyAction>): () => void {
 
 function getBody(saveStatus: Status, hasChanges: boolean, resetHandler: () => void, saveHandler: () => void): JSX.Element {
   if (saveStatus === "fulfilled") {
-    return (<span>Salvato <CheckIcon fontSize="small" /></span>);
+    return (<Typography variant="bodyMedium">Salvato <CheckIcon fontSize="small" /></Typography>);
   } else if (saveStatus === "loading") {
-    return (<span>Salvataggio...</span>);
+    return (<CircularProgress color="primary" />);
   } else if (!hasChanges) {
     return <></>;
   }
