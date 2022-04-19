@@ -4,11 +4,13 @@ import Fab, { FabProps } from "@mui/material/Fab";
 import Box from "@mui/material/Box";
 
 interface M3FabProps extends FabProps {
-  lowered?: boolean,
-  colourCombination?: "primary" | "surface" | "secondary" | "tertiary"
+  lowered?: boolean;
+  colourCombination?: "primary" | "surface" | "secondary" | "tertiary";
 }
 
-const CustomizedFab = styled(Fab)<M3FabProps>(({ theme, size, lowered, colourCombination = "primary" }) => ({
+const CustomizedFab = styled(Fab, {
+  shouldForwardProp: (prop) => (prop !== "lowered") && (prop !== "colourCombination")
+})<M3FabProps>(({ theme, size, lowered, colourCombination }) => ({
   textTransform: "none",
   backgroundColor: `${(
     colourCombination === "surface" ? theme.palette.surface.main : (
@@ -55,7 +57,8 @@ const CustomizedFab = styled(Fab)<M3FabProps>(({ theme, size, lowered, colourCom
       size === "large" ? "2.25rem" : "1.5rem"
     )
   ),
-  margin: "1rem",
+  marginRight: "1rem",
+  marginBottom: "1rem",
   ":hover": {
     boxShadow: theme.shadows[lowered ? 2 : 4],
     "& .state-layer": {
