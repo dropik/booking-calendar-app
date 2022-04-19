@@ -52,7 +52,9 @@ export default function SaveAndResetWidget(): JSX.Element {
       bottom: "2.5rem",
       right: "2.5rem",
       borderRadius: "1.75rem",
-      padding: "0.75rem",
+      paddingRight: "1rem",
+      paddingLeft: "1rem",
+      overflow: "visible",
       backgroundColor: (theme) => theme.palette.surface.main
     }}>
       {body}
@@ -62,6 +64,7 @@ export default function SaveAndResetWidget(): JSX.Element {
         bottom: 0,
         left: 0,
         right: 0,
+        borderRadius: "inherit",
         pointerEvents: "none",
         backgroundColor: (theme) => alpha(theme.palette.surfaceTint.main, theme.opacities.surface1),
       }}></Box>
@@ -92,7 +95,7 @@ function getBody(saveStatus: Status, resetHandler: () => void, saveHandler: () =
 
   return (
     <>
-      <FilledButton onClick={saveHandler} sx={{ mr: 1 }}>
+      <FilledButton onClick={saveHandler} sx={{ mr: 1, mt: 2, mb: 2 }}>
         Salva
       </FilledButton>
       <IconButton onClick={resetHandler}>
