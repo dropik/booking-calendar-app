@@ -105,6 +105,28 @@ declare module "@mui/material/styles" {
     bodyMedium?: React.CSSProperties;
     bodySmall?: React.CSSProperties;
   }
+
+  interface Theme {
+    opacities: {
+      hover: number,
+      focus: number,
+      press: number,
+      drag: number,
+      disabled: number,
+      disabledContainer: number
+    };
+  }
+
+  interface ThemeOptions {
+    opacities?: {
+      hover?: number,
+      focus?: number,
+      press?: number,
+      drag?: number,
+      disabled?: number,
+      disabledContainer?: number
+    }
+  }
 }
 
 declare module "@mui/material/Typography" {
@@ -367,6 +389,14 @@ const theme = createTheme({
       fontWeight: "400",
       letterSpacing: "0.0333rem"
     }
+  },
+  opacities: {
+    hover: 0.08,
+    focus: 0.12,
+    press: 0.12,
+    drag: 0.16,
+    disabled: 0.12,
+    disabledContainer: 0.38
   }
 });
 

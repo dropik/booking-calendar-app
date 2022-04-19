@@ -11,6 +11,7 @@ import * as Api from "../../api";
 import "../../globals.css";
 import "./SaveAndReset.css";
 import FilledButton from "../m3/FilledButton";
+import IconButton from "../m3/IconButton";
 
 type Status = "idle" | "loading" | "fulfilled";
 
@@ -62,9 +63,9 @@ function getBody(saveStatus: Status, hasChanges: boolean, resetHandler: () => vo
   }
   return (
     <>
-      <div onClick={resetHandler} className="button reset">
+      <IconButton onClick={resetHandler}>
         <RestoreIcon />
-      </div>
+      </IconButton>
       <FilledButton onClick={saveHandler}>Salva</FilledButton>
     </>
   );

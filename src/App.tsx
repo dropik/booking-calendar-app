@@ -11,7 +11,6 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import "./App.css";
-import "./components/m3/m3.css";
 
 export default function App(): JSX.Element {
   useWindowCursorGrabbingEffect();

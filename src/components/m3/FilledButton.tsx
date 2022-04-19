@@ -1,7 +1,7 @@
 import React from "react";
+import { alpha, styled } from "@mui/material/styles";
 import Button, { ButtonProps } from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { alpha, styled } from "@mui/material/styles";
 
 const CustomizedButton = styled(Button)<ButtonProps>(({ theme }) => ({
   color: theme.palette.onPrimary.main,
@@ -12,8 +12,8 @@ const CustomizedButton = styled(Button)<ButtonProps>(({ theme }) => ({
   paddingLeft: "1.5rem",
   paddingRight: "1.5rem",
   ":disabled": {
-    backgroundColor: alpha(theme.palette.onSurface.main, 0.12),
-    color: alpha(theme.palette.onSurface.main, 0.38)
+    backgroundColor: alpha(theme.palette.onSurface.main, theme.opacities.disabledContainer),
+    color: alpha(theme.palette.onSurface.main, theme.opacities.disabled)
   },
   ":hover": {
     boxShadow: theme.shadows[1],
@@ -23,14 +23,14 @@ const CustomizedButton = styled(Button)<ButtonProps>(({ theme }) => ({
     boxShadow: theme.shadows[0],
     "& .MuiTouchRipple-root": {
       backgroundColor: theme.palette.onPrimary.main,
-      opacity: 0.12
+      opacity: theme.opacities.focus
     }
   },
   ":active": {
     boxShadow: theme.shadows[0],
     "& .MuiTouchRipple-root": {
       backgroundColor: theme.palette.onPrimary.main,
-      opacity: 0.08
+      opacity: theme.opacities.hover
     }
   }
 }));
