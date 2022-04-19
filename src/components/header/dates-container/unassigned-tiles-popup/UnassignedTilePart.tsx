@@ -3,10 +3,11 @@ import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector, useColumns, useLeftmostDate } from "../../../../redux/hooks";
 import * as Utils from "../../../../utils";
 import * as TilesSlice from "../../../../redux/tilesSlice";
-import * as ContextMenuSlice from "../../../../redux/contextMenuSlice";
+import * as PoppersSlice from "../../../../redux/poppersSlice";
 
 import OccupationInfo from "../../../OccupationInfo";
 import TileContextMenu from "../../../table-container/TileContextMenu";
+import ColourPicker from "../../../table-container/ColourPicker";
 
 import "./UnassignedTilePart.css";
 
@@ -23,8 +24,10 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
   const ref = useRef<HTMLDivElement>(null);
   const [isShowInfo, setIsShowInfo] = useState(false);
   const [isShowContextMenu, setIsShowContextMenu] = useState(false);
+  const [isShowColourPicker, setIsShowColourPicker] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const contextMenuHideCallback = useCallback(() => setIsShowContextMenu(false), []);
+  const colourPickerHideCallback = useCallback(() => setIsShowColourPicker(false), []);
 
   useBackgroundColorEffect(ref, tileData);
 
@@ -40,8 +43,9 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
     event.stopPropagation();
     setIsShowInfo(false);
     setIsShowContextMenu(true);
+    setIsShowColourPicker(false);
     setMousePos({ x: event.pageX, y: event.pageY });
-    dispatch(ContextMenuSlice.show());
+    dispatch(PoppersSlice.show());
   }
 
   function grabTile(event: React.MouseEvent<HTMLDivElement>) {
@@ -90,7 +94,12 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
       }
       {
         isShowContextMenu ?
-          <TileContextMenu tileId={tileId} x={mousePos.x} y={mousePos.y} onHide={contextMenuHideCallback} isOutOfBound={outOfBound} /> :
+          <TileContextMenu tileId={tileId} x={mousePos.x} y={mousePos.y} onHide={contextMenuHideCallback} isOutOfBound={outOfBound} onColourPickerShow={() => setIsShowColourPicker(true)} /> :
+          <></>
+      }
+      {
+        isShowColourPicker ?
+          <ColourPicker tileId={tileId} onHide={colourPickerHideCallback} /> :
           <></>
       }
     </div>

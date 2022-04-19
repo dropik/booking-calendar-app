@@ -6,7 +6,7 @@ import { faCircleInfo, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
 import * as DialogSlice from "../../redux/dialogSlice";
-import * as ContextMenuSlice from "../../redux/contextMenuSlice";
+import * as ContextMenuSlice from "../../redux/poppersSlice";
 
 import "./TileContextMenu.css";
 
@@ -15,10 +15,11 @@ type Props = {
   x: number,
   y: number,
   onHide: () => void,
-  isOutOfBound: boolean
+  isOutOfBound: boolean,
+  onColourPickerShow: () => void
 };
 
-export default function TileContextMenu({ tileId, x, y, onHide, isOutOfBound }: Props): JSX.Element {
+export default function TileContextMenu({ tileId, x, y, onHide, isOutOfBound, onColourPickerShow }: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const ref = useRef<HTMLDivElement>(null);
   const assignColourIconRef = useRef<HTMLDivElement>(null);
@@ -48,6 +49,11 @@ export default function TileContextMenu({ tileId, x, y, onHide, isOutOfBound }: 
     hideMenu();
   }
 
+  function showColourPicker() {
+    onColourPickerShow();
+    onHide();
+  }
+
   function removeOccupation() {
     if (!isUnassigned) {
       dispatch(TilesSlice.removeAssignment({ tileId }));
@@ -61,7 +67,7 @@ export default function TileContextMenu({ tileId, x, y, onHide, isOutOfBound }: 
         <FontAwesomeIcon icon={faCircleInfo} />
         Informazioni
       </div>
-      <div className={assignColourClassName}>
+      <div className={assignColourClassName} onClick={showColourPicker}>
         <div ref={assignColourIconRef} className="icon"></div>
         Assegna colore
       </div>

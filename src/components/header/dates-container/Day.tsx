@@ -2,7 +2,7 @@ import React, { memo } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import * as TilesSlice from "../../../redux/tilesSlice";
-import * as ContextMenuSlice from "../../../redux/contextMenuSlice";
+import * as ContextMenuSlice from "../../../redux/poppersSlice";
 
 import DayAlert from "./DayAlert";
 

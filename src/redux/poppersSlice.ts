@@ -8,7 +8,7 @@ const initialState: State = {
   isShown: false
 };
 
-export const contextMenuSlice = createSlice({
+export const poppersSlice = createSlice({
   name: "contextMenu",
   initialState: initialState,
   reducers: {
@@ -21,6 +21,6 @@ export const contextMenuSlice = createSlice({
   }
 });
 
-export const { show, hide } = contextMenuSlice.actions;
+export const { show, hide } = poppersSlice.actions;
 
-export default contextMenuSlice.reducer;
+export default poppersSlice.reducer;

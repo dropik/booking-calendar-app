@@ -17,7 +17,7 @@ export default function UnassignedTilesPopup(): JSX.Element {
   const dispatch = useAppDispatch();
   const popupData = usePopupData();
   const isDialogShown = useAppSelector((state) => state.dialog.dialogs.length > 0);
-  const isContextMenuShown = useAppSelector((state) => state.contextMenu.isShown);
+  const isContextMenuShown = useAppSelector((state) => state.poppers.isShown);
 
   useHideOnClickOutsidePopupEffect(dispatch, isDialogShown, isContextMenuShown);
 

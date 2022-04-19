@@ -141,7 +141,7 @@ export const tilesSlice = createSlice({
   }
 });
 
-export const { move, grab, drop, toggleDate, removeAssignment, saveChanges, undoChanges } = tilesSlice.actions;
+export const { move, grab, drop, toggleDate, removeAssignment, saveChanges, undoChanges, setColour } = tilesSlice.actions;
 
 export default tilesSlice.reducer;
 
