@@ -7,7 +7,6 @@ import { useAppDispatch, useCurrentDate } from "../../redux/hooks";
 import * as TableSlice from "../../redux/tableSlice";
 
 import SidemenuButton from "./SidemenuButton";
-import SaveAndReset from "./SaveAndReset";
 
 export default function DateInput(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -29,7 +28,6 @@ export default function DateInput(): JSX.Element {
           renderInput={(props) => <TextField {...props} />}
         />
       </div>
-      <SaveAndReset />
     </>
   );
 }

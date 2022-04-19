@@ -22,15 +22,13 @@ const CustomizedButton = styled(Button)<ButtonProps>(({ theme }) => ({
   ":focus-visible": {
     boxShadow: theme.shadows[0],
     "& .MuiTouchRipple-root": {
-      backgroundColor: theme.palette.onPrimary.main,
-      opacity: theme.opacities.focus
+      backgroundColor: alpha(theme.palette.onPrimary.main, theme.opacities.focus)
     }
   },
   ":active": {
     boxShadow: theme.shadows[0],
     "& .MuiTouchRipple-root": {
-      backgroundColor: theme.palette.onPrimary.main,
-      opacity: theme.opacities.hover
+      backgroundColor: alpha(theme.palette.onPrimary.main, theme.opacities.hover)
     }
   }
 }));

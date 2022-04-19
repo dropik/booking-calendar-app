@@ -113,7 +113,12 @@ declare module "@mui/material/styles" {
       press: number,
       drag: number,
       disabled: number,
-      disabledContainer: number
+      disabledContainer: number,
+      surface1: number,
+      surface2: number,
+      surface3: number,
+      surface4: number,
+      surface5: number
     };
   }
 
@@ -124,7 +129,12 @@ declare module "@mui/material/styles" {
       press?: number,
       drag?: number,
       disabled?: number,
-      disabledContainer?: number
+      disabledContainer?: number,
+      surface1?: number,
+      surface2?: number,
+      surface3?: number,
+      surface4?: number,
+      surface5?: number
     }
   }
 }
@@ -396,7 +406,12 @@ const theme = createTheme({
     press: 0.12,
     drag: 0.16,
     disabled: 0.12,
-    disabledContainer: 0.38
+    disabledContainer: 0.38,
+    surface1: 0.05,
+    surface2: 0.08,
+    surface3: 0.11,
+    surface4: 0.12,
+    surface5: 0.14
   }
 });
 
