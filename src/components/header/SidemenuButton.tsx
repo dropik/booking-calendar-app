@@ -1,6 +1,5 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import MenuIcon from "@mui/icons-material/Menu";
 
 import { useAppDispatch } from "../../redux/hooks";
 import * as SidemenuSlice from "../../redux/sidemenuSlice";
@@ -16,7 +15,7 @@ export default function SidemenuButton(): JSX.Element {
 
   return (
     <div className="sidemenu-button">
-      <FontAwesomeIcon className="button" icon={faBars} onClick={showSidemenu} />
+      <MenuIcon className="button" onClick={showSidemenu} />
     </div>
   );
 }

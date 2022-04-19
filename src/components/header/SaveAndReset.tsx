@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faRotateLeft } from "@fortawesome/free-solid-svg-icons";
+import CheckIcon from "@mui/icons-material/Check";
+import RestoreIcon from "@mui/icons-material/Restore";
 
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
@@ -53,7 +53,7 @@ function getResetHandler(dispatch: React.Dispatch<AnyAction>): () => void {
 
 function getBody(saveStatus: Status, hasChanges: boolean, resetHandler: () => void, saveHandler: () => void): JSX.Element {
   if (saveStatus === "fulfilled") {
-    return (<span>Salvato <FontAwesomeIcon icon={faCheck} /></span>);
+    return (<span>Salvato <CheckIcon fontSize="small" /></span>);
   } else if (saveStatus === "loading") {
     return (<span>Salvataggio...</span>);
   } else if (!hasChanges) {
@@ -62,7 +62,7 @@ function getBody(saveStatus: Status, hasChanges: boolean, resetHandler: () => vo
   return (
     <>
       <div onClick={resetHandler} className="button reset">
-        <FontAwesomeIcon icon={faRotateLeft} />
+        <RestoreIcon />
       </div>
       <div onClick={saveHandler} className="button save">Salva</div>
     </>

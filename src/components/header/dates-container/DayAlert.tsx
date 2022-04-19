@@ -1,6 +1,5 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
+import NotificationImportantIcon from "@mui/icons-material/NotificationImportant";
 
 import "./DayAlert.css";
 
@@ -14,7 +13,7 @@ export default function DayAlert({ hasUnassignedTiles }: Props): JSX.Element {
       className="day-alert"
       title="Ci sono occupazioni non assegnati"
     >
-      <FontAwesomeIcon icon={faCircleExclamation} />
+      <NotificationImportantIcon fontSize="small" />
     </span> :
     <></>;
 }

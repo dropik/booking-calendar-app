@@ -1,12 +1,12 @@
 import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleInfo, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import InfoIcon from "@mui/icons-material/Info";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
 import * as DialogSlice from "../../redux/dialogSlice";
-import * as ContextMenuSlice from "../../redux/poppersSlice";
+import * as PoppersSlice from "../../redux/poppersSlice";
 
 import "./TileContextMenu.css";
 
@@ -28,7 +28,7 @@ export default function TileContextMenu({ tileId, x, y, onHide, isOutOfBound, on
 
   function hideMenu() {
     onHide();
-    dispatch(ContextMenuSlice.hide());
+    dispatch(PoppersSlice.hide());
   }
 
   useContextMenuPositionEffect(ref, x, y);
@@ -64,7 +64,7 @@ export default function TileContextMenu({ tileId, x, y, onHide, isOutOfBound, on
   return (
     <div ref={ref} onMouseDown={stopMouseEventPropagation} className="tile-context-menu">
       <div className="button" onClick={showInfoDialog}>
-        <FontAwesomeIcon icon={faCircleInfo} />
+        <InfoIcon />
         Informazioni
       </div>
       <div className={assignColourClassName} onClick={showColourPicker}>
@@ -72,7 +72,7 @@ export default function TileContextMenu({ tileId, x, y, onHide, isOutOfBound, on
         Assegna colore
       </div>
       <div className={removeClassName} onClick={removeOccupation}>
-        <FontAwesomeIcon icon={faTrashCan} />
+        <DeleteIcon />
         Rimuovi occupazione
       </div>
     </div>
@@ -107,7 +107,7 @@ function useHideContextOnClickOutside(dispatch: React.Dispatch<AnyAction>, hideM
   useEffect(() => {
     function onClickSomewhere() {
       hideMenu();
-      dispatch(ContextMenuSlice.hide());
+      dispatch(PoppersSlice.hide());
     }
     window.addEventListener("mousedown", onClickSomewhere);
     return () => window.removeEventListener("mousedown", onClickSomewhere);

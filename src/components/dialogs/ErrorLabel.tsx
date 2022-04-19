@@ -1,6 +1,5 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
+import ErrorIcon from "@mui/icons-material/Error";
 
 type Props = {
   show: boolean,
@@ -14,7 +13,7 @@ export default function ErrorLabel({ show, text }: Props): JSX.Element {
 
   return (
     <div className="error-label">
-      <FontAwesomeIcon icon={faCircleExclamation} />
+      <ErrorIcon fontSize="small" />
       {text}
     </div>
   );

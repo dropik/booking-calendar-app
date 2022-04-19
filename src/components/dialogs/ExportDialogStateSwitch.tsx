@@ -1,6 +1,5 @@
 import React, { ReactNode } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import CheckIcon from "@mui/icons-material/Check";
 
 import { ExportDialogState } from "./ExportDialogBody";
 
@@ -16,7 +15,7 @@ export default function ExportDialogStateSwitch({ children, state }: Props): JSX
   case "loading":
     return <div className="message">Esporto...</div>;
   case "done":
-    return <div className="message">Fatto <FontAwesomeIcon icon={faCheck} /></div>;
+    return <div className="message">Fatto <CheckIcon fontSize="small" /></div>;
   case "no data":
     return <div className="message">Nessun dato da esportare!</div>;
   }

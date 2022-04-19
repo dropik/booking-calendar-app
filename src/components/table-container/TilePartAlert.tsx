@@ -1,6 +1,5 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 
 import * as TilesSlice from "../../redux/tilesSlice";
 
@@ -28,7 +27,7 @@ export default function TilePartAlert({ personsInRoomType, roomType, tileData }:
 
   return (
     <span className={className} title={title}>
-      <FontAwesomeIcon icon={faTriangleExclamation} />
+      <ErrorOutlineIcon fontSize="small" />
     </span>
   );
 }

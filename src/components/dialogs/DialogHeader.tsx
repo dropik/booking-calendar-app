@@ -1,6 +1,6 @@
 import React, { ReactNode, useContext } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleLeft, faXmark } from "@fortawesome/free-solid-svg-icons";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import CloseIcon from "@mui/icons-material/Close";
 
 import { useAppDispatch } from "../../redux/hooks";
 import * as DialogSlice from "../../redux/dialogSlice";
@@ -22,7 +22,7 @@ export default function DialogHeader({ children }: Props): JSX.Element {
   }
 
   const goBackButton = dialogContext.index !== 0 ?
-    <FontAwesomeIcon className="button back" icon={faAngleLeft} onClick={goBack} /> :
+    <ArrowBackIcon className="button back" onClick={goBack} /> :
     <></>;
 
   return (
@@ -30,7 +30,7 @@ export default function DialogHeader({ children }: Props): JSX.Element {
       <h3>
         {goBackButton}
         {children}
-        <FontAwesomeIcon className="button close" icon={faXmark} onClick={dialogContainerContext.fadeOutDialog} />
+        <CloseIcon className="button close" onClick={dialogContainerContext.fadeOutDialog} />
       </h3>
       <hr />
     </>

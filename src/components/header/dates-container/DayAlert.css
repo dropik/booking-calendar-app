@@ -1,8 +1,7 @@
 .day-alert {
   display: inline-block;
   position: absolute;
-  font-size: 0.8rem;
-  top: 0.4rem;
-  right: 0.4rem;
+  top: 0.2rem;
+  right: 0.2rem;
   line-height: 1rem;
 }
