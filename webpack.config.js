@@ -1,14 +1,28 @@
 const path = require("path");
+const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
+const ReactRefreshTypeScript = require("react-refresh-typescript");
+
+const isDevelopment = process.env.NODE_ENV !== "production";
 
 module.exports = {
   entry: "./src/index.tsx",
-  mode: "development",
+  mode: isDevelopment ? "development" : "production",
   module: {
     rules: [
       {
         test: /\.tsx?$/,
-        use: "ts-loader",
         exclude: /node_modules/,
+        use: [
+          {
+            loader: require.resolve("ts-loader"),
+            options: {
+              getCustomTransformers: () => ({
+                before: [isDevelopment && ReactRefreshTypeScript()].filter(Boolean)
+              }),
+              transpileOnly: isDevelopment
+            }
+          }
+        ]
       },
       {
         test: /\.css$/,
@@ -24,6 +38,7 @@ module.exports = {
     publicPath: "/dist/",
     filename: "bundle.js",
   },
+  plugins: [isDevelopment && new ReactRefreshWebpackPlugin()].filter(Boolean),
   devServer: {
     static: {
       directory: path.join(__dirname, "public"),
