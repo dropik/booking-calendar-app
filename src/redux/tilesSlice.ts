@@ -21,6 +21,7 @@ export type TileData = {
 
 export type ChangesMap = {
   [key: string]: {
+    roomChanged: boolean,
     originalRoom?: number,
     newRoom?: number,
     originalColour?: string,
@@ -115,6 +116,7 @@ export const tilesSlice = createSlice({
       state.bookingsMap[booking].forEach((tileId) => {
         if (state.changesMap[tileId] === undefined) {
           state.changesMap[tileId] = {
+            roomChanged: false,
             originalColour: state.data[tileId].colour
           };
         } else if (state.changesMap[tileId].originalColour === undefined) {
@@ -341,10 +343,12 @@ function assignTile(state: WritableDraft<State>, tileId: string, newY: number): 
 function saveRoomChange(state: WritableDraft<State>, tileId: string, prevY: number | undefined, newY: number | undefined): void {
   if (!state.changesMap[tileId]) {
     state.changesMap[tileId] = {
-      originalRoom: prevY,
-      newRoom: newY
+      roomChanged: true,
+      originalRoom: prevY
     };
-  } else {
-    state.changesMap[tileId].newRoom = newY;
+  } else if (!state.changesMap[tileId].roomChanged) {
+    state.changesMap[tileId].roomChanged = true;
+    state.changesMap[tileId].originalRoom = prevY;
   }
+  state.changesMap[tileId].newRoom = newY;
 }
