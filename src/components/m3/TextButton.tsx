@@ -3,13 +3,26 @@ import { alpha, styled } from "@mui/material/styles";
 import Button, { ButtonProps } from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
-const CustomizedButton = styled(Button)(({ theme }) => ({
+interface M3TextButtonProps extends ButtonProps {
+  isIconOnly?: boolean
+}
+
+const CustomizedButton = styled(Button, {
+  shouldForwardProp: (prop) => prop !== "isIconOnly"
+})<M3TextButtonProps>(({ theme, isIconOnly }) => ({
   textTransform: "none",
   height: "2.5rem",
   borderRadius: "1.25rem",
   minWidth: "3rem",
   paddingLeft: "0.75rem",
   paddingRight: "0.75rem",
+  "& .MuiButton-startIcon": {
+    marginRight: isIconOnly ? 0 : undefined,
+    marginLeft: isIconOnly ? 0 : undefined,
+    ".MuiSvgIcon-root": {
+      fontSize: "1.125rem"
+    }
+  },
   ":disabled": {
     color: alpha(theme.palette.onSurface.main, theme.opacities.disabled)
   },
@@ -24,7 +37,7 @@ const CustomizedButton = styled(Button)(({ theme }) => ({
   }
 }));
 
-export default function TextButton(props: ButtonProps): JSX.Element {
+export default function M3TextButton(props: M3TextButtonProps): JSX.Element {
   return (
     <CustomizedButton {...props} disableFocusRipple disableTouchRipple>
       <Typography variant="labelLarge">

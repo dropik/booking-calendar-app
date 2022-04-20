@@ -96,8 +96,8 @@ function getBody(saveStatus: Status, resetHandler: () => void, saveHandler: () =
   }
 
   return (
-    <Stack spacing={2} direction="column" alignItems="center" justifyContent="flex-end" sx={{ mt: 2.5, mb: 2.5 }}>
-      <TextButton startIcon={<RestoreIcon />} onClick={resetHandler} sx={{ width: "2.5rem", height: "2.5rem", padding: 0, minWidth: "unset" }} />
+    <Stack spacing={1} direction="column" alignItems="center" justifyContent="flex-end" sx={{ mt: 2.5, mb: 2.5 }}>
+      <TextButton startIcon={<RestoreIcon />} isIconOnly onClick={resetHandler} sx={{ width: "2.5rem", height: "2.5rem", padding: 0, minWidth: "unset" }} />
       <Fab size="small" colourCombination="surface" lowered onClick={saveHandler}>
         <SaveIcon />
       </Fab>
