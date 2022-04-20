@@ -1,5 +1,5 @@
 import React from "react";
-import { createTheme, hslToRgb, PaletteColorOptions, recomposeColor, rgbToHex } from "@mui/material/styles";
+import { createTheme, hslToRgb, PaletteColor, PaletteColorOptions, recomposeColor, rgbToHex } from "@mui/material/styles";
 
 declare module "@mui/material/styles" {
   interface Palette {
@@ -35,6 +35,10 @@ declare module "@mui/material/styles" {
     inverseOnSurface: Palette["colourBackground"];
     inversePrimary: Palette["primary"];
   }
+
+  type ThemePalettes = keyof Pick<Palette, {
+    [key in keyof Palette]: Palette[key] extends PaletteColor ? key : never
+  }[keyof Palette]>;
 
   interface PaletteOptions {
     onPrimary?: PaletteOptions["primary"];

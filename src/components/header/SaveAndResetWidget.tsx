@@ -79,10 +79,7 @@ export default function SaveAndResetWidget(): JSX.Element {
           <Card elevation={1} sx={{
             borderRadius: "1.75rem",
             overflow: "visible",
-            paddingLeft: "1rem",
-            paddingRight: "1rem",
-            paddingTop: "1rem",
-            paddingBottom: "1rem",
+            padding: "1rem",
             backgroundColor: (theme) => theme.palette.surface.main
           }}>
             {body}
@@ -125,11 +122,21 @@ function getBody(saveStatus: Status, resetHandler: () => void, saveHandler: () =
   }
 
   return (
-    <Stack spacing={1} direction="column" alignItems="center">
-      <TextButton startIcon={<RestoreIcon />} isIconOnly onClick={resetHandler} sx={{ width: "2.5rem", height: "2.5rem", padding: 0, minWidth: "unset" }} />
-      <Fab size="small" colourCombination="surface" lowered onClick={saveHandler}>
+    <Stack spacing={1} direction="row" alignItems="center">
+      <Fab size="small" dark elevation="none" onClick={saveHandler} sx={{ m: 0 }}>
         <SaveIcon />
       </Fab>
+      <TextButton
+        startIcon={<RestoreIcon />}
+        iconOnly
+        onClick={resetHandler}
+        sx={{
+          width: "2.5rem",
+          height: "2.5rem",
+          padding: 0,
+          minWidth: "unset"
+        }}
+      />
     </Stack>
   );
 }
