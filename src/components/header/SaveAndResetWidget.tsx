@@ -17,9 +17,6 @@ import M3Card from "../m3/M3Card";
 import M3TextButton from "../m3/M3TextButton";
 import M3Fab from "../m3/M3Fab";
 
-import "../../globals.css";
-import "./SaveAndReset.css";
-
 type Status = "idle" | "loading" | "fulfilled";
 
 export default function SaveAndResetWidget(): JSX.Element {
