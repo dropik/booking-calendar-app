@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 
 import Header from "./components/Header";
+import DatesContainer from "./components/DatesContainer";
 import Hotel from "./components/Hotel";
 import TableContainer from "./components/TableContainer";
 import SaveAndResetWidget from "./components/SaveAndResetWidget";
@@ -21,6 +22,7 @@ export default function App(): JSX.Element {
   return (
     <div className="app">
       <Header />
+      <DatesContainer />
       <Hotel />
       <TableContainer />
       <SaveAndResetWidget />

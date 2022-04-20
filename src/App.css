@@ -1,5 +1,6 @@
-.app {
+html {
   font-family: Roboto, Arial, Helvetica, sans-serif;
+  background-color: #fffbfe;
 }
 
 .tile-grabbing {

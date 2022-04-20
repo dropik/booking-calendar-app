@@ -1,7 +1,11 @@
 .dates-container {
+  position: fixed;
+  left: 0.5rem;
+  right: 0.5rem;
+  top: 4rem;
   display: flex;
-  position: relative;
   height: 4rem;
   border: 2px solid black;
   overflow: hidden;
+  z-index: 1100;
 }

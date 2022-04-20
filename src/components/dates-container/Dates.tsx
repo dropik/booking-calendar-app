@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useMemo, useRef } from "react";
 
-import { useDates, useAppSelector } from "../../../redux/hooks";
+import { useDates, useAppSelector } from "../../redux/hooks";
 
 import Day from "./Day";
 

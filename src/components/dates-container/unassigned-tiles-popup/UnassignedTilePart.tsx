@@ -1,13 +1,13 @@
 import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 
-import { useAppDispatch, useAppSelector, useColumns, useLeftmostDate } from "../../../../redux/hooks";
-import * as Utils from "../../../../utils";
-import * as TilesSlice from "../../../../redux/tilesSlice";
-import * as PoppersSlice from "../../../../redux/poppersSlice";
+import { useAppDispatch, useAppSelector, useColumns, useLeftmostDate } from "../../../redux/hooks";
+import * as Utils from "../../../utils";
+import * as TilesSlice from "../../../redux/tilesSlice";
+import * as PoppersSlice from "../../../redux/poppersSlice";
 
-import OccupationInfo from "../../../OccupationInfo";
-import TileContextMenu from "../../../table-container/TileContextMenu";
-import ColourPicker from "../../../table-container/ColourPicker";
+import OccupationInfo from "../../OccupationInfo";
+import TileContextMenu from "../../table-container/TileContextMenu";
+import ColourPicker from "../../table-container/ColourPicker";
 
 import "./UnassignedTilePart.css";
 

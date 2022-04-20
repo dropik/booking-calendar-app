@@ -294,6 +294,10 @@ const theme = createTheme({
       main: primary(80),
       light: primary(80),
       dark: primary(40)
+    },
+    background: {
+      default: neutral(99),
+      paper: neutral(99)
     }
   },
 

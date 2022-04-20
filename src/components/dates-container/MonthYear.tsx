@@ -1,7 +1,7 @@
 import React from "react";
 
-import { useCurrentDate } from "../../../redux/hooks";
-import * as Utils from "../../../utils";
+import { useCurrentDate } from "../../redux/hooks";
+import * as Utils from "../../utils";
 
 import "./MonthYear.css";
 

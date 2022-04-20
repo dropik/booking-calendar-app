@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useMemo, useRef } from "react";
 
-import { useLeftShift } from "../../../../redux/hooks";
+import { useLeftShift } from "../../../redux/hooks";
 
 import UnassignedRow from "./UnassignedRow";
 

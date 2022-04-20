@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import * as Utils from "../../../utils";
-import * as TilesSlice from "../../../redux/tilesSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import * as Utils from "../../utils";
+import * as TilesSlice from "../../redux/tilesSlice";
 
 import UnassignedTilesPopupBody from "./unassigned-tiles-popup/UnassignedTilesPopupBody";
 
