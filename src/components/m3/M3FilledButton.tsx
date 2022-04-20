@@ -33,7 +33,7 @@ const CustomizedButton = styled(Button)<ButtonProps>(({ theme }) => ({
   }
 }));
 
-export default function FilledButton(props: ButtonProps): JSX.Element {
+export default function M3FilledButton(props: ButtonProps): JSX.Element {
   return (
     <CustomizedButton {...props} variant="contained" disableTouchRipple disableFocusRipple>
       <Typography variant="labelLarge">
