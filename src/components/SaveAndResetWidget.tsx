@@ -7,15 +7,15 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import * as TilesSlice from "../../redux/tilesSlice";
-import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
-import * as Api from "../../api";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import * as TilesSlice from "../redux/tilesSlice";
+import * as ConnectionErrorSlice from "../redux/connectionErrorSlice";
+import * as Api from "../api";
 
-import SlideAndFade from "../m3/SlideAndFade";
-import M3Card from "../m3/M3Card";
-import M3TextButton from "../m3/M3TextButton";
-import M3Fab from "../m3/M3Fab";
+import SlideAndFade from "./m3/SlideAndFade";
+import M3Card from "./m3/M3Card";
+import M3TextButton from "./m3/M3TextButton";
+import M3Fab from "./m3/M3Fab";
 
 type Status = "idle" | "loading" | "fulfilled";
 

@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import Header from "./components/Header";
 import Hotel from "./components/Hotel";
 import TableContainer from "./components/TableContainer";
-import SaveAndResetWidget from "./components/header/SaveAndResetWidget";
+import SaveAndResetWidget from "./components/SaveAndResetWidget";
 import Sidemenu from "./components/Sidemenu";
 import Dialog from "./components/Dialog";
 
