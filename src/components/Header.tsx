@@ -1,15 +1,12 @@
 import React from "react";
 
+import M3AppBar from "./m3/M3AppBar";
 import DateInput from "./header/DateInput";
-
-import "./Header.css";
 
 export default function Header(): JSX.Element {
   return (
-    <div className="header">
-      <div className="date-input">
-        <DateInput />
-      </div>
-    </div>
+    <M3AppBar>
+      <DateInput />
+    </M3AppBar>
   );
 }
