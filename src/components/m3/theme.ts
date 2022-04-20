@@ -1,5 +1,5 @@
 import React from "react";
-import { createTheme } from "@mui/material/styles";
+import { createTheme, hslToRgb, PaletteColorOptions, recomposeColor, rgbToHex } from "@mui/material/styles";
 
 declare module "@mui/material/styles" {
   interface Palette {
@@ -159,155 +159,140 @@ declare module "@mui/material/Typography" {
   }
 }
 
+const makeColour: (keyColour: (luminosity: number) => string) => PaletteColorOptions = (keyColour) => ({
+  main: keyColour(40),
+  light: keyColour(40),
+  dark: keyColour(80)
+});
+
+const makeOnColour: (keyColour: (luminosity: number) => string) => PaletteColorOptions = (keyColour) => ({
+  main: keyColour(100),
+  light: keyColour(100),
+  dark: keyColour(20)
+});
+
+const makeColourContainer: (keyColour: (luminosity: number) => string) => PaletteColorOptions = (keyColour) => ({
+  main: keyColour(90),
+  light: keyColour(90),
+  dark: keyColour(30)
+});
+
+const makeOnColourContainer: (keyColour: (luminosity: number) => string) => PaletteColorOptions = (keyColour) => ({
+  main: keyColour(10),
+  light: keyColour(10),
+  dark: keyColour(90)
+});
+
+const assembleColour: (hue: number, saturation: number, luminosity: number) => string = (hue, saturation, luminosity) =>
+  rgbToHex(hslToRgb(recomposeColor({
+    type: "hsl",
+    values: [hue, saturation, luminosity]
+  })));
+
+const primary: (luminosity: number) => string = (luminosity) =>
+  assembleColour(256, 34, luminosity);
+
+const secondary: (luminosity: number) => string = (luminosity) =>
+  assembleColour(181, 49, luminosity);
+
+const tertiary: (luminosity: number) => string = (luminosity) =>
+  assembleColour(340, 21, luminosity);
+
+const error: (luminosity: number) => string = (luminosity) =>
+  assembleColour(3, 71, luminosity);
+
+const neutral: (luminosity: number) => string = (luminosity) =>
+  assembleColour(264, 5, luminosity);
+
+const neutralVariant: (luminosity: number) => string = (luminosity) =>
+  assembleColour(270, 4, luminosity);
+
 const theme = createTheme({
   palette: {
-    primary: {
-      main: "#6750A4",
-      light: "#6750A4",
-      dark: "#D0BCFF"
-    },
-    onPrimary: {
-      main: "#FFFFFF",
-      light: "#FFFFFF",
-      dark: "#371E73"
-    },
-    primaryContainer: {
-      main: "#EADDFF",
-      light: "#EADDFF",
-      dark: "#4F378B"
-    },
-    onPrimaryContainer: {
-      main: "#21005E",
-      light: "#21005E",
-      dark: "#EADDFF"
-    },
+    primary:            makeColour(primary),
+    onPrimary:          makeOnColour(primary),
+    primaryContainer:   makeColourContainer(primary),
+    onPrimaryContainer: makeOnColourContainer(primary),
 
-    secondary: {
-      main: "#625B71",
-      light: "#625B71",
-      dark: "#CCC2DC"
-    },
-    onSecondary: {
-      main: "#FFFFFF",
-      light: "#FFFFFF",
-      dark: "#332D41"
-    },
-    secondaryContainer: {
-      main: "#E8DEF8",
-      light: "#E8DEF8",
-      dark: "#4A4458"
-    },
-    onSecondaryContainer: {
-      main: "#1E192B",
-      light: "#1E192B",
-      dark: "#E8DEF8"
-    },
+    secondary:            makeColour(secondary),
+    onSecondary:          makeOnColour(secondary),
+    secondaryContainer:   makeColourContainer(secondary),
+    onSecondaryContainer: makeOnColourContainer(secondary),
 
-    tertiary: {
-      main: "#7D5260",
-      light: "#7D5260",
-      dark: "#EFB8C8"
-    },
-    onTertiary: {
-      main: "#FFFFFF",
-      light: "#FFFFFF",
-      dark: "#492532"
-    },
-    tertiaryContainer: {
-      main: "#FFD8E4",
-      light: "#FFD8E4",
-      dark: "#633B48"
-    },
-    onTertiaryContainer: {
-      main: "#370B1E",
-      light: "#370B1E",
-      dark: "#FFD8E4"
-    },
+    tertiary:             makeColour(tertiary),
+    onTertiary:           makeOnColour(tertiary),
+    tertiaryContainer:    makeColourContainer(tertiary),
+    onTertiaryContainer:  makeOnColourContainer(tertiary),
 
-    error: {
-      main: "#B3261E",
-      light: "#B3261E",
-      dark: "#F2B8B5"
-    },
-    onError: {
-      main: "#FFFFFF",
-      light: "#FFFFFF",
-      dark: "#601410"
-    },
-    errorContainer: {
-      main: "#F9DEDC",
-      light: "#F9DEDC",
-      dark: "#8C1D18"
-    },
-    onErrorContainer: {
-      main: "#370B1E",
-      light: "#370B1E",
-      dark: "#F9DEDC"
-    },
+    error:            makeColour(error),
+    onError:          makeOnColour(error),
+    errorContainer:   makeColourContainer(error),
+    onErrorContainer: makeOnColourContainer(error),
 
     colourBackground: {
-      main: "#FFFBFE",
-      light: "#FFFBFE",
-      dark: "#1C1B1F"
+      main: neutral(99),
+      light: neutral(99),
+      dark: neutral(10)
     },
     onBackground: {
-      main: "#1C1B1F",
-      light: "#1C1B1F",
-      dark: "#E6E1E5"
+      main: neutral(10),
+      light: neutral(10),
+      dark: neutral(90)
     },
     surface: {
-      main: "#FFFBFE",
-      light: "#FFFBFE",
-      dark: "#1C1B1F"
+      main: neutral(99),
+      light: neutral(99),
+      dark: neutral(10)
     },
     onSurface: {
-      main: "#1C1B1F",
-      light: "#1C1B1F",
-      dark: "#E6E1E5"
+      main: neutral(10),
+      light: neutral(10),
+      dark: neutral(90)
     },
 
     surfaceVariant: {
-      main: "#E7E0EC",
-      light: "#E7E0EC",
-      dark: "#49454F"
+      main: neutralVariant(90),
+      light: neutralVariant(90),
+      dark: neutralVariant(30)
     },
     onSurfaceVariant: {
-      main: "#49454E",
-      light: "#49454E",
-      dark: "#CAC4D0"
+      main: neutralVariant(30),
+      light: neutralVariant(30),
+      dark: neutralVariant(80)
     },
     outline: {
-      main: "#79747E",
-      light: "#79747E",
-      dark: "#938F99"
+      main: neutralVariant(50),
+      light: neutralVariant(50),
+      dark: neutralVariant(60)
     },
 
     shadow: {
-      main: "#000000",
-      light: "#000000",
-      dark: "#000000"
+      main: neutral(0),
+      light: neutral(0),
+      dark: neutral(0)
     },
     surfaceTint: {
-      main: "#6750A4",
-      light: "#6750A4",
-      dark: "#D0BCFF"
+      main: primary(40),
+      light: primary(40),
+      dark: primary(80)
     },
     inverseSurface: {
-      main: "#313033",
-      light: "#313033",
-      dark: "#E6E1E5"
+      main: neutral(20),
+      light: neutral(20),
+      dark: neutral(90)
     },
     inverseOnSurface: {
-      main: "#F4EFF4",
-      light: "#F4EFF4",
-      dark: "#313033"
+      main: neutral(95),
+      light: neutral(95),
+      dark: neutral(20)
     },
     inversePrimary: {
-      main: "#D0BCFF",
-      light: "#D0BCFF",
-      dark: "#6750A4"
+      main: primary(80),
+      light: primary(80),
+      dark: primary(40)
     }
   },
+
   typography: {
     displayLarge: {
       lineHeight: "4rem",
@@ -400,6 +385,7 @@ const theme = createTheme({
       letterSpacing: "0.0333rem"
     }
   },
+
   opacities: {
     hover: 0.08,
     focus: 0.12,

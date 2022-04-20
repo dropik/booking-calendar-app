@@ -49,14 +49,16 @@ export default function SaveAndResetWidget(): JSX.Element {
   const body = getBody(status, resetHandler, saveHandler);
 
   return (
-    <Card elevation={1} sx={{
+    <Card elevation={5} sx={{
       position: "fixed",
       bottom: "2.5rem",
       right: "3rem",
-      borderRadius: "0.75rem",
+      borderRadius: "1.75rem",
       overflow: "visible",
-      paddingLeft: "1.25rem",
-      paddingRight: "1.25rem",
+      paddingLeft: "1rem",
+      paddingRight: "1rem",
+      paddingTop: "1rem",
+      paddingBottom: "1rem",
       backgroundColor: (theme) => theme.palette.surface.main
     }}>
       {body}
@@ -68,7 +70,7 @@ export default function SaveAndResetWidget(): JSX.Element {
         right: 0,
         pointerEvents: "none",
         borderRadius: "inherit",
-        backgroundColor: (theme) => alpha(theme.palette.primary.main, theme.opacities.surface1)
+        backgroundColor: (theme) => alpha(theme.palette.primary.main, theme.opacities.surface5)
       }}></Box>
     </Card>
   );
@@ -96,7 +98,7 @@ function getBody(saveStatus: Status, resetHandler: () => void, saveHandler: () =
   }
 
   return (
-    <Stack spacing={1} direction="column" alignItems="center" justifyContent="flex-end" sx={{ mt: 2.5, mb: 2.5 }}>
+    <Stack spacing={1} direction="column" alignItems="center">
       <TextButton startIcon={<RestoreIcon />} isIconOnly onClick={resetHandler} sx={{ width: "2.5rem", height: "2.5rem", padding: 0, minWidth: "unset" }} />
       <Fab size="small" colourCombination="surface" lowered onClick={saveHandler}>
         <SaveIcon />
