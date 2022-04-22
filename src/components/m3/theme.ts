@@ -194,22 +194,22 @@ const assembleColour: (hue: number, saturation: number, luminosity: number) => s
   })));
 
 const primary: (luminosity: number) => string = (luminosity) =>
-  assembleColour(256, 34, luminosity);
+  assembleColour(221, 75, luminosity);
 
 const secondary: (luminosity: number) => string = (luminosity) =>
-  assembleColour(181, 49, luminosity);
+  assembleColour(193, 68, luminosity);
 
 const tertiary: (luminosity: number) => string = (luminosity) =>
-  assembleColour(340, 21, luminosity);
+  assembleColour(73, 98, luminosity);
 
 const error: (luminosity: number) => string = (luminosity) =>
-  assembleColour(3, 71, luminosity);
+  assembleColour(13, 89, luminosity);
 
 const neutral: (luminosity: number) => string = (luminosity) =>
-  assembleColour(264, 5, luminosity);
+  assembleColour(212, 13, luminosity);
 
 const neutralVariant: (luminosity: number) => string = (luminosity) =>
-  assembleColour(270, 4, luminosity);
+  assembleColour(203, 9, luminosity);
 
 const theme = createTheme({
   palette: {
