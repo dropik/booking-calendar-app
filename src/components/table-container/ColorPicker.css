@@ -1,4 +1,4 @@
-.colour-picker {
+.color-picker {
   position: absolute;
   cursor: auto;
   z-index: 1500;
@@ -8,6 +8,6 @@
   transform: translate(calc(-86px + 1.5rem), 10px);
 }
 
-.unassigned-tiles-popup-body .colour-picker {
+.unassigned-tiles-popup-body .color-picker {
   position: fixed;
 }

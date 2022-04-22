@@ -20,19 +20,19 @@ declare module "@mui/material/styles" {
     errorContainer: Palette["error"];
     onErrorContainer: Palette["error"];
 
-    colourBackground: Palette["secondary"];
-    onBackground: Palette["colourBackground"];
-    surface: Palette["colourBackground"];
-    onSurface: Palette["colourBackground"];
+    colorBackground: Palette["secondary"];
+    onBackground: Palette["colorBackground"];
+    surface: Palette["colorBackground"];
+    onSurface: Palette["colorBackground"];
 
-    surfaceVariant: Palette["colourBackground"];
-    onSurfaceVariant: Palette["colourBackground"];
-    outline: Palette["colourBackground"];
+    surfaceVariant: Palette["colorBackground"];
+    onSurfaceVariant: Palette["colorBackground"];
+    outline: Palette["colorBackground"];
 
-    shadow: Palette["colourBackground"];
+    shadow: Palette["colorBackground"];
     surfaceTint: Palette["primary"];
-    inverseSurface: Palette["colourBackground"];
-    inverseOnSurface: Palette["colourBackground"];
+    inverseSurface: Palette["colorBackground"];
+    inverseOnSurface: Palette["colorBackground"];
     inversePrimary: Palette["primary"];
   }
 
@@ -58,19 +58,19 @@ declare module "@mui/material/styles" {
     errorContainer?: PaletteOptions["error"];
     onErrorContainer?: PaletteOptions["error"];
 
-    colourBackground?: PaletteOptions["secondary"];
-    onBackground?: PaletteOptions["colourBackground"];
-    surface?: PaletteOptions["colourBackground"];
-    onSurface?: PaletteOptions["colourBackground"];
+    colorBackground?: PaletteOptions["secondary"];
+    onBackground?: PaletteOptions["colorBackground"];
+    surface?: PaletteOptions["colorBackground"];
+    onSurface?: PaletteOptions["colorBackground"];
 
-    surfaceVariant?: PaletteOptions["colourBackground"];
-    onSurfaceVariant?: PaletteOptions["colourBackground"];
-    outline?: PaletteOptions["colourBackground"];
+    surfaceVariant?: PaletteOptions["colorBackground"];
+    onSurfaceVariant?: PaletteOptions["colorBackground"];
+    outline?: PaletteOptions["colorBackground"];
 
-    shadow?: PaletteOptions["colourBackground"];
+    shadow?: PaletteOptions["colorBackground"];
     surfaceTint?: PaletteOptions["primary"];
-    inverseSurface?: PaletteOptions["colourBackground"];
-    inverseOnSurface?: PaletteOptions["colourBackground"];
+    inverseSurface?: PaletteOptions["colorBackground"];
+    inverseOnSurface?: PaletteOptions["colorBackground"];
     inversePrimary?: PaletteOptions["primary"];
   }
 
@@ -163,77 +163,77 @@ declare module "@mui/material/Typography" {
   }
 }
 
-const makeColour: (keyColour: (luminosity: number) => string) => PaletteColorOptions = (keyColour) => ({
-  main: keyColour(40),
-  light: keyColour(40),
-  dark: keyColour(80)
+const makeColor: (keyColor: (luminosity: number) => string) => PaletteColorOptions = (keyColor) => ({
+  main: keyColor(40),
+  light: keyColor(40),
+  dark: keyColor(80)
 });
 
-const makeOnColour: (keyColour: (luminosity: number) => string) => PaletteColorOptions = (keyColour) => ({
-  main: keyColour(100),
-  light: keyColour(100),
-  dark: keyColour(20)
+const makeOnColor: (keyColor: (luminosity: number) => string) => PaletteColorOptions = (keyColor) => ({
+  main: keyColor(100),
+  light: keyColor(100),
+  dark: keyColor(20)
 });
 
-const makeColourContainer: (keyColour: (luminosity: number) => string) => PaletteColorOptions = (keyColour) => ({
-  main: keyColour(90),
-  light: keyColour(90),
-  dark: keyColour(30)
+const makeColorContainer: (keyColor: (luminosity: number) => string) => PaletteColorOptions = (keyColor) => ({
+  main: keyColor(90),
+  light: keyColor(90),
+  dark: keyColor(30)
 });
 
-const makeOnColourContainer: (keyColour: (luminosity: number) => string) => PaletteColorOptions = (keyColour) => ({
-  main: keyColour(10),
-  light: keyColour(10),
-  dark: keyColour(90)
+const makeOnColorContainer: (keyColor: (luminosity: number) => string) => PaletteColorOptions = (keyColor) => ({
+  main: keyColor(10),
+  light: keyColor(10),
+  dark: keyColor(90)
 });
 
-const assembleColour: (hue: number, saturation: number, luminosity: number) => string = (hue, saturation, luminosity) =>
+const assembleColor: (hue: number, saturation: number, luminosity: number) => string = (hue, saturation, luminosity) =>
   rgbToHex(hslToRgb(recomposeColor({
     type: "hsl",
     values: [hue, saturation, luminosity]
   })));
 
 const primary: (luminosity: number) => string = (luminosity) =>
-  assembleColour(221, 75, luminosity);
+  assembleColor(219, 93, luminosity);
 
 const secondary: (luminosity: number) => string = (luminosity) =>
-  assembleColour(193, 68, luminosity);
+  assembleColor(193, 68, luminosity);
 
 const tertiary: (luminosity: number) => string = (luminosity) =>
-  assembleColour(73, 98, luminosity);
+  assembleColor(73, 98, luminosity);
 
 const error: (luminosity: number) => string = (luminosity) =>
-  assembleColour(13, 89, luminosity);
+  assembleColor(13, 89, luminosity);
 
 const neutral: (luminosity: number) => string = (luminosity) =>
-  assembleColour(212, 13, luminosity);
+  assembleColor(212, 13, luminosity);
 
 const neutralVariant: (luminosity: number) => string = (luminosity) =>
-  assembleColour(203, 9, luminosity);
+  assembleColor(203, 9, luminosity);
 
 const theme = createTheme({
   palette: {
-    primary:            makeColour(primary),
-    onPrimary:          makeOnColour(primary),
-    primaryContainer:   makeColourContainer(primary),
-    onPrimaryContainer: makeOnColourContainer(primary),
+    primary:            makeColor(primary),
+    onPrimary:          makeOnColor(primary),
+    primaryContainer:   makeColorContainer(primary),
+    onPrimaryContainer: makeOnColorContainer(primary),
 
-    secondary:            makeColour(secondary),
-    onSecondary:          makeOnColour(secondary),
-    secondaryContainer:   makeColourContainer(secondary),
-    onSecondaryContainer: makeOnColourContainer(secondary),
+    secondary:            makeColor(secondary),
+    onSecondary:          makeOnColor(secondary),
+    secondaryContainer:   makeColorContainer(secondary),
+    onSecondaryContainer: makeOnColorContainer(secondary),
 
-    tertiary:             makeColour(tertiary),
-    onTertiary:           makeOnColour(tertiary),
-    tertiaryContainer:    makeColourContainer(tertiary),
-    onTertiaryContainer:  makeOnColourContainer(tertiary),
+    tertiary:             makeColor(tertiary),
+    onTertiary:           makeOnColor(tertiary),
+    tertiaryContainer:    makeColorContainer(tertiary),
+    onTertiaryContainer:  makeOnColorContainer(tertiary),
 
-    error:            makeColour(error),
-    onError:          makeOnColour(error),
-    errorContainer:   makeColourContainer(error),
-    onErrorContainer: makeOnColourContainer(error),
+    error:            makeColor(error),
+    onError:          makeOnColor(error),
+    errorContainer:   makeColorContainer(error),
+    onErrorContainer: makeOnColorContainer(error),
 
-    colourBackground: {
+    colorBackground: {
       main: neutral(99),
       light: neutral(99),
       dark: neutral(10)

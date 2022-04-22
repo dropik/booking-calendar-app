@@ -16,15 +16,15 @@ type Props = {
   y: number,
   onHide: () => void,
   isOutOfBound: boolean,
-  onColourPickerShow: () => void
+  onColorPickerShow: () => void
 };
 
-export default function TileContextMenu({ tileId, x, y, onHide, isOutOfBound, onColourPickerShow }: Props): JSX.Element {
+export default function TileContextMenu({ tileId, x, y, onHide, isOutOfBound, onColorPickerShow }: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const ref = useRef<HTMLDivElement>(null);
-  const assignColourIconRef = useRef<HTMLDivElement>(null);
+  const assignColorIconRef = useRef<HTMLDivElement>(null);
   const isUnassigned = useIsUnassigned(tileId);
-  const colour = useAppSelector((state) => state.tiles.data[tileId].colour);
+  const color = useAppSelector((state) => state.tiles.data[tileId].color);
 
   function hideMenu() {
     onHide();
@@ -32,14 +32,14 @@ export default function TileContextMenu({ tileId, x, y, onHide, isOutOfBound, on
   }
 
   useContextMenuPositionEffect(ref, x, y);
-  useAssignColourIconBackgroundColourEffect(assignColourIconRef, colour);
+  useAssignColorIconBackgroundColorEffect(assignColorIconRef, color);
   useHideContextOnClickOutside(dispatch, hideMenu);
 
   const removeClassName = getRemoveClassName(isUnassigned);
 
-  let assignColourClassName = "button assign-colour";
+  let assignColorClassName = "button assign-color";
   if (isOutOfBound) {
-    assignColourClassName += " disabled";
+    assignColorClassName += " disabled";
   }
 
   function showInfoDialog() {
@@ -49,8 +49,8 @@ export default function TileContextMenu({ tileId, x, y, onHide, isOutOfBound, on
     hideMenu();
   }
 
-  function showColourPicker() {
-    onColourPickerShow();
+  function showColorPicker() {
+    onColorPickerShow();
     onHide();
   }
 
@@ -67,8 +67,8 @@ export default function TileContextMenu({ tileId, x, y, onHide, isOutOfBound, on
         <InfoIcon />
         Informazioni
       </div>
-      <div className={assignColourClassName} onClick={showColourPicker}>
-        <div ref={assignColourIconRef} className="icon"></div>
+      <div className={assignColorClassName} onClick={showColorPicker}>
+        <div ref={assignColorIconRef} className="icon"></div>
         Assegna colore
       </div>
       <div className={removeClassName} onClick={removeOccupation}>
@@ -95,12 +95,12 @@ function useContextMenuPositionEffect(ref: React.RefObject<HTMLDivElement>, mous
   }, [ref, mouseX, mouseY]);
 }
 
-function useAssignColourIconBackgroundColourEffect(ref: React.RefObject<HTMLDivElement>, colour: string) {
+function useAssignColorIconBackgroundColorEffect(ref: React.RefObject<HTMLDivElement>, color: string) {
   useLayoutEffect(() => {
     if (ref.current) {
-      ref.current.style.backgroundColor = colour;
+      ref.current.style.backgroundColor = color;
     }
-  }, [ref, colour]);
+  }, [ref, color]);
 }
 
 function useHideContextOnClickOutside(dispatch: React.Dispatch<AnyAction>, hideMenu: () => void): void {

@@ -15,7 +15,7 @@ export type TileData = {
   roomType: string,
   entity: string,
   persons: number,
-  colour: string,
+  color: string,
   roomNumber?: number
 };
 
@@ -24,8 +24,8 @@ export type ChangesMap = {
     roomChanged: boolean,
     originalRoom?: number,
     newRoom?: number,
-    originalColour?: string,
-    newColour?: string
+    originalColor?: string,
+    newColor?: string
   }
 };
 
@@ -111,19 +111,19 @@ export const tilesSlice = createSlice({
       unassignChangedTiles(state);
       reassignTiles(state);
     },
-    setColour: (state, action: PayloadAction<{ tileId: string, colour: string }>) => {
+    setColor: (state, action: PayloadAction<{ tileId: string, color: string }>) => {
       const booking = state.data[action.payload.tileId].bookingId;
       state.bookingsMap[booking].forEach((tileId) => {
         if (state.changesMap[tileId] === undefined) {
           state.changesMap[tileId] = {
             roomChanged: false,
-            originalColour: state.data[tileId].colour
+            originalColor: state.data[tileId].color
           };
-        } else if (state.changesMap[tileId].originalColour === undefined) {
-          state.changesMap[tileId].originalColour = state.data[tileId].colour;
+        } else if (state.changesMap[tileId].originalColor === undefined) {
+          state.changesMap[tileId].originalColor = state.data[tileId].color;
         }
-        state.changesMap[tileId].newColour = action.payload.colour;
-        state.data[tileId].colour = action.payload.colour;
+        state.changesMap[tileId].newColor = action.payload.color;
+        state.data[tileId].color = action.payload.color;
         checkChangeReturnedToOriginal(state, tileId);
       });
     }
@@ -143,7 +143,7 @@ export const tilesSlice = createSlice({
   }
 });
 
-export const { move, grab, drop, toggleDate, removeAssignment, saveChanges, undoChanges, setColour } = tilesSlice.actions;
+export const { move, grab, drop, toggleDate, removeAssignment, saveChanges, undoChanges, setColor } = tilesSlice.actions;
 
 export default tilesSlice.reducer;
 
@@ -262,9 +262,9 @@ function reassignTiles(state: WritableDraft<State>): void {
       }
     }
 
-    const originalColour = state.changesMap[tileId].originalColour;
-    if (originalColour) {
-      state.data[tileId].colour = originalColour;
+    const originalColor = state.changesMap[tileId].originalColor;
+    if (originalColor) {
+      state.data[tileId].color = originalColor;
     }
 
     delete state.changesMap[tileId];
@@ -275,7 +275,7 @@ function checkChangeReturnedToOriginal(state: WritableDraft<State>, tileId: stri
   if (
     state.changesMap[tileId] &&
     (state.changesMap[tileId].originalRoom === state.changesMap[tileId].newRoom) &&
-    (state.changesMap[tileId].originalColour === state.changesMap[tileId].newColour)
+    (state.changesMap[tileId].originalColor === state.changesMap[tileId].newColor)
   ) {
     delete state.changesMap[tileId];
   }

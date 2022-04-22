@@ -5,14 +5,14 @@ import { useAppDispatch } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
 import * as PoppersSlice from "../../redux/poppersSlice";
 
-import "./ColourPicker.css";
+import "./ColorPicker.css";
 
 type Props = {
   tileId: string,
   onHide: () => void
 };
 
-export default function ColourPicker({ tileId, onHide }: Props): JSX.Element {
+export default function ColorPicker({ tileId, onHide }: Props): JSX.Element {
   const dispatch = useAppDispatch();
 
   const hidePicker = useCallback(() => {
@@ -30,9 +30,9 @@ export default function ColourPicker({ tileId, onHide }: Props): JSX.Element {
   }, [hidePicker]);
 
   return (
-    <div className="colour-picker" onMouseDown={stopPropagation} onMouseUp={stopPropagation}>
-      <CirclePicker colors={["#fccfcf", "#fce7cf", "#fafccf", "#d6fccf", "#cffcfc", "#cfe7fc", "#d2cffc", "#f5cffc"]} width="168px" onChange={(colour) => {
-        dispatch(TilesSlice.setColour({ tileId, colour: colour.hex }));
+    <div className="color-picker" onMouseDown={stopPropagation} onMouseUp={stopPropagation}>
+      <CirclePicker colors={["#fccfcf", "#fce7cf", "#fafccf", "#d6fccf", "#cffcfc", "#cfe7fc", "#d2cffc", "#f5cffc"]} width="168px" onChange={(color) => {
+        dispatch(TilesSlice.setColor({ tileId, color: color.hex }));
         hidePicker();
       }} />
     </div>

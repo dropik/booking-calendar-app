@@ -7,7 +7,7 @@ import * as PoppersSlice from "../../../redux/poppersSlice";
 
 import OccupationInfo from "../../OccupationInfo";
 import TileContextMenu from "../../table-container/TileContextMenu";
-import ColourPicker from "../../table-container/ColourPicker";
+import ColorPicker from "../../table-container/ColorPicker";
 
 import "./UnassignedTilePart.css";
 
@@ -24,10 +24,10 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
   const ref = useRef<HTMLDivElement>(null);
   const [isShowInfo, setIsShowInfo] = useState(false);
   const [isShowContextMenu, setIsShowContextMenu] = useState(false);
-  const [isShowColourPicker, setIsShowColourPicker] = useState(false);
+  const [isShowColorPicker, setIsShowColorPicker] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const contextMenuHideCallback = useCallback(() => setIsShowContextMenu(false), []);
-  const colourPickerHideCallback = useCallback(() => setIsShowColourPicker(false), []);
+  const colorPickerHideCallback = useCallback(() => setIsShowColorPicker(false), []);
 
   useBackgroundColorEffect(ref, tileData);
 
@@ -43,7 +43,7 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
     event.stopPropagation();
     setIsShowInfo(false);
     setIsShowContextMenu(true);
-    setIsShowColourPicker(false);
+    setIsShowColorPicker(false);
     setMousePos({ x: event.pageX, y: event.pageY });
     dispatch(PoppersSlice.show());
   }
@@ -94,12 +94,12 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
       }
       {
         isShowContextMenu ?
-          <TileContextMenu tileId={tileId} x={mousePos.x} y={mousePos.y} onHide={contextMenuHideCallback} isOutOfBound={outOfBound} onColourPickerShow={() => setIsShowColourPicker(true)} /> :
+          <TileContextMenu tileId={tileId} x={mousePos.x} y={mousePos.y} onHide={contextMenuHideCallback} isOutOfBound={outOfBound} onColorPickerShow={() => setIsShowColorPicker(true)} /> :
           <></>
       }
       {
-        isShowColourPicker ?
-          <ColourPicker tileId={tileId} onHide={colourPickerHideCallback} /> :
+        isShowColorPicker ?
+          <ColorPicker tileId={tileId} onHide={colorPickerHideCallback} /> :
           <></>
       }
     </div>
@@ -109,7 +109,7 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
 function useBackgroundColorEffect(ref: React.RefObject<HTMLDivElement>, tileData: TilesSlice.TileData): void {
   useLayoutEffect(() => {
     if (ref.current) {
-      ref.current.style.backgroundColor = tileData.colour;
+      ref.current.style.backgroundColor = tileData.color;
     }
   }, [ref, tileData]);
 }

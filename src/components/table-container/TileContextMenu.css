@@ -37,7 +37,7 @@
   color: #c5a4a4;
 }
 
-.tile-context-menu .assign-colour .icon {
+.tile-context-menu .assign-color .icon {
   border-radius: 1rem;
   display: inline-block;
   border: 2px solid black;
@@ -45,6 +45,6 @@
   vertical-align: bottom;
 }
 
-.tile-context-menu .assign-colour.disabled {
+.tile-context-menu .assign-color.disabled {
   color: gray;
 }

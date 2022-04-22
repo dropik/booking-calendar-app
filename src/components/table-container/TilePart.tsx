@@ -9,7 +9,7 @@ import * as PoppersSlice from "../../redux/poppersSlice";
 import TilePartAlert from "./TilePartAlert";
 import OccupationInfo from "../OccupationInfo";
 import TileContextMenu from "./TileContextMenu";
-import ColourPicker from "./ColourPicker";
+import ColorPicker from "./ColorPicker";
 
 import "./TilePart.css";
 
@@ -29,10 +29,10 @@ export default function TilePart({ y, tileData }: Props): JSX.Element {
   const personsInRoomType = useAppSelector(state => state.roomTypes.data[roomType]);
   const [isShowInfo, setIsShowInfo] = useState(false);
   const [isShowContextMenu, setIsShowContextMenu] = useState(false);
-  const [isShowColourPicker, setIsShowColourPicker] = useState(false);
+  const [isShowColorPicker, setIsShowColorPicker] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const contextMenuHideCallback = useCallback(() => setIsShowContextMenu(false), []);
-  const colourPickerHideCallback = useCallback(() => setIsShowColourPicker(false), []);
+  const colorPickerHideCallback = useCallback(() => setIsShowColorPicker(false), []);
 
   const outOfBound = isOutOfBound(tileData, leftmostDate, columns);
   const className = getClassName(isGrabbed, outOfBound);
@@ -48,7 +48,7 @@ export default function TilePart({ y, tileData }: Props): JSX.Element {
     event.preventDefault();
     event.stopPropagation();
     setIsShowInfo(false);
-    setIsShowColourPicker(false);
+    setIsShowColorPicker(false);
     setIsShowContextMenu(true);
     setMousePos({ x: event.pageX, y: event.pageY });
     dispatch(PoppersSlice.show());
@@ -71,7 +71,7 @@ export default function TilePart({ y, tileData }: Props): JSX.Element {
     setIsShowInfo(false);
   }
 
-  useBackgroundColourEffect(ref, tileData.colour);
+  useBackgroundColorEffect(ref, tileData.color);
 
   return (
     <div
@@ -92,12 +92,12 @@ export default function TilePart({ y, tileData }: Props): JSX.Element {
       }
       {
         isShowContextMenu ?
-          <TileContextMenu tileId={tileId} x={mousePos.x} y={mousePos.y} onHide={contextMenuHideCallback} isOutOfBound={outOfBound} onColourPickerShow={() => setIsShowColourPicker(true)} /> :
+          <TileContextMenu tileId={tileId} x={mousePos.x} y={mousePos.y} onHide={contextMenuHideCallback} isOutOfBound={outOfBound} onColorPickerShow={() => setIsShowColorPicker(true)} /> :
           <></>
       }
       {
-        isShowColourPicker ?
-          <ColourPicker tileId={tileId} onHide={colourPickerHideCallback} /> :
+        isShowColorPicker ?
+          <ColorPicker tileId={tileId} onHide={colorPickerHideCallback} /> :
           <></>
       }
     </div>
@@ -133,13 +133,13 @@ function getClassName(grabbed: boolean | undefined, outOfBound: boolean): string
   return className;
 }
 
-function useBackgroundColourEffect(
+function useBackgroundColorEffect(
   ref: React.RefObject<HTMLDivElement>,
-  colour: string
+  color: string
 ): void {
   useLayoutEffect(() => {
     if (ref.current) {
-      ref.current.style.backgroundColor = colour;
+      ref.current.style.backgroundColor = color;
     }
-  }, [ref, colour]);
+  }, [ref, color]);
 }

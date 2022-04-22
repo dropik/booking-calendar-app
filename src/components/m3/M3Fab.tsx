@@ -3,61 +3,61 @@ import { styled, ThemePalettes } from "@mui/material/styles";
 import Fab, { FabProps } from "@mui/material/Fab";
 import Box from "@mui/material/Box";
 
-type ColourCombination = "primary" | "surface" | "secondary" | "tertiary";
+type ColorCombination = "primary" | "surface" | "secondary" | "tertiary";
 
 type Elevation = "normal" | "lowered" | "none";
 
 type FabTheme = {
   container: ThemePalettes,
-  colour: ThemePalettes,
+  color: ThemePalettes,
   stateLayer: ThemePalettes,
 };
 
 type FabThemes = {
-  [key in ColourCombination]: FabTheme
+  [key in ColorCombination]: FabTheme
 };
 
 const fabThemes: FabThemes = {
   primary: {
     container: "primaryContainer",
-    colour: "onPrimaryContainer",
+    color: "onPrimaryContainer",
     stateLayer: "primary"
   },
   surface: {
     container: "surface",
-    colour: "primary",
+    color: "primary",
     stateLayer: "primary"
   },
   secondary: {
     container: "secondaryContainer",
-    colour: "onSecondaryContainer",
+    color: "onSecondaryContainer",
     stateLayer: "onSecondaryContainer"
   },
   tertiary: {
     container: "tertiary",
-    colour: "onTertiaryContainer",
+    color: "onTertiaryContainer",
     stateLayer: "onTertiaryContainer"
   }
 };
 
 interface M3FabProps extends FabProps {
   elevation?: Elevation;
-  colourCombination?: ColourCombination;
+  colorCombination?: ColorCombination;
   dark?: boolean
 }
 
 const CustomizedFab = styled(Fab, {
-  shouldForwardProp: (prop) => (prop !== "elevation") && (prop !== "colourCombination") && (prop !== "dark")
-})<M3FabProps>(({ theme, size, elevation, colourCombination, dark }) => {
+  shouldForwardProp: (prop) => (prop !== "elevation") && (prop !== "colorCombination") && (prop !== "dark")
+})<M3FabProps>(({ theme, size, elevation, colorCombination, dark }) => {
   const elevationDef: Elevation = elevation ? elevation : "normal";
-  const colourCombinationDef: ColourCombination = colourCombination ? colourCombination : "primary";
+  const colorCombinationDef: ColorCombination = colorCombination ? colorCombination : "primary";
   const lighting = dark ? "dark" : "light";
   return ({
     textTransform: "none",
-    backgroundColor: `${theme.palette[fabThemes[colourCombinationDef].container][lighting]} !important`,
-    color: theme.palette[fabThemes[colourCombinationDef].colour][lighting],
+    backgroundColor: `${theme.palette[fabThemes[colorCombinationDef].container][lighting]} !important`,
+    color: theme.palette[fabThemes[colorCombinationDef].color][lighting],
     "& .state-layer": {
-      backgroundColor: theme.palette[fabThemes[colourCombinationDef].stateLayer][lighting],
+      backgroundColor: theme.palette[fabThemes[colorCombinationDef].stateLayer][lighting],
       opacity: 0
     },
     boxShadow: theme.shadows[(

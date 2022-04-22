@@ -31,7 +31,7 @@ export default function GrabbedTile(): JSX.Element {
 function useBackgroundColorEffect(ref: React.RefObject<HTMLDivElement>, tileData: TilesSlice.TileData | undefined): void {
   useEffect(() => {
     if (ref.current && tileData) {
-      ref.current.style.backgroundColor = tileData.colour;
+      ref.current.style.backgroundColor = tileData.color;
     }
   }, [ref, tileData]);
 }
