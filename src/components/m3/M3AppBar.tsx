@@ -8,6 +8,7 @@ const CustomizedAppBar = styled(AppBar)<AppBarProps>(({ theme }) => ({
   display: "flex",
   flexDirection: "row",
   alignItems: "center",
+  justifyContent: "space-between",
   height: "4rem",
   paddingLeft: "1rem",
   paddingRight: "1rem"

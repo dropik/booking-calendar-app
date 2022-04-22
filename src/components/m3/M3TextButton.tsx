@@ -4,7 +4,7 @@ import Button, { ButtonProps } from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
 interface M3TextButtonProps extends ButtonProps {
-  iconOnly?: boolean
+  iconOnly?: boolean;
 }
 
 const CustomizedButton = styled(Button, {
@@ -12,8 +12,9 @@ const CustomizedButton = styled(Button, {
 })<M3TextButtonProps>(({ theme, iconOnly }) => ({
   textTransform: "none",
   height: "2.5rem",
+  width: iconOnly ? "2.5rem" : undefined,
   borderRadius: "1.25rem",
-  minWidth: "3rem",
+  minWidth: iconOnly ? "2.5rem" : "3rem",
   paddingLeft: "0.75rem",
   paddingRight: "0.75rem",
   "& .MuiButton-startIcon": {
