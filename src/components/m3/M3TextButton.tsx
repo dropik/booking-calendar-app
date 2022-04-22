@@ -17,12 +17,11 @@ const CustomizedButton = styled(Button, {
   minWidth: iconOnly ? "2.5rem" : "3rem",
   paddingLeft: "0.75rem",
   paddingRight: "0.75rem",
-  "& .MuiButton-startIcon": {
-    marginRight: iconOnly ? 0 : undefined,
-    marginLeft: iconOnly ? 0 : undefined,
-    ".MuiSvgIcon-root": {
-      fontSize: "1.125rem"
-    }
+  "& .MuiButton-startIcon .MuiSvgIcon-root": {
+    fontSize: "1.125rem"
+  },
+  "& .MuiTypography-root .MuiSvgIcon-root": {
+    verticalAlign: "bottom"
   },
   ":disabled": {
     color: alpha(theme.palette.onSurface.main, theme.opacities.disabled)

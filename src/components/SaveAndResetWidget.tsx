@@ -91,7 +91,6 @@ function getBody(saveStatus: Status, resetHandler: () => void, saveHandler: () =
         <SaveIcon />
       </M3Fab>
       <M3TextButton
-        startIcon={<RestoreIcon />}
         iconOnly
         onClick={resetHandler}
         sx={{
@@ -100,7 +99,9 @@ function getBody(saveStatus: Status, resetHandler: () => void, saveHandler: () =
           padding: 0,
           minWidth: "unset"
         }}
-      />
+      >
+        <RestoreIcon />
+      </M3TextButton>
     </Stack>
   );
 }
