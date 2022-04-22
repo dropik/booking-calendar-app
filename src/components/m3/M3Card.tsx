@@ -15,7 +15,7 @@ const CustomizedCard = styled(Card, {
   padding: "1rem",
   backgroundColor: theme.palette.surface.main,
   boxShadow: theme.shadows[1],
-  "& .surface-tint,.state-layer": {
+  "& > .surface-tint,.state-layer": {
     position: "absolute",
     top: 0,
     bottom: 0,
@@ -24,38 +24,38 @@ const CustomizedCard = styled(Card, {
     pointerEvents: "none",
     borderRadius: "inherit"
   },
-  "& .state-layer": {
+  "& > .state-layer": {
     backgroundColor: theme.palette.onSurface.main,
     opacity: 0
   },
-  "& .surface-tint": {
+  "& > .surface-tint": {
     backgroundColor: theme.palette.primary.main,
     opacity: theme.opacities.surface1
   },
   ":hover": {
     boxShadow: theme.shadows[2],
-    "& .state-layer": {
+    "& > .state-layer": {
       opacity: theme.opacities.hover
     },
-    "& .surface-tint": {
+    "& > .surface-tint": {
       opacity: theme.opacities.surface2
     }
   },
   ":focus-visible": {
     boxShadow: theme.shadows[1],
-    "& .state-layer": {
+    "& > .state-layer": {
       opacity: theme.opacities.focus
     },
-    "& .surface-tint": {
+    "& > .surface-tint": {
       opacity: theme.opacities.surface1
     }
   },
   ":active": {
     boxShadow: theme.shadows[1],
-    "& .state-layer": {
+    "& > .state-layer": {
       opacity: theme.opacities.press
     },
-    "& .surface-tint": {
+    "& > .surface-tint": {
       opacity: theme.opacities.surface1
     }
   }

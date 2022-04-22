@@ -17,29 +17,44 @@ const CustomizedButton = styled(Button, {
   minWidth: iconOnly ? "2.5rem" : "3rem",
   paddingLeft: "0.75rem",
   paddingRight: "0.75rem",
+  "& .state-layer": {
+    position: "absolute",
+    pointerEvents: "none",
+    borderRadius: "inherit",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: theme.palette.primary.main,
+    opacity: 0
+  },
   "& .MuiButton-startIcon .MuiSvgIcon-root": {
     fontSize: "1.125rem"
   },
   "& .MuiTypography-root .MuiSvgIcon-root": {
     verticalAlign: "bottom"
   },
-  ":disabled": {
+  "&:disabled": {
     color: alpha(theme.palette.onSurface.main, theme.opacities.disabled)
   },
-  ":hover .MuiTouchRipple-root": {
-    backgroundColor: alpha(theme.palette.onPrimary.main, theme.opacities.hover)
+  "&:hover": {
+    backgroundColor: "inherit",
+    ".state-layer": {
+      opacity: theme.opacities.hover
+    }
   },
-  ":focus-visible .MuiTouchRipple-root": {
-    backgroundColor: alpha(theme.palette.onPrimary.main, theme.opacities.focus)
+  "&.focused .state-layer, :focus-visible .state-layer": {
+    opacity: theme.opacities.focus
   },
-  ":active .MuiTouchRipple-root": {
-    backgroundColor: alpha(theme.palette.onPrimary.main, theme.opacities.press)
+  "&:active .state-layer": {
+    opacity: theme.opacities.press
   }
 }));
 
 export default function M3TextButton(props: M3TextButtonProps): JSX.Element {
   return (
     <CustomizedButton {...props} disableFocusRipple disableTouchRipple>
+      <div className="state-layer"></div>
       <Typography variant="labelLarge">
         {props.children}
       </Typography>

@@ -36,6 +36,7 @@ export default function DateInput(): JSX.Element {
         iconOnly
         onClick={openDateInput}
         aria-describedby={id}
+        className={open ? "focused" : ""}
       >
         <TodayIcon />
       </M3TextButton>
@@ -48,6 +49,31 @@ export default function DateInput(): JSX.Element {
           PopperProps={{
             anchorEl: ref.current,
             placement: "bottom-end"
+          }}
+          PaperProps={{
+            sx: {
+              backgroundColor: (theme) => theme.palette.surface.main,
+              boxShadow: (theme) => theme.shadows[2],
+              color: (theme) => theme.palette.onSurface.main,
+              borderRadius: "0.25rem",
+              "& .MuiDialogActions-root": {
+                position: "absolute",
+                pointerEvents: "none",
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0,
+                zIndex: 1,
+                backgroundColor: (theme) => theme.palette.surfaceTint.main,
+                opacity: (theme) => theme.opacities.surface2
+              },
+              "& .MuiSvgIcon-root": {
+                color: (theme) => theme.palette.onSurfaceVariant.main
+              },
+              "& div[role=presentation]": {
+                overflow: "visible"
+              }
+            }
           }}
         />
       </Popover>
