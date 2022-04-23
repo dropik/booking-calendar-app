@@ -1,8 +1,8 @@
 import React from "react";
-import { DatePicker } from "@mui/x-date-pickers";
 import { TextField } from "@mui/material";
 
 import * as Utils from "../../utils";
+import M3DatePicker from "../m3/M3DatePicker";
 
 type Props = {
   label?: string,
@@ -14,7 +14,7 @@ type Props = {
 
 export default function DateInput({ label, value, onChange, minValue, maxValue}: Props): JSX.Element {
   return (
-    <DatePicker
+    <M3DatePicker
       label={label}
       value={new Date(value)}
       onChange={(date) => {
