@@ -1,9 +1,11 @@
 import React, { Fragment, useEffect, useLayoutEffect, useMemo, useRef } from "react";
+import Box from "@mui/material/Box";
 
 import { useAppDispatch, useAppSelector, useHotelData } from "../redux/hooks";
 import * as HotelSlice from "../redux/hotelSlice";
 import * as RoomTypesSlice from "../redux/roomTypesSlice";
 
+import DrawerAdjacent from "./m3/DrawerAdjacent";
 import Floor from "./hotel/Floor";
 import RoomNumber from "./hotel/RoomNumber";
 import BottomSpace from "./hotel/BottomSpace";
@@ -22,12 +24,18 @@ export default function Hotel(): JSX.Element {
   useScrollEffect(ref, scrollTop);
 
   return (
-    <div className="hotel-container">
-      <div ref={ref} className="hotel">
-        {rows}
-        <BottomSpace key="bottom-space" />
-      </div>
-    </div>)
+    <Box className="hotel-container">
+      <DrawerAdjacent sx={{
+        flexDirection: "column",
+        border: "2px solid black",
+        borderTop: "none"
+      }}>
+        <div ref={ref} className="hotel">
+          {rows}
+          <BottomSpace key="bottom-space" />
+        </div>
+      </DrawerAdjacent>
+    </Box>)
   ;
 }
 

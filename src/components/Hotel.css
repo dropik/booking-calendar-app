@@ -1,13 +1,12 @@
 .hotel-container {
   position: fixed;
+  display: flex;
   pointer-events: none;
   top: calc(8rem + 2px);
   left: 0.5rem;
   right: 0.5rem;
   max-height: calc(100% - 8.5rem - 2px);
   overflow: hidden;
-  border: 2px solid black;
-  border-top: 0;
 }
 
 .hotel {
