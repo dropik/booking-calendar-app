@@ -1,5 +1,6 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
+import Box from "@mui/material/Box";
 
 import * as Utils from "../utils";
 import * as Globals from "../globals";
@@ -8,6 +9,7 @@ import * as HotelSlice from "../redux/hotelSlice";
 import * as ScrollSlice from "../redux/scrollSlice";
 import * as TableSlice from "../redux/tableSlice";
 
+import DrawerAdjacent from "./m3/DrawerAdjacent";
 import Table from "./table-container/Table";
 import FetchTiles from "./table-container/FetchTiles";
 import GrabbedTile from "./table-container/GrabbedTile";
@@ -45,9 +47,16 @@ export default function TableContainer(): JSX.Element {
   useInitialScrollLeftEffect(ref, hotelData, leftmostDate, fetchReason);
 
   return (
-    <div ref={ref} className="table-container" onScroll={handleScroll}>
-      {tableContents}
-    </div>
+    <Box className="table-container">
+      <DrawerAdjacent>
+        <Box ref={ref} onScroll={handleScroll} sx={{
+          overflow: "scroll",
+          overscrollBehavior: "none"
+        }}>
+          {tableContents}
+        </Box>
+      </DrawerAdjacent>
+    </Box>
   );
 }
 
