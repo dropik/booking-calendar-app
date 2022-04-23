@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import TodayIcon from "@mui/icons-material/Today";
 import Popover from "@mui/material/Popover";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { alpha } from "@mui/material/styles";
 
 import M3TextButton from "../m3/M3TextButton";
 
@@ -72,6 +73,64 @@ export default function DateInput(): JSX.Element {
               },
               "& div[role=presentation]": {
                 overflow: "visible"
+              },
+              "& .MuiCalendarPicker-viewTransitionContainer": {
+                borderTop: (theme) => `0.0625rem solid ${theme.palette.surfaceVariant.main}`
+              },
+              "& > div > div": {
+                maxHeight: "22.4375rem",
+                "& .MuiCalendarPicker-root": {
+                  maxHeight: "22.4375rem"
+                }
+              },
+              "& .MuiButtonBase-root,button": {
+                color: (theme) => theme.palette.onSurface.main,
+                lineHeight: (theme) => theme.typography.labelLarge,
+                fontSize: (theme) => theme.typography.labelLarge,
+                fontWeight: (theme) => theme.typography.labelLarge,
+                letterSpacing: (theme) => theme.typography.labelLarge,
+                "&:hover": {
+                  backgroundColor: (theme) => alpha(theme.palette.onSurface.main, theme.opacities.hover)
+                },
+                "&.Mui-selected": {
+                  backgroundColor: (theme) => theme.palette.primary.main,
+                  color: (theme) => theme.palette.onPrimary.main,
+                  "::before": {
+                    content: "' '",
+                    position: "absolute",
+                    pointerEvents: "none",
+                    borderRadius: "inherit",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: (theme) => theme.palette.onPrimary.main,
+                    opacity: 0
+                  },
+                  "&:hover": {
+                    boxShadow: (theme) => theme.shadows[1],
+                    backgroundColor: (theme) => theme.palette.primary.main,
+                    "::before": {
+                      opacity: (theme) => theme.opacities.hover
+                    }
+                  },
+                  "&:focus": {
+                    backgroundColor: (theme) => theme.palette.primary.main,
+                  },
+                  "&:focus-visible": {
+                    boxShadow: (theme) => theme.shadows[0],
+                    backgroundColor: (theme) => theme.palette.primary.main,
+                    "::before": {
+                      opacity: (theme) => theme.opacities.focus
+                    }
+                  },
+                  "&:active": {
+                    backgroundColor: (theme) => theme.palette.primary.main,
+                    "::before": {
+                      opacity: (theme) => theme.opacities.hover
+                    }
+                  }
+                }
               }
             }
           }}
