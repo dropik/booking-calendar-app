@@ -6,7 +6,7 @@ import scroll from "./scrollSlice";
 import tiles from "./tilesSlice";
 import roomTypes from "./roomTypesSlice";
 import poppers from "./poppersSlice";
-import sidemenu from "./sidemenuSlice";
+import drawer from "./drawerSlice";
 import dialog from "./dialogSlice";
 import connectionError from "./connectionErrorSlice";
 
@@ -18,7 +18,7 @@ export default combineReducers(
     tiles,
     roomTypes,
     poppers,
-    sidemenu,
+    drawer,
     dialog,
     connectionError
   }

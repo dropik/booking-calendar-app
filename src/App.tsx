@@ -5,7 +5,7 @@ import DatesContainer from "./components/DatesContainer";
 import Hotel from "./components/Hotel";
 import TableContainer from "./components/TableContainer";
 import SaveAndResetWidget from "./components/SaveAndResetWidget";
-import Sidemenu from "./components/Sidemenu";
+import AppDrawer from "./components/AppDrawer";
 import Dialog from "./components/Dialog";
 
 import "@fontsource/roboto/300.css";
@@ -26,7 +26,7 @@ export default function App(): JSX.Element {
       <Hotel />
       <TableContainer />
       <SaveAndResetWidget />
-      <Sidemenu />
+      <AppDrawer />
       <Dialog />
     </div>
   );

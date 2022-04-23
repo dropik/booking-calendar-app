@@ -2,7 +2,7 @@ import React from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 
 import { useAppDispatch } from "../../redux/hooks";
-import * as DrawerSlice from "../../redux/sidemenuSlice";
+import * as DrawerSlice from "../../redux/drawerSlice";
 
 import M3TextButton from "../m3/M3TextButton";
 
@@ -10,7 +10,7 @@ export default function DrawerButton(): JSX.Element {
   const dispatch = useAppDispatch();
 
   function openDrawer() {
-    dispatch(DrawerSlice.show());
+    dispatch(DrawerSlice.open());
   }
 
   return (

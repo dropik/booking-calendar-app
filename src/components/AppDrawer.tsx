@@ -7,33 +7,33 @@ import PersonIcon from "@mui/icons-material/Person";
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
 
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import * as SidemenuSlice from "../redux/sidemenuSlice";
+import * as DrawerSlice from "../redux/drawerSlice";
 import * as DialogSlice from "../redux/dialogSlice";
 
 import "../globals.css";
-import "./Sidemenu.css";
+import "./AppDrawer.css";
 
-export default function Sidemenu(): JSX.Element {
+export default function AppDrawer(): JSX.Element {
   const dispatch = useAppDispatch();
-  const showed = useAppSelector((state) => state.sidemenu.showed);
-  const sidemenuRef = useRef<HTMLDivElement>(null);
+  const open = useAppSelector((state) => state.drawer.open);
+  const drawerRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  function hideMenu() {
-    if (sidemenuRef.current) {
-      sidemenuRef.current.classList.add("hide");
+  function close() {
+    if (drawerRef.current) {
+      drawerRef.current.classList.add("hide");
     }
     if (containerRef.current) {
       containerRef.current.classList.add("hide");
     }
   }
 
-  function handleSidemenuAnimationEnd() {
-    if (sidemenuRef.current) {
-      if (sidemenuRef.current.classList.contains("show")) {
-        sidemenuRef.current.classList.remove("show");
-      } else if (sidemenuRef.current.classList.contains("hide")) {
-        dispatch(SidemenuSlice.hide());
+  function handleDrawerAnimationEnd() {
+    if (drawerRef.current) {
+      if (drawerRef.current.classList.contains("show")) {
+        drawerRef.current.classList.remove("show");
+      } else if (drawerRef.current.classList.contains("hide")) {
+        dispatch(DrawerSlice.close());
       }
     }
   }
@@ -48,15 +48,15 @@ export default function Sidemenu(): JSX.Element {
     dispatch(DialogSlice.show({ dialogType: dialog }));
   }
 
-  if (!showed) {
+  if (!open) {
     return <></>;
   }
 
   return (
-    <div ref={sidemenuRef} onAnimationEnd={handleSidemenuAnimationEnd} className="sidemenu show">
+    <div ref={drawerRef} onAnimationEnd={handleDrawerAnimationEnd} className="drawer show">
       <div ref={containerRef} onAnimationEnd={handleContainerAnimationEnd} className="container show">
         <h3 className="title">
-          <span className="icon button" onClick={hideMenu}><ArrowBackIcon /></span>
+          <span className="icon button" onClick={close}><ArrowBackIcon /></span>
           Utilità
           <span className="icon"></span>
         </h3>
@@ -87,7 +87,7 @@ export default function Sidemenu(): JSX.Element {
           Cliente
         </div>
       </div>
-      <div className="fallback" onClick={hideMenu}></div>
+      <div className="fallback" onClick={close}></div>
     </div>
   );
 }
