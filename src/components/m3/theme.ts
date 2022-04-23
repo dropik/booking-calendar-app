@@ -124,6 +124,8 @@ declare module "@mui/material/styles" {
       surface4: number,
       surface5: number
     };
+
+    drawerWidth: string;
   }
 
   interface ThemeOptions {
@@ -139,7 +141,9 @@ declare module "@mui/material/styles" {
       surface3?: number,
       surface4?: number,
       surface5?: number
-    }
+    };
+
+    drawerWidth?: string;
   }
 }
 
@@ -406,7 +410,9 @@ const theme = createTheme({
     surface3: 0.11,
     surface4: 0.12,
     surface5: 0.14
-  }
+  },
+
+  drawerWidth: "22.5rem"
 });
 
 export default theme;

@@ -1,4 +1,5 @@
 import React from "react";
+import { useTheme } from "@mui/material/styles";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import BookIcon from "@mui/icons-material/Book";
@@ -16,6 +17,7 @@ import "./AppDrawer.css";
 export default function AppDrawer(): JSX.Element {
   const dispatch = useAppDispatch();
   const open = useAppSelector((state) => state.drawer.open);
+  const theme = useTheme();
 
   function closeDrawer() {
     dispatch(DrawerSlice.close());
@@ -31,9 +33,9 @@ export default function AppDrawer(): JSX.Element {
       anchor="left"
       open={open}
       sx={{
-        width: "20rem",
+        width: theme.drawerWidth,
         "& .MuiDrawer-paper": {
-          width: "20rem",
+          width: theme.drawerWidth,
           boxSizing: "border-box",
         },
       }}

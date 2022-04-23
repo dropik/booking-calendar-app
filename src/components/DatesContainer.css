@@ -2,10 +2,9 @@
   position: fixed;
   left: 0.5rem;
   right: 0.5rem;
-  top: 4rem;
+  top: 4.125rem;
   display: flex;
   height: 4rem;
-  border: 2px solid black;
   overflow: hidden;
   z-index: 1100;
 }
