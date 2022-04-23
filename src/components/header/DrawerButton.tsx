@@ -21,7 +21,7 @@ export default function DrawerButton(): JSX.Element {
       iconOnly
       sx={{
         color: theme.palette.onSurface.main,
-        mr: "0.5rem"
+        mr: "1rem"
       }}
     >
       <MenuIcon />
