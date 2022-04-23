@@ -1,4 +1,7 @@
 import React, { useEffect } from "react";
+import { useTheme } from "@mui/material/styles";
+import GlobalStyles from "@mui/material/GlobalStyles";
+import Box from "@mui/material/Box";
 
 import Header from "./components/Header";
 import DatesContainer from "./components/DatesContainer";
@@ -12,23 +15,35 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-import "./App.css";
-import "./globals.css";
-import "./components/m3/m3.css";
 
 export default function App(): JSX.Element {
+  const theme = useTheme();
+
   useWindowCursorGrabbingEffect();
 
   return (
-    <div className="app">
+    <Box sx={{
+      "& .MuiSvgIcon-root": {
+        verticalAlign: "text-bottom"
+      }
+    }}>
+      <GlobalStyles styles={{
+        html: {
+          fontFamily: "Roboto, Arial, Helvetica, sans-serif",
+          backgroundColor: theme.palette.surface.main,
+          "&.tile-grabbing": {
+            cursor: "grabbing"
+          }
+        }
+      }} />
       <Header />
+      <AppDrawer />
       <DatesContainer />
       <Hotel />
       <TableContainer />
       <SaveAndResetWidget />
-      <AppDrawer />
       <Dialog />
-    </div>
+    </Box>
   );
 }
 

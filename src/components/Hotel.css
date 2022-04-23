@@ -1,5 +1,6 @@
 .hotel-container {
   position: fixed;
+  pointer-events: none;
   top: calc(8rem + 2px);
   left: 0.5rem;
   right: 0.5rem;
