@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
+import { useTheme } from "@mui/material/styles";
 
 import { useAppDispatch, useAppSelector, useLeftShift, useTileData } from "../../redux/hooks";
 import * as Utils from "../../utils";
@@ -9,10 +10,11 @@ import "./GrabbedTile.css";
 
 export default function GrabbedTile(): JSX.Element {
   const dispatch = useAppDispatch();
+  const theme = useTheme();
   const grabbedTileId = useAppSelector(state => state.tiles.grabbedTile);
   const grabbedMouseY = useAppSelector(state => state.tiles.mouseYOnGrab);
   const tileData = useTileData(grabbedTileId);
-  const left = useLeftShift(tileData?.from);
+  const left = useLeftShift(tileData?.from, theme.drawerWidth);
   const ref = useRef<HTMLDivElement>(null);
 
   useBackgroundColorEffect(ref, tileData);

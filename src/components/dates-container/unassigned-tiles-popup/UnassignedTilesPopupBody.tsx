@@ -1,4 +1,5 @@
 import React, { useLayoutEffect, useMemo, useRef } from "react";
+import { useTheme } from "@mui/material/styles";
 
 import { useLeftShift } from "../../../redux/hooks";
 
@@ -12,7 +13,8 @@ type Props = {
 }
 
 export default function UnassignedTilesPopupBody({ leftmostSelectedTileDate, tilesPerSelectedDay }: Props): JSX.Element {
-  const left = useLeftShift(leftmostSelectedTileDate);
+  const theme = useTheme();
+  const left = useLeftShift(leftmostSelectedTileDate, theme.drawerWidth);
   const ref = useRef<HTMLDivElement>(null);
   const rows = useRowsMemo(tilesPerSelectedDay, leftmostSelectedTileDate);
 

@@ -38,13 +38,15 @@ export function useDates(): Generator<string, void, void> {
   }();
 }
 
-export function useLeftShift(fromDate: string | undefined): number {
+export function useLeftShift(fromDate: string | undefined, drawerWidth: string): number {
   return useAppSelector((state) => {
     if (fromDate) {
       const daysShift = Utils.daysBetweenDates(state.table.leftmostDate, fromDate);
       const cellWidth = Utils.remToPx(4) + 2;
       const hotelBarShift = Utils.remToPx(6.5) + 4;
-      return hotelBarShift + daysShift * cellWidth - state.scroll.left;
+      const drawerWidthPx = Utils.remToPx(Number.parseFloat(drawerWidth.replace("rem", "")));
+      const drawerShift = state.drawer.open ? drawerWidthPx : 0;
+      return drawerShift + hotelBarShift + daysShift * cellWidth - state.scroll.left;
     } else return 0;
   });
 }
