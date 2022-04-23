@@ -27,7 +27,7 @@ export default function Header(): JSX.Element {
             duration: theme.transitions.duration.leavingScreen,
           }),
           ...(open && {
-            left: "-3rem",
+            left: "-2.5rem",
             transition: theme.transitions.create(["left"], {
               easing: theme.transitions.easing.easeOut,
               duration: theme.transitions.duration.enteringScreen,

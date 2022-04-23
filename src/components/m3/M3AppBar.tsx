@@ -10,8 +10,8 @@ const CustomizedAppBar = styled(AppBar)<AppBarProps>(({ theme }) => ({
   alignItems: "center",
   justifyContent: "space-between",
   height: "4rem",
-  paddingLeft: "1rem",
-  paddingRight: "1rem"
+  paddingLeft: "0.5rem",
+  paddingRight: "0.5rem"
 }));
 
 export default function M3AppBar({ ...props}: AppBarProps): JSX.Element {
