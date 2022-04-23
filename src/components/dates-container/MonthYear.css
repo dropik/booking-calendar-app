@@ -1,7 +1,7 @@
 .month-year {
   position: absolute;
   z-index: 1;
-  height: 4rem;
+  height: 3.75rem;
   width: 6rem;
   border-right: 2px solid black;
   text-align: center;

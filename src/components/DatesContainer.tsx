@@ -12,8 +12,7 @@ export default function DatesContainer(): JSX.Element {
   return (
     <Box className="dates-container">
       <DrawerAdjacent sx={{
-        border: "2px solid black",
-        borderBottom: "none"
+        border: "2px solid black"
       }}>
         <MonthYear key="monthYear" />
         <Dates />

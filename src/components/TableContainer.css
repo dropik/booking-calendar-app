@@ -1,5 +1,5 @@
 .table-container {
-  margin-top: calc(8rem + 4px);
+  margin-top: 8rem;
   width: calc(100vw - 7rem - 6px);
   max-height: calc(100vh - 8.5rem - 4px);
   margin-left: calc(6rem + 4px);

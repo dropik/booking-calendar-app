@@ -2,7 +2,7 @@
   position: fixed;
   display: flex;
   pointer-events: none;
-  top: calc(8rem + 2px);
+  top: 7.875rem;
   left: 0.5rem;
   right: 0.5rem;
   max-height: calc(100% - 8.5rem - 2px);
