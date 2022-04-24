@@ -14,11 +14,7 @@ import * as DrawerSlice from "../redux/drawerSlice";
 import * as DialogSlice from "../redux/dialogSlice";
 
 import M3TextButton from "./m3/M3TextButton";
-import M3Divider from "./m3/M3Divider";
-import M3ListItemButton from "./m3/M3ListItemButton";
-import M3ListItemIcon from "./m3/M3ListItemIcon";
-import M3ListSubheader from "./m3/M3ListSubheader";
-import M3ListItemText from "./m3/M3ListItemText";
+import Menu from "./Menu";
 
 export default function AppDrawer(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -67,35 +63,48 @@ export default function AppDrawer(): JSX.Element {
           <ArrowBackIcon />
         </M3TextButton>
       </List>
-      <M3Divider />
-      <List subheader={<M3ListSubheader>Esporta</M3ListSubheader>}>
-        <M3ListItemButton onClick={() => { showDialog("police"); }}>
-          <M3ListItemIcon><LocalPoliceOutlinedIcon /></M3ListItemIcon>
-          <M3ListItemText>Polizia</M3ListItemText>
-        </M3ListItemButton>
-        <M3ListItemButton onClick={() => { showDialog("istat"); }}>
-          <M3ListItemIcon><QueryStatsIcon /></M3ListItemIcon>
-          <M3ListItemText>Istat</M3ListItemText>
-        </M3ListItemButton>
-      </List>
-      <M3Divider />
-      <List subheader={<M3ListSubheader>Calcola</M3ListSubheader>}>
-        <M3ListItemButton onClick={() => { showDialog("cityTax"); }}>
-          <M3ListItemIcon><AttachMoneyIcon /></M3ListItemIcon>
-          <M3ListItemText>Tassa di soggiorno</M3ListItemText>
-        </M3ListItemButton>
-      </List>
-      <M3Divider />
-      <List subheader={<M3ListSubheader>Cerca</M3ListSubheader>}>
-        <M3ListItemButton onClick={() => { showDialog("findBooking"); }}>
-          <M3ListItemIcon><BookOutlinedIcon /></M3ListItemIcon>
-          <M3ListItemText>Prenotazione</M3ListItemText>
-        </M3ListItemButton>
-        <M3ListItemButton onClick={() => { showDialog("findClient"); }}>
-          <M3ListItemIcon><PersonOutlinedIcon /></M3ListItemIcon>
-          <M3ListItemText>Cliente</M3ListItemText>
-        </M3ListItemButton>
-      </List>
+      <Menu lists={[
+        {
+          subheader: "Esporta",
+          items: [
+            {
+              text: "Polizia",
+              icon: <LocalPoliceOutlinedIcon />,
+              onClick: () => showDialog("police")
+            },
+            {
+              text: "Istat",
+              icon: <QueryStatsIcon />,
+              onClick: () => showDialog("istat")
+            }
+          ]
+        },
+        {
+          subheader: "Calcola",
+          items: [
+            {
+              text: "Tassa di soggiorno",
+              icon: <AttachMoneyIcon />,
+              onClick: () => showDialog("cityTax")
+            }
+          ]
+        },
+        {
+          subheader: "Cerca",
+          items: [
+            {
+              text: "Prenotazione",
+              icon: <BookOutlinedIcon />,
+              onClick: () => showDialog("findBooking")
+            },
+            {
+              text: "Cliente",
+              icon: <PersonOutlinedIcon />,
+              onClick: () => showDialog("findClient")
+            }
+          ]
+        }
+      ]} />
     </Drawer>
   );
 }
