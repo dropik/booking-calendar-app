@@ -3,9 +3,7 @@ import { useTheme } from "@mui/material/styles";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import BookOutlinedIcon from "@mui/icons-material/BookOutlined";
-import LocalPoliceOutlinedIcon from "@mui/icons-material/LocalPoliceOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import QueryStatsIcon from "@mui/icons-material/QueryStats";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
@@ -82,21 +80,6 @@ export default function AppDrawer(): JSX.Element {
                   icon: <CalendarMonthOutlinedIcon />,
                   onClick: () => void 0,
                   selected: true
-                }
-              ]
-            },
-            {
-              subheader: "Esporta",
-              items: [
-                {
-                  text: "Polizia",
-                  icon: <LocalPoliceOutlinedIcon />,
-                  onClick: () => showDialog("police")
-                },
-                {
-                  text: "Istat",
-                  icon: <QueryStatsIcon />,
-                  onClick: () => showDialog("istat")
                 }
               ]
             },

@@ -1,12 +1,13 @@
 import React from "react";
+import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { useTheme } from "@mui/material/styles";
 
 import M3AppBar from "./m3/M3AppBar";
 import DrawerAdjacent from "./m3/DrawerAdjacent";
 import DrawerButton from "./header/DrawerButton";
 import DateInput from "./header/DateInput";
+import DownloadButton from "./header/DownloadButton";
 
 import { useAppSelector } from "../redux/hooks";
 
@@ -37,7 +38,13 @@ export default function Header(): JSX.Element {
           <DrawerButton />
           <Typography variant="titleLarge">Booking Calendar</Typography>
         </Box>
-        <DateInput />
+        <Box sx={{
+          display: "flex",
+          flexDirection: "row"
+        }}>
+          <DateInput />
+          <DownloadButton />
+        </Box>
       </DrawerAdjacent>
     </M3AppBar>
   );
