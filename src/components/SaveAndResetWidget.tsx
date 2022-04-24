@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import CheckIcon from "@mui/icons-material/Check";
 import RestoreIcon from "@mui/icons-material/Restore";
@@ -25,17 +25,14 @@ export default function SaveAndResetWidget(): JSX.Element {
   const hasChanges = useHasChanges();
   const changes = useAppSelector((state) => state.tiles.changesMap);
   const [status, setStatus] = useState<Status>("idle");
-  const [keepShown, setKeepShown] = useState(false);
   const ref = useRef<HTMLElement | null>(null);
 
   function saveHandler() {
     async function launchSaveAsync(): Promise<void> {
       try {
         await Api.postChangesAsync(changes);
-        setKeepShown(true);
         dispatch(TilesSlice.saveChanges());
         setStatus("fulfilled");
-        setTimeout(() => setKeepShown(false), 1000);
       } catch (error) {
         dispatch(ConnectionErrorSlice.show());
         setStatus("idle");
@@ -45,15 +42,14 @@ export default function SaveAndResetWidget(): JSX.Element {
     setStatus("loading");
   }
 
-  useEffect(() => {
-    if (hasChanges && status !== "loading") {
+  function tryResetIdle() {
+    if (!hasChanges) {
       setStatus("idle");
     }
-  }, [hasChanges, status]);
+  }
 
   const resetHandler = getResetHandler(dispatch);
   const body = getBody(status, resetHandler, saveHandler);
-  const show = hasChanges || keepShown;
 
   return (
     <>
@@ -63,7 +59,7 @@ export default function SaveAndResetWidget(): JSX.Element {
         bottom: "2.5rem",
         right: "3rem"
       }} ref={ref}></Box>
-      <SlideAndFade in={show} container={ref.current} boxSx={{
+      <SlideAndFade in={hasChanges} container={ref.current} onExited={tryResetIdle} boxSx={{
         position: "fixed",
         bottom: "2.5rem",
         right: "3rem"
