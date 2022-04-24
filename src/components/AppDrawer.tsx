@@ -6,6 +6,7 @@ import BookOutlinedIcon from "@mui/icons-material/BookOutlined";
 import LocalPoliceOutlinedIcon from "@mui/icons-material/LocalPoliceOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
+import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import Fade from "@mui/material/Fade";
@@ -74,6 +75,16 @@ export default function AppDrawer(): JSX.Element {
             </ListItem>
           </List>
           <Menu lists={[
+            {
+              items: [
+                {
+                  text: "Calendario",
+                  icon: <CalendarMonthOutlinedIcon />,
+                  onClick: () => void 0,
+                  selected: true
+                }
+              ]
+            },
             {
               subheader: "Esporta",
               items: [

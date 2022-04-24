@@ -9,11 +9,12 @@ import M3Divider from "./m3/M3Divider";
 
 type Props = {
   lists: {
-    subheader: string,
+    subheader?: string,
     items: {
       icon: ReactNode,
       text: string,
-      onClick: () => void
+      onClick: () => void,
+      selected?: boolean
     }[]
   }[]
 }
@@ -22,11 +23,14 @@ export default function Menu({ lists }: Props): JSX.Element {
   return (
     <>
       {lists.map((list) => (
-        <React.Fragment key={list.subheader}>
+        <React.Fragment key={list.subheader ? list.subheader : list.items.toString()}>
           <M3Divider />
-          <List subheader={<M3ListSubheader>{list.subheader}</M3ListSubheader>}>
+          <List sx={{
+            paddingTop: !list.subheader ? "1rem" : undefined,
+            paddingBottom: "1rem"
+          }} subheader={<M3ListSubheader>{list.subheader ? list.subheader : ""}</M3ListSubheader>}>
             {list.items.map((item) => (
-              <M3ListItemButton key={item.text} onClick={item.onClick}>
+              <M3ListItemButton key={item.text} onClick={item.onClick} selected={item.selected}>
                 <M3ListItemIcon>{item.icon}</M3ListItemIcon>
                 <M3ListItemText>{item.text}</M3ListItemText>
               </M3ListItemButton>
