@@ -16,7 +16,7 @@ import * as DrawerSlice from "../redux/drawerSlice";
 import * as DialogSlice from "../redux/dialogSlice";
 
 import M3TextButton from "./m3/M3TextButton";
-import Menu from "./Menu";
+import DrawerLists from "./DrawerLists";
 
 export default function AppDrawer(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -72,7 +72,7 @@ export default function AppDrawer(): JSX.Element {
               </M3TextButton>
             </ListItem>
           </List>
-          <Menu lists={[
+          <DrawerLists lists={[
             {
               items: [
                 {
