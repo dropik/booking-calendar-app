@@ -8,7 +8,7 @@ import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
 import Drawer from "@mui/material/Drawer";
 import Divider, { DividerProps } from "@mui/material/Divider";
-import List, { ListProps } from "@mui/material/List";
+import List from "@mui/material/List";
 import ListItemButton, { ListItemButtonProps } from "@mui/material/ListItemButton";
 import ListItemIcon, { ListItemIconProps } from "@mui/material/ListItemIcon";
 import ListItemText, { ListItemTextProps } from "@mui/material/ListItemText";
@@ -21,10 +21,6 @@ import * as DialogSlice from "../redux/dialogSlice";
 
 import M3TextButton from "./m3/M3TextButton";
 import StateLayer from "./m3/StateLayer";
-
-const M3List = styled(List)<ListProps>(() => ({
-  paddingBottom: 0
-}));
 
 const M3Divider = styled(Divider)<DividerProps>(({ theme }) => ({
   marginLeft: "1rem",
@@ -166,7 +162,7 @@ export default function AppDrawer(): JSX.Element {
         </M3TextButton>
       </List>
       <M3Divider />
-      <M3List subheader={<M3ListSubheader>Esporta</M3ListSubheader>}>
+      <List subheader={<M3ListSubheader>Esporta</M3ListSubheader>}>
         <M3ListItemButton onClick={() => { showDialog("police"); }}>
           <M3ListItemIcon><LocalPoliceOutlinedIcon /></M3ListItemIcon>
           <M3ListItemText>Polizia</M3ListItemText>
@@ -175,16 +171,16 @@ export default function AppDrawer(): JSX.Element {
           <M3ListItemIcon><QueryStatsIcon /></M3ListItemIcon>
           <M3ListItemText>Istat</M3ListItemText>
         </M3ListItemButton>
-      </M3List>
+      </List>
       <M3Divider />
-      <M3List subheader={<M3ListSubheader>Calcola</M3ListSubheader>}>
+      <List subheader={<M3ListSubheader>Calcola</M3ListSubheader>}>
         <M3ListItemButton onClick={() => { showDialog("cityTax"); }}>
           <M3ListItemIcon><AttachMoneyIcon /></M3ListItemIcon>
           <M3ListItemText>Tassa di soggiorno</M3ListItemText>
         </M3ListItemButton>
-      </M3List>
+      </List>
       <M3Divider />
-      <M3List subheader={<M3ListSubheader>Cerca</M3ListSubheader>}>
+      <List subheader={<M3ListSubheader>Cerca</M3ListSubheader>}>
         <M3ListItemButton onClick={() => { showDialog("findBooking"); }}>
           <M3ListItemIcon><BookOutlinedIcon /></M3ListItemIcon>
           <M3ListItemText>Prenotazione</M3ListItemText>
@@ -193,7 +189,7 @@ export default function AppDrawer(): JSX.Element {
           <M3ListItemIcon><PersonOutlinedIcon /></M3ListItemIcon>
           <M3ListItemText>Cliente</M3ListItemText>
         </M3ListItemButton>
-      </M3List>
+      </List>
     </Drawer>
   );
 }
