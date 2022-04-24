@@ -427,7 +427,7 @@ const theme = createTheme({
       fastOutSlowIn: "cubic-bezier(0.76, 0.1, 0, 1.02)"
     },
     duration: {
-      long: 1000
+      long: 900
     }
   }
 });
