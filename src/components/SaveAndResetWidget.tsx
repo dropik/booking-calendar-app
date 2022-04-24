@@ -60,7 +60,7 @@ export default function SaveAndResetWidget(): JSX.Element {
       <Box sx={{
         position: "fixed",
         pointerEvents: "none",
-        bottom: "4rem",
+        bottom: "2.5rem",
         right: "3rem"
       }} ref={ref}></Box>
       <SlideAndFade in={show} container={ref.current} boxSx={{
