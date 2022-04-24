@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import CheckIcon from "@mui/icons-material/Check";
 import RestoreIcon from "@mui/icons-material/Restore";
@@ -16,6 +16,7 @@ import SlideAndFade from "./m3/SlideAndFade";
 import M3Card from "./m3/M3Card";
 import M3TextButton from "./m3/M3TextButton";
 import M3Fab from "./m3/M3Fab";
+import { Box } from "@mui/material";
 
 type Status = "idle" | "loading" | "fulfilled";
 
@@ -25,6 +26,7 @@ export default function SaveAndResetWidget(): JSX.Element {
   const changes = useAppSelector((state) => state.tiles.changesMap);
   const [status, setStatus] = useState<Status>("idle");
   const [keepShown, setKeepShown] = useState(false);
+  const ref = useRef<HTMLElement | null>(null);
 
   function saveHandler() {
     async function launchSaveAsync(): Promise<void> {
@@ -54,13 +56,21 @@ export default function SaveAndResetWidget(): JSX.Element {
   const show = hasChanges || keepShown;
 
   return (
-    <SlideAndFade in={show} boxSx={{
-      position: "fixed",
-      bottom: "2.5rem",
-      right: "3rem"
-    }}>
-      <M3Card borderRadius="1.75rem">{body}</M3Card>
-    </SlideAndFade>
+    <>
+      <Box sx={{
+        position: "fixed",
+        pointerEvents: "none",
+        bottom: "4rem",
+        right: "3rem"
+      }} ref={ref}></Box>
+      <SlideAndFade in={show} container={ref.current} boxSx={{
+        position: "fixed",
+        bottom: "2.5rem",
+        right: "3rem"
+      }}>
+        <M3Card borderRadius="1.75rem">{body}</M3Card>
+      </SlideAndFade>
+    </>
   );
 }
 
