@@ -13,9 +13,3 @@
 .tile-persons {
   line-height: 4rem;
 }
-
-.tile.out-of-bound {
-  background-color: rgba(19, 18, 18, 0.12) !important;
-  color: rgba(19, 18, 18, 0.38);
-  cursor: auto;
-}

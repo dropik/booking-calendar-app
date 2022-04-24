@@ -1,7 +1,6 @@
 import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 
-import { useAppDispatch, useAppSelector, useColumns, useLeftmostDate } from "../../../redux/hooks";
-import * as Utils from "../../../utils";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import * as TilesSlice from "../../../redux/tilesSlice";
 import * as PoppersSlice from "../../../redux/poppersSlice";
 
@@ -19,8 +18,6 @@ type Props = {
 export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const tileData = useAppSelector((state) => state.tiles.data[tileId]);
-  const leftmostDate = useLeftmostDate();
-  const columns = useColumns();
   const ref = useRef<HTMLDivElement>(null);
   const [isShowInfo, setIsShowInfo] = useState(false);
   const [isShowContextMenu, setIsShowContextMenu] = useState(false);
@@ -35,9 +32,6 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
     return <></>;
   }
 
-  const outOfBound = isOutOfBound(tileData, leftmostDate, columns);
-  const className = getClassName(outOfBound);
-
   function showContextMenu(event: React.MouseEvent<HTMLDivElement>) {
     event.preventDefault();
     event.stopPropagation();
@@ -49,7 +43,7 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
   }
 
   function grabTile(event: React.MouseEvent<HTMLDivElement>) {
-    if (!outOfBound && ref.current && (event.button === 0)) {
+    if (ref.current && (event.button === 0)) {
       dispatch(TilesSlice.grab({
         tileId,
         mouseY: event.pageY - ref.current.getBoundingClientRect().top
@@ -79,7 +73,7 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
   return (
     <div
       ref={ref}
-      className={className}
+      className="unassigned-tile-part"
       onMouseDown={grabTile}
       onMouseEnter={showInfo}
       onMouseLeave={hideInfo}
@@ -94,7 +88,7 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
       }
       {
         isShowContextMenu ?
-          <TileContextMenu tileId={tileId} x={mousePos.x} y={mousePos.y} onHide={contextMenuHideCallback} isOutOfBound={outOfBound} onColorPickerShow={() => setIsShowColorPicker(true)} /> :
+          <TileContextMenu tileId={tileId} x={mousePos.x} y={mousePos.y} onHide={contextMenuHideCallback} onColorPickerShow={() => setIsShowColorPicker(true)} /> :
           <></>
       }
       {
@@ -112,17 +106,4 @@ function useBackgroundColorEffect(ref: React.RefObject<HTMLDivElement>, tileData
       ref.current.style.backgroundColor = tileData.color;
     }
   }, [ref, tileData]);
-}
-
-function isOutOfBound(tileData: TilesSlice.TileData, leftmostDate: string, columns: number): boolean {
-  const tileStartShift = Utils.daysBetweenDates(leftmostDate, tileData.from);
-  return (tileStartShift < 0) || (tileStartShift + tileData.nights > columns);
-}
-
-function getClassName(outOfBound: boolean): string {
-  let className = "unassigned-tile-part";
-  if (outOfBound) {
-    className += " out-of-bound";
-  }
-  return className;
 }

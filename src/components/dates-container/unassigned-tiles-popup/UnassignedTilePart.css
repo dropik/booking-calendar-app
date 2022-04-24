@@ -4,9 +4,3 @@
   text-align: center;
   cursor: grab;
 }
-
-.unassigned-tile-part.out-of-bound {
-  background-color: rgba(28, 27, 31, 0.12) !important;
-  color: rgba(28, 27, 31, 0.38);
-  cursor: auto;
-}

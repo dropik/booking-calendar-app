@@ -1,8 +1,6 @@
 import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 
-import * as Utils from "../../utils";
-
-import { useAppDispatch, useAppSelector, useColumns, useLeftmostDate } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
 import * as PoppersSlice from "../../redux/poppersSlice";
 
@@ -23,8 +21,6 @@ export default function TilePart({ y, tileData }: Props): JSX.Element {
   const tileId = tileData.id;
   const isGrabbed = useAppSelector(state => state.tiles.grabbedMap[tileId]);
   const ref = useRef<HTMLDivElement>(null);
-  const leftmostDate = useLeftmostDate();
-  const columns = useColumns();
   const roomType = useRoomTypeByNumber(y);
   const personsInRoomType = useAppSelector(state => state.roomTypes.data[roomType]);
   const [isShowInfo, setIsShowInfo] = useState(false);
@@ -34,12 +30,11 @@ export default function TilePart({ y, tileData }: Props): JSX.Element {
   const contextMenuHideCallback = useCallback(() => setIsShowContextMenu(false), []);
   const colorPickerHideCallback = useCallback(() => setIsShowColorPicker(false), []);
 
-  const outOfBound = isOutOfBound(tileData, leftmostDate, columns);
-  const className = getClassName(isGrabbed, outOfBound);
+  const className = getClassName(isGrabbed);
 
   function grabTile(event: React.MouseEvent<HTMLDivElement>) {
     event.preventDefault();
-    if ((event.button == 0) && !outOfBound && ref.current) {
+    if ((event.button == 0) && ref.current) {
       dispatch(TilesSlice.grab({ tileId, mouseY: event.pageY - ref.current.getBoundingClientRect().top }));
     }
   }
@@ -92,7 +87,7 @@ export default function TilePart({ y, tileData }: Props): JSX.Element {
       }
       {
         isShowContextMenu ?
-          <TileContextMenu tileId={tileId} x={mousePos.x} y={mousePos.y} onHide={contextMenuHideCallback} isOutOfBound={outOfBound} onColorPickerShow={() => setIsShowColorPicker(true)} /> :
+          <TileContextMenu tileId={tileId} x={mousePos.x} y={mousePos.y} onHide={contextMenuHideCallback} onColorPickerShow={() => setIsShowColorPicker(true)} /> :
           <></>
       }
       {
@@ -117,18 +112,10 @@ function useRoomTypeByNumber(roomNumber: number): string {
   });
 }
 
-function isOutOfBound(tileData: TilesSlice.TileData, leftmostDate: string, columns: number): boolean {
-  const tileStartShift = Utils.daysBetweenDates(leftmostDate, tileData.from);
-  return (tileStartShift < 0) || (tileStartShift + tileData.nights > columns);
-}
-
-function getClassName(grabbed: boolean | undefined, outOfBound: boolean): string {
+function getClassName(grabbed: boolean | undefined): string {
   let className = "tile";
   if (grabbed) {
     className += " grabbed";
-  }
-  if (outOfBound) {
-    className += " out-of-bound";
   }
   return className;
 }

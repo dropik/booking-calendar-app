@@ -15,11 +15,10 @@ type Props = {
   x: number,
   y: number,
   onHide: () => void,
-  isOutOfBound: boolean,
   onColorPickerShow: () => void
 };
 
-export default function TileContextMenu({ tileId, x, y, onHide, isOutOfBound, onColorPickerShow }: Props): JSX.Element {
+export default function TileContextMenu({ tileId, x, y, onHide, onColorPickerShow }: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const ref = useRef<HTMLDivElement>(null);
   const assignColorIconRef = useRef<HTMLDivElement>(null);
@@ -36,11 +35,6 @@ export default function TileContextMenu({ tileId, x, y, onHide, isOutOfBound, on
   useHideContextOnClickOutside(dispatch, hideMenu);
 
   const removeClassName = getRemoveClassName(isUnassigned);
-
-  let assignColorClassName = "button assign-color";
-  if (isOutOfBound) {
-    assignColorClassName += " disabled";
-  }
 
   function showInfoDialog() {
     if (tileId) {
@@ -67,7 +61,7 @@ export default function TileContextMenu({ tileId, x, y, onHide, isOutOfBound, on
         <InfoIcon />
         Informazioni
       </div>
-      <div className={assignColorClassName} onClick={showColorPicker}>
+      <div className="button assign-color" onClick={showColorPicker}>
         <div ref={assignColorIconRef} className="icon"></div>
         Assegna colore
       </div>
