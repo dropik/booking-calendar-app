@@ -3,6 +3,8 @@ import { alpha, styled } from "@mui/material/styles";
 import Button, { ButtonProps } from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
+import { StateLayer } from "./Tints";
+
 interface M3TextButtonProps extends ButtonProps {
   iconOnly?: boolean;
 }
@@ -18,13 +20,6 @@ const CustomizedButton = styled(Button, {
   paddingLeft: "0.75rem",
   paddingRight: "0.75rem",
   "& .state-layer": {
-    position: "absolute",
-    pointerEvents: "none",
-    borderRadius: "inherit",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
     backgroundColor: theme.palette.primary.main,
     opacity: 0
   },
@@ -54,7 +49,7 @@ const CustomizedButton = styled(Button, {
 export default function M3TextButton(props: M3TextButtonProps): JSX.Element {
   return (
     <CustomizedButton {...props} disableFocusRipple disableTouchRipple>
-      <div className="state-layer"></div>
+      <StateLayer />
       <Typography variant="labelLarge">
         {props.children}
       </Typography>

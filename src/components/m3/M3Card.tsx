@@ -1,7 +1,8 @@
 import React from "react";
 import { styled } from "@mui/material/styles";
 import Card, { CardProps } from "@mui/material/Card";
-import Box from "@mui/material/Box";
+
+import { StateLayer, SurfaceTint } from "./Tints";
 
 interface M3CardProps extends CardProps {
   borderRadius?: string
@@ -15,15 +16,6 @@ const CustomizedCard = styled(Card, {
   padding: "1rem",
   backgroundColor: theme.palette.surface.main,
   boxShadow: theme.shadows[1],
-  "& > .surface-tint,.state-layer": {
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    pointerEvents: "none",
-    borderRadius: "inherit"
-  },
   "& > .state-layer": {
     backgroundColor: theme.palette.onSurface.main,
     opacity: 0
@@ -64,9 +56,9 @@ const CustomizedCard = styled(Card, {
 export default function M3Card({children, ...props }: M3CardProps): JSX.Element {
   return (
     <CustomizedCard {...props}>
-      <Box className="state-layer"></Box>
+      <StateLayer />
       {children}
-      <Box className="surface-tint"></Box>
+      <SurfaceTint />
     </CustomizedCard>
   );
 }

@@ -1,7 +1,8 @@
 import React from "react";
 import { styled, ThemePalettes } from "@mui/material/styles";
 import Fab, { FabProps } from "@mui/material/Fab";
-import Box from "@mui/material/Box";
+
+import { StateLayer } from "./Tints";
 
 type ColorCombination = "primary" | "surface" | "secondary" | "tertiary";
 
@@ -119,15 +120,7 @@ const CustomizedFab = styled(Fab, {
 export default function M3Fab(props: M3FabProps): JSX.Element {
   return (
     <CustomizedFab {...props} disableFocusRipple>
-      <Box className="state-layer" sx={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0,
-        pointerEvents: "none",
-        borderRadius: "inherit"
-      }}></Box>
+      <StateLayer />
       {props.children}
     </CustomizedFab>
   );

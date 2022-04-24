@@ -20,7 +20,7 @@ import * as DrawerSlice from "../redux/drawerSlice";
 import * as DialogSlice from "../redux/dialogSlice";
 
 import M3TextButton from "./m3/M3TextButton";
-import StateLayer from "./m3/StateLayer";
+import { StateLayer } from "./m3/Tints";
 
 const M3Divider = styled(Divider)<DividerProps>(({ theme }) => ({
   marginLeft: "1rem",
