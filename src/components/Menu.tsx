@@ -10,7 +10,7 @@ interface Props extends MenuProps {
     text: string,
     icon: ReactNode,
     onClick: () => void
-  }[]
+  }[];
 }
 
 export default function Menu({ list, ...props }: Props): JSX.Element {

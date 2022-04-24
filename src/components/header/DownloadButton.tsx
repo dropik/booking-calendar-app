@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useTheme } from "@mui/material/styles";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import LocalPoliceOutlinedIcon from "@mui/icons-material/LocalPoliceOutlined";
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
@@ -12,7 +11,6 @@ import Menu from "../Menu";
 
 export default function DownloadButton(): JSX.Element {
   const dispatch = useAppDispatch();
-  const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const open = Boolean(anchorEl);
@@ -32,8 +30,7 @@ export default function DownloadButton(): JSX.Element {
       <M3TextButton
         iconOnly
         aria-describedby={id}
-        className={open ? "focused" : ""}
-        sx={{ color: theme.palette.onSurfaceVariant.main }}
+        focused={open}
         onClick={(event) => setAnchorEl(event.currentTarget)}
       >
         <FileDownloadOutlinedIcon />

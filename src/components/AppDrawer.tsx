@@ -64,9 +64,7 @@ export default function AppDrawer(): JSX.Element {
               <M3TextButton
                 iconOnly
                 onClick={closeDrawer}
-                sx={{
-                  color: theme.palette.onSurfaceVariant.main,
-                }}
+                sx={{ color: theme.palette.onSurfaceVariant.main }}
               >
                 <ArrowBackIcon />
               </M3TextButton>

@@ -7,6 +7,7 @@ import { StateLayer } from "./Tints";
 
 interface M3TextButtonProps extends ButtonProps {
   iconOnly?: boolean;
+  focused?: boolean;
 }
 
 const CustomizedButton = styled(Button, {
@@ -43,12 +44,20 @@ const CustomizedButton = styled(Button, {
   },
   "&:active .state-layer": {
     opacity: theme.opacities.press
+  },
+  ".MuiAppBar-root &": {
+    color: theme.palette.onSurfaceVariant.main
   }
 }));
 
-export default function M3TextButton(props: M3TextButtonProps): JSX.Element {
+export default function M3TextButton({ focused, ...props }: M3TextButtonProps): JSX.Element {
   return (
-    <CustomizedButton {...props} disableFocusRipple disableTouchRipple>
+    <CustomizedButton
+      className={focused ? "focused" : ""}
+      disableFocusRipple
+      disableTouchRipple
+      {...props}
+    >
       <StateLayer />
       <Typography variant="labelLarge">
         {props.children}

@@ -32,11 +32,10 @@ export default function DateInput(): JSX.Element {
   return (
     <div ref={ref}>
       <M3TextButton
-        sx={{ color: (theme) => theme.palette.onSurfaceVariant.main }}
         iconOnly
         onClick={openDateInput}
         aria-describedby={id}
-        className={open ? "focused" : ""}
+        focused={open}
       >
         <TodayIcon />
       </M3TextButton>
