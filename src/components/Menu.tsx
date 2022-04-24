@@ -24,11 +24,13 @@ export default function Menu({ lists }: Props): JSX.Element {
     <>
       {lists.map((list) => (
         <React.Fragment key={list.subheader ? list.subheader : list.items.toString()}>
-          <M3Divider />
-          <List sx={{
-            paddingTop: !list.subheader ? "1rem" : undefined,
-            paddingBottom: "1rem"
-          }} subheader={<M3ListSubheader>{list.subheader ? list.subheader : ""}</M3ListSubheader>}>
+          {list.subheader ? <M3Divider /> : <></>}
+          <List
+            sx={{ paddingBottom: "1rem" }}
+            subheader={
+              <M3ListSubheader>{list.subheader ? list.subheader : ""}</M3ListSubheader>
+            }
+          >
             {list.items.map((item) => (
               <M3ListItemButton key={item.text} onClick={item.onClick} selected={item.selected}>
                 <M3ListItemIcon>{item.icon}</M3ListItemIcon>
