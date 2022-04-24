@@ -209,10 +209,10 @@ const primary: (luminosity: number) => string = (luminosity) =>
   assembleColor(219, 93, luminosity);
 
 const secondary: (luminosity: number) => string = (luminosity) =>
-  assembleColor(193, 68, luminosity);
+  assembleColor(219, 65, luminosity);
 
 const tertiary: (luminosity: number) => string = (luminosity) =>
-  assembleColor(73, 98, luminosity);
+  assembleColor(248, 65, luminosity);
 
 const error: (luminosity: number) => string = (luminosity) =>
   assembleColor(13, 89, luminosity);
