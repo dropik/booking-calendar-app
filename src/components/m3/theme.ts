@@ -110,6 +110,14 @@ declare module "@mui/material/styles" {
     bodySmall?: React.CSSProperties;
   }
 
+  interface Easing {
+    fastOutSlowIn: string;
+  }
+
+  interface Duration {
+    long: number
+  }
+
   interface Theme {
     opacities: {
       hover: number,
@@ -412,7 +420,16 @@ const theme = createTheme({
     surface5: 0.14
   },
 
-  drawerWidth: "22.5rem"
+  drawerWidth: "22.5rem",
+
+  transitions: {
+    easing: {
+      fastOutSlowIn: "cubic-bezier(0.76, 0.1, 0, 1.02)"
+    },
+    duration: {
+      long: 1000
+    }
+  }
 });
 
 export default theme;

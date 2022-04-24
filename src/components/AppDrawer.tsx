@@ -47,6 +47,10 @@ export default function AppDrawer(): JSX.Element {
           paddingRight: "0.75rem"
         },
       }}
+      SlideProps={{
+        easing: theme.transitions.easing.fastOutSlowIn
+      }}
+      transitionDuration={theme.transitions.duration.long}
     >
       <List sx={{
         paddingTop: "0.75rem",

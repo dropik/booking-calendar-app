@@ -23,14 +23,14 @@ export default function Header(): JSX.Element {
           position: "relative",
           left: 0,
           transition: theme.transitions.create(["left"], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
+            easing: theme.transitions.easing.fastOutSlowIn,
+            duration: theme.transitions.duration.long,
           }),
           ...(open && {
             left: "-3rem",
             transition: theme.transitions.create(["left"], {
-              easing: theme.transitions.easing.easeOut,
-              duration: theme.transitions.duration.enteringScreen,
+              easing: theme.transitions.easing.fastOutSlowIn,
+              duration: theme.transitions.duration.long,
             }),
           }),
         }}>

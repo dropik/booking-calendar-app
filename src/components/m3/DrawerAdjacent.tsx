@@ -17,14 +17,14 @@ export default function DrawerAdjacent({ children, sx, ...props }: BoxProps): JS
       overflow: "hidden",
       width: "100%",
       transition: theme.transitions.create(["margin"], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
+        easing: theme.transitions.easing.fastOutSlowIn,
+        duration: theme.transitions.duration.long,
       }),
       ...(open && {
         marginLeft: theme.drawerWidth,
         transition: theme.transitions.create(["margin"], {
-          easing: theme.transitions.easing.easeOut,
-          duration: theme.transitions.duration.enteringScreen,
+          easing: theme.transitions.easing.fastOutSlowIn,
+          duration: theme.transitions.duration.long,
         }),
       }),
       ...sx
