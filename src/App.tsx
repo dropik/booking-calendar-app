@@ -10,6 +10,7 @@ import TableContainer from "./components/TableContainer";
 import SaveAndResetWidget from "./components/SaveAndResetWidget";
 import AppDrawer from "./components/AppDrawer";
 import Dialog from "./components/Dialog";
+import PoliceDialog from "./components/PoliceDialog";
 
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
@@ -43,6 +44,7 @@ export default function App(): JSX.Element {
       <TableContainer />
       <SaveAndResetWidget />
       <Dialog />
+      <PoliceDialog />
     </Box>
   );
 }

@@ -22,6 +22,8 @@ export default function DialogMaster(): JSX.Element {
 
   if (dialogs.length === 0) {
     return <></>;
+  } else if ((dialogs.length === 1) && ((dialogs[0].type === "police") || (dialogs[0].type === "istat"))) {
+    return <></>;
   }
 
   return (
