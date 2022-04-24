@@ -2,39 +2,91 @@ import React from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import BookIcon from "@mui/icons-material/Book";
-import LocalPoliceIcon from "@mui/icons-material/LocalPolice";
-import PersonIcon from "@mui/icons-material/Person";
+import BookOutlinedIcon from "@mui/icons-material/BookOutlined";
+import LocalPoliceOutlinedIcon from "@mui/icons-material/LocalPoliceOutlined";
+import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
 import Drawer from "@mui/material/Drawer";
+import Divider, { DividerProps } from "@mui/material/Divider";
+import List, { ListProps } from "@mui/material/List";
+import ListItemButton, { ListItemButtonProps } from "@mui/material/ListItemButton";
+import ListItemIcon, { ListItemIconProps } from "@mui/material/ListItemIcon";
+import ListItemText, { ListItemTextProps } from "@mui/material/ListItemText";
+import ListSubheader, { ListSubheaderProps } from "@mui/material/ListSubheader";
+import Typography from "@mui/material/Typography";
 
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import * as DrawerSlice from "../redux/drawerSlice";
 import * as DialogSlice from "../redux/dialogSlice";
 
-import "./AppDrawer.css";
 import M3TextButton from "./m3/M3TextButton";
-import { Divider, DividerProps, List, ListProps, ListItem, ListItemButton, ListItemButtonProps, ListItemIcon, ListItemIconProps, ListItemText, ListItemTextProps, ListSubheader, ListSubheaderProps, Typography } from "@mui/material";
+import StateLayer from "./m3/StateLayer";
 
-const M3List = styled(List)<ListProps>(({ theme }) => ({
+const M3List = styled(List)<ListProps>(() => ({
   paddingBottom: 0
 }));
 
 const M3Divider = styled(Divider)<DividerProps>(({ theme }) => ({
   marginLeft: "1rem",
-  marginRight: "1rem"
+  marginRight: "1rem",
+  backgroundColor: theme.palette.outline.main
 }));
 
-const M3ListItemButton = styled(ListItemButton)<ListItemButtonProps>(({ theme }) => ({
-  paddingTop: 0,
-  paddingBottom: 0,
-  height: "3.5rem",
-  borderRadius: "1.75rem"
-}));
+function M3ListItemButton({ sx, children, ...props }: ListItemButtonProps): JSX.Element {
+  return (
+    <ListItemButton {...props}  sx={{
+      paddingTop: 0,
+      paddingBottom: 0,
+      height: "3.5rem",
+      borderRadius: "1.75rem",
+      backgroundColor: "transparent",
+      "& .state-layer": {
+        backgroundColor: (theme) => theme.palette.onSurface.main,
+        opacity: 0
+      },
+      "&:hover": {
+        backgroundColor: "transparent",
+        "& .state-layer": {
+          opacity: (theme) => theme.opacities.hover
+        }
+      },
+      "&:focus-visible,&.Mui-focusVisible": {
+        background: "transparent",
+        ".state-layer": {
+          opacity: (theme) => theme.opacities.focus
+        }
+      },
+      "&:active .state-layer": {
+        backgroundColor: (theme) => theme.palette.onSecondaryContainer.main,
+        opacity: (theme) => theme.opacities.press
+      },
+      "&.Mui-selected": {
+        backgroundColor: (theme) => theme.palette.secondaryContainer.main,
+        "& .state-layer": {
+          backgroundColor: (theme) => theme.palette.onSecondaryContainer.main
+        },
+        "&:hover": {
+          backgroundColor: (theme) => theme.palette.secondaryContainer.main
+        },
+        "&.Mui-focusVisible": {
+          backgroundColor: (theme) => theme.palette.secondaryContainer.main
+        }
+      },
+      ...sx
+    }}>
+      <StateLayer />
+      {children}
+    </ListItemButton>
+  );
+}
 
 const M3ListItemIcon = styled(ListItemIcon)<ListItemIconProps>(({ theme }) => ({
   minWidth: "auto",
-  marginRight: "0.75rem"
+  marginRight: "0.75rem",
+  color: theme.palette.onSurfaceVariant.main,
+  ".Mui-selected &": {
+    color: theme.palette.onSecondaryContainer.main
+  }
 }));
 
 function M3ListSubheader({ children, sx, ...props }: ListSubheaderProps): JSX.Element {
@@ -50,9 +102,15 @@ function M3ListSubheader({ children, sx, ...props }: ListSubheaderProps): JSX.El
   );
 }
 
-function M3ListItemText({ children, ...props }: ListItemTextProps): JSX.Element {
+function M3ListItemText({ children, sx, ...props }: ListItemTextProps): JSX.Element {
   return (
-    <ListItemText {...props}>
+    <ListItemText {...props} sx={{
+      color: (theme) => theme.palette.onSurfaceVariant.main,
+      ".Mui-selected &": {
+        color: (theme) => theme.palette.onSecondaryContainer.main
+      },
+      ...sx
+    }}>
       <Typography variant="labelLarge">
         {children}
       </Typography>
@@ -110,7 +168,7 @@ export default function AppDrawer(): JSX.Element {
       <M3Divider />
       <M3List subheader={<M3ListSubheader>Esporta</M3ListSubheader>}>
         <M3ListItemButton onClick={() => { showDialog("police"); }}>
-          <M3ListItemIcon><LocalPoliceIcon /></M3ListItemIcon>
+          <M3ListItemIcon><LocalPoliceOutlinedIcon /></M3ListItemIcon>
           <M3ListItemText>Polizia</M3ListItemText>
         </M3ListItemButton>
         <M3ListItemButton onClick={() => { showDialog("istat"); }}>
@@ -128,11 +186,11 @@ export default function AppDrawer(): JSX.Element {
       <M3Divider />
       <M3List subheader={<M3ListSubheader>Cerca</M3ListSubheader>}>
         <M3ListItemButton onClick={() => { showDialog("findBooking"); }}>
-          <M3ListItemIcon><BookIcon /></M3ListItemIcon>
+          <M3ListItemIcon><BookOutlinedIcon /></M3ListItemIcon>
           <M3ListItemText>Prenotazione</M3ListItemText>
         </M3ListItemButton>
         <M3ListItemButton onClick={() => { showDialog("findClient"); }}>
-          <M3ListItemIcon><PersonIcon /></M3ListItemIcon>
+          <M3ListItemIcon><PersonOutlinedIcon /></M3ListItemIcon>
           <M3ListItemText>Cliente</M3ListItemText>
         </M3ListItemButton>
       </M3List>
