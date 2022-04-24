@@ -6,6 +6,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
 
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import * as TilesSlice from "../redux/tilesSlice";
@@ -16,7 +17,6 @@ import SlideAndFade from "./m3/SlideAndFade";
 import M3Card from "./m3/M3Card";
 import M3TextButton from "./m3/M3TextButton";
 import M3Fab from "./m3/M3Fab";
-import { Box } from "@mui/material";
 
 type Status = "idle" | "loading" | "fulfilled";
 

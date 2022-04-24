@@ -8,6 +8,9 @@ import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
+import Fade from "@mui/material/Fade";
+import Box from "@mui/material/Box";
+import ListItem from "@mui/material/ListItem";
 
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import * as DrawerSlice from "../redux/drawerSlice";
@@ -52,63 +55,68 @@ export default function AppDrawer(): JSX.Element {
       }}
       transitionDuration={theme.transitions.duration.long}
     >
-      <List sx={{
-        paddingTop: "0.75rem",
-        paddingBottom: "0.75rem"
-      }}>
-        <M3TextButton
-          iconOnly
-          onClick={closeDrawer}
-          sx={{
-            color: theme.palette.onSurfaceVariant.main,
-            float: "right"
-          }}
-        >
-          <ArrowBackIcon />
-        </M3TextButton>
-      </List>
-      <Menu lists={[
-        {
-          subheader: "Esporta",
-          items: [
+      <Fade in={open} mountOnEnter unmountOnExit easing={theme.transitions.easing.fastOutSlowIn} timeout={theme.transitions.duration.long}>
+        <Box>
+          <List sx={{
+            paddingTop: "0.25rem",
+            paddingBottom: "0.25rem"
+          }}>
+            <ListItem sx={{ justifyContent: "end" }}>
+              <M3TextButton
+                iconOnly
+                onClick={closeDrawer}
+                sx={{
+                  color: theme.palette.onSurfaceVariant.main,
+                }}
+              >
+                <ArrowBackIcon />
+              </M3TextButton>
+            </ListItem>
+          </List>
+          <Menu lists={[
             {
-              text: "Polizia",
-              icon: <LocalPoliceOutlinedIcon />,
-              onClick: () => showDialog("police")
+              subheader: "Esporta",
+              items: [
+                {
+                  text: "Polizia",
+                  icon: <LocalPoliceOutlinedIcon />,
+                  onClick: () => showDialog("police")
+                },
+                {
+                  text: "Istat",
+                  icon: <QueryStatsIcon />,
+                  onClick: () => showDialog("istat")
+                }
+              ]
             },
             {
-              text: "Istat",
-              icon: <QueryStatsIcon />,
-              onClick: () => showDialog("istat")
-            }
-          ]
-        },
-        {
-          subheader: "Calcola",
-          items: [
-            {
-              text: "Tassa di soggiorno",
-              icon: <AttachMoneyIcon />,
-              onClick: () => showDialog("cityTax")
-            }
-          ]
-        },
-        {
-          subheader: "Cerca",
-          items: [
-            {
-              text: "Prenotazione",
-              icon: <BookOutlinedIcon />,
-              onClick: () => showDialog("findBooking")
+              subheader: "Calcola",
+              items: [
+                {
+                  text: "Tassa di soggiorno",
+                  icon: <AttachMoneyIcon />,
+                  onClick: () => showDialog("cityTax")
+                }
+              ]
             },
             {
-              text: "Cliente",
-              icon: <PersonOutlinedIcon />,
-              onClick: () => showDialog("findClient")
+              subheader: "Cerca",
+              items: [
+                {
+                  text: "Prenotazione",
+                  icon: <BookOutlinedIcon />,
+                  onClick: () => showDialog("findBooking")
+                },
+                {
+                  text: "Cliente",
+                  icon: <PersonOutlinedIcon />,
+                  onClick: () => showDialog("findClient")
+                }
+              ]
             }
-          ]
-        }
-      ]} />
+          ]} />
+        </Box>
+      </Fade>
     </Drawer>
   );
 }
