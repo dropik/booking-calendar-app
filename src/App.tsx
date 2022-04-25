@@ -11,6 +11,7 @@ import SaveAndResetWidget from "./components/SaveAndResetWidget";
 import AppDrawer from "./components/AppDrawer";
 import Dialog from "./components/Dialog";
 import PoliceDownloadDialog from "./components/dialogs/PoliceDownloadDialog";
+import IstatDownloadDialog from "./components/dialogs/IstatDownloadDialog";
 
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
@@ -45,6 +46,7 @@ export default function App(): JSX.Element {
       <SaveAndResetWidget />
       <Dialog />
       <PoliceDownloadDialog />
+      <IstatDownloadDialog />
     </Box>
   );
 }
