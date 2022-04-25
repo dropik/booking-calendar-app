@@ -1,5 +1,6 @@
 import React from "react";
-import { createTheme, hslToRgb, PaletteColor, PaletteColorOptions, recomposeColor, rgbToHex } from "@mui/material/styles";
+import { createTheme, PaletteColor, PaletteColorOptions, recomposeColor, rgbToHex } from "@mui/material/styles";
+import { lab2rgb } from "rgb-lab";
 
 declare module "@mui/material/styles" {
   interface Palette {
@@ -175,53 +176,54 @@ declare module "@mui/material/Typography" {
   }
 }
 
-const makeColor: (keyColor: (luminosity: number) => string) => PaletteColorOptions = (keyColor) => ({
+const makeColor: (keyColor: (luminance: number) => string) => PaletteColorOptions = (keyColor) => ({
   main: keyColor(40),
   light: keyColor(40),
   dark: keyColor(80)
 });
 
-const makeOnColor: (keyColor: (luminosity: number) => string) => PaletteColorOptions = (keyColor) => ({
+const makeOnColor: (keyColor: (luminance: number) => string) => PaletteColorOptions = (keyColor) => ({
   main: keyColor(100),
   light: keyColor(100),
   dark: keyColor(20)
 });
 
-const makeColorContainer: (keyColor: (luminosity: number) => string) => PaletteColorOptions = (keyColor) => ({
+const makeColorContainer: (keyColor: (luminance: number) => string) => PaletteColorOptions = (keyColor) => ({
   main: keyColor(90),
   light: keyColor(90),
   dark: keyColor(30)
 });
 
-const makeOnColorContainer: (keyColor: (luminosity: number) => string) => PaletteColorOptions = (keyColor) => ({
+const makeOnColorContainer: (keyColor: (luminance: number) => string) => PaletteColorOptions = (keyColor) => ({
   main: keyColor(10),
   light: keyColor(10),
   dark: keyColor(90)
 });
 
-const assembleColor: (hue: number, saturation: number, luminosity: number) => string = (hue, saturation, luminosity) =>
-  rgbToHex(hslToRgb(recomposeColor({
-    type: "hsl",
-    values: [hue, saturation, luminosity]
-  })));
+const assembleColor: (luminance: number, a: number, b: number) => string = (luminance, a, b) =>
+  rgbToHex(recomposeColor({
+    type: "rgb",
+    values: lab2rgb([luminance, a, b]),
+    colorSpace: "srgb"
+  }));
 
-const primary: (luminosity: number) => string = (luminosity) =>
-  assembleColor(219, 93, luminosity);
+const primary: (luminance: number) => string = (luminance) =>
+  assembleColor(luminance, 29, -42);
 
-const secondary: (luminosity: number) => string = (luminosity) =>
-  assembleColor(219, 65, luminosity);
+const secondary: (luminance: number) => string = (luminance) =>
+  assembleColor(luminance, 8, -11);
 
-const tertiary: (luminosity: number) => string = (luminosity) =>
-  assembleColor(248, 65, luminosity);
+const tertiary: (luminance: number) => string = (luminance) =>
+  assembleColor(luminance, 20, -1);
 
-const error: (luminosity: number) => string = (luminosity) =>
-  assembleColor(13, 89, luminosity);
+const error: (luminance: number) => string = (luminance) =>
+  assembleColor(luminance, 55, 40);
 
-const neutral: (luminosity: number) => string = (luminosity) =>
-  assembleColor(212, 13, luminosity);
+const neutral: (luminance: number) => string = (luminance) =>
+  assembleColor(luminance, 4, -5);
 
-const neutralVariant: (luminosity: number) => string = (luminosity) =>
-  assembleColor(203, 9, luminosity);
+const neutralVariant: (luminance: number) => string = (luminance) =>
+  assembleColor(luminance, 2, -3);
 
 const theme = createTheme({
   palette: {
