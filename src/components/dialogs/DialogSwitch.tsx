@@ -7,8 +7,6 @@ import BookingByTileIdDialog from "./BookingByTileIdDialog";
 import ClientDialog from "./ClientDialog";
 import FindBookingDialog from "./FindBookingDialog";
 import FindClientDialog from "./FindClientDialog";
-import IstatExportDialog from "./IstatExportDialog";
-import PoliceExportDialog from "./PoliceExportDialog";
 import TaxDialog from "./TaxDialog";
 
 type Props = {
@@ -17,10 +15,6 @@ type Props = {
 
 export default function DialogSwitch({ dialog }: Props): JSX.Element {
   switch (dialog.type) {
-  case "police":
-    return <PoliceExportDialog />;
-  case "istat":
-    return <IstatExportDialog />;
   case "cityTax":
     return <TaxDialog />;
   case "booking":
@@ -35,5 +29,7 @@ export default function DialogSwitch({ dialog }: Props): JSX.Element {
     return <ClientDialog bookingId={dialog.bookingId} clientId={dialog.clientId} />;
   case "findClient":
     return <FindClientDialog />;
+  default:
+    return <></>;
   }
 }
