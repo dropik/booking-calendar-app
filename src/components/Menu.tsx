@@ -9,7 +9,8 @@ interface Props extends MenuProps {
   list: {
     text: string,
     icon: ReactNode,
-    onClick: () => void
+    onClick: () => void,
+    disabled?: boolean
   }[];
 }
 
@@ -17,7 +18,7 @@ export default function Menu({ list, ...props }: Props): JSX.Element {
   return (
     <M3Menu {...props}>
       {list.map((item) => (
-        <M3MenuItem key={item.text} onClick={item.onClick}>
+        <M3MenuItem disabled={item.disabled} key={item.text} onClick={item.onClick}>
           <M3ListItemIcon>{item.icon}</M3ListItemIcon>
           <M3ListItemText>{item.text}</M3ListItemText>
         </M3MenuItem>

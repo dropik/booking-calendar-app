@@ -2,7 +2,6 @@ import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import * as TilesSlice from "../../../redux/tilesSlice";
-import * as PoppersSlice from "../../../redux/poppersSlice";
 
 import OccupationInfo from "../../OccupationInfo";
 import TileContextMenu from "../../table-container/TileContextMenu";
@@ -20,11 +19,10 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
   const tileData = useAppSelector((state) => state.tiles.data[tileId]);
   const ref = useRef<HTMLDivElement>(null);
   const [isShowInfo, setIsShowInfo] = useState(false);
-  const [isShowContextMenu, setIsShowContextMenu] = useState(false);
   const [isShowColorPicker, setIsShowColorPicker] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const contextMenuHideCallback = useCallback(() => setIsShowContextMenu(false), []);
   const colorPickerHideCallback = useCallback(() => setIsShowColorPicker(false), []);
+  const [contextMenuAnchorEl, setContextMenuAnchorEl] = useState<HTMLElement | null>(null);
 
   useBackgroundColorEffect(ref, tileData);
 
@@ -34,12 +32,11 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
 
   function showContextMenu(event: React.MouseEvent<HTMLDivElement>) {
     event.preventDefault();
-    event.stopPropagation();
-    setIsShowInfo(false);
-    setIsShowContextMenu(true);
-    setIsShowColorPicker(false);
-    setMousePos({ x: event.pageX, y: event.pageY });
-    dispatch(PoppersSlice.show());
+    setContextMenuAnchorEl(event.currentTarget);
+  }
+
+  function closeContextMenu() {
+    setContextMenuAnchorEl(null);
   }
 
   function grabTile(event: React.MouseEvent<HTMLDivElement>) {
@@ -54,10 +51,8 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
   }
 
   function showInfo(event: React.MouseEvent<HTMLDivElement>) {
-    if (!isShowContextMenu) {
-      setIsShowInfo(true);
-      setMousePos({ x: event.pageX, y: event.pageY });
-    }
+    setIsShowInfo(true);
+    setMousePos({ x: event.pageX, y: event.pageY });
   }
 
   function moveInfo(event: React.MouseEvent<HTMLDivElement>) {
@@ -71,32 +66,36 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
   }
 
   return (
-    <div
-      ref={ref}
-      className="unassigned-tile-part"
-      onMouseDown={grabTile}
-      onMouseEnter={showInfo}
-      onMouseLeave={hideInfo}
-      onMouseMove={moveInfo}
-      onContextMenu={showContextMenu}
-    >
-      <span className="tile-persons">{tileData.persons}</span>
-      {
-        isShowInfo ?
-          <OccupationInfo tileId={tileId} x={mousePos.x} y={mousePos.y} /> :
-          <></>
-      }
-      {
-        isShowContextMenu ?
-          <TileContextMenu tileId={tileId} x={mousePos.x} y={mousePos.y} onHide={contextMenuHideCallback} onColorPickerShow={() => setIsShowColorPicker(true)} /> :
-          <></>
-      }
-      {
-        isShowColorPicker ?
-          <ColorPicker tileId={tileId} onHide={colorPickerHideCallback} /> :
-          <></>
-      }
-    </div>
+    <>
+      <div
+        ref={ref}
+        className="unassigned-tile-part"
+        onMouseDown={grabTile}
+        onMouseEnter={showInfo}
+        onMouseLeave={hideInfo}
+        onMouseMove={moveInfo}
+        onContextMenu={showContextMenu}
+      >
+        <span className="tile-persons">{tileData.persons}</span>
+        {
+          isShowInfo ?
+            <OccupationInfo tileId={tileId} x={mousePos.x} y={mousePos.y} /> :
+            <></>
+        }
+        {
+          isShowColorPicker ?
+            <ColorPicker tileId={tileId} onHide={colorPickerHideCallback} /> :
+            <></>
+        }
+      </div>
+      <TileContextMenu
+        tileId={tileId}
+        anchorEl={contextMenuAnchorEl}
+        onClose={closeContextMenu}
+        onColorPickerShow={() => setIsShowColorPicker(true)}
+        unassigned
+      />
+    </>
   );
 }
 

@@ -91,6 +91,7 @@ export const tilesSlice = createSlice({
       state.grabbedTile = action.payload.tileId;
       state.grabbedMap[action.payload.tileId] = true;
       state.mouseYOnGrab = action.payload.mouseY;
+      state.selectedDate = undefined;
     },
     drop: (state, action: PayloadAction<{ tileId: string }>) => {
       state.grabbedTile = undefined;

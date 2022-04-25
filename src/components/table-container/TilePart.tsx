@@ -2,7 +2,6 @@ import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
-import * as PoppersSlice from "../../redux/poppersSlice";
 
 import TilePartAlert from "./TilePartAlert";
 import OccupationInfo from "../OccupationInfo";
@@ -24,11 +23,10 @@ export default function TilePart({ y, tileData }: Props): JSX.Element {
   const roomType = useRoomTypeByNumber(y);
   const personsInRoomType = useAppSelector(state => state.roomTypes.data[roomType]);
   const [isShowInfo, setIsShowInfo] = useState(false);
-  const [isShowContextMenu, setIsShowContextMenu] = useState(false);
   const [isShowColorPicker, setIsShowColorPicker] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const contextMenuHideCallback = useCallback(() => setIsShowContextMenu(false), []);
   const colorPickerHideCallback = useCallback(() => setIsShowColorPicker(false), []);
+  const [contextMenuAnchorEl, setContextMenuAnchorEl] = useState<HTMLElement | null>(null);
 
   const className = getClassName(isGrabbed);
 
@@ -41,19 +39,16 @@ export default function TilePart({ y, tileData }: Props): JSX.Element {
 
   function showContextMenu(event: React.MouseEvent<HTMLDivElement>) {
     event.preventDefault();
-    event.stopPropagation();
-    setIsShowInfo(false);
-    setIsShowColorPicker(false);
-    setIsShowContextMenu(true);
-    setMousePos({ x: event.pageX, y: event.pageY });
-    dispatch(PoppersSlice.show());
+    setContextMenuAnchorEl(event.currentTarget);
+  }
+
+  function closeContextMenu() {
+    setContextMenuAnchorEl(null);
   }
 
   function showInfo(event: React.MouseEvent<HTMLDivElement>) {
-    if (!isShowContextMenu) {
-      setIsShowInfo(true);
-      setMousePos({ x: event.pageX, y: event.pageY });
-    }
+    setIsShowInfo(true);
+    setMousePos({ x: event.pageX, y: event.pageY });
   }
 
   function moveInfo(event: React.MouseEvent<HTMLDivElement>) {
@@ -69,33 +64,36 @@ export default function TilePart({ y, tileData }: Props): JSX.Element {
   useBackgroundColorEffect(ref, tileData.color);
 
   return (
-    <div
-      ref={ref}
-      className={className}
-      onMouseDown={grabTile}
-      onMouseEnter={showInfo}
-      onMouseLeave={hideInfo}
-      onMouseMove={moveInfo}
-      onContextMenu={showContextMenu}
-    >
-      <span className="tile-persons">{tileData.persons}</span>
-      <TilePartAlert personsInRoomType={personsInRoomType} roomType={roomType} tileData={tileData} />
-      {
-        isShowInfo ?
-          <OccupationInfo tileId={tileId} x={mousePos.x} y={mousePos.y} /> :
-          <></>
-      }
-      {
-        isShowContextMenu ?
-          <TileContextMenu tileId={tileId} x={mousePos.x} y={mousePos.y} onHide={contextMenuHideCallback} onColorPickerShow={() => setIsShowColorPicker(true)} /> :
-          <></>
-      }
-      {
-        isShowColorPicker ?
-          <ColorPicker tileId={tileId} onHide={colorPickerHideCallback} /> :
-          <></>
-      }
-    </div>
+    <>
+      <div
+        ref={ref}
+        className={className}
+        onMouseDown={grabTile}
+        onMouseEnter={showInfo}
+        onMouseLeave={hideInfo}
+        onMouseMove={moveInfo}
+        onContextMenu={showContextMenu}
+      >
+        <span className="tile-persons">{tileData.persons}</span>
+        <TilePartAlert personsInRoomType={personsInRoomType} roomType={roomType} tileData={tileData} />
+        {
+          isShowInfo ?
+            <OccupationInfo tileId={tileId} x={mousePos.x} y={mousePos.y} /> :
+            <></>
+        }
+        {
+          isShowColorPicker ?
+            <ColorPicker tileId={tileId} onHide={colorPickerHideCallback} /> :
+            <></>
+        }
+      </div>
+      <TileContextMenu
+        tileId={tileId}
+        anchorEl={contextMenuAnchorEl}
+        onClose={closeContextMenu}
+        onColorPickerShow={() => setIsShowColorPicker(true)}
+      />
+    </>
   );
 }
 
