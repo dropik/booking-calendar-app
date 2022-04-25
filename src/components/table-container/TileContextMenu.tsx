@@ -25,17 +25,10 @@ export default function TileContextMenu({ tileId, anchorEl, onClose, onColorPick
 
   function showInfoDialog() {
     dispatch(DialogSlice.showBookingDialog({ tileId }));
-    onClose();
-  }
-
-  function showColorPicker() {
-    onColorPickerShow();
-    onClose();
   }
 
   function removeOccupation() {
     dispatch(TilesSlice.removeAssignment({ tileId }));
-    onClose();
   }
 
   return (
@@ -44,6 +37,7 @@ export default function TileContextMenu({ tileId, anchorEl, onClose, onColorPick
       anchorEl={anchorEl}
       open={open}
       onClose={onClose}
+      onItemClick={onClose}
       anchorOrigin={{
         vertical: "top",
         horizontal: "right"
@@ -57,7 +51,7 @@ export default function TileContextMenu({ tileId, anchorEl, onClose, onColorPick
         {
           text: "Assegna colore",
           icon: <PaletteIcon />,
-          onClick: showColorPicker,
+          onClick: onColorPickerShow,
         },
         {
           text: "Rimuovi occupazione",

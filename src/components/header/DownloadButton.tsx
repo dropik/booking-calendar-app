@@ -22,7 +22,6 @@ export default function DownloadButton(): JSX.Element {
 
   function showDialog(dialog: DialogSlice.ZeroParameterDialog) {
     dispatch(DialogSlice.show({ dialogType: dialog }));
-    close();
   }
 
   return (
@@ -40,6 +39,7 @@ export default function DownloadButton(): JSX.Element {
         anchorEl={anchorEl}
         open={open}
         onClose={close}
+        onItemClick={close}
         list={[
           {
             text: "Polizia",
