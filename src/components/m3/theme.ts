@@ -21,6 +21,46 @@ declare module "@mui/material/styles" {
     errorContainer: Palette["error"];
     onErrorContainer: Palette["error"];
 
+    booking1: Palette["primary"];
+    onBooking1: Palette["booking1"];
+    booking1Container: Palette["booking1"];
+    onBooking1Container: Palette["booking1"];
+
+    booking2: Palette["primary"];
+    onBooking2: Palette["booking2"];
+    booking2Container: Palette["booking2"];
+    onBooking2Container: Palette["booking2"];
+
+    booking3: Palette["primary"];
+    onBooking3: Palette["booking3"];
+    booking3Container: Palette["booking3"];
+    onBooking3Container: Palette["booking3"];
+
+    booking4: Palette["primary"];
+    onBooking4: Palette["booking4"];
+    booking4Container: Palette["booking4"];
+    onBooking4Container: Palette["booking4"];
+
+    booking5: Palette["primary"];
+    onBooking5: Palette["booking5"];
+    booking5Container: Palette["booking5"];
+    onBooking5Container: Palette["booking5"];
+
+    booking6: Palette["primary"];
+    onBooking6: Palette["booking6"];
+    booking6Container: Palette["booking6"];
+    onBooking6Container: Palette["booking6"];
+
+    booking7: Palette["primary"];
+    onBooking7: Palette["booking7"];
+    booking7Container: Palette["booking7"];
+    onBooking7Container: Palette["booking7"];
+
+    booking8: Palette["primary"];
+    onBooking8: Palette["booking8"];
+    booking8Container: Palette["booking8"];
+    onBooking8Container: Palette["booking8"];
+
     colorBackground: Palette["secondary"];
     onBackground: Palette["colorBackground"];
     surface: Palette["colorBackground"];
@@ -58,6 +98,46 @@ declare module "@mui/material/styles" {
     onError?: PaletteOptions["error"];
     errorContainer?: PaletteOptions["error"];
     onErrorContainer?: PaletteOptions["error"];
+
+    booking1?: PaletteOptions["primary"];
+    onBooking1?: PaletteOptions["booking1"];
+    booking1Container?: PaletteOptions["booking1"];
+    onBooking1Container?: PaletteOptions["booking1"];
+
+    booking2?: PaletteOptions["primary"];
+    onBooking2?: PaletteOptions["booking2"];
+    booking2Container?: PaletteOptions["booking2"];
+    onBooking2Container?: PaletteOptions["booking2"];
+
+    booking3?: PaletteOptions["primary"];
+    onBooking3?: PaletteOptions["booking3"];
+    booking3Container?: PaletteOptions["booking3"];
+    onBooking3Container?: PaletteOptions["booking3"];
+
+    booking4?: PaletteOptions["primary"];
+    onBooking4?: PaletteOptions["booking4"];
+    booking4Container?: PaletteOptions["booking4"];
+    onBooking4Container?: PaletteOptions["booking4"];
+
+    booking5?: PaletteOptions["primary"];
+    onBooking5?: PaletteOptions["booking5"];
+    booking5Container?: PaletteOptions["booking5"];
+    onBooking5Container?: PaletteOptions["booking5"];
+
+    booking6?: PaletteOptions["primary"];
+    onBooking6?: PaletteOptions["booking6"];
+    booking6Container?: PaletteOptions["booking6"];
+    onBooking6Container?: PaletteOptions["booking6"];
+
+    booking7?: PaletteOptions["primary"];
+    onBooking7?: PaletteOptions["booking7"];
+    booking7Container?: PaletteOptions["booking7"];
+    onBooking7Container?: PaletteOptions["booking7"];
+
+    booking8?: PaletteOptions["primary"];
+    onBooking8?: PaletteOptions["booking8"];
+    booking8Container?: PaletteOptions["booking8"];
+    onBooking8Container?: PaletteOptions["booking8"];
 
     colorBackground?: PaletteOptions["secondary"];
     onBackground?: PaletteOptions["colorBackground"];
@@ -225,6 +305,30 @@ const neutral: (luminance: number) => string = (luminance) =>
 const neutralVariant: (luminance: number) => string = (luminance) =>
   assembleColor(luminance, 2, -3);
 
+const booking1: (luminance: number) => string = (luminance) =>
+  assembleColor(luminance, 31, 13);
+
+const booking2: (luminance: number) => string = (luminance) =>
+  assembleColor(luminance, -3, 33);
+
+const booking3: (luminance: number) => string = (luminance) =>
+  assembleColor(luminance, -17, 29);
+
+const booking4: (luminance: number) => string = (luminance) =>
+  assembleColor(luminance, -29, 26);
+
+const booking5: (luminance: number) => string = (luminance) =>
+  assembleColor(luminance, -18, -6);
+
+const booking6: (luminance: number) => string = (luminance) =>
+  assembleColor(luminance, -5, -25);
+
+const booking7: (luminance: number) => string = (luminance) =>
+  assembleColor(luminance, 20, -39);
+
+const booking8: (luminance: number) => string = (luminance) =>
+  assembleColor(luminance, 34, -28);
+
 const theme = createTheme({
   palette: {
     primary:            makeColor(primary),
@@ -246,6 +350,46 @@ const theme = createTheme({
     onError:          makeOnColor(error),
     errorContainer:   makeColorContainer(error),
     onErrorContainer: makeOnColorContainer(error),
+
+    booking1: makeColor(booking1),
+    onBooking1: makeOnColor(booking1),
+    booking1Container: makeColorContainer(booking1),
+    onBooking1Container: makeOnColorContainer(booking1),
+
+    booking2: makeColor(booking2),
+    onBooking2: makeOnColor(booking2),
+    booking2Container: makeColorContainer(booking2),
+    onBooking2Container: makeOnColorContainer(booking2),
+
+    booking3: makeColor(booking3),
+    onBooking3: makeOnColor(booking3),
+    booking3Container: makeColorContainer(booking3),
+    onBooking3Container: makeOnColorContainer(booking3),
+
+    booking4: makeColor(booking4),
+    onBooking4: makeOnColor(booking4),
+    booking4Container: makeColorContainer(booking4),
+    onBooking4Container: makeOnColorContainer(booking4),
+
+    booking5: makeColor(booking5),
+    onBooking5: makeOnColor(booking5),
+    booking5Container: makeColorContainer(booking5),
+    onBooking5Container: makeOnColorContainer(booking5),
+
+    booking6: makeColor(booking6),
+    onBooking6: makeOnColor(booking6),
+    booking6Container: makeColorContainer(booking6),
+    onBooking6Container: makeOnColorContainer(booking6),
+
+    booking7: makeColor(booking7),
+    onBooking7: makeOnColor(booking7),
+    booking7Container: makeColorContainer(booking7),
+    onBooking7Container: makeOnColorContainer(booking7),
+
+    booking8: makeColor(booking8),
+    onBooking8: makeOnColor(booking8),
+    booking8Container: makeColorContainer(booking8),
+    onBooking8Container: makeOnColorContainer(booking8),
 
     colorBackground: {
       main: neutral(99),

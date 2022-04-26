@@ -1,4 +1,5 @@
 import React, { useCallback, useLayoutEffect } from "react";
+import { useTheme } from "@mui/material/styles";
 import { CirclePicker } from "react-color";
 
 import { useAppDispatch } from "../../redux/hooks";
@@ -14,6 +15,7 @@ type Props = {
 
 export default function ColorPicker({ tileId, onHide }: Props): JSX.Element {
   const dispatch = useAppDispatch();
+  const theme = useTheme();
 
   const hidePicker = useCallback(() => {
     onHide();
@@ -31,7 +33,16 @@ export default function ColorPicker({ tileId, onHide }: Props): JSX.Element {
 
   return (
     <div className="color-picker" onMouseDown={stopPropagation} onMouseUp={stopPropagation}>
-      <CirclePicker colors={["#fccfcf", "#fce7cf", "#fafccf", "#d6fccf", "#cffcfc", "#cfe7fc", "#d2cffc", "#f5cffc"]} width="168px" onChange={(color) => {
+      <CirclePicker colors={[
+        theme.palette.booking1Container.main,
+        theme.palette.booking2Container.main,
+        theme.palette.booking3Container.main,
+        theme.palette.booking4Container.main,
+        theme.palette.booking5Container.main,
+        theme.palette.booking6Container.main,
+        theme.palette.booking7Container.main,
+        theme.palette.booking8Container.main,
+      ]} width="168px" onChange={(color) => {
         dispatch(TilesSlice.setColor({ tileId, color: color.hex }));
         hidePicker();
       }} />
