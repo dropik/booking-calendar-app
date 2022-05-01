@@ -14,7 +14,7 @@ type Props = {
 export default function OccupationInfo({ tileId, x, y }: Props): JSX.Element {
   const ref = useRef<HTMLDivElement>(null);
   const tileData = useTileData(tileId);
-  const canShow = useAppSelector((state) => (state.tiles.grabbedTile === undefined) && (!state.poppers.isShown));
+  const canShow = useAppSelector((state) => state.tiles.grabbedTile === undefined);
 
   useUpdatePopupCoordsEffect(ref, x, y);
 

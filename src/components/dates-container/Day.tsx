@@ -2,7 +2,6 @@ import React, { memo } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
-import * as ContextMenuSlice from "../../redux/poppersSlice";
 
 import DayAlert from "./DayAlert";
 
@@ -29,13 +28,8 @@ export default memo(function Day({ x }: Props): JSX.Element {
     dispatch(TilesSlice.toggleDate({ date: x }));
   }
 
-  function hideContextMenu(event: React.MouseEvent<HTMLDivElement>) {
-    event.stopPropagation();
-    dispatch(ContextMenuSlice.hide());
-  }
-
   return (
-    <div className={className} onMouseDown={hideContextMenu} onClick={toggleDate}>
+    <div className={className} onClick={toggleDate}>
       <b>{day}</b>
       <DayAlert hasUnassignedTiles={hasUnassignedTiles} />
     </div>

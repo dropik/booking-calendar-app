@@ -1,38 +1,47 @@
-import React, { useCallback, useLayoutEffect } from "react";
+import React from "react";
 import { useTheme } from "@mui/material/styles";
 import { CirclePicker } from "react-color";
 
 import { useAppDispatch } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
-import * as PoppersSlice from "../../redux/poppersSlice";
 
 import "./ColorPicker.css";
+import M3Menu from "../m3/M3Menu";
 
 type Props = {
   tileId: string,
-  onHide: () => void
+  onHide: () => void,
+  anchorEl : HTMLElement | null
 };
 
-export default function ColorPicker({ tileId, onHide }: Props): JSX.Element {
+export default function ColorPicker({ tileId, onHide, anchorEl }: Props): JSX.Element {
   const dispatch = useAppDispatch();
   const theme = useTheme();
 
-  const hidePicker = useCallback(() => {
-    onHide();
-    dispatch(PoppersSlice.hide());
-  }, [dispatch, onHide]);
-
-  function stopPropagation(event: React.MouseEvent<HTMLDivElement>) {
-    event.stopPropagation();
-  }
-
-  useLayoutEffect(() => {
-    window.addEventListener("mouseup", hidePicker);
-    return () => window.removeEventListener("mouseup", hidePicker);
-  }, [hidePicker]);
+  const open = Boolean(anchorEl);
+  const id = open ? "color-picker" : undefined;
 
   return (
-    <div className="color-picker" onMouseDown={stopPropagation} onMouseUp={stopPropagation}>
+    <M3Menu
+      id={id}
+      anchorEl={anchorEl}
+      open={open}
+      onClose={onHide}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "left"
+      }}
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right"
+      }}
+      PaperProps={{
+        sx: {
+          paddingLeft: "0.5rem",
+          paddingRight: "0.5rem"
+        }
+      }}
+    >
       <CirclePicker colors={[
         theme.palette.booking1Container.main,
         theme.palette.booking2Container.main,
@@ -44,8 +53,8 @@ export default function ColorPicker({ tileId, onHide }: Props): JSX.Element {
         theme.palette.booking8Container.main,
       ]} width="168px" onChange={(color) => {
         dispatch(TilesSlice.setColor({ tileId, color: color.hex }));
-        hidePicker();
+        onHide();
       }} />
-    </div>
+    </M3Menu>
   );
 }

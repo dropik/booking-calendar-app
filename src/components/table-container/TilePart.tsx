@@ -1,4 +1,4 @@
-import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
@@ -6,7 +6,6 @@ import * as TilesSlice from "../../redux/tilesSlice";
 import TilePartAlert from "./TilePartAlert";
 import OccupationInfo from "../OccupationInfo";
 import TileContextMenu from "./TileContextMenu";
-import ColorPicker from "./ColorPicker";
 
 import "./TilePart.css";
 
@@ -23,9 +22,7 @@ export default function TilePart({ y, tileData }: Props): JSX.Element {
   const roomType = useRoomTypeByNumber(y);
   const personsInRoomType = useAppSelector(state => state.roomTypes.data[roomType]);
   const [isShowInfo, setIsShowInfo] = useState(false);
-  const [isShowColorPicker, setIsShowColorPicker] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const colorPickerHideCallback = useCallback(() => setIsShowColorPicker(false), []);
   const [contextMenuAnchorEl, setContextMenuAnchorEl] = useState<HTMLElement | null>(null);
 
   const className = getClassName(isGrabbed);
@@ -81,17 +78,11 @@ export default function TilePart({ y, tileData }: Props): JSX.Element {
             <OccupationInfo tileId={tileId} x={mousePos.x} y={mousePos.y} /> :
             <></>
         }
-        {
-          isShowColorPicker ?
-            <ColorPicker tileId={tileId} onHide={colorPickerHideCallback} /> :
-            <></>
-        }
       </div>
       <TileContextMenu
         tileId={tileId}
         anchorEl={contextMenuAnchorEl}
         onClose={closeContextMenu}
-        onColorPickerShow={() => setIsShowColorPicker(true)}
       />
     </>
   );

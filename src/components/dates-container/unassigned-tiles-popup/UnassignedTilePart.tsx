@@ -1,11 +1,10 @@
-import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import * as TilesSlice from "../../../redux/tilesSlice";
 
 import OccupationInfo from "../../OccupationInfo";
 import TileContextMenu from "../../table-container/TileContextMenu";
-import ColorPicker from "../../table-container/ColorPicker";
 
 import "./UnassignedTilePart.css";
 
@@ -19,9 +18,7 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
   const tileData = useAppSelector((state) => state.tiles.data[tileId]);
   const ref = useRef<HTMLDivElement>(null);
   const [isShowInfo, setIsShowInfo] = useState(false);
-  const [isShowColorPicker, setIsShowColorPicker] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const colorPickerHideCallback = useCallback(() => setIsShowColorPicker(false), []);
   const [contextMenuAnchorEl, setContextMenuAnchorEl] = useState<HTMLElement | null>(null);
 
   useBackgroundColorEffect(ref, tileData);
@@ -82,17 +79,11 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
             <OccupationInfo tileId={tileId} x={mousePos.x} y={mousePos.y} /> :
             <></>
         }
-        {
-          isShowColorPicker ?
-            <ColorPicker tileId={tileId} onHide={colorPickerHideCallback} /> :
-            <></>
-        }
       </div>
       <TileContextMenu
         tileId={tileId}
         anchorEl={contextMenuAnchorEl}
         onClose={closeContextMenu}
-        onColorPickerShow={() => setIsShowColorPicker(true)}
         unassigned
       />
     </>
