@@ -17,9 +17,21 @@ declare module "@mui/material/styles" {
     tertiaryContainer: Palette["tertiary"];
     onTertiaryContainer: Palette["tertiary"];
 
+    onSuccess: Palette["success"];
+    successContainer: Palette["success"];
+    onSuccessContainer: Palette["success"];
+
+    onInfo: Palette["info"];
+    infoContainer: Palette["info"];
+    onInfoContainer: Palette["info"];
+
     onError: Palette["error"];
     errorContainer: Palette["error"];
     onErrorContainer: Palette["error"];
+
+    onWarning: Palette["warning"];
+    warningContainer: Palette["warning"];
+    onWarningContainer: Palette["warning"];
 
     booking1: Palette["primary"];
     onBooking1: Palette["booking1"];
@@ -77,9 +89,9 @@ declare module "@mui/material/styles" {
     inversePrimary: Palette["primary"];
   }
 
-  type ThemePalettes = keyof Pick<Palette, {
+  type ThemePalettes = {
     [key in keyof Palette]: Palette[key] extends PaletteColor ? key : never
-  }[keyof Palette]>;
+  }[keyof Palette];
 
   interface PaletteOptions {
     onPrimary?: PaletteOptions["primary"];
@@ -95,9 +107,21 @@ declare module "@mui/material/styles" {
     tertiaryContainer?: PaletteOptions["tertiary"];
     onTertiaryContainer?: PaletteOptions["tertiary"];
 
+    onSuccess?: PaletteOptions["success"];
+    successContainer?: PaletteOptions["success"];
+    onSuccessContainer?: PaletteOptions["success"];
+
+    onInfo?: PaletteOptions["info"];
+    infoContainer?: PaletteOptions["info"];
+    onInfoContainer?: PaletteOptions["info"];
+
     onError?: PaletteOptions["error"];
     errorContainer?: PaletteOptions["error"];
     onErrorContainer?: PaletteOptions["error"];
+
+    onWarning?: PaletteOptions["warning"];
+    warningContainer?: PaletteOptions["warning"];
+    onWarningContainer?: PaletteOptions["warning"];
 
     booking1?: PaletteOptions["primary"];
     onBooking1?: PaletteOptions["booking1"];
@@ -296,8 +320,17 @@ const secondary: (luminance: number) => string = (luminance) =>
 const tertiary: (luminance: number) => string = (luminance) =>
   assembleColor(luminance, 20, -1);
 
+const success: (luminance: number) => string = (luminance) =>
+  assembleColor(luminance, -40, 33);
+
+const info: (luminance: number) => string = (luminance) =>
+  assembleColor(luminance, -4, -46);
+
 const error: (luminance: number) => string = (luminance) =>
   assembleColor(luminance, 55, 40);
+
+const warning: (luminance: number) => string = (luminance) =>
+  assembleColor(luminance, 37, 60);
 
 const neutral: (luminance: number) => string = (luminance) =>
   assembleColor(luminance, 4, -5);
@@ -346,10 +379,25 @@ const theme = createTheme({
     tertiaryContainer:    makeColorContainer(tertiary),
     onTertiaryContainer:  makeOnColorContainer(tertiary),
 
+    success:             makeColor(success),
+    onSuccess:           makeOnColor(success),
+    successContainer:    makeColorContainer(success),
+    onSuccessContainer:  makeOnColorContainer(success),
+
+    info:             makeColor(info),
+    onInfo:           makeOnColor(info),
+    infoContainer:    makeColorContainer(info),
+    onInfoContainer:  makeOnColorContainer(info),
+
     error:            makeColor(error),
     onError:          makeOnColor(error),
     errorContainer:   makeColorContainer(error),
     onErrorContainer: makeOnColorContainer(error),
+
+    warning:             makeColor(warning),
+    onWarning:           makeOnColor(warning),
+    warningContainer:    makeColorContainer(warning),
+    onWarningContainer:  makeOnColorContainer(warning),
 
     booking1: makeColor(booking1),
     onBooking1: makeOnColor(booking1),
