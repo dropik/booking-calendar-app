@@ -4,7 +4,7 @@ import Menu, { MenuProps } from "@mui/material/Menu";
 
 import { SurfaceTint } from "./Tints";
 
-export default function M3Menu({ children, ...props }: MenuProps): JSX.Element {
+export default function M3Menu({ children, PaperProps, ...props }: MenuProps): JSX.Element {
   const theme = useTheme();
 
   return (
@@ -18,7 +18,8 @@ export default function M3Menu({ children, ...props }: MenuProps): JSX.Element {
           "& .surface-tint": {
             backgroundColor: theme.palette.surfaceTint.main,
             opacity: theme.opacities.surface2
-          }
+          },
+          ...PaperProps?.sx
         }
       }}
       {...props}
