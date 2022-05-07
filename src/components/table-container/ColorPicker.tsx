@@ -38,10 +38,6 @@ export default function ColorPicker({ tileId, onHide, anchorEl }: Props): JSX.El
       onClose={onHide}
       anchorOrigin={{
         vertical: "top",
-        horizontal: "left"
-      }}
-      transformOrigin={{
-        vertical: "top",
         horizontal: "right"
       }}
     >
