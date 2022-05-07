@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import InfoIcon from "@mui/icons-material/InfoOutlined";
 import PaletteIcon from "@mui/icons-material/PaletteOutlined";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
@@ -19,21 +19,12 @@ type Props = {
 
 export default function TileContextMenu({ tileId, anchorEl, onClose, unassigned }: Props): JSX.Element {
   const dispatch = useAppDispatch();
-  const [colorPickerAnchorEl, setColorPickerAnchorEl] = useState<HTMLElement | null>(null);
 
   const open = Boolean(anchorEl);
   const id = open ? "tile-context-menu" : undefined;
 
   function showInfoDialog() {
     dispatch(DialogSlice.showBookingDialog({ tileId }));
-  }
-
-  function showColorPicker(event: React.MouseEvent<HTMLElement>) {
-    setColorPickerAnchorEl(event.currentTarget);
-  }
-
-  function closeColorPicker() {
-    setColorPickerAnchorEl(null);
   }
 
   function removeOccupation() {
@@ -61,7 +52,7 @@ export default function TileContextMenu({ tileId, anchorEl, onClose, unassigned 
           {
             text: "Assegna colore",
             icon: <PaletteIcon />,
-            onClick: showColorPicker,
+            children: <ColorPicker tileId={tileId} />
           },
           {
             text: "Rimuovi occupazione",
@@ -71,7 +62,6 @@ export default function TileContextMenu({ tileId, anchorEl, onClose, unassigned 
           }
         ]}
       />
-      <ColorPicker tileId={tileId} onHide={closeColorPicker} anchorEl={colorPickerAnchorEl} />
     </>
   );
 }

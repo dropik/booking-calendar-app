@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useContext } from "react";
+import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { MenuProps } from "@mui/material/Menu";
 
 import M3Menu from "./m3/M3Menu";
@@ -35,12 +35,18 @@ type CustomNestedMenuProps = MenuProps & CustomNestedMenuExtensionProps;
 type NestedMenuProps = ListNestedMenuProps | CustomNestedMenuProps;
 
 type MenuContextProps = {
+  onAnyItemClick: () => void,
+  anchorEl?: HTMLElement,
+  setAnchorEl?: (el: HTMLElement | undefined) => void,
+  focusedItemId?: string,
+  setFocusedItemId?: (id: string | undefined) => void
+};
+
+type MenuRootProps = NestedMenuProps & {
   onAnyItemClick: () => void
 };
 
-type MenuRootProps = NestedMenuProps & MenuContextProps;
-
-const MenuContext = createContext<MenuContextProps>({
+export const MenuContext = createContext<MenuContextProps>({
   onAnyItemClick: () => void 0
 });
 
@@ -62,20 +68,40 @@ function NestedMenu(props: NestedMenuProps): JSX.Element {
     <M3Menu {...props} />;
 }
 
-function ListNestedMenu({ list, ...props }: ListNestedMenuProps): JSX.Element {
+function ListNestedMenu({ list, open, ...props }: ListNestedMenuProps): JSX.Element {
+  const context = useContext(MenuContext);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined>();
+  const [focusedItemId, setFocusedItemId] = useState<string>();
+
+  const newContext: MenuContextProps = {
+    onAnyItemClick: context.onAnyItemClick,
+    anchorEl: anchorEl,
+    setAnchorEl: setAnchorEl,
+    focusedItemId: focusedItemId,
+    setFocusedItemId: setFocusedItemId
+  };
+
+  useEffect(() => {
+    if (!open) {
+      setAnchorEl(undefined);
+    }
+  }, [open]);
+
   return (
-    <M3Menu {...props}>
-      {list.map((item) => {
-        return ("onClick" in item) ?
-          <LeafListItem {...item} key={item.text} /> :
-          <BranchListItem {...item} key={item.text} />;
-      })}
-    </M3Menu>
+    <MenuContext.Provider value={newContext}>
+      <M3Menu {...props} open={open}>
+        {list.map((item) => {
+          return ("onClick" in item) ?
+            <LeafListItem {...item} key={item.text} /> :
+            <BranchListItem {...item} key={item.text} />;
+        })}
+      </M3Menu>
+    </MenuContext.Provider>
   );
 }
 
 function LeafListItem({ text, icon, disabled, onClick }: LeafMenuItemProps): JSX.Element {
-  const { onAnyItemClick } = useContext(MenuContext);
+  const { onAnyItemClick, setAnchorEl, setFocusedItemId } = useContext(MenuContext);
 
   return(
     <M3MenuItem
@@ -83,6 +109,10 @@ function LeafListItem({ text, icon, disabled, onClick }: LeafMenuItemProps): JSX
       onClick={(event) => {
         onClick(event);
         onAnyItemClick();
+      }}
+      onMouseEnter={() => {
+        setAnchorEl?.(undefined);
+        setFocusedItemId?.(text);
       }}
     >
       <M3ListItemIcon>{icon}</M3ListItemIcon>
@@ -92,14 +122,34 @@ function LeafListItem({ text, icon, disabled, onClick }: LeafMenuItemProps): JSX
 }
 
 function BranchListItem({ text, icon, disabled, ...props}: BranchMenuItemProps): JSX.Element {
+  const { anchorEl, setAnchorEl, focusedItemId, setFocusedItemId } = useContext(MenuContext);
+
+  const open = Boolean(anchorEl) && (focusedItemId === text);
+  const id = open ? text : undefined;
+
+  function openSubmenu(event: React.MouseEvent<HTMLElement>) {
+    setAnchorEl?.(event.currentTarget);
+    setFocusedItemId?.(text);
+  }
+
   return (
     <>
       <M3MenuItem
         disabled={disabled}
+        onMouseEnter={openSubmenu}
       >
         <M3ListItemIcon>{icon}</M3ListItemIcon>
         <M3ListItemText>{text}</M3ListItemText>
       </M3MenuItem>
+      <NestedMenu
+        {...props}
+        id={id}
+        anchorEl={anchorEl}
+        open={open}
+        sx={{ pointerEvents: "none" }}
+        PaperProps={{ sx: { pointerEvents: "all" }}}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      />
     </>
   );
 }
