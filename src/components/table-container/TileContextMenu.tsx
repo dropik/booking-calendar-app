@@ -47,7 +47,7 @@ export default function TileContextMenu({ tileId, anchorEl, onClose, unassigned 
         anchorEl={anchorEl}
         open={open}
         onClose={onClose}
-        onItemClick={onClose}
+        onAnyItemClick={onClose}
         anchorOrigin={{
           vertical: "top",
           horizontal: "right"

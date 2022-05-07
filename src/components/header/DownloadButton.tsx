@@ -39,7 +39,7 @@ export default function DownloadButton(): JSX.Element {
         anchorEl={anchorEl}
         open={open}
         onClose={close}
-        onItemClick={close}
+        onAnyItemClick={close}
         list={[
           {
             text: "Polizia",
