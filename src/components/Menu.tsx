@@ -6,41 +6,70 @@ import M3MenuItem from "./m3/M3MenuItem";
 import M3ListItemIcon from "./m3/M3ListItemIcon";
 import M3ListItemText from "./m3/M3ListItemText";
 
-type ListItemData = {
+type ListItemProps = {
   text: string,
   icon: ReactNode,
   disabled?: boolean
-  onClick: (event: React.MouseEvent<HTMLElement>) => void,
-} | {
-  text: string,
-  icon: ReactNode,
-  disabled?: boolean,
-  list: ListItemData[]
 };
+
+type LeafListItemProps = ListItemProps & {
+  onClick: (event: React.MouseEvent<HTMLElement>) => void,
+  onAnyItemClick: () => void
+};
+
+type NestedListItemProps = LeafListItemProps | (ListItemProps & {
+  list: NestedListItemProps[]
+});
+
+type BranchListItemProps = Exclude<NestedListItemProps, LeafListItemProps>;
 
 interface Props extends MenuProps {
   onAnyItemClick: () => void;
-  list: ListItemData[];
+  list: NestedListItemProps[];
 }
 
 export default function Menu({ list, onAnyItemClick, ...props }: Props): JSX.Element {
   return (
     <M3Menu {...props}>
-      {list.map((item) => (
-        <M3MenuItem
-          key={item.text}
-          disabled={item.disabled}
-          onClick={(event) => {
-            if ("onClick" in item) {
-              item.onClick(event);
-              onAnyItemClick();
-            }
-          }}
-        >
-          <M3ListItemIcon>{item.icon}</M3ListItemIcon>
-          <M3ListItemText>{item.text}</M3ListItemText>
-        </M3MenuItem>
-      ))}
+      {list.map((item) => {
+        if ("onClick" in item) {
+          return (
+            <LeafListItem {...item} key={item.text} onAnyItemClick={onAnyItemClick} />
+          );
+        } else {
+          return (
+            <BranchListItem {...item} key={item.text} />
+          );
+        }
+      })}
     </M3Menu>
+  );
+}
+
+function LeafListItem({ text, icon, disabled, onClick, onAnyItemClick }: LeafListItemProps): JSX.Element {
+  return(
+    <M3MenuItem
+      disabled={disabled}
+      onClick={(event) => {
+        onClick(event);
+        onAnyItemClick();
+      }}
+    >
+      <M3ListItemIcon>{icon}</M3ListItemIcon>
+      <M3ListItemText>{text}</M3ListItemText>
+    </M3MenuItem>
+  );
+}
+
+function BranchListItem({ text, icon, disabled, list}: BranchListItemProps): JSX.Element {
+  return (
+    <>
+      <M3MenuItem
+        disabled={disabled}
+      >
+        <M3ListItemIcon>{icon}</M3ListItemIcon>
+        <M3ListItemText>{text}</M3ListItemText>
+      </M3MenuItem>
+    </>
   );
 }
