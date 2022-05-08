@@ -63,7 +63,40 @@ export default function Menu({ onAnyItemClick, ...props }: MenuRootProps): JSX.E
   );
 }
 
-function NestedMenu(props: NestedMenuProps): JSX.Element {
+function NestedMenu({ TransitionProps, sx, ...props }: NestedMenuProps): JSX.Element {
+  const [isInTransition, setIsInTransition] = useState(false);
+
+  function startTransition() {
+    setIsInTransition(true);
+  }
+
+  function endTransition() {
+    setIsInTransition(false);
+  }
+
+  return (
+    <NestedMenuSwitch
+      {...props}
+      TransitionProps={{
+        ...TransitionProps,
+        onEntering: startTransition,
+        onEntered: endTransition,
+        onExiting: startTransition,
+        onExited: endTransition
+      }}
+      sx={{
+        ...sx,
+        "& .MuiMenu-paper": {
+          ...(isInTransition && {
+            pointerEvents: "none"
+          })
+        }
+      }}
+    />
+  );
+}
+
+function NestedMenuSwitch(props: NestedMenuProps): JSX.Element {
   return ("list" in props) ?
     <ListNestedMenu {...props} /> :
     <M3Menu {...props} />;
@@ -155,7 +188,7 @@ function BranchListItem({ text, icon, disabled, ...props}: BranchMenuItemProps):
         anchorEl={anchorEl}
         open={open}
         sx={{ pointerEvents: "none" }}
-        PaperProps={{ ref: setMenuRef, sx: { pointerEvents: "all" }}}
+        PaperProps={{ ref: setMenuRef, sx: { pointerEvents: "all" } }}
         anchorOrigin={{ vertical: "top", horizontal: anchorOriginHorizontal }}
         transformOrigin={{ vertical: "top", horizontal: transforOriginHorizontal }}
       />
