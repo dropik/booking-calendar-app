@@ -1,5 +1,6 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { MenuProps } from "@mui/material/Menu";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 
 import M3Menu from "./m3/M3Menu";
 import M3MenuItem from "./m3/M3MenuItem";
@@ -115,8 +116,9 @@ function LeafListItem({ text, icon, disabled, onClick }: LeafMenuItemProps): JSX
         setFocusedItemId?.(text);
       }}
     >
-      <M3ListItemIcon>{icon}</M3ListItemIcon>
-      <M3ListItemText>{text}</M3ListItemText>
+      <M3ListItemIcon sx={{ flexBasis: "1.5rem", flexGrow: 0 }}>{icon}</M3ListItemIcon>
+      <M3ListItemText sx={{ flexGrow: 1, mr: "0.75rem" }}>{text}</M3ListItemText>
+      <M3ListItemIcon sx={{ flexBasis: "1.5rem", flexGrow: 1, mr: 0 }} />
     </M3MenuItem>
   );
 }
@@ -138,8 +140,9 @@ function BranchListItem({ text, icon, disabled, ...props}: BranchMenuItemProps):
         disabled={disabled}
         onMouseEnter={openSubmenu}
       >
-        <M3ListItemIcon>{icon}</M3ListItemIcon>
-        <M3ListItemText>{text}</M3ListItemText>
+        <M3ListItemIcon sx={{ flexBasis: "1.5rem", flexGrow: 0 }}>{icon}</M3ListItemIcon>
+        <M3ListItemText sx={{ flexGrow: 1, mr: "0.75rem" }}>{text}</M3ListItemText>
+        <M3ListItemIcon sx={{ flexBasis: "1.5rem", flexGrow: 0, mr: 0 }}><ArrowRightIcon /></M3ListItemIcon>
       </M3MenuItem>
       <NestedMenu
         {...props}

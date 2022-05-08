@@ -8,7 +8,7 @@ const M3MenuItem = styled(MenuItem)<MenuItemProps>(({ theme }) => ({
   paddingLeft: "0.75rem",
   paddingRight: "0.75rem",
   "& .MuiListItemIcon-root": {
-    minWidth: "auto"
+    minWidth: "1.5rem"
   },
   "&:hover": {
     backgroundColor: alpha(theme.palette.onSurface.main, theme.opacities.hover)
