@@ -9,20 +9,21 @@ export default function M3Menu({ children, PaperProps, ...props }: MenuProps): J
 
   return (
     <Menu
+      {...props}
       elevation={2}
       PaperProps={{
+        ...PaperProps,
         sx: {
+          ...PaperProps?.sx,
           backgroundColor: theme.palette.surface.main,
           minWidth: "7rem",
           maxWidth: "17.5rem",
           "& .surface-tint": {
             backgroundColor: theme.palette.surfaceTint.main,
             opacity: theme.opacities.surface2
-          },
-          ...PaperProps?.sx
+          }
         }
       }}
-      {...props}
     >
       {children}
       <SurfaceTint />

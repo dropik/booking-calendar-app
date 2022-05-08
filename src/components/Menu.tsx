@@ -125,6 +125,11 @@ function LeafListItem({ text, icon, disabled, onClick }: LeafMenuItemProps): JSX
 
 function BranchListItem({ text, icon, disabled, ...props}: BranchMenuItemProps): JSX.Element {
   const { anchorEl, setAnchorEl, focusedItemId, setFocusedItemId } = useContext(MenuContext);
+  const [menuRef, setMenuRef] = useState<HTMLElement | null>(null);
+
+  const openOnLeft = menuRef && anchorEl && ((document.body.clientWidth - anchorEl.getBoundingClientRect().right - 16) < menuRef.clientWidth);
+  const anchorOriginHorizontal = openOnLeft ? "left" : "right";
+  const transforOriginHorizontal = openOnLeft ? "right" : "left";
 
   const open = Boolean(anchorEl) && (focusedItemId === text);
   const id = open ? text : undefined;
@@ -150,8 +155,9 @@ function BranchListItem({ text, icon, disabled, ...props}: BranchMenuItemProps):
         anchorEl={anchorEl}
         open={open}
         sx={{ pointerEvents: "none" }}
-        PaperProps={{ sx: { pointerEvents: "all" }}}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        PaperProps={{ ref: setMenuRef, sx: { pointerEvents: "all" }}}
+        anchorOrigin={{ vertical: "top", horizontal: anchorOriginHorizontal }}
+        transformOrigin={{ vertical: "top", horizontal: transforOriginHorizontal }}
       />
     </>
   );
