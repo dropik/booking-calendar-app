@@ -1,4 +1,4 @@
-import React, { ReactNode, useRef, useState } from "react";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -49,6 +49,10 @@ export default function DownloadDialog({ type, onFetchAsync, setFilename, icon, 
     setNoData(false);
   }
 
+  useEffect(() => {
+    setSelectedDate(currentDate);
+  }, [currentDate]);
+
   function download() {
     async function fetchDataAsync() {
       try {
@@ -74,21 +78,26 @@ export default function DownloadDialog({ type, onFetchAsync, setFilename, icon, 
   }
 
   return (
-    <Dialog open={open} onClose={closeDialog} TransitionProps={{ onExited: resetState }} PaperProps={{
-      sx: {
-        boxShadow: theme.shadows[3],
-        borderRadius: "1.75rem",
-        minWidth: "17.5rem",
-        maxWidth: "35rem",
-        padding: "1.5rem",
-        backgroundColor: theme.palette.surface.main,
-        color: theme.palette.onSurfaceVariant.main,
-        "& .surface-tint": {
-          backgroundColor: theme.palette.surfaceTint.main,
-          opacity: theme.opacities.surface3
+    <Dialog
+      open={open}
+      onClose={closeDialog}
+      TransitionProps={{ onExited: resetState }}
+      PaperProps={{
+        sx: {
+          boxShadow: theme.shadows[3],
+          borderRadius: "1.75rem",
+          minWidth: "17.5rem",
+          maxWidth: "35rem",
+          padding: "1.5rem",
+          backgroundColor: theme.palette.surface.main,
+          color: theme.palette.onSurfaceVariant.main,
+          "& .surface-tint": {
+            backgroundColor: theme.palette.surfaceTint.main,
+            opacity: theme.opacities.surface3
+          }
         }
-      }
-    }}>
+      }}
+    >
       <Typography align="center" sx={{
         height: "1.5rem",
         color: theme.palette.secondary.main
