@@ -23,6 +23,7 @@ export default function DownloadDialogBody({ state, selectedDate, onChangeDate, 
         value={new Date(selectedDate)}
         onChange={onChangeDate}
         renderInput={(props) => <TextField {...props} />}
+        PopperProps={{ placement: "left-start" }}
       />
     );
   case "loading":
