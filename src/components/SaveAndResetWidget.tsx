@@ -1,15 +1,13 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import RestoreIcon from "@mui/icons-material/Restore";
 import SaveIcon from "@mui/icons-material/Save";
 import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
 
 import * as Api from "../api";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import * as TilesSlice from "../redux/tilesSlice";
 import * as ConnectionErrorSlice from "../redux/connectionErrorSlice";
 
-import SlideAndFade from "./m3/SlideAndFade";
 import M3Card from "./m3/M3Card";
 import M3TextButton from "./m3/M3TextButton";
 import M3Fab from "./m3/M3Fab";
@@ -23,7 +21,6 @@ export default function SaveAndResetWidget(): JSX.Element {
   const hasChanges = useAppSelector((state) => Object.keys(state.tiles.changesMap).length > 0);
   const changes = useAppSelector((state) => state.tiles.changesMap);
   const [status, setStatus] = useState<Status>("idle");
-  const ref = useRef<HTMLElement | null>(null);
 
   function saveHandler() {
     async function launchSaveAsync(): Promise<void> {
@@ -54,17 +51,11 @@ export default function SaveAndResetWidget(): JSX.Element {
 
   return (
     <>
-      <Box sx={{
-        position: "fixed",
-        pointerEvents: "none",
-        bottom: "2.5rem",
-        right: "3rem"
-      }} ref={ref}></Box>
-      <SlideAndFade in={openActions} container={ref.current} boxSx={{
-        position: "fixed",
-        bottom: "2.5rem",
-        right: "3rem"
-      }}>
+      <M3Snackbar
+        open={openActions}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        sx={{ pr: "1rem", pb: "1rem" }}
+      >
         <M3Card borderRadius="1.75rem">
           <Stack spacing={1} direction="row" alignItems="center">
             <M3Fab size="small" dark elevation="none" onClick={saveHandler} sx={{ m: 0 }}>
@@ -84,7 +75,7 @@ export default function SaveAndResetWidget(): JSX.Element {
             </M3TextButton>
           </Stack>
         </M3Card>
-      </SlideAndFade>
+      </M3Snackbar>
       <M3Snackbar open={openLoading}>
         <M3Alert severity="info">Salviamo modifiche...</M3Alert>
       </M3Snackbar>

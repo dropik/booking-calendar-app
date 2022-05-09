@@ -1,4 +1,5 @@
-import React from "react";
+/* eslint-disable react/prop-types */
+import React, { forwardRef } from "react";
 import { styled } from "@mui/material/styles";
 import Card, { CardProps } from "@mui/material/Card";
 
@@ -11,6 +12,7 @@ interface M3CardProps extends CardProps {
 const CustomizedCard = styled(Card, {
   shouldForwardProp: (prop) => prop !== "borderRadius"
 })<M3CardProps>(({ theme, borderRadius }) => ({
+  position: "relative",
   borderRadius: borderRadius ? borderRadius : "0.75rem",
   overflow: "visible",
   padding: "1rem",
@@ -53,12 +55,14 @@ const CustomizedCard = styled(Card, {
   }
 }));
 
-export default function M3Card({children, ...props }: M3CardProps): JSX.Element {
+const M3Card = forwardRef<HTMLDivElement, M3CardProps>(function M3Card({children, ...props }, ref): JSX.Element {
   return (
-    <CustomizedCard {...props}>
+    <CustomizedCard {...props} ref={ref}>
       <StateLayer />
       {children}
       <SurfaceTint />
     </CustomizedCard>
   );
-}
+});
+
+export default M3Card;
