@@ -3,8 +3,6 @@ import RestoreIcon from "@mui/icons-material/Restore";
 import SaveIcon from "@mui/icons-material/Save";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
-import Alert from "@mui/material/Alert";
-import Snackbar from "@mui/material/Snackbar";
 
 import * as Api from "../api";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
@@ -15,6 +13,8 @@ import SlideAndFade from "./m3/SlideAndFade";
 import M3Card from "./m3/M3Card";
 import M3TextButton from "./m3/M3TextButton";
 import M3Fab from "./m3/M3Fab";
+import M3Alert from "./m3/M3Alert";
+import M3Snackbar from "./m3/M3Snackbar";
 
 type Status = "idle" | "loading" | "fulfilled";
 
@@ -85,20 +85,12 @@ export default function SaveAndResetWidget(): JSX.Element {
           </Stack>
         </M3Card>
       </SlideAndFade>
-      <Snackbar
-        open={openLoading}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert elevation={1} severity="info">Salviamo modifiche...</Alert>
-      </Snackbar>
-      <Snackbar
-        open={openSuccess}
-        onClose={resetIdle}
-        autoHideDuration={1000}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert elevation={1} severity="success">Modifiche salvate!</Alert>
-      </Snackbar>
+      <M3Snackbar open={openLoading}>
+        <M3Alert severity="info">Salviamo modifiche...</M3Alert>
+      </M3Snackbar>
+      <M3Snackbar open={openSuccess} onClose={resetIdle} autoHideDuration={1000}>
+        <M3Alert severity="success">Modifiche salvate!</M3Alert>
+      </M3Snackbar>
     </>
   );
 }

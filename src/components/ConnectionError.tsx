@@ -1,9 +1,10 @@
 import React from "react";
-import Alert from "@mui/material/Alert";
-import Snackbar from "@mui/material/Snackbar";
 
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import * as ConnectionErrorSlice from "../redux/connectionErrorSlice";
+
+import M3Snackbar from "./m3/M3Snackbar";
+import M3Alert from "./m3/M3Alert";
 
 export default function ConnectionError(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -14,13 +15,8 @@ export default function ConnectionError(): JSX.Element {
   }
 
   return (
-    <Snackbar
-      open={showError}
-      autoHideDuration={3000}
-      onClose={close}
-      anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-    >
-      <Alert elevation={1} severity="error">Errore di connessione!</Alert>
-    </Snackbar>
+    <M3Snackbar open={showError} autoHideDuration={3000} onClose={close}>
+      <M3Alert severity="error">Errore di connessione!</M3Alert>
+    </M3Snackbar>
   );
 }
