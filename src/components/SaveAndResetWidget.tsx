@@ -1,17 +1,15 @@
 import React, { useRef, useState } from "react";
-import { AnyAction } from "@reduxjs/toolkit";
-import CheckIcon from "@mui/icons-material/Check";
 import RestoreIcon from "@mui/icons-material/Restore";
 import SaveIcon from "@mui/icons-material/Save";
-import CircularProgress from "@mui/material/CircularProgress";
-import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
+import Alert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
 
+import * as Api from "../api";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import * as TilesSlice from "../redux/tilesSlice";
 import * as ConnectionErrorSlice from "../redux/connectionErrorSlice";
-import * as Api from "../api";
 
 import SlideAndFade from "./m3/SlideAndFade";
 import M3Card from "./m3/M3Card";
@@ -22,7 +20,7 @@ type Status = "idle" | "loading" | "fulfilled";
 
 export default function SaveAndResetWidget(): JSX.Element {
   const dispatch = useAppDispatch();
-  const hasChanges = useHasChanges();
+  const hasChanges = useAppSelector((state) => Object.keys(state.tiles.changesMap).length > 0);
   const changes = useAppSelector((state) => state.tiles.changesMap);
   const [status, setStatus] = useState<Status>("idle");
   const ref = useRef<HTMLElement | null>(null);
@@ -42,14 +40,17 @@ export default function SaveAndResetWidget(): JSX.Element {
     setStatus("loading");
   }
 
-  function tryResetIdle() {
-    if (!hasChanges) {
-      setStatus("idle");
-    }
+  function resetChanges() {
+    dispatch(TilesSlice.undoChanges());
   }
 
-  const resetHandler = getResetHandler(dispatch);
-  const body = getBody(status, resetHandler, saveHandler);
+  function resetIdle() {
+    setStatus("idle");
+  }
+
+  const openActions = status === "idle" && hasChanges;
+  const openLoading = status === "loading";
+  const openSuccess = status === "fulfilled";
 
   return (
     <>
@@ -59,55 +60,45 @@ export default function SaveAndResetWidget(): JSX.Element {
         bottom: "2.5rem",
         right: "3rem"
       }} ref={ref}></Box>
-      <SlideAndFade in={hasChanges} container={ref.current} onExited={tryResetIdle} boxSx={{
+      <SlideAndFade in={openActions} container={ref.current} boxSx={{
         position: "fixed",
         bottom: "2.5rem",
         right: "3rem"
       }}>
-        <M3Card borderRadius="1.75rem">{body}</M3Card>
+        <M3Card borderRadius="1.75rem">
+          <Stack spacing={1} direction="row" alignItems="center">
+            <M3Fab size="small" dark elevation="none" onClick={saveHandler} sx={{ m: 0 }}>
+              <SaveIcon />
+            </M3Fab>
+            <M3TextButton
+              iconOnly
+              onClick={resetChanges}
+              sx={{
+                width: "2.5rem",
+                height: "2.5rem",
+                padding: 0,
+                minWidth: "unset"
+              }}
+            >
+              <RestoreIcon />
+            </M3TextButton>
+          </Stack>
+        </M3Card>
       </SlideAndFade>
-    </>
-  );
-}
-
-function useHasChanges(): boolean {
-  return useAppSelector((state) => Object.keys(state.tiles.changesMap).length > 0);
-}
-
-function getResetHandler(dispatch: React.Dispatch<AnyAction>): () => void {
-  return () => {
-    dispatch(TilesSlice.undoChanges());
-  };
-}
-
-function getBody(saveStatus: Status, resetHandler: () => void, saveHandler: () => void): JSX.Element {
-  if (saveStatus === "fulfilled") {
-    return (
-      <Typography variant="bodyMedium" sx={{ color: (theme) => theme.palette.outline.main }}>
-        <CheckIcon />
-      </Typography>
-    );
-  } else if (saveStatus === "loading") {
-    return (<CircularProgress color="primary" />);
-  }
-
-  return (
-    <Stack spacing={1} direction="row" alignItems="center">
-      <M3Fab size="small" dark elevation="none" onClick={saveHandler} sx={{ m: 0 }}>
-        <SaveIcon />
-      </M3Fab>
-      <M3TextButton
-        iconOnly
-        onClick={resetHandler}
-        sx={{
-          width: "2.5rem",
-          height: "2.5rem",
-          padding: 0,
-          minWidth: "unset"
-        }}
+      <Snackbar
+        open={openLoading}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <RestoreIcon />
-      </M3TextButton>
-    </Stack>
+        <Alert elevation={1} severity="info">Salviamo modifiche...</Alert>
+      </Snackbar>
+      <Snackbar
+        open={openSuccess}
+        onClose={resetIdle}
+        autoHideDuration={1000}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert elevation={1} severity="success">Modifiche salvate!</Alert>
+      </Snackbar>
+    </>
   );
 }

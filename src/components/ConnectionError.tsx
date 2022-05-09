@@ -20,7 +20,7 @@ export default function ConnectionError(): JSX.Element {
       onClose={close}
       anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
     >
-      <Alert severity="error">Errore di connessione!</Alert>
+      <Alert elevation={1} severity="error">Errore di connessione!</Alert>
     </Snackbar>
   );
 }
