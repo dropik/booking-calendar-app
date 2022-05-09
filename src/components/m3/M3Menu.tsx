@@ -4,7 +4,7 @@ import Menu, { MenuProps } from "@mui/material/Menu";
 
 import { SurfaceTint } from "./Tints";
 
-export default function M3Menu({ children, PaperProps, ...props }: MenuProps): JSX.Element {
+export default function M3Menu({ children, PaperProps, TransitionProps, ...props }: MenuProps): JSX.Element {
   const theme = useTheme();
 
   return (
@@ -23,6 +23,11 @@ export default function M3Menu({ children, PaperProps, ...props }: MenuProps): J
             opacity: theme.opacities.surface2
           }
         }
+      }}
+      TransitionProps={{
+        ...TransitionProps,
+        mountOnEnter: true,
+        unmountOnExit: true
       }}
     >
       {children}
