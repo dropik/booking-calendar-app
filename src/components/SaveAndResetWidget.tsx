@@ -22,7 +22,7 @@ export default function SaveAndResetWidget(): JSX.Element {
   const changes = useAppSelector((state) => state.tiles.changesMap);
   const [status, setStatus] = useState<Status>("idle");
 
-  function saveHandler() {
+  function saveChanges() {
     async function launchSaveAsync(): Promise<void> {
       try {
         await Api.postChangesAsync(changes);
@@ -51,37 +51,70 @@ export default function SaveAndResetWidget(): JSX.Element {
 
   return (
     <>
-      <M3Snackbar
-        open={openActions}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        sx={{ pr: "1rem", pb: "1rem" }}
-      >
-        <M3Card borderRadius="1.75rem">
-          <Stack spacing={1} direction="row" alignItems="center">
-            <M3Fab size="small" dark elevation="none" onClick={saveHandler} sx={{ m: 0 }}>
-              <SaveIcon />
-            </M3Fab>
-            <M3TextButton
-              iconOnly
-              onClick={resetChanges}
-              sx={{
-                width: "2.5rem",
-                height: "2.5rem",
-                padding: 0,
-                minWidth: "unset"
-              }}
-            >
-              <RestoreIcon />
-            </M3TextButton>
-          </Stack>
-        </M3Card>
-      </M3Snackbar>
-      <M3Snackbar open={openLoading}>
-        <M3Alert severity="info">Salviamo modifiche...</M3Alert>
-      </M3Snackbar>
-      <M3Snackbar open={openSuccess} onClose={resetIdle} autoHideDuration={1000}>
-        <M3Alert severity="success">Modifiche salvate!</M3Alert>
-      </M3Snackbar>
+      <ActionButtons open={openActions} onSave={saveChanges} onReset={resetChanges} />
+      <SavingNotification open={openLoading} />
+      <SavedNotification open={openSuccess} onClose={resetIdle} />
     </>
+  );
+}
+
+type ActionButtonsProps = {
+  open: boolean,
+  onSave: () => void,
+  onReset: () => void
+}
+
+function ActionButtons({ open, onSave, onReset }: ActionButtonsProps): JSX.Element {
+  return (
+    <M3Snackbar
+      open={open}
+      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      sx={{ pr: "1rem", pb: "1rem" }}
+    >
+      <M3Card borderRadius="1.75rem">
+        <Stack spacing={1} direction="row" alignItems="center">
+          <M3Fab size="small" dark elevation="none" onClick={onSave} sx={{ m: 0 }}>
+            <SaveIcon />
+          </M3Fab>
+          <M3TextButton
+            iconOnly
+            onClick={onReset}
+            sx={{
+              width: "2.5rem",
+              height: "2.5rem",
+              padding: 0,
+              minWidth: "unset"
+            }}
+          >
+            <RestoreIcon />
+          </M3TextButton>
+        </Stack>
+      </M3Card>
+    </M3Snackbar>
+  );
+}
+
+type SavingNotificationProps = {
+  open: boolean
+};
+
+function SavingNotification({ open }: SavingNotificationProps): JSX.Element {
+  return (
+    <M3Snackbar open={open}>
+      <M3Alert severity="info">Salviamo modifiche...</M3Alert>
+    </M3Snackbar>
+  );
+}
+
+type SavedNotificationProps = {
+  open: boolean,
+  onClose: () => void
+};
+
+function SavedNotification({ open, onClose }: SavedNotificationProps): JSX.Element {
+  return (
+    <M3Snackbar open={open} onClose={onClose} autoHideDuration={1000}>
+      <M3Alert severity="success">Modifiche salvate!</M3Alert>
+    </M3Snackbar>
   );
 }
