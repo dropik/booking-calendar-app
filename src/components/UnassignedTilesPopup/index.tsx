@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import * as Utils from "../../utils";
 import * as TilesSlice from "../../redux/tilesSlice";
 
-import UnassignedTilesPopupBody from "./unassigned-tiles-popup/UnassignedTilesPopupBody";
+import UnassignedTilesPopupBody from "./UnassignedTilesPopupBody";
 
 type PopupData = {
   show: boolean,

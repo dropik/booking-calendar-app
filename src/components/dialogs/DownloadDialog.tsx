@@ -11,8 +11,8 @@ import * as DialogSlice from "../../redux/dialogSlice";
 import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
 
 import { SurfaceTint } from "../m3/Tints";
-import DownloadDialogBody from "./download-dialog/DownloadDialogBody";
-import DownloadDialogActions from "./download-dialog/DownloadDialogActions";
+import DownloadDialogBody from "./DownloadDialogBody";
+import DownloadDialogActions from "./DownloadDialogActions";
 
 export type DownloadDialogState = "fill" | "loading" | "done";
 

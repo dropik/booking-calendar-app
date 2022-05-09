@@ -1,8 +1,8 @@
 import React from "react";
 
-import { DownloadDialogState } from "../DownloadDialog";
+import { DownloadDialogState } from "./DownloadDialog";
 
-import M3TextButton from "../../m3/M3TextButton";
+import M3TextButton from "../m3/M3TextButton";
 
 type Props = {
   state: DownloadDialogState,

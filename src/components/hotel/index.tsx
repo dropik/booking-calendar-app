@@ -1,14 +1,14 @@
 import React, { Fragment, useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import Box from "@mui/material/Box";
 
-import { useAppDispatch, useAppSelector, useHotelData } from "../redux/hooks";
-import * as HotelSlice from "../redux/hotelSlice";
-import * as RoomTypesSlice from "../redux/roomTypesSlice";
+import { useAppDispatch, useAppSelector, useHotelData } from "../../redux/hooks";
+import * as HotelSlice from "../../redux/hotelSlice";
+import * as RoomTypesSlice from "../../redux/roomTypesSlice";
 
-import DrawerAdjacent from "./m3/DrawerAdjacent";
-import Floor from "./hotel/Floor";
-import RoomNumber from "./hotel/RoomNumber";
-import BottomSpace from "./hotel/BottomSpace";
+import DrawerAdjacent from "../m3/DrawerAdjacent";
+import Floor from "./Floor";
+import RoomNumber from "./RoomNumber";
+import BottomSpace from "./BottomSpace";
 
 import "./Hotel.css";
 

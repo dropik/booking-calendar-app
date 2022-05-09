@@ -2,18 +2,18 @@ import React, { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import Box from "@mui/material/Box";
 
-import * as Utils from "../utils";
-import * as Globals from "../globals";
-import { useAppDispatch, useAppSelector, useHotelData, useLeftmostDate } from "../redux/hooks";
-import * as HotelSlice from "../redux/hotelSlice";
-import * as ScrollSlice from "../redux/scrollSlice";
-import * as TableSlice from "../redux/tableSlice";
+import * as Utils from "../../utils";
+import * as Globals from "../../globals";
+import { useAppDispatch, useAppSelector, useHotelData, useLeftmostDate } from "../../redux/hooks";
+import * as HotelSlice from "../../redux/hotelSlice";
+import * as ScrollSlice from "../../redux/scrollSlice";
+import * as TableSlice from "../../redux/tableSlice";
 
-import DrawerAdjacent from "./m3/DrawerAdjacent";
-import Table from "./table-container/Table";
-import FetchTiles from "./table-container/FetchTiles";
-import GrabbedTile from "./table-container/GrabbedTile";
-import ConnectionError from "./table-container/ConnectionError";
+import DrawerAdjacent from "../m3/DrawerAdjacent";
+import Table from "./Table";
+import FetchTiles from "./FetchTiles";
+import GrabbedTile from "./GrabbedTile";
+import ConnectionError from "./ConnectionError";
 
 import "./TableContainer.css";
 

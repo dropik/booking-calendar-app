@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 
-import { useAppSelector } from "../../../redux/hooks";
+import { useAppSelector } from "../../redux/hooks";
 
 import UnassignedTilePart from "./UnassignedTilePart";
 

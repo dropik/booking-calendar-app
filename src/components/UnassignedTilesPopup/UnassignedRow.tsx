@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from "react";
 
-import { useAppSelector } from "../../../redux/hooks";
-import * as Utils from "../../../utils";
+import { useAppSelector } from "../../redux/hooks";
+import * as Utils from "../../utils";
 
 import UnassignedCell from "./UnassignedCell";
 

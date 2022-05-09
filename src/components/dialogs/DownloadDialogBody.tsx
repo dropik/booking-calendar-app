@@ -4,9 +4,9 @@ import CircularProgress from "@mui/material/CircularProgress";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
-import { DownloadDialogState } from "../DownloadDialog";
+import { DownloadDialogState } from "./DownloadDialog";
 
-import M3DatePicker from "../../m3/M3DatePicker";
+import M3DatePicker from "../m3/M3DatePicker";
 
 type Props = {
   state: DownloadDialogState,

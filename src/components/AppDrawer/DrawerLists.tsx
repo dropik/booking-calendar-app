@@ -1,11 +1,11 @@
 import React, { ReactNode } from "react";
 import List from "@mui/material/List";
 
-import M3ListSubheader from "./m3/M3ListSubheader";
-import M3ListItemButton from "./m3/M3ListItemButton";
-import M3ListItemIcon from "./m3/M3ListItemIcon";
-import M3ListItemText from "./m3/M3ListItemText";
-import M3Divider from "./m3/M3Divider";
+import M3ListSubheader from "../m3/M3ListSubheader";
+import M3ListItemButton from "../m3/M3ListItemButton";
+import M3ListItemIcon from "../m3/M3ListItemIcon";
+import M3ListItemText from "../m3/M3ListItemText";
+import M3Divider from "../m3/M3Divider";
 
 type Props = {
   lists: {

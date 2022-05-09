@@ -11,11 +11,11 @@ import Fade from "@mui/material/Fade";
 import Box from "@mui/material/Box";
 import ListItem from "@mui/material/ListItem";
 
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import * as DrawerSlice from "../redux/drawerSlice";
-import * as DialogSlice from "../redux/dialogSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import * as DrawerSlice from "../../redux/drawerSlice";
+import * as DialogSlice from "../../redux/dialogSlice";
 
-import M3TextButton from "./m3/M3TextButton";
+import M3TextButton from "../m3/M3TextButton";
 import DrawerLists from "./DrawerLists";
 
 export default function AppDrawer(): JSX.Element {

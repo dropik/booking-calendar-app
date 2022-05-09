@@ -1,10 +1,10 @@
 import React from "react";
 import Box from "@mui/material/Box";
 
-import DrawerAdjacent from "./m3/DrawerAdjacent";
-import MonthYear from "./dates-container/MonthYear";
-import Dates from "./dates-container/Dates";
-import UnassignedTilesPopup from "./dates-container/UnassignedTilesPopup";
+import DrawerAdjacent from "../m3/DrawerAdjacent";
+import MonthYear from "./MonthYear";
+import Dates from "./Dates";
+import UnassignedTilesPopup from "../UnassignedTilesPopup";
 
 import "./DatesContainer.css";
 

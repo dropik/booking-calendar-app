@@ -1,10 +1,10 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
 
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import * as TilesSlice from "../../../redux/tilesSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import * as TilesSlice from "../../redux/tilesSlice";
 
-import OccupationInfo from "../../OccupationInfo";
-import TileContextMenu from "../../Menu/TileContextMenu";
+import OccupationInfo from "../OccupationInfo";
+import TileContextMenu from "../Menu/TileContextMenu";
 
 import "./UnassignedTilePart.css";
 

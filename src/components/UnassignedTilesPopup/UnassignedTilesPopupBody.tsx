@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useMemo, useRef } from "react";
 import { useTheme } from "@mui/material/styles";
 
-import { useLeftShift } from "../../../redux/hooks";
+import { useLeftShift } from "../../redux/hooks";
 
 import UnassignedRow from "./UnassignedRow";
 
