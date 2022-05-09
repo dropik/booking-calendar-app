@@ -13,7 +13,6 @@ import DrawerAdjacent from "../m3/DrawerAdjacent";
 import Table from "./Table";
 import FetchTiles from "./FetchTiles";
 import GrabbedTile from "./GrabbedTile";
-import ConnectionError from "./ConnectionError";
 
 import "./TableContainer.css";
 
@@ -105,7 +104,6 @@ function useTableContentsMemo(): JSX.Element {
       <Table />
       <FetchTiles />
       <GrabbedTile />
-      <ConnectionError />
     </>
   ), []);
 }

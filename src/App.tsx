@@ -9,6 +9,7 @@ import Hotel from "./components/Hotel";
 import TableContainer from "./components/TableContainer";
 import SaveAndResetWidget from "./components/SaveAndResetWidget";
 import AppDrawer from "./components/AppDrawer";
+import ConnectionError from "./components/ConnectionError";
 import Dialog from "./components/Dialog";
 import PoliceDownloadDialog from "./components/dialogs/PoliceDownloadDialog";
 import IstatDownloadDialog from "./components/dialogs/IstatDownloadDialog";
@@ -44,6 +45,7 @@ export default function App(): JSX.Element {
       <Hotel />
       <TableContainer />
       <SaveAndResetWidget />
+      <ConnectionError />
       <Dialog />
       <PoliceDownloadDialog />
       <IstatDownloadDialog />
