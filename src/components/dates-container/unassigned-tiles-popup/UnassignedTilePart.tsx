@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import * as TilesSlice from "../../../redux/tilesSlice";
 
 import OccupationInfo from "../../OccupationInfo";
-import TileContextMenu from "../../table-container/TileContextMenu";
+import TileContextMenu from "../../Menu/TileContextMenu";
 
 import "./UnassignedTilePart.css";
 

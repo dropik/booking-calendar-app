@@ -5,7 +5,7 @@ import * as TilesSlice from "../../redux/tilesSlice";
 
 import TilePartAlert from "./TilePartAlert";
 import OccupationInfo from "../OccupationInfo";
-import TileContextMenu from "./TileContextMenu";
+import TileContextMenu from "../Menu/TileContextMenu";
 
 import "./TilePart.css";
 

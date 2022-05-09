@@ -4,7 +4,7 @@ import Grid from "@mui/material/Grid";
 
 import { useAppDispatch } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
-import { MenuContext } from "../Menu";
+import { MenuContext } from ".";
 
 import M3FilledButton from "../m3/M3FilledButton";
 

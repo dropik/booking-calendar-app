@@ -7,7 +7,7 @@ import { useAppDispatch } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
 import * as DialogSlice from "../../redux/dialogSlice";
 
-import Menu from "../Menu";
+import Menu from ".";
 import ColorPicker from "./ColorPicker";
 
 type Props = {
@@ -32,36 +32,34 @@ export default function TileContextMenu({ tileId, anchorEl, onClose, unassigned 
   }
 
   return (
-    <>
-      <Menu
-        id={id}
-        anchorEl={anchorEl}
-        open={open}
-        onClose={onClose}
-        onAnyItemClick={onClose}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "right"
-        }}
-        list={[
-          {
-            text: "Informazioni",
-            icon: <InfoIcon />,
-            onClick: showInfoDialog
-          },
-          {
-            text: "Assegna colore",
-            icon: <PaletteIcon />,
-            children: <ColorPicker tileId={tileId} />
-          },
-          {
-            text: "Rimuovi occupazione",
-            icon: <DeleteIcon />,
-            onClick: removeOccupation,
-            disabled: unassigned
-          }
-        ]}
-      />
-    </>
+    <Menu
+      id={id}
+      anchorEl={anchorEl}
+      open={open}
+      onClose={onClose}
+      onAnyItemClick={onClose}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "right"
+      }}
+      list={[
+        {
+          text: "Informazioni",
+          icon: <InfoIcon />,
+          onClick: showInfoDialog
+        },
+        {
+          text: "Assegna colore",
+          icon: <PaletteIcon />,
+          children: <ColorPicker tileId={tileId} />
+        },
+        {
+          text: "Rimuovi occupazione",
+          icon: <DeleteIcon />,
+          onClick: removeOccupation,
+          disabled: unassigned
+        }
+      ]}
+    />
   );
 }
