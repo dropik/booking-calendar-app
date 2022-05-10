@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import RestoreIcon from "@mui/icons-material/Restore";
 import SaveIcon from "@mui/icons-material/Save";
 import Stack from "@mui/material/Stack";
@@ -16,13 +16,42 @@ import M3Snackbar from "./m3/M3Snackbar";
 
 type Status = "idle" | "loading" | "fulfilled";
 
+type SaveAndResetWidgetContextProps = {
+  status: Status,
+  setStatus: (newStatus: Status) => void
+};
+
+const SaveAndResetWidgetContext = createContext<SaveAndResetWidgetContextProps>({
+  status: "idle",
+  setStatus: () => void 0
+});
+
 export default function SaveAndResetWidget(): JSX.Element {
+  const [status, setStatus] = useState<Status>("idle");
+
+  const context: SaveAndResetWidgetContextProps = {
+    status: status,
+    setStatus: setStatus
+  };
+
+  return (
+    <SaveAndResetWidgetContext.Provider value={context}>
+      <ActionButtons />
+      <SavingNotification />
+      <SavedNotification />
+    </SaveAndResetWidgetContext.Provider>
+  );
+}
+
+function ActionButtons(): JSX.Element {
+  const { status, setStatus } = useContext(SaveAndResetWidgetContext);
   const dispatch = useAppDispatch();
   const hasChanges = useAppSelector((state) => Object.keys(state.tiles.changesMap).length > 0);
   const changes = useAppSelector((state) => state.tiles.changesMap);
-  const [status, setStatus] = useState<Status>("idle");
 
-  function saveChanges() {
+  const open = status === "idle" && hasChanges;
+
+  function save() {
     async function launchSaveAsync(): Promise<void> {
       try {
         await Api.postChangesAsync(changes);
@@ -37,34 +66,10 @@ export default function SaveAndResetWidget(): JSX.Element {
     setStatus("loading");
   }
 
-  function resetChanges() {
+  function reset() {
     dispatch(TilesSlice.undoChanges());
   }
 
-  function resetIdle() {
-    setStatus("idle");
-  }
-
-  const openActions = status === "idle" && hasChanges;
-  const openLoading = status === "loading";
-  const openSuccess = status === "fulfilled";
-
-  return (
-    <>
-      <ActionButtons open={openActions} onSave={saveChanges} onReset={resetChanges} />
-      <SavingNotification open={openLoading} />
-      <SavedNotification open={openSuccess} onClose={resetIdle} />
-    </>
-  );
-}
-
-type ActionButtonsProps = {
-  open: boolean,
-  onSave: () => void,
-  onReset: () => void
-}
-
-function ActionButtons({ open, onSave, onReset }: ActionButtonsProps): JSX.Element {
   return (
     <M3Snackbar
       open={open}
@@ -73,12 +78,12 @@ function ActionButtons({ open, onSave, onReset }: ActionButtonsProps): JSX.Eleme
     >
       <M3Card borderRadius="1.75rem">
         <Stack spacing={1} direction="row" alignItems="center">
-          <M3Fab size="small" dark elevation="none" onClick={onSave} sx={{ m: 0 }}>
+          <M3Fab size="small" dark elevation="none" onClick={save} sx={{ m: 0 }}>
             <SaveIcon />
           </M3Fab>
           <M3TextButton
             iconOnly
-            onClick={onReset}
+            onClick={reset}
             sx={{
               width: "2.5rem",
               height: "2.5rem",
@@ -94,11 +99,11 @@ function ActionButtons({ open, onSave, onReset }: ActionButtonsProps): JSX.Eleme
   );
 }
 
-type SavingNotificationProps = {
-  open: boolean
-};
+function SavingNotification(): JSX.Element {
+  const { status } = useContext(SaveAndResetWidgetContext);
 
-function SavingNotification({ open }: SavingNotificationProps): JSX.Element {
+  const open = status === "loading";
+
   return (
     <M3Snackbar open={open}>
       <M3Alert severity="info">Salviamo modifiche...</M3Alert>
@@ -106,14 +111,17 @@ function SavingNotification({ open }: SavingNotificationProps): JSX.Element {
   );
 }
 
-type SavedNotificationProps = {
-  open: boolean,
-  onClose: () => void
-};
+function SavedNotification(): JSX.Element {
+  const { status, setStatus } = useContext(SaveAndResetWidgetContext);
 
-function SavedNotification({ open, onClose }: SavedNotificationProps): JSX.Element {
+  const open = status === "fulfilled";
+
+  function resetIdle() {
+    setStatus("idle");
+  }
+
   return (
-    <M3Snackbar open={open} onClose={onClose} autoHideDuration={1000}>
+    <M3Snackbar open={open} onClose={resetIdle} autoHideDuration={1000}>
       <M3Alert severity="success">Modifiche salvate!</M3Alert>
     </M3Snackbar>
   );
