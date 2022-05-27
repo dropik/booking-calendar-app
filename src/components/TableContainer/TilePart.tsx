@@ -4,7 +4,6 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
 
 import TilePartAlert from "./TilePartAlert";
-import OccupationInfo from "../OccupationInfo";
 import TileContextMenu from "../Menu/TileContextMenu";
 
 import "./TilePart.css";
@@ -21,8 +20,6 @@ export default function TilePart({ y, tileData }: Props): JSX.Element {
   const ref = useRef<HTMLDivElement>(null);
   const roomType = useRoomTypeByNumber(y);
   const personsInRoomType = useAppSelector(state => state.roomTypes.data[roomType]);
-  const [isShowInfo, setIsShowInfo] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [contextMenuAnchorEl, setContextMenuAnchorEl] = useState<HTMLElement | null>(null);
 
   const className = getClassName(isGrabbed);
@@ -43,21 +40,6 @@ export default function TilePart({ y, tileData }: Props): JSX.Element {
     setContextMenuAnchorEl(null);
   }
 
-  function showInfo(event: React.MouseEvent<HTMLDivElement>) {
-    setIsShowInfo(true);
-    setMousePos({ x: event.pageX, y: event.pageY });
-  }
-
-  function moveInfo(event: React.MouseEvent<HTMLDivElement>) {
-    if (isShowInfo) {
-      setMousePos({ x: event.pageX, y: event.pageY });
-    }
-  }
-
-  function hideInfo() {
-    setIsShowInfo(false);
-  }
-
   useBackgroundColorEffect(ref, tileData.color);
 
   return (
@@ -66,18 +48,10 @@ export default function TilePart({ y, tileData }: Props): JSX.Element {
         ref={ref}
         className={className}
         onMouseDown={grabTile}
-        onMouseEnter={showInfo}
-        onMouseLeave={hideInfo}
-        onMouseMove={moveInfo}
         onContextMenu={showContextMenu}
       >
         <span className="tile-persons">{tileData.persons}</span>
         <TilePartAlert personsInRoomType={personsInRoomType} roomType={roomType} tileData={tileData} />
-        {
-          isShowInfo ?
-            <OccupationInfo tileId={tileId} x={mousePos.x} y={mousePos.y} /> :
-            <></>
-        }
       </div>
       <TileContextMenu
         tileId={tileId}

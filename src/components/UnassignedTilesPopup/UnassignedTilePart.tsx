@@ -3,7 +3,6 @@ import React, { useLayoutEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
 
-import OccupationInfo from "../OccupationInfo";
 import TileContextMenu from "../Menu/TileContextMenu";
 
 import "./UnassignedTilePart.css";
@@ -17,8 +16,6 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
   const dispatch = useAppDispatch();
   const tileData = useAppSelector((state) => state.tiles.data[tileId]);
   const ref = useRef<HTMLDivElement>(null);
-  const [isShowInfo, setIsShowInfo] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [contextMenuAnchorEl, setContextMenuAnchorEl] = useState<HTMLElement | null>(null);
 
   useBackgroundColorEffect(ref, tileData);
@@ -47,38 +44,15 @@ export default function UnassignedTilePart({ hasTilePart, tileId }: Props): JSX.
     }
   }
 
-  function showInfo(event: React.MouseEvent<HTMLDivElement>) {
-    setIsShowInfo(true);
-    setMousePos({ x: event.pageX, y: event.pageY });
-  }
-
-  function moveInfo(event: React.MouseEvent<HTMLDivElement>) {
-    if (isShowInfo) {
-      setMousePos({ x: event.pageX, y: event.pageY });
-    }
-  }
-
-  function hideInfo() {
-    setIsShowInfo(false);
-  }
-
   return (
     <>
       <div
         ref={ref}
         className="unassigned-tile-part"
         onMouseDown={grabTile}
-        onMouseEnter={showInfo}
-        onMouseLeave={hideInfo}
-        onMouseMove={moveInfo}
         onContextMenu={showContextMenu}
       >
         <span className="tile-persons">{tileData.persons}</span>
-        {
-          isShowInfo ?
-            <OccupationInfo tileId={tileId} x={mousePos.x} y={mousePos.y} /> :
-            <></>
-        }
       </div>
       <TileContextMenu
         tileId={tileId}
