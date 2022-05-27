@@ -312,31 +312,30 @@ const assembleColor: (luminance: number, a: number, b: number) => string = (lumi
   }));
 
 const primary: (luminance: number) => string = (luminance) =>
-  assembleColor(luminance, 29, -42);
+  assembleColor(luminance, -31, 36);
 
 const secondary: (luminance: number) => string = (luminance) =>
-  assembleColor(luminance, 8, -11);
+  assembleColor(luminance, -10, 11);
 
 const tertiary: (luminance: number) => string = (luminance) =>
-  assembleColor(luminance, 20, -1);
+  assembleColor(luminance, -15, -5);
 
-const success: (luminance: number) => string = (luminance) =>
-  assembleColor(luminance, -40, 33);
+const success = primary;
 
 const info: (luminance: number) => string = (luminance) =>
-  assembleColor(luminance, -4, -46);
+  assembleColor(luminance, -17, -19);
 
 const error: (luminance: number) => string = (luminance) =>
-  assembleColor(luminance, 55, 40);
+  assembleColor(luminance, 60, 43);
 
 const warning: (luminance: number) => string = (luminance) =>
-  assembleColor(luminance, 37, 60);
+  assembleColor(luminance, 56, 61);
 
 const neutral: (luminance: number) => string = (luminance) =>
-  assembleColor(luminance, 4, -5);
+  assembleColor(luminance, -2, 3);
 
 const neutralVariant: (luminance: number) => string = (luminance) =>
-  assembleColor(luminance, 2, -3);
+  assembleColor(luminance, -4, 6);
 
 const booking1: (luminance: number) => string = (luminance) =>
   assembleColor(luminance, 31, 13);
