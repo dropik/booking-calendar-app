@@ -29,17 +29,6 @@ export default function TableContainer(): JSX.Element {
     const scrollLeft = event.currentTarget.scrollLeft;
 
     dispatch(ScrollSlice.set({ top: scrollTop, left: scrollLeft }));
-
-    const scrollLeftMax = event.currentTarget.scrollWidth - event.currentTarget.clientWidth;
-    const cellWidth = Utils.remToPx(4) + 1;
-    const scrollLimit = cellWidth * Globals.TABLE_FETCH_BREAKPOINT;
-    if (scrollLeft < scrollLimit) {
-      dispatch(TableSlice.expandLeft());
-    } else if (
-      scrollLeft > scrollLeftMax - scrollLimit
-    ) {
-      dispatch(TableSlice.expandRight());
-    }
   }
 
   useTableDimentionsUpdateEffect(ref, dispatch, hotelData);

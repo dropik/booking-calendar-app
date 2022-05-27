@@ -8,18 +8,6 @@ import * as TilesSlice from "./tilesSlice";
 export const useAppDispatch = () => useDispatch<Store.AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<Store.RootState> = useSelector;
 
-export function useCurrentDate(): string {
-  return useAppSelector((state) => {
-    const cellWidth = Utils.remToPx(4) + 2;
-    const dateShift = Math.floor(
-      (state.scroll.left + cellWidth / 2) / cellWidth
-    );
-    const newDate = new Date(state.table.leftmostDate);
-    newDate.setDate(newDate.getDate() + dateShift);
-    return Utils.dateToString(newDate);
-  });
-}
-
 export function useTileData(id: string | undefined): TilesSlice.TileData | undefined {
   return useAppSelector((state) => {
     return (id === undefined) ? undefined : state.tiles.data[id];
@@ -46,10 +34,13 @@ export function useLeftShift(fromDate: string | undefined, drawerWidth: string):
       const hotelBarShift = Utils.remToPx(6.5) + 4;
       const drawerWidthPx = Utils.remToPx(Number.parseFloat(drawerWidth.replace("rem", "")));
       const drawerShift = state.drawer.open ? drawerWidthPx : 0;
-      return drawerShift + hotelBarShift + daysShift * cellWidth - state.scroll.left;
+      return drawerShift + hotelBarShift + daysShift * cellWidth;
     } else return 0;
   });
 }
+
+export const useCurrentDate:        () => string =
+  () => useAppSelector((state) => state.table.currentDate);
 
 export const useLeftmostDate:       () => string =
   () => useAppSelector(state => state.table.leftmostDate);
