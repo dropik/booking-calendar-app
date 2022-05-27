@@ -1,7 +1,6 @@
 import React, { memo } from "react";
 
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import * as TilesSlice from "../../redux/tilesSlice";
+import { useAppSelector } from "../../redux/hooks";
 
 import DayAlert from "./DayAlert";
 
@@ -12,24 +11,12 @@ type Props = {
 };
 
 export default memo(function Day({ x }: Props): JSX.Element {
-  const dispatch = useAppDispatch();
   const hasUnassignedTiles = useHasUnassignedTiles(x);
-  const selected = useAppSelector((state) => state.tiles.selectedDate === x);
 
   const day = getDayFromX(x);
-  const className = getClassName(selected, hasUnassignedTiles);
-
-  function toggleDate() {
-    if(document.getSelection() && document.getSelection()?.empty) {
-      document.getSelection()?.empty();
-    } else if(window.getSelection()) {
-      window.getSelection()?.removeAllRanges();
-    }
-    dispatch(TilesSlice.toggleDate({ date: x }));
-  }
 
   return (
-    <div className={className} onClick={toggleDate}>
+    <div className="day">
       <b>{day}</b>
       <DayAlert hasUnassignedTiles={hasUnassignedTiles} />
     </div>
@@ -42,11 +29,4 @@ function useHasUnassignedTiles(x: string) {
 
 function getDayFromX(x: string): string {
   return x.substring(8);
-}
-function getClassName(selected: boolean, hasUnassignedTiles: boolean): string {
-  let className = "day";
-  if (selected && hasUnassignedTiles) {
-    className += " selected";
-  }
-  return className;
 }

@@ -4,7 +4,6 @@ import Box from "@mui/material/Box";
 import DrawerAdjacent from "../m3/DrawerAdjacent";
 import MonthYear from "./MonthYear";
 import Dates from "./Dates";
-import UnassignedTilesPopup from "../UnassignedTilesPopup";
 
 import "./DatesContainer.css";
 
@@ -16,7 +15,6 @@ export default function DatesContainer(): JSX.Element {
       }}>
         <MonthYear key="monthYear" />
         <Dates />
-        <UnassignedTilesPopup />
       </DrawerAdjacent>
     </Box>
   );

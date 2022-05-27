@@ -52,7 +52,6 @@ export type State = {
   },
   changesMap: ChangesMap,
   grabbedTile?: string,
-  selectedDate?: string
   mouseYOnGrab: number
 };
 
@@ -91,15 +90,11 @@ export const tilesSlice = createSlice({
       state.grabbedTile = action.payload.tileId;
       state.grabbedMap[action.payload.tileId] = true;
       state.mouseYOnGrab = action.payload.mouseY;
-      state.selectedDate = undefined;
     },
     drop: (state, action: PayloadAction<{ tileId: string }>) => {
       state.grabbedTile = undefined;
       state.grabbedMap[action.payload.tileId] = false;
       state.mouseYOnGrab = 0;
-    },
-    toggleDate: (state, action: PayloadAction<{ date: string | undefined }>) => {
-      state.selectedDate = state.selectedDate === action.payload.date ? undefined : action.payload.date;
     },
     removeAssignment: (state, action: PayloadAction<{ tileId: string }>) => {
       tryRemoveAssignment(state, action);
@@ -144,7 +139,7 @@ export const tilesSlice = createSlice({
   }
 });
 
-export const { move, grab, drop, toggleDate, removeAssignment, saveChanges, undoChanges, setColor } = tilesSlice.actions;
+export const { move, grab, drop, removeAssignment, saveChanges, undoChanges, setColor } = tilesSlice.actions;
 
 export default tilesSlice.reducer;
 
