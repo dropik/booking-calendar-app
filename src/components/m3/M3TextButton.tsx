@@ -1,4 +1,5 @@
-import React from "react";
+/* eslint-disable react/prop-types */
+import React, { forwardRef } from "react";
 import { alpha, styled } from "@mui/material/styles";
 import Button, { ButtonProps } from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -50,18 +51,21 @@ const CustomizedButton = styled(Button, {
   }
 }));
 
-export default function M3TextButton({ focused, ...props }: M3TextButtonProps): JSX.Element {
+const M3TextButton = forwardRef<HTMLButtonElement, M3TextButtonProps>(function M3TextButton({ focused, children, ...props }, ref): JSX.Element {
   return (
     <CustomizedButton
       className={focused ? "focused" : ""}
+      ref={ref}
       disableFocusRipple
       disableTouchRipple
       {...props}
     >
       <StateLayer />
       <Typography variant="labelLarge">
-        {props.children}
+        {children}
       </Typography>
     </CustomizedButton>
   );
-}
+});
+
+export default M3TextButton;

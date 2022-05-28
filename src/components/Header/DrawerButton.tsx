@@ -20,8 +20,7 @@ export default function DrawerButton(): JSX.Element {
       onClick={openDrawer}
       iconOnly
       sx={{
-        color: theme.palette.onSurface.main,
-        mr: "1rem"
+        color: theme.palette.onSurface.main
       }}
     >
       <MenuIcon />

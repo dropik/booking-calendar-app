@@ -1,19 +1,49 @@
 import React, { useRef, useState } from "react";
-import TodayIcon from "@mui/icons-material/Today";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDownOutlined";
 import Popover from "@mui/material/Popover";
 
 import M3TextButton from "../m3/M3TextButton";
 import M3DatePicker from "../m3/M3DatePicker";
 
 import * as Utils from "../../utils";
-import { useAppDispatch, useCurrentDate } from "../../redux/hooks";
+import { useAppDispatch, useColumns, useCurrentDate, useLeftmostDate } from "../../redux/hooks";
 import * as TableSlice from "../../redux/tableSlice";
+import { Box, Typography } from "@mui/material";
+import { ChevronLeftOutlined, ChevronRightOutlined } from "@mui/icons-material";
 
 export default function DateInput(): JSX.Element {
   const dispatch = useAppDispatch();
   const currentDate = useCurrentDate();
+  const leftmostDate = useLeftmostDate();
+  const columns = useColumns();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLButtonElement>(null);
+
+  const leftmostDateObj = new Date(leftmostDate);
+  const rightmostDateObj = new Date(leftmostDate);
+  rightmostDateObj.setDate(rightmostDateObj.getDate() + columns);
+  let leftmostMonth = leftmostDateObj.toLocaleDateString("default", { month: "long" });
+  if (leftmostMonth.length > 4) {
+    leftmostMonth = leftmostDateObj.toLocaleDateString("default", { month: "short" });
+  }
+  leftmostMonth = `${leftmostMonth[0].toLocaleUpperCase()}${leftmostMonth.substring(1)}`;
+  let rightmostMonth = rightmostDateObj.toLocaleDateString("default", { month: "long" });
+  if (rightmostMonth.length > 4) {
+    rightmostMonth = rightmostDateObj.toLocaleDateString("default", { month: "short" });
+  }
+  rightmostMonth = `${rightmostMonth[0].toLocaleUpperCase()}${rightmostMonth.substring(1)}`;
+  const leftmostYear = leftmostDateObj.getFullYear();
+  const rightmostYear = rightmostDateObj.getFullYear();
+  let dateString = "";
+  if (leftmostYear === rightmostYear) {
+    if (leftmostMonth === rightmostMonth) {
+      dateString = `${leftmostMonth} ${leftmostYear}`;
+    } else {
+      dateString = `${leftmostMonth} - ${rightmostMonth} ${leftmostYear}`;
+    }
+  } else {
+    dateString = `${leftmostMonth} ${leftmostYear} - ${rightmostMonth} ${rightmostYear}`;
+  }
 
   const open = Boolean(anchorEl);
   const id = open ? "datepicker-wrapper" : undefined;
@@ -29,15 +59,40 @@ export default function DateInput(): JSX.Element {
     setAnchorEl(event.currentTarget);
   }
 
+  function goNext() {
+    dispatch(TableSlice.goNext());
+  }
+
+  function goPrev() {
+    dispatch(TableSlice.goPrev());
+  }
+
   return (
-    <div ref={ref}>
+    <Box sx={{
+      display: "flex",
+      justifyContent: "center",
+      flexBasis: "40%"
+    }}>
+      <Box sx={{
+        display: "flex"
+      }}>
+        <M3TextButton iconOnly onClick={goPrev}>
+          <ChevronLeftOutlined />
+        </M3TextButton>
+        <M3TextButton iconOnly onClick={goNext}>
+          <ChevronRightOutlined />
+        </M3TextButton>
+      </Box>
       <M3TextButton
-        iconOnly
+        ref={ref}
         onClick={openDateInput}
         aria-describedby={id}
         focused={open}
+        endIcon={<ArrowDropDownIcon />}
       >
-        <TodayIcon />
+        <Typography variant="titleLarge">
+          {dateString}
+        </Typography>
       </M3TextButton>
       <Popover sx={{ opacity: 0 }} id={id} open={open} anchorEl={anchorEl}>
         <M3DatePicker
@@ -51,6 +106,6 @@ export default function DateInput(): JSX.Element {
           }}
         />
       </Popover>
-    </div>
+    </Box>
   );
 }

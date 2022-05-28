@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { WritableDraft } from "immer/dist/internal";
 
 import * as Utils from "../utils";
 
@@ -45,22 +46,32 @@ export const tableSlice = createSlice({
       state.clientHeight = action.payload.clientHeight;
     },
     changeDate: (state, action: PayloadAction<{ date: string }>) => {
-      state.currentDate = action.payload.date;
-      state.leftmostDate = Utils.getDateShift(action.payload.date, -3);
-      state.columns = getInitialColumnsAmount();
-      state.lastFetchPeriod = {
-        from: state.leftmostDate,
-        to: Utils.getDateShift(state.leftmostDate, state.columns - 1)
-      };
-      state.fetchReason = "changeDate";
+      updateStateByNewDate(state, action.payload.date);
+    },
+    goNext: (state) => {
+      updateStateByNewDate(state, Utils.getDateShift(state.currentDate, 7));
+    },
+    goPrev: (state) => {
+      updateStateByNewDate(state, Utils.getDateShift(state.currentDate, -7));
     }
   }
 });
 
-export const { updateHeights, changeDate } = tableSlice.actions;
+export const { updateHeights, changeDate, goNext, goPrev } = tableSlice.actions;
 
 export default tableSlice.reducer;
 
-function getInitialColumnsAmount() {
+function updateStateByNewDate(state: WritableDraft<State>, date: string): void {
+  state.currentDate = date;
+  state.leftmostDate = Utils.getDateShift(date, -3);
+  state.columns = getInitialColumnsAmount();
+  state.lastFetchPeriod = {
+    from: state.leftmostDate,
+    to: Utils.getDateShift(state.leftmostDate, state.columns - 1)
+  };
+  state.fetchReason = "changeDate";
+}
+
+function getInitialColumnsAmount(): number {
   return 7;
 }
