@@ -1,19 +1,22 @@
-import React, { useMemo, useRef } from "react";
+import React, { useMemo } from "react";
+import Box from "@mui/material/Box";
 
-import { useDates } from "../../redux/hooks";
+import { useDates } from "../../../redux/hooks";
 
 import Day from "./Day";
 
-import "./Dates.css";
-
 export default function Dates(): JSX.Element {
   const dates = useDates();
-  const ref = useRef<HTMLDivElement>(null);
-
   const dayCells = useDayCellsMemo(dates);
 
   return (
-    <div ref={ref} className="dates">{dayCells}</div>
+    <Box sx={{
+      display: "flex",
+      height: "100%",
+      ml: "7.5rem"
+    }}>
+      {dayCells}
+    </Box>
   );
 }
 

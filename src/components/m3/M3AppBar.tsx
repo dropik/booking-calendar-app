@@ -6,10 +6,10 @@ const CustomizedAppBar = styled(AppBar)<AppBarProps>(({ theme }) => ({
   backgroundColor: theme.palette.surface.main,
   color: theme.palette.onSurface.main,
   display: "flex",
-  flexDirection: "row",
+  flexDirection: "column",
   alignItems: "center",
   justifyContent: "space-between",
-  height: "4rem"
+  height: "9.5rem"
 }));
 
 export default function M3AppBar({ ...props}: AppBarProps): JSX.Element {
