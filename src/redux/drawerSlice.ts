@@ -12,15 +12,12 @@ export const drawerSlice = createSlice({
   name: "drawer",
   initialState: initialState,
   reducers: {
-    open: (state) => {
-      state.open = true;
-    },
-    close: (state) => {
-      state.open = false;
+    toggle: (state) => {
+      state.open = !state.open;
     }
   }
 });
 
-export const { open, close } = drawerSlice.actions;
+export const { toggle } = drawerSlice.actions;
 
 export default drawerSlice.reducer;

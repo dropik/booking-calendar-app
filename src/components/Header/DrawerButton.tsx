@@ -12,7 +12,7 @@ export default function DrawerButton(): JSX.Element {
   const theme = useTheme();
 
   function openDrawer() {
-    dispatch(DrawerSlice.open());
+    dispatch(DrawerSlice.toggle());
   }
 
   return (

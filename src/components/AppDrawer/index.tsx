@@ -1,31 +1,22 @@
 import React from "react";
 import { useTheme } from "@mui/material/styles";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import BookOutlinedIcon from "@mui/icons-material/BookOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
 import Fade from "@mui/material/Fade";
 import Box from "@mui/material/Box";
-import ListItem from "@mui/material/ListItem";
 
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import * as DrawerSlice from "../../redux/drawerSlice";
 import * as DialogSlice from "../../redux/dialogSlice";
 
-import M3TextButton from "../m3/M3TextButton";
 import DrawerLists from "./DrawerLists";
 
 export default function AppDrawer(): JSX.Element {
   const dispatch = useAppDispatch();
   const open = useAppSelector((state) => state.drawer.open);
   const theme = useTheme();
-
-  function closeDrawer() {
-    dispatch(DrawerSlice.close());
-  }
 
   function showDialog(dialog: DialogSlice.ZeroParameterDialog) {
     dispatch(DialogSlice.show({ dialogType: dialog }));
@@ -39,6 +30,7 @@ export default function AppDrawer(): JSX.Element {
       sx={{
         width: theme.drawerWidth,
         "& .MuiDrawer-paper": {
+          top: "4rem",
           width: theme.drawerWidth,
           boxSizing: "border-box",
           backgroundColor: theme.palette.surface.main,
@@ -56,20 +48,6 @@ export default function AppDrawer(): JSX.Element {
     >
       <Fade in={open} mountOnEnter unmountOnExit easing={theme.transitions.easing.fastOutSlowIn} timeout={theme.transitions.duration.long}>
         <Box>
-          <List sx={{
-            paddingTop: "0.25rem",
-            paddingBottom: "0.25rem"
-          }}>
-            <ListItem sx={{ justifyContent: "end" }}>
-              <M3TextButton
-                iconOnly
-                onClick={closeDrawer}
-                sx={{ color: theme.palette.onSurfaceVariant.main }}
-              >
-                <ArrowBackIcon />
-              </M3TextButton>
-            </ListItem>
-          </List>
           <DrawerLists lists={[
             {
               items: [
