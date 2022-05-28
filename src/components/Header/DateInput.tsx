@@ -71,7 +71,6 @@ export default function DateInput(): JSX.Element {
     <Box sx={{
       display: "flex",
       justifyContent: "center",
-      flexBasis: "40%"
     }}>
       <Box sx={{
         display: "flex"

@@ -9,14 +9,11 @@ import Box from "@mui/material/Box";
 
 export default function Header(): JSX.Element {
   return (
-    <M3AppBar sx={{
-      "& > div": {
-        flexBasis: "30%"
-      }
-    }}>
+    <M3AppBar>
       <Box sx={{
         display: "flex",
-        alignItems: "baseline"
+        alignItems: "baseline",
+        flexBasis: "23rem",
       }}>
         <Box sx={{
           display: "flex",
@@ -25,13 +22,19 @@ export default function Header(): JSX.Element {
         }}>
           <DrawerButton />
         </Box>
-        <Typography variant="titleLarge">Booking Calendar</Typography>
+        <DateInput />
       </Box>
-      <DateInput />
+      <Typography variant="titleLarge" sx={{
+        flexBasis: "11rem",
+        textAlign: "center"
+      }}>Booking Calendar</Typography>
       <Box sx={{
         display: "flex",
         justifyContent: "end",
-        paddingRight: "1rem"
+        paddingRight: "1rem",
+        flexBasis: "23rem",
+        flexShrink: 0,
+        minWidth: "11rem"
       }}>
         <DownloadButton />
       </Box>
