@@ -16,7 +16,8 @@ export default function Header(): JSX.Element {
         height: "4rem",
         width: "100%",
         flexDirection: "row",
-        alignItems: "center"
+        alignItems: "center",
+        justifyContent: "space-between"
       }}>
         <Box sx={{
           display: "flex",
@@ -39,7 +40,7 @@ export default function Header(): JSX.Element {
         <Box sx={{
           display: "flex",
           justifyContent: "end",
-          paddingRight: "1rem",
+          paddingRight: "0.5rem",
           flexBasis: "23rem",
           flexShrink: 0,
           minWidth: "11rem"
