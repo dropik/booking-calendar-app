@@ -5,7 +5,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useAppDispatch } from "../../redux/hooks";
 import * as DrawerSlice from "../../redux/drawerSlice";
 
-import M3TextButton from "../m3/M3TextButton";
+import M3IconButton from "../m3/M3IconButton";
 
 export default function DrawerButton(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -16,14 +16,13 @@ export default function DrawerButton(): JSX.Element {
   }
 
   return (
-    <M3TextButton
+    <M3IconButton
       onClick={openDrawer}
-      iconOnly
       sx={{
         color: theme.palette.onSurface.main
       }}
     >
       <MenuIcon />
-    </M3TextButton>
+    </M3IconButton>
   );
 }

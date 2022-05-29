@@ -4,8 +4,6 @@ import GlobalStyles from "@mui/material/GlobalStyles";
 import Box from "@mui/material/Box";
 
 import TopAppBar from "./components/TopAppBar";
-import Hotel from "./components/Hotel";
-import TableContainer from "./components/TableContainer";
 import SaveAndResetWidget from "./components/SaveAndResetWidget";
 import AppDrawer from "./components/AppDrawer";
 import ConnectionError from "./components/ConnectionError";
@@ -17,6 +15,7 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
+import Table from "./components/Table";
 
 export default function App(): JSX.Element {
   const theme = useTheme();
@@ -36,12 +35,14 @@ export default function App(): JSX.Element {
           "&.tile-grabbing": {
             cursor: "grabbing"
           }
+        },
+        body: {
+          margin: 0
         }
       }} />
       <TopAppBar />
       <AppDrawer />
-      <Hotel />
-      <TableContainer />
+      <Table />
       <SaveAndResetWidget />
       <ConnectionError />
       <Dialog />

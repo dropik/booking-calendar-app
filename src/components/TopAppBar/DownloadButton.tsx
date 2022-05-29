@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 
-import M3TextButton from "../m3/M3TextButton";
 import DownloadMenu from "../Menu/DownloadMenu";
+import M3IconButton from "../m3/M3IconButton";
 
 export default function DownloadButton(): JSX.Element {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -15,13 +15,12 @@ export default function DownloadButton(): JSX.Element {
 
   return (
     <div>
-      <M3TextButton
-        iconOnly
+      <M3IconButton
         focused={open}
         onClick={(event) => setAnchorEl(event.currentTarget)}
       >
         <FileDownloadOutlinedIcon />
-      </M3TextButton>
+      </M3IconButton>
       <DownloadMenu anchorEl={anchorEl} onClose={close} />
     </div>
   );

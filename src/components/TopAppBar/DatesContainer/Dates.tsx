@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 
 import { useDates } from "../../../redux/hooks";
 
@@ -11,11 +12,14 @@ export default function Dates(): JSX.Element {
 
   return (
     <Box sx={{
-      display: "flex",
       height: "100%",
       ml: "7.5rem"
     }}>
-      {dayCells}
+      <Grid container spacing={0} columns={7} sx={{
+        height: "100%"
+      }}>
+        {dayCells}
+      </Grid>
     </Box>
   );
 }

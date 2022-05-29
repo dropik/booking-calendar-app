@@ -1,15 +1,18 @@
 import React, { useRef, useState } from "react";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDownOutlined";
 import Popover from "@mui/material/Popover";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import ChevronLeftOutlined from "@mui/icons-material/ChevronLeftOutlined";
+import ChevronRightOutlined from "@mui/icons-material/ChevronRightOutlined";
 
 import M3TextButton from "../m3/M3TextButton";
+import M3IconButton from "../m3/M3IconButton";
 import M3DatePicker from "../m3/M3DatePicker";
 
 import * as Utils from "../../utils";
 import { useAppDispatch, useColumns, useCurrentDate, useLeftmostDate } from "../../redux/hooks";
 import * as TableSlice from "../../redux/tableSlice";
-import { Box, Typography } from "@mui/material";
-import { ChevronLeftOutlined, ChevronRightOutlined } from "@mui/icons-material";
 
 export default function DateInput(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -75,12 +78,12 @@ export default function DateInput(): JSX.Element {
       <Box sx={{
         display: "flex"
       }}>
-        <M3TextButton iconOnly onClick={goPrev}>
+        <M3IconButton onClick={goPrev}>
           <ChevronLeftOutlined />
-        </M3TextButton>
-        <M3TextButton iconOnly onClick={goNext}>
+        </M3IconButton>
+        <M3IconButton onClick={goNext}>
           <ChevronRightOutlined />
-        </M3TextButton>
+        </M3IconButton>
       </Box>
       <M3TextButton
         ref={ref}

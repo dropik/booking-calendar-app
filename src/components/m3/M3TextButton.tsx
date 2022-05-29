@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 
 import { StateLayer } from "./Tints";
 
-interface M3TextButtonProps extends ButtonProps {
+export interface M3TextButtonProps extends ButtonProps {
   iconOnly?: boolean;
   focused?: boolean;
 }

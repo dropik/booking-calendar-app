@@ -1,6 +1,6 @@
 import React, { memo } from "react";
-import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
 
 type Props = {
   x: string
@@ -13,8 +13,7 @@ export default memo(function Day({ x }: Props): JSX.Element {
   dayOfWeek = `${dayOfWeek[0].toLocaleUpperCase()}${dayOfWeek.substring(1)}`;
 
   return (
-    <Box sx={{
-      flexGrow: 1,
+    <Grid item xs={1} sx={{
       display: "flex",
       flexDirection: "column",
       justifyContent: "center",
@@ -22,6 +21,6 @@ export default memo(function Day({ x }: Props): JSX.Element {
     }}>
       <Typography variant="bodySmall">{dayOfWeek}</Typography>
       <Typography variant="labelLarge">{day}</Typography>
-    </Box>
+    </Grid>
   );
 });
