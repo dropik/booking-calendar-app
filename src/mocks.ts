@@ -75,7 +75,7 @@ export const tiles: TilesSlice.TileData[] = [
     roomType: "camera matrimoniale/doppia",
     entity: "camera doppia",
     persons: 2,
-    color: "#ffcccb",
+    color: "booking1",
     roomNumber: 3
   },
   {
@@ -87,7 +87,7 @@ export const tiles: TilesSlice.TileData[] = [
     roomType: "camera matrimoniale/doppia",
     entity: "camera doppia",
     persons: 2,
-    color: "#f4e2a3",
+    color: "booking2",
     roomNumber: 2
   },
   {
@@ -99,7 +99,7 @@ export const tiles: TilesSlice.TileData[] = [
     roomType: "camera matrimoniale/doppia",
     entity: "camera doppia",
     persons: 2,
-    color: "#d7eaaa",
+    color: "booking3",
     roomNumber: 6
   },
   {
@@ -111,7 +111,7 @@ export const tiles: TilesSlice.TileData[] = [
     roomType: "camera tripla",
     entity: "camera tripla",
     persons: 3,
-    color: "#bbf1b0"
+    color: "booking4"
   },
   {
     id: "4",
@@ -122,7 +122,7 @@ export const tiles: TilesSlice.TileData[] = [
     roomType: "camera singola",
     entity: "camera singola",
     persons: 1,
-    color: "#b4eded"
+    color: "booking5"
   },
   {
     id: "5",
@@ -133,7 +133,7 @@ export const tiles: TilesSlice.TileData[] = [
     roomType: "camera matrimoniale/doppia",
     entity: "camera doppia",
     persons: 2,
-    color: "#bae7ff"
+    color: "booking6"
   },
   {
     id: "6",
@@ -144,7 +144,7 @@ export const tiles: TilesSlice.TileData[] = [
     roomType: "camera matrimoniale/doppia",
     entity: "camera doppia",
     persons: 2,
-    color: "#f4e2a3",
+    color: "booking2",
     roomNumber: 5
   }
 ];

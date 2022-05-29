@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
@@ -7,11 +7,26 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import ExpandLessOutlined from "@mui/icons-material/ExpandLessOutlined";
 
+import * as Utils from "../../utils";
+import { TileData, TileColor } from "../../redux/tilesSlice";
+import * as HotelSlice from "../../redux/hotelSlice";
+import * as RoomTypesSlice from "../../redux/roomTypesSlice";
+
 import M3IconButton from "../m3/M3IconButton";
 import DrawerAdjacent from "../m3/DrawerAdjacent";
+import { useAppDispatch, useAppSelector, useLeftmostDate } from "../../redux/hooks";
 
 export default function Table(): JSX.Element {
   const theme = useTheme();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(HotelSlice.fetchAsync());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(RoomTypesSlice.fetchAsync());
+  }, [dispatch]);
 
   return (
     <DrawerAdjacent>
@@ -63,31 +78,18 @@ export default function Table(): JSX.Element {
               }}>
                 <Grid container columnSpacing={1} rowSpacing={0} columns={7}>
                   <FreeSpace variant="left" nights={6} />
-                  <Grid item xs={1.5}>
-                    <Badge anchorOrigin={{ vertical: "top", horizontal: "left" }} badgeContent=" " color="error" variant="dot" sx={{
-                      display: "block",
-                      "& .MuiBadge-badge": {
-                        top: "0.75rem",
-                        left: "0.75rem"
-                      }
-                    }}>
-                      <Box sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "start",
-                        justifyContent: "center",
-                        height: "3rem",
-                        p: "1rem",
-                        borderTopLeftRadius: "0.75rem",
-                        borderBottomLeftRadius: "0.75rem",
-                        backgroundColor: theme.palette.booking1Container.light,
-                        color: theme.palette.onBooking1Container.light,
-                      }}>
-                        <Typography variant="titleMedium">Ivan Petrov - 3 persone</Typography>
-                        <Typography variant="bodySmall">tripla alpina</Typography>
-                      </Box>
-                    </Badge>
-                  </Grid>
+                  <Tile data={{
+                    id: "0",
+                    bookingId: "0",
+                    name: "Ivan Petrov",
+                    from: "2022-05-31",
+                    nights: 2,
+                    roomType: "camera tripla",
+                    entity: "camera tripla",
+                    persons: 3,
+                    color: "booking1",
+                    roomNumber: 1
+                  }}/>
                 </Grid>
               </Box>
             </Box>
@@ -141,6 +143,100 @@ function FreeSpace({ variant, nights }: FreeSpaceProps): JSX.Element {
           {cells}
         </Grid>
       </Box>
+    </Grid>
+  );
+}
+
+type TileProps = {
+  data: TileData
+}
+
+function Tile({ data }: TileProps): JSX.Element {
+  const theme = useTheme();
+  const leftmostDate = useLeftmostDate();
+  const rightmostDate = useAppSelector((state) => Utils.getDateShift(state.table.leftmostDate, state.table.columns - 1));
+  const arrivalToRightmost = Utils.daysBetweenDates(data.from, rightmostDate);
+  const leftmostToArrival = Utils.daysBetweenDates(leftmostDate, data.from);
+  const assignedRoomType = useAppSelector((state) => {
+    for (const floor of state.hotel.data.floors) {
+      for (const room of floor.rooms) {
+        if (room.number === data.roomNumber) {
+          return room.type;
+        }
+      }
+    }
+  });
+  const personsInAssignedRoomType = useAppSelector((state) => assignedRoomType ? state.roomTypes.data[assignedRoomType] : undefined);
+  let badgeColor = undefined;
+  if (personsInAssignedRoomType) {
+    if (!personsInAssignedRoomType.includes(data.persons)) {
+      badgeColor = theme.palette.error.light;
+    } else if (assignedRoomType !== data.roomType) {
+      badgeColor = theme.palette.warning.dark;
+    }
+  }
+
+  let cropLeft = false;
+  let cropRight = false;
+
+  let size = data.nights;
+  if (leftmostToArrival < 0) {
+    size -= -leftmostToArrival - 0.5;
+    cropLeft = true;
+  }
+  if (arrivalToRightmost < data.nights) {
+    size -= data.nights - arrivalToRightmost - 0.5;
+    cropRight = true;
+  }
+
+  return (
+    <Grid item xs={size}>
+      <Badge
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+          ...(cropRight && {
+            horizontal: "left"
+          })
+        }}
+        badgeContent=" "
+        variant="dot"
+        sx={{
+          display: "block",
+          "& .MuiBadge-badge": {
+            backgroundColor: badgeColor,
+            top: "0.75rem",
+            right: "0.75rem",
+            ...(cropRight && {
+              right: "auto",
+              left: "0.75rem"
+            })
+          }
+        }}
+      >
+        <Box sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "start",
+          justifyContent: "center",
+          height: "3rem",
+          p: "1rem",
+          borderRadius: "0.75rem",
+          ...(cropLeft && {
+            borderTopLeftRadius: 0,
+            borderBottomLeftRadius: 0,
+          }),
+          ...(cropRight && {
+            borderTopRightRadius: 0,
+            borderBottomRightRadius: 0,
+          }),
+          backgroundColor: theme.palette[`${data.color}Container`].light,
+          color: theme.palette[`on${data.color[0].toUpperCase()}${data.color.substring(1)}Container` as `on${Capitalize<TileColor>}Container`].light,
+        }}>
+          <Typography variant="titleMedium">{data.name} - {data.persons} person{data.persons > 1 ? "e": "a"}</Typography>
+          <Typography variant="bodySmall">{data.entity.replace("Camera", "").replace("camera", "")}</Typography>
+        </Box>
+      </Badge>
     </Grid>
   );
 }

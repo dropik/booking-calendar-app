@@ -6,6 +6,8 @@ import * as Utils from "../utils";
 
 import * as TableSlice from "./tableSlice";
 
+export type TileColor = "booking1" | "booking2" | "booking3" | "booking4" | "booking5" | "booking6" | "booking7" | "booking8";
+
 export type TileData = {
   id: string,
   bookingId: string,
@@ -15,7 +17,7 @@ export type TileData = {
   roomType: string,
   entity: string,
   persons: number,
-  color: string,
+  color: TileColor,
   roomNumber?: number
 };
 
@@ -24,8 +26,8 @@ export type ChangesMap = {
     roomChanged: boolean,
     originalRoom?: number,
     newRoom?: number,
-    originalColor?: string,
-    newColor?: string
+    originalColor?: TileColor,
+    newColor?: TileColor
   }
 };
 
@@ -107,7 +109,7 @@ export const tilesSlice = createSlice({
       unassignChangedTiles(state);
       reassignTiles(state);
     },
-    setColor: (state, action: PayloadAction<{ tileId: string, color: string }>) => {
+    setColor: (state, action: PayloadAction<{ tileId: string, color: TileColor }>) => {
       const booking = state.data[action.payload.tileId].bookingId;
       state.bookingsMap[booking].forEach((tileId) => {
         if (state.changesMap[tileId] === undefined) {

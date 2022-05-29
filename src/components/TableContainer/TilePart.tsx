@@ -1,4 +1,5 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
+import { useTheme } from "@mui/material/styles";
 
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
@@ -14,6 +15,7 @@ type Props = {
 };
 
 export default function TilePart({ y, tileData }: Props): JSX.Element {
+  const theme = useTheme();
   const dispatch = useAppDispatch();
   const tileId = tileData.id;
   const isGrabbed = useAppSelector(state => state.tiles.grabbedMap[tileId]);
@@ -40,7 +42,7 @@ export default function TilePart({ y, tileData }: Props): JSX.Element {
     setContextMenuAnchorEl(null);
   }
 
-  useBackgroundColorEffect(ref, tileData.color);
+  useBackgroundColorEffect(ref, theme.palette[tileData.color].light);
 
   return (
     <>

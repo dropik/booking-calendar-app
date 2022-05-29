@@ -17,7 +17,9 @@ export default function GrabbedTile(): JSX.Element {
   const left = useLeftShift(tileData?.from, theme.drawerWidth);
   const ref = useRef<HTMLDivElement>(null);
 
-  useBackgroundColorEffect(ref, tileData);
+  const color = tileData ? theme.palette[tileData.color].light : "none";
+
+  useBackgroundColorEffect(ref, color);
   useLeftShiftEffect(ref, left);
   useMouseHandlingEffect(ref, dispatch, grabbedTileId, grabbedMouseY);
 
@@ -30,12 +32,12 @@ export default function GrabbedTile(): JSX.Element {
   return (<div ref={ref} className="grabbed-tile">{cells}</div>);
 }
 
-function useBackgroundColorEffect(ref: React.RefObject<HTMLDivElement>, tileData: TilesSlice.TileData | undefined): void {
+function useBackgroundColorEffect(ref: React.RefObject<HTMLDivElement>, color: string): void {
   useEffect(() => {
-    if (ref.current && tileData) {
-      ref.current.style.backgroundColor = tileData.color;
+    if (ref.current) {
+      ref.current.style.backgroundColor = color;
     }
-  }, [ref, tileData]);
+  }, [ref, color]);
 }
 
 function useLeftShiftEffect(ref: React.RefObject<HTMLDivElement>, left: number): void {
