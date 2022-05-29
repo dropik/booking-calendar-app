@@ -62,15 +62,7 @@ export default function Table(): JSX.Element {
                 mb: "0.5rem"
               }}>
                 <Grid container columnSpacing={1} rowSpacing={0} columns={7}>
-                  <Grid item xs={5.5}>
-                    <Box sx={{
-                      height: "calc(5rem - 2px)",
-                      borderTopRightRadius: "0.75rem",
-                      borderBottomRightRadius: "0.75rem",
-                      border: `1px dashed ${theme.palette.outline.light}`,
-                      borderLeft: 0
-                    }}></Box>
-                  </Grid>
+                  <FreeSpace variant="left" nights={6} />
                   <Grid item xs={1.5}>
                     <Badge anchorOrigin={{ vertical: "top", horizontal: "left" }} badgeContent=" " color="error" variant="dot" sx={{
                       display: "block",
@@ -103,5 +95,52 @@ export default function Table(): JSX.Element {
         </Box>
       </Stack>
     </DrawerAdjacent>
+  );
+}
+
+type FreeSpaceProps = {
+  variant: "left" | "right" | "center",
+  nights: number
+};
+
+function FreeSpace({ variant, nights }: FreeSpaceProps): JSX.Element {
+  const theme = useTheme();
+
+  const size = variant === "center" ? nights : nights - 0.5;
+
+  const cells: JSX.Element[] = [];
+
+  if (variant !== "left") {
+    cells.push(<Grid key={0} item xs={1} sx={{ borderRight: `1px dashed ${theme.palette.outline.light}` }}></Grid>);
+  }
+
+  for (let i = 1; i < nights; i++) {
+    cells.push(<Grid key={i} item xs={2} sx={{ borderRight: `1px dashed ${theme.palette.outline.light}` }}></Grid>);
+  }
+
+  return (
+    <Grid item xs={size}>
+      <Box sx={{
+        height: "calc(3rem - 2px)",
+        borderRadius: "0.75rem",
+        pt: "1rem",
+        pb: "1rem",
+        border: `1px dashed ${theme.palette.outline.light}`,
+        ...(variant === "left" && {
+          borderTopLeftRadius: 0,
+          borderBottomLeftRadius: 0,
+          borderLeft: 0
+        }),
+        ...(variant === "right" && {
+          borderTopRightRadius: 0,
+          borderBottomRightRadius: 0,
+          borderRight: 0
+        })
+      }}>
+        <Grid container spacing={0} columns={size * 2} sx={{ height: "100%" }}>
+          {cells}
+        </Grid>
+      </Box>
+    </Grid>
   );
 }
