@@ -1,34 +1,39 @@
 import React from "react";
-import Box, { BoxProps } from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
+import Box, { BoxProps } from "@mui/material/Box";
 
-import { useAppSelector } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import * as LayoutSlice from "../../redux/layoutSlice";
 
 export default function DrawerAdjacent({ children, sx, ...props }: BoxProps): JSX.Element {
-  const open = useAppSelector((state) => state.drawer.open);
   const theme = useTheme();
+  const dispatch = useAppDispatch();
+  const open = useAppSelector((state) => state.drawer.open);
+
+  function addAdjustRequest() {
+    dispatch(LayoutSlice.addAdjustRequest());
+  }
 
   return (
-    <Box sx={{
-      display: "inherit",
-      flexDirection: "inherit",
-      alignItems: "inherit",
-      justifyContent: "inherit",
-      overflow: "hidden",
-      //width: "100%",
-      transition: theme.transitions.create(["margin"], {
-        easing: theme.transitions.easing.fastOutSlowIn,
-        duration: theme.transitions.duration.long,
-      }),
-      ...(open && {
-        marginLeft: theme.drawerWidth,
+    <Box
+      onTransitionEnd={addAdjustRequest}
+      sx={{
+        ...sx,
+        display: "inherit",
+        flexDirection: "inherit",
+        alignItems: "inherit",
+        justifyContent: "inherit",
+        overflow: "hidden",
         transition: theme.transitions.create(["margin"], {
           easing: theme.transitions.easing.fastOutSlowIn,
           duration: theme.transitions.duration.long,
         }),
-      }),
-      ...sx
-    }} {...props}>
+        ...(open && {
+          marginLeft: theme.drawerWidth
+        })
+      }}
+      {...props}
+    >
       {children}
     </Box>
   );
