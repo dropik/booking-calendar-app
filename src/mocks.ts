@@ -146,6 +146,18 @@ export const tiles: TilesSlice.TileData[] = [
     persons: 2,
     color: "booking2",
     roomNumber: 5
+  },
+  {
+    id: "7",
+    bookingId: "7",
+    name: "Sasha Smirnov",
+    from: "2022-02-23",
+    nights: 2,
+    roomType: "camera matrimoniale/doppia",
+    entity: "camera doppia",
+    persons: 2,
+    color: "booking3",
+    roomNumber: 5
   }
 ];
 

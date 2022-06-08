@@ -1,25 +1,102 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useTheme } from "@mui/material/styles";
+import { css } from "@emotion/css";
 import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import ExpandLessOutlined from "@mui/icons-material/ExpandLessOutlined";
+import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
 
 import * as Utils from "../../utils";
+import { useAppDispatch, useAppSelector, useColumns, useHotelData, useLeftmostDate } from "../../redux/hooks";
 import { TileData, TileColor } from "../../redux/tilesSlice";
 import * as HotelSlice from "../../redux/hotelSlice";
 import * as RoomTypesSlice from "../../redux/roomTypesSlice";
 
 import M3IconButton from "../m3/M3IconButton";
 import DrawerAdjacent from "../m3/DrawerAdjacent";
-import { useAppDispatch, useAppSelector, useLeftmostDate } from "../../redux/hooks";
-import { css } from "@emotion/css";
+import FetchTiles from "../TableContainer/FetchTiles";
+
+type TileDescriptor = FreeSpaceProps | TileData;
 
 export default function Table(): JSX.Element {
   const theme = useTheme();
   const dispatch = useAppDispatch();
+  const hotelData = useHotelData();
+  const leftmostDate = useLeftmostDate();
+  const oneDayBefore = Utils.getDateShift(leftmostDate, -1);
+  const columns = useColumns();
+
+  const tiles = useAppSelector((state) => {
+    const tiles: TileDescriptor[][] = [];
+
+    for (const floor of hotelData.floors) {
+      for (const room of floor.rooms) {
+        tiles[room.number] = [];
+        const assignedTilesForRoom = state.tiles.assignedMap[room.number];
+
+        if (!assignedTilesForRoom) {
+          tiles[room.number].push({
+            from: oneDayBefore,
+            to: Utils.getDateShift(leftmostDate, columns),
+            cropLeft: true,
+            cropRight: true
+          });
+          continue;
+        }
+
+        const dateCounterObj = new Date(oneDayBefore);
+        let freeSpace: FreeSpaceProps | null = null;
+
+        for (let i = 0; i < columns + 1; i++) {
+          const dateCounter = Utils.dateToString(dateCounterObj);
+          const assignedTile = assignedTilesForRoom[dateCounter];
+
+          if (!freeSpace) {
+            if (assignedTile) {
+              const tile = state.tiles.data[assignedTile];
+              tiles[room.number].push(tile);
+              i += tile.nights;
+              dateCounterObj.setDate(dateCounterObj.getDate() + tile.nights + 1);
+            } else {
+              freeSpace = {
+                from: dateCounter,
+                to: dateCounter,
+                cropLeft: false,
+                cropRight: false
+              };
+              if (i === 0) {
+                freeSpace.cropLeft = true;
+              }
+              dateCounterObj.setDate(dateCounterObj.getDate() + 1);
+            }
+          } else {
+            if (assignedTile) {
+              freeSpace.to = dateCounter;
+              tiles[room.number].push(freeSpace);
+              freeSpace = null;
+
+              const tile = state.tiles.data[assignedTile];
+              tiles[room.number].push(tile);
+              i += tile.nights - 1;
+              dateCounterObj.setDate(dateCounterObj.getDate() + tile.nights);
+            } else {
+              freeSpace.to = dateCounter;
+              dateCounterObj.setDate(dateCounterObj.getDate() + 1);
+            }
+          }
+        }
+
+        if (freeSpace) {
+          freeSpace.cropRight = true;
+          tiles[room.number].push(freeSpace);
+        }
+      }
+    }
+
+    return tiles;
+  });
 
   useEffect(() => {
     dispatch(HotelSlice.fetchAsync());
@@ -31,71 +108,113 @@ export default function Table(): JSX.Element {
 
   return (
     <DrawerAdjacent>
+      <FetchTiles />
       <Stack spacing={1} sx={{
         mt: "9.5rem",
         color: theme.palette.onSurface.light
       }}>
-        <Box>
-          <Box sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            pl: "2rem",
-            pr: "2rem",
-            pt: "1rem",
-            pb: "1rem",
-            borderBottom: `1px solid ${theme.palette.outline.light}`
-          }}>
-            <Typography variant="headlineMedium">Piano 1</Typography>
-            <M3IconButton>
-              <ExpandLessOutlined />
-            </M3IconButton>
-          </Box>
-          <Stack spacing={0}>
-            <Box sx={{
-              position: "relative"
-            }}>
-              <Box sx={{
-                position: "absolute",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                left: 0,
-                top: 0,
-                bottom: 0,
-                width: "5.5rem",
-                pr: "1rem",
-                pl: "1rem",
-                borderRight: `1px solid ${theme.palette.outline.light}`
-              }}>
-                <Typography variant="labelLarge">1</Typography>
-                <Typography variant="bodySmall">tripla standard</Typography>
+        {
+          hotelData.floors.map((floor) => {
+            const floorNameParts = floor.name.split(" ");
+            let capitalizedFloor = "";
+            for (const part of floorNameParts) {
+              capitalizedFloor += `${part[0].toLocaleUpperCase()}${part.substring(1)} `;
+            }
+            capitalizedFloor.trimEnd();
+
+            return (
+              <Box key={floor.name}>
+                <Box sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  pl: "2rem",
+                  pr: "2rem",
+                  pt: "1rem",
+                  pb: "1rem",
+                  borderBottom: `1px solid ${theme.palette.outline.light}`
+                }}>
+                  <Typography variant="headlineMedium">{capitalizedFloor}</Typography>
+                  <M3IconButton>
+                    <ExpandLessOutlinedIcon />
+                  </M3IconButton>
+                </Box>
+                <Stack spacing={0} sx={{
+                  borderBottom: `1px solid ${theme.palette.outline.light}`
+                }}>
+                  {
+                    floor.rooms.map((room, index) => {
+                      const significantRoomType = room.type.replace("Camera ", "").replace("camera ", "");
+
+                      return (
+                        <Box key={room.number} sx={{
+                          position: "relative"
+                        }}>
+                          <Box sx={{
+                            position: "absolute",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            left: 0,
+                            top: 0,
+                            bottom: 0,
+                            width: "5.5rem",
+                            pr: "1rem",
+                            pl: "1rem",
+                            borderRight: `1px solid ${theme.palette.outline.light}`
+                          }}>
+                            <Typography variant="labelLarge">{room.number}</Typography>
+                            <Typography
+                              sx={{
+                                textAlign: "center",
+                                overflowWrap: "anywhere"
+                              }}
+                              variant="bodySmall"
+                            >
+                              {significantRoomType}
+                            </Typography>
+                          </Box>
+                          <Box sx={{
+                            ml: "calc(7.5rem + 1px)",
+                            mt: "0.25rem",
+                            mb: "0.25rem",
+                            ...((index === 0) && {
+                              mt: "0.5rem"
+                            }),
+                            ...((index === floor.rooms.length - 1) && {
+                              mb: "0.5rem"
+                            })
+                          }}>
+                            <Grid container spacing={0} columns={columns * 2}>
+                              {
+                                tiles[room.number].map((tile) => {
+                                  if ("id" in tile) {
+                                    return <Tile key={tile.id} data={tile} />;
+                                  } else {
+                                    return (
+                                      <FreeSpace
+                                        key={tile.from}
+                                        from={tile.from}
+                                        to={tile.to}
+                                        cropLeft={tile.cropLeft}
+                                        cropRight={tile.cropRight}
+                                      />
+                                    );
+                                  }
+                                })
+                              }
+                            </Grid>
+                          </Box>
+                        </Box>
+                      );
+                    })
+                  }
+                </Stack>
               </Box>
-              <Box sx={{
-                ml: "7.5rem",
-                mt: "0.5rem",
-                mb: "0.5rem"
-              }}>
-                <Grid container columnSpacing={1} rowSpacing={0} columns={7}>
-                  <FreeSpace from="2022-05-26" to="2022-05-31" cropLeft={true} cropRight={false} />
-                  <Tile data={{
-                    id: "0",
-                    bookingId: "0",
-                    name: "Ivan Petrov",
-                    from: "2022-05-31",
-                    nights: 2,
-                    roomType: "camera tripla",
-                    entity: "camera tripla",
-                    persons: 3,
-                    color: "booking1",
-                    roomNumber: 1
-                  }}/>
-                </Grid>
-              </Box>
-            </Box>
-          </Stack>
-        </Box>
+            );
+          })
+        }
       </Stack>
     </DrawerAdjacent>
   );
@@ -109,47 +228,14 @@ type FreeSpaceProps = {
 };
 
 function FreeSpace({ from, to, cropLeft, cropRight }: FreeSpaceProps): JSX.Element {
-  const theme = useTheme();
-
   const nights = Utils.daysBetweenDates(from, to);
-  const size = nights + 0.5 * Number(cropLeft) + 0.5 * Number(cropRight);
-
-  const cells: JSX.Element[] = [];
-
-  let firstCellSize = 2;
-
-  if (!cropLeft) {
-    firstCellSize = 1;
-  }
-
-  cells.push(<Grid key={0} item xs={firstCellSize} sx={{ borderRight: `1px dashed ${theme.palette.outline.light}` }}></Grid>);
-  for (let i = 1; i < nights; i++) {
-    cells.push(<Grid key={i} item xs={2} sx={{ borderRight: `1px dashed ${theme.palette.outline.light}` }}></Grid>);
-  }
+  const size = 2 * nights - Number(cropLeft) - Number(cropRight);
 
   return (
-    <Grid item xs={size}>
-      <Box sx={{
-        height: "calc(3rem - 2px)",
-        borderRadius: "0.75rem",
-        pt: "1rem",
-        pb: "1rem",
-        border: `1px dashed ${theme.palette.outline.light}`,
-        ...(cropLeft && {
-          borderTopLeftRadius: 0,
-          borderBottomLeftRadius: 0,
-          borderLeft: 0
-        }),
-        ...(cropRight && {
-          borderTopRightRadius: 0,
-          borderBottomRightRadius: 0,
-          borderRight: 0
-        })
-      }}>
-        <Grid container spacing={0} columns={size * 2} sx={{ height: "100%" }}>
-          {cells}
-        </Grid>
-      </Box>
+    <Grid item xs={size} sx={{
+      visibility: "hidden",
+      height: "5rem"
+    }}>
     </Grid>
   );
 }
@@ -270,7 +356,7 @@ function Tile({ data }: TileProps): JSX.Element {
 
       setTitle(`${data.persons}`);
     }
-  }, [adjustLayoutRequestId, data.name, data.persons]);
+  }, [adjustLayoutRequestId, leftmostDate, data.name, data.persons]);
 
   useEffect(() => {
     if (bodyRef.current && canvasRef.current) {
@@ -300,7 +386,7 @@ function Tile({ data }: TileProps): JSX.Element {
       }
       setBody(entityAbbreviation);
     }
-  }, [adjustLayoutRequestId, significantEntity]);
+  }, [adjustLayoutRequestId, leftmostDate, significantEntity]);
 
   let badgeColor = undefined;
   if (personsInAssignedRoomType) {
@@ -314,18 +400,25 @@ function Tile({ data }: TileProps): JSX.Element {
   let cropLeft = false;
   let cropRight = false;
 
-  let size = data.nights;
+  let size = data.nights * 2;
   if (leftmostToArrival < 0) {
-    size -= -leftmostToArrival - 0.5;
+    size -= -leftmostToArrival * 2 - 1;
     cropLeft = true;
   }
   if (arrivalToRightmost < data.nights) {
-    size -= data.nights - arrivalToRightmost - 0.5;
+    size -= data.nights * 2 - arrivalToRightmost * 2 - 1;
     cropRight = true;
   }
 
   return (
-    <Grid item xs={size}>
+    <Grid item xs={size} sx={{
+      ...(!cropRight && {
+        paddingRight: "0.25rem"
+      }),
+      ...(!cropLeft && {
+        paddingLeft: "0.25rem"
+      })
+    }}>
       <Badge
         anchorOrigin={{
           vertical: "top",
