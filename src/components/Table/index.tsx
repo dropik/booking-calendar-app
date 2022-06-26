@@ -184,11 +184,11 @@ export default function Table(): JSX.Element {
                             ml: "calc(7.5rem + 1px)",
                           }}>
                             <Grid container spacing={0} columns={7} sx={{
-                              borderBottom: `1px solid ${theme.palette.onSurfaceVariant.dark}`,
-                              height: "calc(5rem + 5px)",
+                              borderBottom: `1px solid ${theme.palette.surfaceVariant.light}`,
+                              height: "calc(5.5rem + 3px)",
                               ...((index === floor.rooms.length - 1) && {
                                 borderBottom: 0,
-                                height: "calc(5rem + 4px)"
+                                height: "calc(5.5rem + 2px)"
                               })
                             }}>
                               {dates.map((date, dateIndex) => {
@@ -197,7 +197,7 @@ export default function Table(): JSX.Element {
                                 return (
                                   <Grid key={date} item xs={1} sx={{
                                     ...(isWeekend && {
-                                      borderRight: `1px solid ${theme.palette.onSurfaceVariant.dark}`,
+                                      borderRight: `1px solid ${theme.palette.surfaceVariant.light}`,
                                     }),
                                     ...((dateIndex === dates.length - 1) && {
                                       borderRight: 0
@@ -450,8 +450,8 @@ function Tile({ data, isFirst, isLast }: TileProps): JSX.Element {
       ...(!cropLeft && {
         paddingLeft: "0.25rem"
       }),
-      pt: "1px",
-      pb: "1px"
+      pt: "0.25rem",
+      pb: "0.25rem"
     }}>
       <Badge
         anchorOrigin={{
