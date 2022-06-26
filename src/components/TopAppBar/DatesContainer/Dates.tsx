@@ -24,12 +24,8 @@ export default function Dates(): JSX.Element {
   );
 }
 
-function useDayCellsMemo(dates: Generator<string, void, void>): JSX.Element[] {
-  return useMemo(() => {
-    const dayCells: JSX.Element[] = [];
-    for (const date of dates) {
-      dayCells.push(<Day key={date} x={date} />);
-    }
-    return dayCells;
-  }, [dates]);
+function useDayCellsMemo(dates: string[]): JSX.Element[] {
+  return useMemo(() => (
+    dates.map((date) => (<Day key={date} x={date} />))
+  ), [dates]);
 }

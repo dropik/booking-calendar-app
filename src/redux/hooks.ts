@@ -14,16 +14,17 @@ export function useTileData(id: string | undefined): TilesSlice.TileData | undef
   });
 }
 
-export function useDates(): Generator<string, void, void> {
+export function useDates(): string[] {
   const dateCounter = new Date(useAppSelector(state => state.table.leftmostDate));
   const columns = useAppSelector(state => state.table.columns);
+  const dates: string[] = [];
 
-  return function*(): Generator<string, void, void> {
-    for (let i = 0; i < columns; i++) {
-      yield Utils.dateToString(dateCounter);
-      dateCounter.setDate(dateCounter.getDate() + 1);
-    }
-  }();
+  for (let i = 0; i < columns; i++) {
+    dates.push(Utils.dateToString(dateCounter));
+    dateCounter.setDate(dateCounter.getDate() + 1);
+  }
+
+  return dates;
 }
 
 export function useLeftShift(fromDate: string | undefined, drawerWidth: string): number {

@@ -31,18 +31,14 @@ export default function Room({ y, isFirst, isLast }: Props): JSX.Element {
   );
 }
 
-function getCells(dates: Generator<string, void, void>, y: number): JSX.Element[] {
-  const cells = [];
-  for (const date of dates) {
-    cells.push(
-      <TableCell
-        key={date}
-        x={date}
-        y={y}
-      />
-    );
-  }
-  return cells;
+function getCells(dates: string[], y: number): JSX.Element[] {
+  return dates.map((date) => (
+    <TableCell
+      key={date}
+      x={date}
+      y={y}
+    />
+  ));
 }
 
 function getClassName(isFirst: boolean, isLast: boolean): string {

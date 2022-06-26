@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
 
 import * as Utils from "../../utils";
-import { useAppDispatch, useAppSelector, useColumns, useHotelData, useLeftmostDate } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector, useColumns, useDates, useHotelData, useLeftmostDate } from "../../redux/hooks";
 import { TileData, TileColor } from "../../redux/tilesSlice";
 import * as HotelSlice from "../../redux/hotelSlice";
 import * as RoomTypesSlice from "../../redux/roomTypesSlice";
@@ -17,6 +17,7 @@ import * as RoomTypesSlice from "../../redux/roomTypesSlice";
 import M3IconButton from "../m3/M3IconButton";
 import DrawerAdjacent from "../m3/DrawerAdjacent";
 import FetchTiles from "../TableContainer/FetchTiles";
+import { SurfaceTint } from "../m3/Tints";
 
 type TileDescriptor = FreeSpaceProps | TileData;
 
@@ -27,6 +28,7 @@ export default function Table(): JSX.Element {
   const leftmostDate = useLeftmostDate();
   const oneDayBefore = Utils.getDateShift(leftmostDate, -1);
   const columns = useColumns();
+  const dates = useDates();
 
   const tiles = useAppSelector((state) => {
     const tiles: TileDescriptor[][] = [];
@@ -109,12 +111,12 @@ export default function Table(): JSX.Element {
   return (
     <DrawerAdjacent>
       <FetchTiles />
-      <Stack spacing={1} sx={{
+      <Stack spacing={0} sx={{
         mt: "9.5rem",
         color: theme.palette.onSurface.light
       }}>
         {
-          hotelData.floors.map((floor) => {
+          hotelData.floors.map((floor, floorIndex) => {
             const floorNameParts = floor.name.split(" ");
             let capitalizedFloor = "";
             for (const part of floorNameParts) {
@@ -132,7 +134,9 @@ export default function Table(): JSX.Element {
                   pr: "2rem",
                   pt: "1rem",
                   pb: "1rem",
-                  borderBottom: `1px solid ${theme.palette.outline.light}`
+                  ...((floorIndex === 0) && {
+                    borderTop: `1px solid ${theme.palette.outline.light}`
+                  })
                 }}>
                   <Typography variant="headlineMedium">{capitalizedFloor}</Typography>
                   <M3IconButton>
@@ -176,21 +180,42 @@ export default function Table(): JSX.Element {
                             </Typography>
                           </Box>
                           <Box sx={{
+                            position: "relative",
                             ml: "calc(7.5rem + 1px)",
-                            mt: "0.25rem",
-                            mb: "0.25rem",
-                            ...((index === 0) && {
-                              mt: "0.5rem"
-                            }),
-                            ...((index === floor.rooms.length - 1) && {
-                              mb: "0.5rem"
-                            })
                           }}>
-                            <Grid container spacing={0} columns={columns * 2}>
+                            <Grid container spacing={0} columns={7} sx={{
+                              borderBottom: `1px solid ${theme.palette.onSurfaceVariant.dark}`,
+                              height: "calc(5rem + 5px)",
+                              ...((index === floor.rooms.length - 1) && {
+                                borderBottom: 0,
+                                height: "calc(5rem + 4px)"
+                              })
+                            }}>
+                              {dates.map((date, dateIndex) => {
+                                const dateObj = new Date(date);
+                                const isWeekend = true;
+                                return (
+                                  <Grid key={date} item xs={1} sx={{
+                                    ...(isWeekend && {
+                                      borderRight: `1px solid ${theme.palette.onSurfaceVariant.dark}`,
+                                    }),
+                                    ...((dateIndex === dates.length - 1) && {
+                                      borderRight: 0
+                                    })
+                                  }}></Grid>
+                                );
+                              })}
+                            </Grid>
+                            <Grid container spacing={0} columns={columns * 2} sx={{
+                              position: "absolute",
+                              top: 0
+                            }}>
                               {
                                 tiles[room.number].map((tile) => {
+                                  const isFirst = index === 0;
+                                  const isLast = index === floor.rooms.length - 1;
                                   if ("id" in tile) {
-                                    return <Tile key={tile.id} data={tile} />;
+                                    return <Tile key={tile.id} data={tile} isFirst={isFirst} isLast={isLast} />;
                                   } else {
                                     return (
                                       <FreeSpace
@@ -199,6 +224,8 @@ export default function Table(): JSX.Element {
                                         to={tile.to}
                                         cropLeft={tile.cropLeft}
                                         cropRight={tile.cropRight}
+                                        isFirst={isFirst}
+                                        isLast={isLast}
                                       />
                                     );
                                   }
@@ -224,27 +251,32 @@ type FreeSpaceProps = {
   from: string,
   to: string,
   cropLeft: boolean,
-  cropRight: boolean
+  cropRight: boolean,
+  isFirst?: boolean,
+  isLast?: boolean
 };
 
-function FreeSpace({ from, to, cropLeft, cropRight }: FreeSpaceProps): JSX.Element {
+function FreeSpace({ from, to, cropLeft, cropRight, isFirst, isLast }: FreeSpaceProps): JSX.Element {
   const nights = Utils.daysBetweenDates(from, to);
   const size = 2 * nights - Number(cropLeft) - Number(cropRight);
 
   return (
     <Grid item xs={size} sx={{
-      visibility: "hidden",
-      height: "5rem"
+      height: "5rem",
+      // mt: "0.5rem",
+      // mb: "0.5rem"
     }}>
     </Grid>
   );
 }
 
 type TileProps = {
-  data: TileData
+  data: TileData,
+  isFirst: boolean,
+  isLast: boolean
 }
 
-function Tile({ data }: TileProps): JSX.Element {
+function Tile({ data, isFirst, isLast }: TileProps): JSX.Element {
   const theme = useTheme();
   const leftmostDate = useLeftmostDate();
   const rightmostDate = useAppSelector((state) => Utils.getDateShift(state.table.leftmostDate, state.table.columns - 1));
@@ -417,7 +449,9 @@ function Tile({ data }: TileProps): JSX.Element {
       }),
       ...(!cropLeft && {
         paddingLeft: "0.25rem"
-      })
+      }),
+      pt: "1px",
+      pb: "1px"
     }}>
       <Badge
         anchorOrigin={{
@@ -460,6 +494,13 @@ function Tile({ data }: TileProps): JSX.Element {
             }),
             backgroundColor: theme.palette[`${data.color}Container`].light,
             color: theme.palette[`on${data.color[0].toUpperCase()}${data.color.substring(1)}Container` as `on${Capitalize<TileColor>}Container`].light,
+            border: `1px solid ${theme.palette.outline.light}`,
+            ...(cropRight && {
+              borderRight: 0
+            }),
+            ...(cropLeft && {
+              borderLeft: 0
+            })
           }}
         >
           <Box sx={{
@@ -483,6 +524,10 @@ function Tile({ data }: TileProps): JSX.Element {
             <Typography ref={titleRef} variant="titleMedium">{title}</Typography>
             <Typography ref={bodyRef} variant="bodySmall">{body}</Typography>
           </Box>
+          {/* <SurfaceTint sx={{
+            backgroundColor: theme.palette.primary.light,
+            opacity: theme.opacities.surface1
+          }} /> */}
         </Box>
       </Badge>
     </Grid>
