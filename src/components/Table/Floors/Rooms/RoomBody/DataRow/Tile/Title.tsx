@@ -5,12 +5,12 @@ import { useAppSelector, useLeftmostDate } from "../../../../../../../redux/hook
 import { TileData } from "../../../../../../../redux/tilesSlice";
 import { getCanvasFontSize, getTextWidth } from "./utils";
 
-type TitleProps = {
+type Props = {
   data: TileData,
   canvasRef: React.RefObject<HTMLCanvasElement>
 }
 
-export default function Title({ data, canvasRef }: TitleProps): JSX.Element {
+export default function Title({ data, canvasRef }: Props): JSX.Element {
   const leftmostDate = useLeftmostDate();
   const adjustLayoutRequestId = useAppSelector((state) => state.layout.adjustLayoutRequestId);
   const titleRef = useRef<HTMLSpanElement>(null);

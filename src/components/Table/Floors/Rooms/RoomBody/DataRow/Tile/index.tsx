@@ -1,16 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {useRef } from "react";
 import { css } from "@emotion/css";
 import { useTheme } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 
 import * as Utils from "../../../../../../../utils";
 import { TileColor, TileData } from "../../../../../../../redux/tilesSlice";
 import { useAppSelector, useLeftmostDate } from "../../../../../../../redux/hooks";
 import Title from "./Title";
-import { getCanvasFontSize, getTextWidth } from "./utils";
+import Body from "./Body";
 
 type Props = {
   data: TileData
@@ -32,41 +31,7 @@ export default function Tile({ data }: Props): JSX.Element {
     }
   });
   const personsInAssignedRoomType = useAppSelector((state) => assignedRoomType ? state.roomTypes.data[assignedRoomType] : undefined);
-  const bodyRef = useRef<HTMLSpanElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const adjustLayoutRequestId = useAppSelector((state) => state.layout.adjustLayoutRequestId);
-  const significantEntity = data.entity.replace("Camera ", "").replace("camera ", "");
-  const [body, setBody] = useState(significantEntity);
-
-  useEffect(() => {
-    if (bodyRef.current && canvasRef.current) {
-      const bodyFontSize = getCanvasFontSize(bodyRef.current);
-
-      const width = getTextWidth(canvasRef.current, significantEntity, bodyFontSize);
-      if (width <= bodyRef.current.clientWidth) {
-        setBody(significantEntity);
-        return;
-      }
-
-      const entityParts = significantEntity.split(" ");
-      let entityAbbreviation = "";
-      if (entityParts.length > 1) {
-        for (const entityPart of entityParts) {
-          entityAbbreviation += entityPart[0].toLocaleUpperCase();
-        }
-      } else {
-        const consonants = ["b", "c", "d", "f", "g", "h", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "z"];
-        entityAbbreviation = significantEntity[0];
-        for (let i = 1; i < significantEntity.length; i++) {
-          if (consonants.includes(significantEntity[i])) {
-            entityAbbreviation += significantEntity[i];
-            break;
-          }
-        }
-      }
-      setBody(entityAbbreviation);
-    }
-  }, [adjustLayoutRequestId, leftmostDate, significantEntity]);
 
   let badgeColor = undefined;
   if (personsInAssignedRoomType) {
@@ -170,7 +135,7 @@ export default function Tile({ data }: Props): JSX.Element {
               `}
             />
             <Title data={data} canvasRef={canvasRef} />
-            <Typography ref={bodyRef} variant="bodySmall">{body}</Typography>
+            <Body data={data} canvasRef={canvasRef} />
           </Box>
         </Box>
       </Badge>
