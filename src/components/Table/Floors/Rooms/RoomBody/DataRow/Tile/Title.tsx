@@ -1,16 +1,17 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Typography from "@mui/material/Typography";
 
 import { useAppSelector, useLeftmostDate } from "../../../../../../../redux/hooks";
 import { TileData } from "../../../../../../../redux/tilesSlice";
 import { getCanvasFontSize, getTextWidth } from "./utils";
+import { TableContext } from "../../../../../TextWidthCanvas";
 
 type Props = {
-  data: TileData,
-  canvasRef: React.RefObject<HTMLCanvasElement>
+  data: TileData
 }
 
-export default function Title({ data, canvasRef }: Props): JSX.Element {
+export default function Title({ data }: Props): JSX.Element {
+  const canvasRef = useContext(TableContext).canvasRef;
   const leftmostDate = useLeftmostDate();
   const adjustLayoutRequestId = useAppSelector((state) => state.layout.adjustLayoutRequestId);
   const titleRef = useRef<HTMLSpanElement>(null);

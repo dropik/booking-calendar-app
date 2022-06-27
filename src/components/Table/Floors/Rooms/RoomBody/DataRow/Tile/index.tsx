@@ -1,5 +1,4 @@
-import React, {useRef } from "react";
-import { css } from "@emotion/css";
+import React from "react";
 import { useTheme } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import Badge from "@mui/material/Badge";
@@ -31,7 +30,6 @@ export default function Tile({ data }: Props): JSX.Element {
     }
   });
   const personsInAssignedRoomType = useAppSelector((state) => assignedRoomType ? state.roomTypes.data[assignedRoomType] : undefined);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   let badgeColor = undefined;
   if (personsInAssignedRoomType) {
@@ -127,15 +125,8 @@ export default function Tile({ data }: Props): JSX.Element {
               whiteSpace: "nowrap"
             }
           }}>
-            <canvas
-              ref={canvasRef}
-              className={css`
-                position: fixed;
-                top: -100000px
-              `}
-            />
-            <Title data={data} canvasRef={canvasRef} />
-            <Body data={data} canvasRef={canvasRef} />
+            <Title data={data} />
+            <Body data={data} />
           </Box>
         </Box>
       </Badge>
