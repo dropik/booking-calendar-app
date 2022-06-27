@@ -12,7 +12,7 @@ import * as RoomTypesSlice from "../../redux/roomTypesSlice";
 import M3IconButton from "../m3/M3IconButton";
 import DrawerAdjacent from "../m3/DrawerAdjacent";
 import FetchTiles from "../TableContainer/FetchTiles";
-import Room from "./Room";
+import Rooms from "./Rooms";
 
 export default function Table(): JSX.Element {
   const theme = useTheme();
@@ -60,15 +60,7 @@ export default function Table(): JSX.Element {
                     <ExpandLessOutlinedIcon />
                   </M3IconButton>
                 </Box>
-                <Stack spacing={0} sx={{
-                  borderBottom: `1px solid ${theme.palette.outline.light}`
-                }}>
-                  {
-                    floor.rooms.map((room, index) => (
-                      <Room key={room.number} data={room} isLast={index === floor.rooms.length - 1} />
-                    ))
-                  }
-                </Stack>
+                <Rooms data={floor.rooms} />
               </Box>
             );
           })
