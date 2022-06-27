@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 import { AsyncThunkAction } from "@reduxjs/toolkit";
 
-import { useAppDispatch } from "../../redux/hooks";
+import { useAppDispatch } from "../../../redux/hooks";
 
 type FetchDataBaseProps<TData, TArgs> = {
   fetchCallbackAsync: AsyncThunkAction<TData, TArgs, {}>

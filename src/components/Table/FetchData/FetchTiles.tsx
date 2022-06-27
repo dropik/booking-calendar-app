@@ -1,7 +1,7 @@
 import React from "react";
 
-import { useAppSelector } from "../../redux/hooks";
-import { fetchAsync } from "../../redux/tilesSlice";
+import { useAppSelector } from "../../../redux/hooks";
+import { fetchAsync } from "../../../redux/tilesSlice";
 
 import FetchDataBase from "./FetchDataBase";
 
