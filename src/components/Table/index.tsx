@@ -197,7 +197,7 @@ export default function Table(): JSX.Element {
                                 }}></Grid>
                               ))}
                             </Grid>
-                            <Grid container spacing={0} columns={columns * 2} sx={{
+                            <Grid container spacing={0} columns={columns} sx={{
                               position: "absolute",
                               top: 0
                             }}>

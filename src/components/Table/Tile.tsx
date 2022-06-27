@@ -170,13 +170,13 @@ export default function Tile({ data }: Props): JSX.Element {
   let cropLeft = false;
   let cropRight = false;
 
-  let size = data.nights * 2;
+  let size = data.nights;
   if (leftmostToArrival < 0) {
-    size -= -leftmostToArrival * 2 - 1;
+    size -= -leftmostToArrival - 0.5;
     cropLeft = true;
   }
   if (arrivalToRightmost < data.nights) {
-    size -= data.nights * 2 - arrivalToRightmost * 2 - 1;
+    size -= data.nights - arrivalToRightmost - 0.5;
     cropRight = true;
   }
 

@@ -12,7 +12,7 @@ export type FreeSpaceProps = {
 
 export default function FreeSpace({ from, to, cropLeft, cropRight }: FreeSpaceProps): JSX.Element {
   const nights = Utils.daysBetweenDates(from, to);
-  const size = 2 * nights - Number(cropLeft) - Number(cropRight);
+  const size = nights - 0.5 * Number(cropLeft) - 0.5 * Number(cropRight);
 
   return (
     <Grid item xs={size}></Grid>
