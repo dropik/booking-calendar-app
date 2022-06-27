@@ -1,7 +1,7 @@
 import React from "react";
 import Box from "@mui/material/Box";
 
-import { RoomData } from "../../redux/hotelSlice";
+import { RoomData } from "../../../../redux/hotelSlice";
 
 import RowHeader from "./RoomHeader";
 import RowBody from "./RowBody";

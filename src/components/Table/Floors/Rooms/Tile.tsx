@@ -6,9 +6,9 @@ import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-import * as Utils from "../../../utils";
-import { TileColor, TileData } from "../../../redux/tilesSlice";
-import { useAppSelector, useLeftmostDate } from "../../../redux/hooks";
+import * as Utils from "../../../../utils";
+import { TileColor, TileData } from "../../../../redux/tilesSlice";
+import { useAppSelector, useLeftmostDate } from "../../../../redux/hooks";
 
 type Props = {
   data: TileData

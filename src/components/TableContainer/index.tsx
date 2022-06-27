@@ -11,7 +11,7 @@ import * as TableSlice from "../../redux/tableSlice";
 
 import DrawerAdjacent from "../m3/DrawerAdjacent";
 import Table from "./Table";
-import FetchTiles from "../Table/FetchTiles";
+import FetchTiles from "../Table/FetchData/FetchTiles";
 import GrabbedTile from "./GrabbedTile";
 
 import "./TableContainer.css";

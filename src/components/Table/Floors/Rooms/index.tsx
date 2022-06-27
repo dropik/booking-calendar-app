@@ -2,7 +2,7 @@ import React from "react";
 import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 
-import { RoomData } from "../../../redux/hotelSlice";
+import { RoomData } from "../../../../redux/hotelSlice";
 
 import Room from "./Room";
 

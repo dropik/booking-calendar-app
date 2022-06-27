@@ -2,7 +2,7 @@ import React from "react";
 import { useTheme } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 
-import { useDates } from "../../../redux/hooks";
+import { useDates } from "../../../../redux/hooks";
 
 type Props = {
   isLast: boolean

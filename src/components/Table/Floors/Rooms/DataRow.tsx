@@ -1,9 +1,9 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
 
-import * as Utils from "../../../utils";
-import { useAppSelector, useColumns } from "../../../redux/hooks";
-import { TileData } from "../../../redux/tilesSlice";
+import * as Utils from "../../../../utils";
+import { useAppSelector, useColumns } from "../../../../redux/hooks";
+import { TileData } from "../../../../redux/tilesSlice";
 
 import FreeSpace, { FreeSpaceProps } from "./FreeSpace";
 import Tile from "./Tile";
