@@ -134,9 +134,10 @@ export default function Table(): JSX.Element {
                   pr: "2rem",
                   pt: "1rem",
                   pb: "1rem",
-                  ...((floorIndex === 0) && {
-                    borderTop: `1px solid ${theme.palette.outline.light}`
-                  })
+                  // ...((floorIndex === 0) && {
+                  //   borderTop: `1px solid ${theme.palette.outline.light}`
+                  // })
+                  borderBottom: `1px solid ${theme.palette.outline.light}`
                 }}>
                   <Typography variant="headlineMedium">{capitalizedFloor}</Typography>
                   <M3IconButton>
@@ -185,10 +186,10 @@ export default function Table(): JSX.Element {
                           }}>
                             <Grid container spacing={0} columns={7} sx={{
                               borderBottom: `1px solid ${theme.palette.surfaceVariant.light}`,
-                              height: "calc(5.5rem + 3px)",
+                              height: "calc(5rem + 5px)",
                               ...((index === floor.rooms.length - 1) && {
                                 borderBottom: 0,
-                                height: "calc(5.5rem + 2px)"
+                                height: "calc(5rem + 4px)"
                               })
                             }}>
                               {dates.map((date, dateIndex) => {
@@ -445,13 +446,13 @@ function Tile({ data, isFirst, isLast }: TileProps): JSX.Element {
   return (
     <Grid item xs={size} sx={{
       ...(!cropRight && {
-        paddingRight: "0.25rem"
+        paddingRight: "1.5px"
       }),
       ...(!cropLeft && {
-        paddingLeft: "0.25rem"
+        paddingLeft: "1.5px"
       }),
-      pt: "0.25rem",
-      pb: "0.25rem"
+      pt: "1px",
+      pb: "1px"
     }}>
       <Badge
         anchorOrigin={{
