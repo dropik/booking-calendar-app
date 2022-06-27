@@ -1,18 +1,14 @@
 import React, { useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
 
 import { useAppDispatch, useHotelData } from "../../redux/hooks";
 import * as HotelSlice from "../../redux/hotelSlice";
 import * as RoomTypesSlice from "../../redux/roomTypesSlice";
 
-import M3IconButton from "../m3/M3IconButton";
 import DrawerAdjacent from "../m3/DrawerAdjacent";
 import FetchTiles from "../TableContainer/FetchTiles";
-import Rooms from "./Rooms";
+import Floor from "./Floor";
 
 export default function Table(): JSX.Element {
   const theme = useTheme();
@@ -35,35 +31,9 @@ export default function Table(): JSX.Element {
         color: theme.palette.onSurface.light
       }}>
         {
-          hotelData.floors.map((floor) => {
-            const floorNameParts = floor.name.split(" ");
-            let capitalizedFloor = "";
-            for (const part of floorNameParts) {
-              capitalizedFloor += `${part[0].toLocaleUpperCase()}${part.substring(1)} `;
-            }
-            capitalizedFloor.trimEnd();
-
-            return (
-              <Box key={floor.name}>
-                <Box sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  pl: "2rem",
-                  pr: "2rem",
-                  pt: "1rem",
-                  pb: "1rem",
-                  borderBottom: `1px solid ${theme.palette.outline.light}`
-                }}>
-                  <Typography variant="headlineMedium">{capitalizedFloor}</Typography>
-                  <M3IconButton>
-                    <ExpandLessOutlinedIcon />
-                  </M3IconButton>
-                </Box>
-                <Rooms data={floor.rooms} />
-              </Box>
-            );
-          })
+          hotelData.floors.map((floor) => (
+            <Floor key={floor.name} data={floor} />
+          ))
         }
       </Stack>
     </DrawerAdjacent>
