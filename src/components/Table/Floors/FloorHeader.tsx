@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
 
-import M3IconButton from "../m3/M3IconButton";
+import M3IconButton from "../../m3/M3IconButton";
 
 type FloorHeaderProps = {
   name: string
