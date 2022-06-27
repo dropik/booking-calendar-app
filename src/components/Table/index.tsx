@@ -16,6 +16,7 @@ import M3IconButton from "../m3/M3IconButton";
 import DrawerAdjacent from "../m3/DrawerAdjacent";
 import FetchTiles from "../TableContainer/FetchTiles";
 import Tile from "./Tile";
+import FreeSpace, { FreeSpaceProps } from "./FreeSpace";
 
 type TileDescriptor = FreeSpaceProps | TileData;
 
@@ -230,21 +231,5 @@ export default function Table(): JSX.Element {
         }
       </Stack>
     </DrawerAdjacent>
-  );
-}
-
-type FreeSpaceProps = {
-  from: string,
-  to: string,
-  cropLeft: boolean,
-  cropRight: boolean
-};
-
-function FreeSpace({ from, to, cropLeft, cropRight }: FreeSpaceProps): JSX.Element {
-  const nights = Utils.daysBetweenDates(from, to);
-  const size = 2 * nights - Number(cropLeft) - Number(cropRight);
-
-  return (
-    <Grid item xs={size} sx={{ height: "5rem" }}></Grid>
   );
 }
