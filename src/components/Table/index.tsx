@@ -15,10 +15,10 @@ import * as RoomTypesSlice from "../../redux/roomTypesSlice";
 import M3IconButton from "../m3/M3IconButton";
 import DrawerAdjacent from "../m3/DrawerAdjacent";
 import FetchTiles from "../TableContainer/FetchTiles";
-import Tile from "./Tile";
-import FreeSpace, { FreeSpaceProps } from "./FreeSpace";
+import { FreeSpaceProps } from "./FreeSpace";
+import TileSwitch from "./TileSwitch";
 
-type TileDescriptor = FreeSpaceProps | TileData;
+export type TileDescriptor = FreeSpaceProps | TileData;
 
 export default function Table(): JSX.Element {
   const theme = useTheme();
@@ -201,23 +201,7 @@ export default function Table(): JSX.Element {
                               position: "absolute",
                               top: 0
                             }}>
-                              {
-                                tiles[room.number].map((tile) => {
-                                  if ("id" in tile) {
-                                    return <Tile key={tile.id} data={tile} />;
-                                  } else {
-                                    return (
-                                      <FreeSpace
-                                        key={tile.from}
-                                        from={tile.from}
-                                        to={tile.to}
-                                        cropLeft={tile.cropLeft}
-                                        cropRight={tile.cropRight}
-                                      />
-                                    );
-                                  }
-                                })
-                              }
+                              <TileSwitch tilesInRoom={tiles[room.number]} />
                             </Grid>
                           </Box>
                         </Box>
