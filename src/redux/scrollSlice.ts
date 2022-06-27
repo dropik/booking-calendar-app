@@ -12,7 +12,7 @@ export const scrollSlice = createSlice({
   name: "scroll",
   initialState: initialState,
   reducers: {
-    set: (state, action: PayloadAction<{ top: number, left: number }>) => {
+    set: (state, action: PayloadAction<{ top: number }>) => {
       state.top = action.payload.top;
     }
   }

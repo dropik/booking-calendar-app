@@ -7,6 +7,7 @@ import DrawerButton from "./DrawerButton";
 import DateInput from "./DateInput";
 import DownloadButton from "./DownloadButton";
 import DatesContainer from "./DatesContainer";
+import Tint from "./Tint";
 
 export default function Header(): JSX.Element {
   return (
@@ -49,6 +50,7 @@ export default function Header(): JSX.Element {
         </Box>
       </Box>
       <DatesContainer />
+      <Tint />
     </M3AppBar>
   );
 }

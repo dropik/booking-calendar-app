@@ -26,9 +26,8 @@ export default function TableContainer(): JSX.Element {
 
   function handleScroll(event: React.UIEvent<HTMLDivElement>) {
     const scrollTop = event.currentTarget.scrollTop;
-    const scrollLeft = event.currentTarget.scrollLeft;
 
-    dispatch(ScrollSlice.set({ top: scrollTop, left: scrollLeft }));
+    dispatch(ScrollSlice.set({ top: scrollTop }));
   }
 
   useTableDimentionsUpdateEffect(ref, dispatch, hotelData);
