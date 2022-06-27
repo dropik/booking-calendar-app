@@ -3,7 +3,7 @@ import { useTheme } from "@mui/material/styles";
 import Badge from "@mui/material/Badge";
 
 import { useAppSelector } from "../../../../../../../redux/hooks";
-import { TileContext } from ".";
+import { TileContext } from "./context";
 
 type Props = {
   children: ReactNode

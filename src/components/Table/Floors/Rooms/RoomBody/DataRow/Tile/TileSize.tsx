@@ -3,7 +3,7 @@ import Grid from "@mui/material/Grid";
 
 import * as Utils from "../../../../../../../utils";
 import { useAppSelector, useLeftmostDate } from "../../../../../../../redux/hooks";
-import { TileContext } from ".";
+import { TileContext } from "./context";
 
 type Props = {
   children: ReactNode

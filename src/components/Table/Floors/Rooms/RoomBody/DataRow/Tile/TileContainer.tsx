@@ -3,7 +3,7 @@ import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 
 import { TileColor } from "../../../../../../../redux/tilesSlice";
-import { TileContext } from ".";
+import { TileContext } from "./context";
 
 type Props = {
   children: ReactNode

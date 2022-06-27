@@ -1,4 +1,4 @@
-import React, { createContext } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 
 import { TileData } from "../../../../../../../redux/tilesSlice";
@@ -7,32 +7,11 @@ import Body from "./Body";
 import TileSize from "./TileSize";
 import TileAlert from "./TileAlert";
 import TileContainer from "./TileContainer";
+import { TileContext } from "./context";
 
 type Props = {
   data: TileData
 }
-
-type TileContextType = {
-  data: TileData,
-  cropLeft: boolean,
-  cropRight: boolean
-}
-
-export const TileContext = createContext<TileContextType>({
-  data: {
-    id: "",
-    bookingId: "",
-    name: "",
-    from: "",
-    nights: 0,
-    roomType: "",
-    entity: "",
-    persons: 0,
-    color: "booking1"
-  },
-  cropLeft: false,
-  cropRight: false
-});
 
 export default function Tile({ data }: Props): JSX.Element {
   return (
