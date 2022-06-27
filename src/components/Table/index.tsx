@@ -12,8 +12,7 @@ import * as RoomTypesSlice from "../../redux/roomTypesSlice";
 import M3IconButton from "../m3/M3IconButton";
 import DrawerAdjacent from "../m3/DrawerAdjacent";
 import FetchTiles from "../TableContainer/FetchTiles";
-import DataRow from "./DataRow";
-import GridRow from "./GridRow";
+import RowBody from "./RowBody";
 
 export default function Table(): JSX.Element {
   const theme = useTheme();
@@ -97,13 +96,7 @@ export default function Table(): JSX.Element {
                               {significantRoomType}
                             </Typography>
                           </Box>
-                          <Box sx={{
-                            position: "relative",
-                            ml: "calc(7.5rem + 1px)",
-                          }}>
-                            <GridRow isLast={index === floor.rooms.length - 1} />
-                            <DataRow roomNumber={room.number} />
-                          </Box>
+                          <RowBody isLast={index === floor.rooms.length - 1} roomNumber={room.number} />
                         </Box>
                       );
                     })
