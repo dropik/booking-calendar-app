@@ -12,8 +12,7 @@ import * as RoomTypesSlice from "../../redux/roomTypesSlice";
 import M3IconButton from "../m3/M3IconButton";
 import DrawerAdjacent from "../m3/DrawerAdjacent";
 import FetchTiles from "../TableContainer/FetchTiles";
-import RowBody from "./RowBody";
-import RowHeader from "./RoomHeader";
+import Room from "./Room";
 
 export default function Table(): JSX.Element {
   const theme = useTheme();
@@ -65,17 +64,9 @@ export default function Table(): JSX.Element {
                   borderBottom: `1px solid ${theme.palette.outline.light}`
                 }}>
                   {
-                    floor.rooms.map((room, index) => {
-
-                      return (
-                        <Box key={room.number} sx={{
-                          position: "relative"
-                        }}>
-                          <RowHeader room={room} />
-                          <RowBody isLast={index === floor.rooms.length - 1} roomNumber={room.number} />
-                        </Box>
-                      );
-                    })
+                    floor.rooms.map((room, index) => (
+                      <Room key={room.number} data={room} isLast={index === floor.rooms.length - 1} />
+                    ))
                   }
                 </Stack>
               </Box>
