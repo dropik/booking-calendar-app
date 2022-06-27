@@ -1,14 +1,11 @@
-import { useEffect } from "react";
+import React from "react";
 
-import { useAppDispatch } from "../../redux/hooks";
 import { fetchAsync } from "../../redux/hotelSlice";
 
-export default function FetchHotelData(): null {
-  const dispatch = useAppDispatch();
+import FetchDataBase from "./FetchDataBase";
 
-  useEffect(() => {
-    dispatch(fetchAsync());
-  }, [dispatch]);
-
-  return null;
+export default function FetchHotelData(): JSX.Element {
+  return (
+    <FetchDataBase fetchCallbackAsync={fetchAsync()} />
+  );
 }

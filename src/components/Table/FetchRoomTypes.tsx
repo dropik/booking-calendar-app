@@ -1,13 +1,11 @@
-import { useEffect } from "react";
-import { useAppDispatch } from "../../redux/hooks";
+import React from "react";
+
 import { fetchAsync } from "../../redux/roomTypesSlice";
 
-export default function FetchRoomTypes(): null {
-  const dispatch = useAppDispatch();
+import FetchDataBase from "./FetchDataBase";
 
-  useEffect(() => {
-    dispatch(fetchAsync());
-  }, [dispatch]);
-
-  return null;
+export default function FetchRoomTypes(): JSX.Element {
+  return (
+    <FetchDataBase fetchCallbackAsync={fetchAsync()} />
+  );
 }
