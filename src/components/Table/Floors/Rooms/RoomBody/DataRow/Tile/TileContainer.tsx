@@ -41,7 +41,19 @@ export default function TileContainer({ children }: Props): JSX.Element {
         })
       }}
     >
-      {children}
+      <Box sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "start",
+        justifyContent: "center",
+        overflow: "hidden",
+        "& > span": {
+          width: "100%",
+          whiteSpace: "nowrap"
+        }
+      }}>
+        {children}
+      </Box>
     </Box>
   );
 }
