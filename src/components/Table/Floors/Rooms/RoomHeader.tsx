@@ -3,13 +3,13 @@ import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
-import { RoomData } from "../../redux/hotelSlice";
+import { RoomData } from "../../../../redux/hotelSlice";
 
 type Props = {
   room: RoomData
 }
 
-export default function RowHeader({ room }: Props): JSX.Element {
+export default function RoomHeader({ room }: Props): JSX.Element {
   const theme = useTheme();
   const significantRoomType = room.type.replace("Camera ", "").replace("camera ", "");
 

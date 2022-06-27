@@ -10,7 +10,7 @@ type Props = {
   roomNumber: number
 }
 
-export default function RowBody({ isLast, roomNumber }: Props): JSX.Element {
+export default function RoomBody({ isLast, roomNumber }: Props): JSX.Element {
   return (
     <Box sx={{
       position: "relative",

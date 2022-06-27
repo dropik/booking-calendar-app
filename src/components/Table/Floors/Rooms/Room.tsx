@@ -3,8 +3,8 @@ import Box from "@mui/material/Box";
 
 import { RoomData } from "../../../../redux/hotelSlice";
 
-import RowHeader from "./RoomHeader";
-import RowBody from "./RowBody";
+import RoomHeader from "./RoomHeader";
+import RoomBody from "./RoomBody";
 
 type RoomProps = {
   data: RoomData,
@@ -16,8 +16,8 @@ export default function Room({ data, isLast }: RoomProps): JSX.Element {
     <Box sx={{
       position: "relative"
     }}>
-      <RowHeader room={data} />
-      <RowBody isLast={isLast} roomNumber={data.number} />
+      <RoomHeader room={data} />
+      <RoomBody isLast={isLast} roomNumber={data.number} />
     </Box>
   );
 }
