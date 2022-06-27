@@ -1,29 +1,24 @@
 import React, { useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
 
-import { useAppDispatch, useDates, useHotelData } from "../../redux/hooks";
-import { TileData } from "../../redux/tilesSlice";
+import { useAppDispatch, useHotelData } from "../../redux/hooks";
 import * as HotelSlice from "../../redux/hotelSlice";
 import * as RoomTypesSlice from "../../redux/roomTypesSlice";
 
 import M3IconButton from "../m3/M3IconButton";
 import DrawerAdjacent from "../m3/DrawerAdjacent";
 import FetchTiles from "../TableContainer/FetchTiles";
-import { FreeSpaceProps } from "./FreeSpace";
 import DataRow from "./DataRow";
-
-export type TileDescriptor = FreeSpaceProps | TileData;
+import GridRow from "./GridRow";
 
 export default function Table(): JSX.Element {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const hotelData = useHotelData();
-  const dates = useDates();
 
   useEffect(() => {
     dispatch(HotelSlice.fetchAsync());
@@ -106,23 +101,7 @@ export default function Table(): JSX.Element {
                             position: "relative",
                             ml: "calc(7.5rem + 1px)",
                           }}>
-                            <Grid container spacing={0} columns={7} sx={{
-                              borderBottom: `1px solid ${theme.palette.surfaceVariant.light}`,
-                              height: "calc(5rem + 5px)",
-                              ...((index === floor.rooms.length - 1) && {
-                                borderBottom: 0,
-                                height: "calc(5rem + 4px)"
-                              })
-                            }}>
-                              {dates.map((date, dateIndex) => (
-                                <Grid key={date} item xs={1} sx={{
-                                  borderRight: `1px solid ${theme.palette.surfaceVariant.light}`,
-                                  ...((dateIndex === dates.length - 1) && {
-                                    borderRight: 0
-                                  })
-                                }}></Grid>
-                              ))}
-                            </Grid>
+                            <GridRow isLast={index === floor.rooms.length - 1} />
                             <DataRow roomNumber={room.number} />
                           </Box>
                         </Box>
