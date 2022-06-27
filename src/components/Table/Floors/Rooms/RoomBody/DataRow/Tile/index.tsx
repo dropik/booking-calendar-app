@@ -81,8 +81,8 @@ export default function Tile({ data }: Props): JSX.Element {
                     whiteSpace: "nowrap"
                   }
                 }}>
-                  <Title data={data} />
-                  <Body data={data} />
+                  <Title />
+                  <Body />
                 </Box>
               </Box>
             </TileAlert>
