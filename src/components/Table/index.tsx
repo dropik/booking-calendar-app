@@ -6,8 +6,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
 
-import * as Utils from "../../utils";
-import { useAppDispatch, useAppSelector, useColumns, useDates, useHotelData, useLeftmostDate } from "../../redux/hooks";
+import { useAppDispatch, useDates, useHotelData } from "../../redux/hooks";
 import { TileData } from "../../redux/tilesSlice";
 import * as HotelSlice from "../../redux/hotelSlice";
 import * as RoomTypesSlice from "../../redux/roomTypesSlice";
@@ -16,7 +15,7 @@ import M3IconButton from "../m3/M3IconButton";
 import DrawerAdjacent from "../m3/DrawerAdjacent";
 import FetchTiles from "../TableContainer/FetchTiles";
 import { FreeSpaceProps } from "./FreeSpace";
-import TileSwitch from "./TileSwitch";
+import DataRow from "./DataRow";
 
 export type TileDescriptor = FreeSpaceProps | TileData;
 
@@ -24,80 +23,7 @@ export default function Table(): JSX.Element {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const hotelData = useHotelData();
-  const leftmostDate = useLeftmostDate();
-  const oneDayBefore = Utils.getDateShift(leftmostDate, -1);
-  const columns = useColumns();
   const dates = useDates();
-
-  const tiles = useAppSelector((state) => {
-    const tiles: TileDescriptor[][] = [];
-
-    for (const floor of hotelData.floors) {
-      for (const room of floor.rooms) {
-        tiles[room.number] = [];
-        const assignedTilesForRoom = state.tiles.assignedMap[room.number];
-
-        if (!assignedTilesForRoom) {
-          tiles[room.number].push({
-            from: oneDayBefore,
-            to: Utils.getDateShift(leftmostDate, columns),
-            cropLeft: true,
-            cropRight: true
-          });
-          continue;
-        }
-
-        const dateCounterObj = new Date(oneDayBefore);
-        let freeSpace: FreeSpaceProps | null = null;
-
-        for (let i = 0; i < columns + 1; i++) {
-          const dateCounter = Utils.dateToString(dateCounterObj);
-          const assignedTile = assignedTilesForRoom[dateCounter];
-
-          if (!freeSpace) {
-            if (assignedTile) {
-              const tile = state.tiles.data[assignedTile];
-              tiles[room.number].push(tile);
-              i += tile.nights;
-              dateCounterObj.setDate(dateCounterObj.getDate() + tile.nights + 1);
-            } else {
-              freeSpace = {
-                from: dateCounter,
-                to: dateCounter,
-                cropLeft: false,
-                cropRight: false
-              };
-              if (i === 0) {
-                freeSpace.cropLeft = true;
-              }
-              dateCounterObj.setDate(dateCounterObj.getDate() + 1);
-            }
-          } else {
-            if (assignedTile) {
-              freeSpace.to = dateCounter;
-              tiles[room.number].push(freeSpace);
-              freeSpace = null;
-
-              const tile = state.tiles.data[assignedTile];
-              tiles[room.number].push(tile);
-              i += tile.nights - 1;
-              dateCounterObj.setDate(dateCounterObj.getDate() + tile.nights);
-            } else {
-              freeSpace.to = dateCounter;
-              dateCounterObj.setDate(dateCounterObj.getDate() + 1);
-            }
-          }
-        }
-
-        if (freeSpace) {
-          freeSpace.cropRight = true;
-          tiles[room.number].push(freeSpace);
-        }
-      }
-    }
-
-    return tiles;
-  });
 
   useEffect(() => {
     dispatch(HotelSlice.fetchAsync());
@@ -197,12 +123,7 @@ export default function Table(): JSX.Element {
                                 }}></Grid>
                               ))}
                             </Grid>
-                            <Grid container spacing={0} columns={columns} sx={{
-                              position: "absolute",
-                              top: 0
-                            }}>
-                              <TileSwitch tilesInRoom={tiles[room.number]} />
-                            </Grid>
+                            <DataRow roomNumber={room.number} />
                           </Box>
                         </Box>
                       );
