@@ -15,7 +15,7 @@ export default function Rooms({ data }: Props): JSX.Element {
 
   return (
     <Stack spacing={0} sx={{
-      borderBottom: `1px solid ${theme.palette.outline.light}`
+      borderTop: `1px solid ${theme.palette.outline.light}`
     }}>
       {
         data.map((room, index) => (

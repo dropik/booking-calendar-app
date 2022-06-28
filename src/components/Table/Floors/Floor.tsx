@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
+import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
+import Collapse from "@mui/material/Collapse";
 
 import { FloorData } from "../../../redux/hotelSlice";
 
@@ -11,10 +13,17 @@ type FloorProps = {
 }
 
 export default function Floor({ data }: FloorProps): JSX.Element {
+  const theme = useTheme();
+  const [open, setOpen] = useState(true);
+
   return (
-    <Box>
-      <FloorHeader name={data.name} />
-      <Rooms data={data.rooms} />
+    <Box sx={{
+      borderBottom: `1px solid ${theme.palette.outline.light}`
+    }}>
+      <FloorHeader name={data.name} collapseCallback={() => setOpen(!open)} />
+      <Collapse in={open} easing={theme.transitions.easing.fastOutSlowIn}>
+        <Rooms data={data.rooms} />
+      </Collapse>
     </Box>
   );
 }
