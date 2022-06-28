@@ -617,10 +617,10 @@ const theme = createTheme({
 
   transitions: {
     easing: {
-      fastOutSlowIn: "cubic-bezier(0.76, 0.1, 0, 1.02)"
+      fastOutSlowIn: "cubic-bezier(1, 0, 0, 1)"
     },
     duration: {
-      long: 750
+      long: 800
     }
   }
 });

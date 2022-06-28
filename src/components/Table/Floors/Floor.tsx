@@ -21,7 +21,7 @@ export default function Floor({ data }: FloorProps): JSX.Element {
       borderBottom: `1px solid ${theme.palette.outline.light}`
     }}>
       <FloorHeader name={data.name} collapseCallback={() => setOpen(!open)} />
-      <Collapse in={open} easing={theme.transitions.easing.fastOutSlowIn}>
+      <Collapse in={open} easing={theme.transitions.easing.fastOutSlowIn} timeout={theme.transitions.duration.long}>
         <Rooms data={data.rooms} />
       </Collapse>
     </Box>
