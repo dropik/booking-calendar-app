@@ -12,7 +12,6 @@ export default function Floors(): JSX.Element {
 
   return (
     <Stack spacing={0} sx={{
-      mt: "9.5rem",
       color: theme.palette.onSurface.light
     }}>
       {
