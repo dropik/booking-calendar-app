@@ -617,7 +617,7 @@ const theme = createTheme({
 
   transitions: {
     easing: {
-      fastOutSlowIn: "cubic-bezier(1, 0, 0, 1)"
+      fastOutSlowIn: "cubic-bezier(1, 0.1, 0, 1)"
     },
     duration: {
       long: 800
