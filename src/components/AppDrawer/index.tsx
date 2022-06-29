@@ -30,7 +30,7 @@ export default function AppDrawer(): JSX.Element {
       sx={{
         width: theme.drawerWidth,
         "& .MuiDrawer-paper": {
-          top: "4rem",
+          top: "10.5rem",
           width: theme.drawerWidth,
           boxSizing: "border-box",
           backgroundColor: theme.palette.surface.main,
