@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
+import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 
 import M3IconButton from "../../m3/M3IconButton";
 
@@ -11,6 +12,7 @@ type FloorHeaderProps = {
 };
 
 export default function FloorHeader({ name, collapseCallback }: FloorHeaderProps): JSX.Element {
+  const [iconState, setIconState] = useState(true);
   const capitalizedFloor = getCapitalizedName(name);
 
   return (
@@ -24,8 +26,11 @@ export default function FloorHeader({ name, collapseCallback }: FloorHeaderProps
       pb: "1rem"
     }}>
       <Typography variant="headlineMedium">{capitalizedFloor}</Typography>
-      <M3IconButton onClick={collapseCallback}>
-        <ExpandLessOutlinedIcon />
+      <M3IconButton onClick={() => {
+        collapseCallback();
+        setIconState(!iconState);
+      }}>
+        {iconState ? <ExpandLessOutlinedIcon /> : <ExpandMoreOutlinedIcon />}
       </M3IconButton>
     </Box>
   );
