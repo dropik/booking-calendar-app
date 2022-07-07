@@ -5,6 +5,7 @@ import Stack from "@mui/material/Stack";
 import { useHotelData } from "../../../redux/hooks";
 
 import Floor from "./Floor";
+import NotAssigned from "./NotAssigned";
 
 export default function Floors(): JSX.Element {
   const theme = useTheme();
@@ -19,6 +20,7 @@ export default function Floors(): JSX.Element {
           <Floor key={floor.name} data={floor} />
         ))
       }
+      <NotAssigned />
     </Stack>
   );
 }
