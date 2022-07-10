@@ -8,7 +8,17 @@ import Section from "../Section";
 import NotAssignedRow from "./NotAssignedRow";
 
 export default function NotAssigned(): JSX.Element {
-  const tiles = useAppSelector((state) => {
+  const tiles = useUnassignedTilesForCurrentPeriod();
+
+  return (
+    <Section header="Non Assegnati">
+      {tiles.map((tile) => <NotAssignedRow key={tile.id} tile={tile} />)}
+    </Section>
+  );
+}
+
+function useUnassignedTilesForCurrentPeriod(): TileData[] {
+  return useAppSelector((state) => {
     const result: TileData[] = [];
     const visitedTiles: string[] = [];
     const leftmostDate = state.table.leftmostDate;
@@ -41,10 +51,4 @@ export default function NotAssigned(): JSX.Element {
 
     return result;
   });
-
-  return (
-    <Section header="Non Assegnati">
-      {tiles.map((tile) => <NotAssignedRow key={tile.id} tile={tile} />)}
-    </Section>
-  );
 }
