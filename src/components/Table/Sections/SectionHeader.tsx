@@ -11,7 +11,7 @@ type FloorHeaderProps = {
   collapseCallback: () => void
 };
 
-export default function FloorHeader({ name, collapseCallback }: FloorHeaderProps): JSX.Element {
+export default function SectionHeader({ name, collapseCallback }: FloorHeaderProps): JSX.Element {
   const [iconState, setIconState] = useState(true);
   const capitalizedFloor = getCapitalizedName(name);
 

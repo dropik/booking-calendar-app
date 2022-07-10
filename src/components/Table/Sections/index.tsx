@@ -7,7 +7,7 @@ import { useHotelData } from "../../../redux/hooks";
 import Floor from "./Floor";
 import NotAssigned from "./NotAssigned";
 
-export default function Floors(): JSX.Element {
+export default function Sections(): JSX.Element {
   const theme = useTheme();
   const data = useHotelData().floors;
 

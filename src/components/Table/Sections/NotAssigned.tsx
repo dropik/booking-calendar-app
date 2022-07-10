@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
+import Collapse from "@mui/material/Collapse";
+import Grid from "@mui/material/Grid";
 
 import * as Utils from "../../../utils";
-import FloorHeader from "./FloorHeader";
 import { useAppSelector, useColumns, useLeftmostDate } from "../../../redux/hooks";
-import GridRow from "./Rooms/RoomBody/GridRow";
-import Grid from "@mui/material/Grid";
 import { TileData } from "../../../redux/tilesSlice";
-import FreeSpace from "./Rooms/RoomBody/DataRow/FreeSpace";
-import Tile from "./Rooms/RoomBody/DataRow/Tile";
-import Collapse from "@mui/material/Collapse";
+import SectionHeader from "./SectionHeader";
+import GridRow from "./Room/RoomBody/GridRow";
+import Tile from "./Room/RoomBody/DataRow/Tile";
+import FreeSpace from "./Room/RoomBody/DataRow/FreeSpace";
 
 export default function NotAssigned(): JSX.Element {
   const theme = useTheme();
@@ -53,7 +53,7 @@ export default function NotAssigned(): JSX.Element {
     <Box sx={{
       borderBottom: `1px solid ${theme.palette.outline.light}`
     }}>
-      <FloorHeader name="Non Assegnati" collapseCallback={() => setOpen(!open)} />
+      <SectionHeader name="Non Assegnati" collapseCallback={() => setOpen(!open)} />
       <Collapse in={open} easing={theme.transitions.easing.fastOutSlowIn} timeout={theme.transitions.duration.long}>
         <Box sx={{
           ...((open && tiles.length > 0) && {

@@ -5,8 +5,9 @@ import Collapse from "@mui/material/Collapse";
 
 import { FloorData } from "../../../redux/hotelSlice";
 
-import Rooms from "./Rooms";
-import FloorHeader from "./FloorHeader";
+import SectionBody from "./SectionBody";
+import SectionHeader from "./SectionHeader";
+import Room from "./Room";
 
 type FloorProps = {
   data: FloorData
@@ -20,9 +21,15 @@ export default function Floor({ data }: FloorProps): JSX.Element {
     <Box sx={{
       borderBottom: `1px solid ${theme.palette.outline.light}`
     }}>
-      <FloorHeader name={data.name} collapseCallback={() => setOpen(!open)} />
+      <SectionHeader name={data.name} collapseCallback={() => setOpen(!open)} />
       <Collapse in={open} easing={theme.transitions.easing.fastOutSlowIn} timeout={theme.transitions.duration.long}>
-        <Rooms data={data.rooms} />
+        <SectionBody>
+          {
+            data.rooms.map((room, index) => (
+              <Room key={room.number} data={room} isLast={index === data.rooms.length - 1} />
+            ))
+          }
+        </SectionBody>
       </Collapse>
     </Box>
   );
