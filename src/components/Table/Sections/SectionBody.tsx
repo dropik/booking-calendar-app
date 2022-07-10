@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, Children } from "react";
 import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 
@@ -11,7 +11,7 @@ export default function SectionBody({ children }: Props): JSX.Element {
 
   return (
     <Stack spacing={0} sx={{
-      ...((children !== <></>) && {
+      ...((Children.count(children) > 0) && {
         borderTop: `1px solid ${theme.palette.outline.light}`
       })
     }}>

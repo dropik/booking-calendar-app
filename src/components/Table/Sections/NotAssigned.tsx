@@ -11,6 +11,7 @@ import SectionHeader from "./SectionHeader";
 import GridRow from "./Room/RoomBody/GridRow";
 import Tile from "./Room/RoomBody/DataRow/Tile";
 import FreeSpace from "./Room/RoomBody/DataRow/FreeSpace";
+import SectionBody from "./SectionBody";
 
 export default function NotAssigned(): JSX.Element {
   const theme = useTheme();
@@ -55,11 +56,7 @@ export default function NotAssigned(): JSX.Element {
     }}>
       <SectionHeader name="Non Assegnati" collapseCallback={() => setOpen(!open)} />
       <Collapse in={open} easing={theme.transitions.easing.fastOutSlowIn} timeout={theme.transitions.duration.long}>
-        <Box sx={{
-          ...((open && tiles.length > 0) && {
-            borderTop: `1px solid ${theme.palette.outline.light}`
-          })
-        }}>
+        <SectionBody>
           {tiles.map((tile) => {
             const freeSpace = (Utils.daysBetweenDates(leftmostDate, tile.from) >= 0) ?
               (<FreeSpace from={Utils.getDateShift(leftmostDate, -1)} to={tile.from} cropLeft={true} cropRight={false} />) :
@@ -99,7 +96,7 @@ export default function NotAssigned(): JSX.Element {
               </Box>
             );
           })}
-        </Box>
+        </SectionBody>
       </Collapse>
     </Box>
   );
