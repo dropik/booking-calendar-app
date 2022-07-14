@@ -7,9 +7,9 @@ import * as Utils from "../../../../utils";
 import { useColumns, useLeftmostDate } from "../../../../redux/hooks";
 import { TileData } from "../../../../redux/tilesSlice";
 
-import FreeSpace from "../Room/RoomBody/DataRow/FreeSpace";
-import Tile from "../Room/RoomBody/DataRow/Tile";
-import GridRow from "../Room/RoomBody/GridRow";
+import FreeSpace from "../Row/RoomBody/DataRow/FreeSpace";
+import Tile from "../Row/RoomBody/DataRow/Tile";
+import GridRow from "../Row/RoomBody/GridRow";
 
 type Props = {
   tile: TileData
@@ -25,9 +25,7 @@ export default function NotAssignedRow({ tile }: Props): JSX.Element {
     <></>;
 
   return (
-    <Box sx={{
-      position: "relative"
-    }}>
+    <>
       <Box sx={{
         position: "absolute",
         display: "flex",
@@ -55,6 +53,6 @@ export default function NotAssignedRow({ tile }: Props): JSX.Element {
           <Tile data={tile} />
         </Grid>
       </Box>
-    </Box>
+    </>
   );
 }

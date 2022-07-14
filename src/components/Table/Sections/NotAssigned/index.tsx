@@ -6,13 +6,18 @@ import { TileData } from "../../../../redux/tilesSlice";
 
 import Section from "../Section";
 import NotAssignedRow from "./NotAssignedRow";
+import Row from "../Row";
 
 export default function NotAssigned(): JSX.Element {
   const tiles = useUnassignedTilesForCurrentPeriod();
 
   return (
     <Section header="Non Assegnati">
-      {tiles.map((tile) => <NotAssignedRow key={tile.id} tile={tile} />)}
+      {tiles.map((tile) => (
+        <Row key={tile.id}>
+          <NotAssignedRow tile={tile} />
+        </Row>
+      ))}
     </Section>
   );
 }
