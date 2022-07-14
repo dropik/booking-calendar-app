@@ -4,8 +4,8 @@ import { FloorData } from "../../../redux/hotelSlice";
 
 import Section from "./Section";
 import Row from "./Row";
-import RoomHeader from "./Row/RoomHeader";
-import RoomBody from "./Row/RoomBody";
+import RoomHeader from "./Room/RoomHeader";
+import RoomBody from "./Room/RoomBody";
 
 type FloorProps = {
   data: FloorData
