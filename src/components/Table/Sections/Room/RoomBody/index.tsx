@@ -1,23 +1,19 @@
 import React from "react";
-import Box from "@mui/material/Box";
 
 import DataRow from "./DataRow";
 import GridRow from "./GridRow";
+import Body from "../../Body";
 
-
-type Props = {
+type RoomBodyProps = {
   isLast: boolean,
   roomNumber: number
 }
 
-export default function RoomBody({ isLast, roomNumber }: Props): JSX.Element {
+export default function RoomBody({ isLast, roomNumber }: RoomBodyProps): JSX.Element {
   return (
-    <Box sx={{
-      position: "relative",
-      ml: "calc(7.5rem + 1px)",
-    }}>
+    <Body>
       <GridRow isLast={isLast} />
       <DataRow roomNumber={roomNumber} />
-    </Box>
+    </Body>
   );
 }
