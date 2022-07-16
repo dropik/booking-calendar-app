@@ -4,10 +4,10 @@ import * as Utils from "../../../../utils";
 import { useAppSelector } from "../../../../redux/hooks";
 import { TileData } from "../../../../redux/tilesSlice";
 
-import Section from "../Section";
-import NotAssignedBody from "./NotAssignedBody";
+import Section from "..";
+import Body from "./Body";
 import Row from "../Row";
-import Header from "../Header";
+import RowHeader from "../Row/Header";
 
 export default function NotAssigned(): JSX.Element {
   const tiles = useUnassignedTilesForCurrentPeriod();
@@ -16,8 +16,8 @@ export default function NotAssigned(): JSX.Element {
     <Section header="Non Assegnati">
       {tiles.map((tile) => (
         <Row key={tile.id}>
-          <Header></Header>
-          <NotAssignedBody tile={tile} />
+          <RowHeader></RowHeader>
+          <Body tile={tile} />
         </Row>
       ))}
     </Section>

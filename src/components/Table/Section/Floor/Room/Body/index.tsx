@@ -2,18 +2,18 @@ import React from "react";
 
 import DataRow from "./DataRow";
 import GridRow from "./GridRow";
-import Body from "../../Body";
+import RowBody from "../../../Row/Body";
 
-type RoomBodyProps = {
+type BodyProps = {
   isLast: boolean,
   roomNumber: number
 }
 
-export default function RoomBody({ isLast, roomNumber }: RoomBodyProps): JSX.Element {
+export default function Body({ isLast, roomNumber }: BodyProps): JSX.Element {
   return (
-    <Body>
+    <RowBody>
       <GridRow isLast={isLast} />
       <DataRow roomNumber={roomNumber} />
-    </Body>
+    </RowBody>
   );
 }

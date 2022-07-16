@@ -6,12 +6,12 @@ import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 
 import M3IconButton from "../../m3/M3IconButton";
 
-type FloorHeaderProps = {
+type HeaderProps = {
   name: string,
   collapseCallback: () => void
 };
 
-export default function SectionHeader({ name, collapseCallback }: FloorHeaderProps): JSX.Element {
+export default function Header({ name, collapseCallback }: HeaderProps): JSX.Element {
   const [iconState, setIconState] = useState(true);
   const capitalizedFloor = getCapitalizedName(name);
 

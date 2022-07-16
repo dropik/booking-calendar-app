@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import Typography from "@mui/material/Typography";
 
-import { useAppSelector, useLeftmostDate } from "../../../../../../../redux/hooks";
+import { useAppSelector, useLeftmostDate } from "../../../../../../../../redux/hooks";
 import { getCanvasFontSize, getTextWidth } from "./utils";
-import { TableContext } from "../../../../../TextWidthCanvas";
+import { TableContext } from "../../../../../../TextWidthCanvas";
 import { TileContext } from "./context";
 
 

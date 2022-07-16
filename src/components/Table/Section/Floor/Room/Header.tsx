@@ -1,18 +1,18 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 
-import { RoomData } from "../../../../redux/hotelSlice";
-import Header from "../Header";
+import { RoomData } from "../../../../../redux/hotelSlice";
+import RowHeader from "../../Row/Header";
 
-type Props = {
+type HeaderProps = {
   room: RoomData
 }
 
-export default function RoomHeader({ room }: Props): JSX.Element {
+export default function Header({ room }: HeaderProps): JSX.Element {
   const significantRoomType = room.type.replace("Camera ", "").replace("camera ", "");
 
   return (
-    <Header>
+    <RowHeader>
       <Typography variant="labelLarge">{room.number}</Typography>
       <Typography
         sx={{
@@ -23,6 +23,6 @@ export default function RoomHeader({ room }: Props): JSX.Element {
       >
         {significantRoomType}
       </Typography>
-    </Header>
+    </RowHeader>
   );
 }

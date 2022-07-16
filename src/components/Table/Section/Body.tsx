@@ -2,11 +2,11 @@ import React, { ReactNode, Children } from "react";
 import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 
-type Props = {
+type BodyProps = {
   children: ReactNode
 }
 
-export default function SectionBody({ children }: Props): JSX.Element {
+export default function Body({ children }: BodyProps): JSX.Element {
   const theme = useTheme();
 
   return (
