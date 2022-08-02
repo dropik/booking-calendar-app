@@ -1,13 +1,9 @@
-import React, { ReactNode } from "react";
-import Box from "@mui/material/Box";
+import React from "react";
+import Box, { BoxProps } from "@mui/material/Box";
 
-type BodyProps = {
-  children: ReactNode
-};
-
-export default function Body({ children }: BodyProps): JSX.Element {
+export default function Body({ children, ...props }: BoxProps): JSX.Element {
   return (
-    <Box sx={{
+    <Box {...props} sx={{
       position: "relative",
       ml: "calc(7.5rem + 1px)",
     }}>
