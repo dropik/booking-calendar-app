@@ -98,7 +98,7 @@ export const tilesSlice = createSlice({
       state.grabbedMap[action.payload.tileId] = false;
       state.mouseYOnGrab = 0;
     },
-    removeAssignment: (state, action: PayloadAction<{ tileId: string }>) => {
+    unassign: (state, action: PayloadAction<{ tileId: string }>) => {
       tryRemoveAssignment(state, action);
       checkChangeReturnedToOriginal(state, action.payload.tileId);
     },
@@ -141,7 +141,7 @@ export const tilesSlice = createSlice({
   }
 });
 
-export const { move, grab, drop, removeAssignment, saveChanges, undoChanges, setColor } = tilesSlice.actions;
+export const { move, grab, drop, unassign, saveChanges, undoChanges, setColor } = tilesSlice.actions;
 
 export default tilesSlice.reducer;
 

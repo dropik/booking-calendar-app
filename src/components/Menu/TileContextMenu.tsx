@@ -28,7 +28,7 @@ export default function TileContextMenu({ tileId, anchorEl, onClose, unassigned 
   }
 
   function removeOccupation() {
-    dispatch(TilesSlice.removeAssignment({ tileId }));
+    dispatch(TilesSlice.unassign({ tileId }));
   }
 
   return (
