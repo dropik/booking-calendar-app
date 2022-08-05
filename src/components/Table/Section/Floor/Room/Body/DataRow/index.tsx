@@ -68,7 +68,7 @@ function useRoomTiles(roomNumber: number): TileDescriptor[] {
       const assignedTile = assignedTilesForRoom[dateCounter];
 
       if (!freeSpace) {
-        if (assignedTile) {
+        if (assignedTile && assignedTile !== "dropzone") {
           const tile = state.tiles.data[assignedTile];
           tiles.push(tile);
           i += tile.nights;
@@ -86,7 +86,7 @@ function useRoomTiles(roomNumber: number): TileDescriptor[] {
           dateCounterObj.setDate(dateCounterObj.getDate() + 1);
         }
       } else {
-        if (assignedTile) {
+        if (assignedTile && assignedTile !== "dropzone") {
           freeSpace.to = dateCounter;
           tiles.push(freeSpace);
           freeSpace = null;

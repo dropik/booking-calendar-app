@@ -5,6 +5,7 @@ import * as Api from "../api";
 import * as Utils from "../utils";
 
 import * as TableSlice from "./tableSlice";
+import * as HotelSlice from "./hotelSlice";
 
 export type TileColor = "booking1" | "booking2" | "booking3" | "booking4" | "booking5" | "booking6" | "booking7" | "booking8";
 
@@ -92,11 +93,42 @@ export const tilesSlice = createSlice({
       state.grabbedTile = action.payload.tileId;
       state.grabbedMap[action.payload.tileId] = true;
       state.mouseYOnGrab = action.payload.mouseY;
+
+      const tile = state.data[action.payload.tileId];
+      for (const roomNumber in state.assignedMap) {
+        let revert = false;
+        const dateCounter = new Date(tile.from);
+        for (let i = 0; i < tile.nights; i++) {
+          const x = Utils.dateToString(dateCounter);
+          dateCounter.setDate(dateCounter.getDate() + 1);
+          if (!state.assignedMap[roomNumber][x]) {
+            state.assignedMap[roomNumber][x] = "dropzone";
+          } else {
+            revert = true;
+            dateCounter.setDate(dateCounter.getDate() - 2);
+            break;
+          }
+        }
+
+        if (revert) {
+          let x = Utils.dateToString(dateCounter);
+          while (Utils.daysBetweenDates(tile.from, x) >= 0) {
+            state.assignedMap[roomNumber][x] = undefined;
+            dateCounter.setDate(dateCounter.getDate() - 1);
+            x = Utils.dateToString(dateCounter);
+          }
+        }
+      }
     },
     drop: (state, action: PayloadAction<{ tileId: string }>) => {
       state.grabbedTile = undefined;
       state.grabbedMap[action.payload.tileId] = false;
       state.mouseYOnGrab = 0;
+
+      // const tile = state.data[action.payload.tileId];
+      // for (const roomNumber of state.assignedMap) {
+      //   const dateCounter = new
+      // }
     },
     unassign: (state, action: PayloadAction<{ tileId: string }>) => {
       tryRemoveAssignment(state, action);
@@ -137,6 +169,15 @@ export const tilesSlice = createSlice({
       })
       .addCase(fetchAsync.rejected, (state) => {
         state.status = "failed";
+      })
+      .addCase(HotelSlice.fetchAsync.fulfilled, (state, action) => {
+        action.payload.floors.forEach((floor) => {
+          floor.rooms.forEach((room) => {
+            if (!state.assignedMap[room.number]) {
+              state.assignedMap[room.number] = { };
+            }
+          });
+        });
       });
   }
 });
