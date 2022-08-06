@@ -125,10 +125,17 @@ export const tilesSlice = createSlice({
       state.grabbedMap[action.payload.tileId] = false;
       state.mouseYOnGrab = 0;
 
-      // const tile = state.data[action.payload.tileId];
-      // for (const roomNumber of state.assignedMap) {
-      //   const dateCounter = new
-      // }
+      const tile = state.data[action.payload.tileId];
+      for (const roomNumber in state.assignedMap) {
+        if (state.assignedMap[roomNumber][tile.from] === "dropzone") {
+          const dateCounter = new Date(tile.from);
+          for (let i = 0; i < tile.nights; i++) {
+            const x = Utils.dateToString(dateCounter);
+            dateCounter.setDate(dateCounter.getDate() + 1);
+            state.assignedMap[roomNumber][x] = undefined;
+          }
+        }
+      }
     },
     unassign: (state, action: PayloadAction<{ tileId: string }>) => {
       tryRemoveAssignment(state, action);
