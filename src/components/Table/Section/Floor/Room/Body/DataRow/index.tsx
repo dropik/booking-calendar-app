@@ -4,8 +4,8 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 
 import * as Utils from "../../../../../../../utils";
-import { useAppSelector, useColumns, useDates, useLeftmostDate, useRightmostDate } from "../../../../../../../redux/hooks";
-import { TileData } from "../../../../../../../redux/tilesSlice";
+import { useAppDispatch, useAppSelector, useColumns, useDates, useLeftmostDate, useRightmostDate } from "../../../../../../../redux/hooks";
+import { TileData, move } from "../../../../../../../redux/tilesSlice";
 
 import FreeSpace from "./FreeSpace";
 import Tile from "./Tile";
@@ -49,7 +49,7 @@ function DateCellSwitch({ roomNumber, date }: DateCellSwitchProps): JSX.Element 
   if (assignedValue === "dropzone") {
     if (grabbedTile) {
       if ((date === grabbedTile.from) || (date === oneDayBefore)) {
-        return <DropZone data={grabbedTile} />;
+        return <DropZone roomNumber={roomNumber} data={grabbedTile} />;
       }
     }
   } else if (assignedValue !== undefined) {
@@ -73,11 +73,21 @@ function DateCellSwitch({ roomNumber, date }: DateCellSwitchProps): JSX.Element 
 }
 
 type DropZoneProps = {
+  roomNumber: number,
   data: TileData
 };
 
-function DropZone({ data }: DropZoneProps): JSX.Element {
+function DropZone({ roomNumber, data }: DropZoneProps): JSX.Element {
+  const dispatch = useAppDispatch();
   const theme = useTheme();
+
+  function acceptDrop(event: React.DragEvent<HTMLDivElement>): void {
+    event.preventDefault();
+  }
+
+  function handleDrop(): void {
+    dispatch(move({ newY: roomNumber }));
+  }
 
   return (
     <TileContext.Provider value={{ data: data, cropLeft: false, cropRight: false}}>
@@ -86,6 +96,9 @@ function DropZone({ data }: DropZoneProps): JSX.Element {
           {
             (value) => (
               <Box
+                onDragEnter={acceptDrop}
+                onDragOver={acceptDrop}
+                onDrop={handleDrop}
                 sx={{
                   display: "flex",
                   position: "relative",

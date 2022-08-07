@@ -363,7 +363,7 @@ function checkHasCollision(
   const dateCounter = new Date(tileData.from);
   for (let i = 0; i < tileData.nights; i++) {
     const x = Utils.dateToString(dateCounter);
-    if (state.assignedMap[newY][x] !== undefined) {
+    if ((state.assignedMap[newY][x] !== undefined) && (state.assignedMap[newY][x] !== "dropzone")) {
       return true;
     }
     dateCounter.setDate(dateCounter.getDate() + 1);

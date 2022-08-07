@@ -1,4 +1,4 @@
-import React, { ReactNode, useContext } from "react";
+import React, { ReactNode, useContext, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 
 import * as Utils from "../../../../../../../../utils";
@@ -30,6 +30,12 @@ export default function TileSize({ children }: Props): JSX.Element {
     size -= data.nights - arrivalToRightmost - 0.5;
     cropRight = true;
   }
+
+  useEffect(() => {
+    return () => {
+      dispatch(drop({ tileId: data.id }));
+    };
+  }, [dispatch, data.id]);
 
   return (
     <Grid
