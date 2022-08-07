@@ -14,12 +14,15 @@ export function useTileData(id: string | undefined): TilesSlice.TileData | undef
   });
 }
 
-export function useDates(): string[] {
+export function useDates(useOneDayBefore = false): string[] {
   const dateCounter = new Date(useAppSelector(state => state.table.leftmostDate));
+  if (useOneDayBefore) {
+    dateCounter.setDate(dateCounter.getDate() - 1);
+  }
   const columns = useAppSelector(state => state.table.columns);
   const dates: string[] = [];
 
-  for (let i = 0; i < columns; i++) {
+  for (let i = useOneDayBefore ? -1 : 0; i < columns; i++) {
     dates.push(Utils.dateToString(dateCounter));
     dateCounter.setDate(dateCounter.getDate() + 1);
   }
@@ -38,6 +41,10 @@ export function useLeftShift(fromDate: string | undefined, drawerWidth: string):
       return drawerShift + hotelBarShift + daysShift * cellWidth;
     } else return 0;
   });
+}
+
+export function useRightmostDate(): string {
+  return useAppSelector((state) => Utils.getDateShift(state.table.leftmostDate, state.table.columns - 1));
 }
 
 export const useCurrentDate:        () => string =

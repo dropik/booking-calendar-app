@@ -2,13 +2,10 @@ import React from "react";
 import Grid from "@mui/material/Grid";
 
 import * as Utils from "../../../../../../../utils";
-import { useAppSelector, useColumns } from "../../../../../../../redux/hooks";
-import { TileData } from "../../../../../../../redux/tilesSlice";
+import { useAppSelector, useColumns, useDates, useLeftmostDate, useRightmostDate } from "../../../../../../../redux/hooks";
 
-import FreeSpace, { FreeSpaceProps } from "./FreeSpace";
+import FreeSpace from "./FreeSpace";
 import Tile from "./Tile";
-
-type TileDescriptor = FreeSpaceProps | TileData;
 
 type Props = {
   roomNumber: number
@@ -16,7 +13,7 @@ type Props = {
 
 export default function DataRow({ roomNumber }: Props): JSX.Element {
   const columns = useColumns();
-  const tiles = useRoomTiles(roomNumber);
+  const dates = useDates(true);
 
   return (
     <Grid container spacing={0} columns={columns} sx={{
@@ -24,89 +21,51 @@ export default function DataRow({ roomNumber }: Props): JSX.Element {
       top: 0
     }}>
       {
-        tiles.map((tile) => (
-          ("id" in tile) ? (
-            <Tile key={tile.id} data={tile} />
-          ) : (
-            <FreeSpace
-              key={tile.from}
-              from={tile.from}
-              to={tile.to}
-              cropLeft={tile.cropLeft}
-              cropRight={tile.cropRight}
-            />
-          )
-        ))
+        dates.map((date) => <DateCellSwitch key={date} roomNumber={roomNumber} date={date} />)
       }
     </Grid>
   );
 }
 
-function useRoomTiles(roomNumber: number): TileDescriptor[] {
-  return useAppSelector((state) => {
-    const tiles: TileDescriptor[] = [];
-    const assignedTilesForRoom = state.tiles.assignedMap[roomNumber];
-    const leftmostDate = state.table.leftmostDate;
-    const columns = state.table.columns;
-    const oneDayBefore = Utils.getDateShift(leftmostDate, -1);
+type DateCellSwitchProps = {
+  roomNumber: number,
+  date: string
+};
 
-    if (!assignedTilesForRoom) {
-      tiles.push({
-        from: oneDayBefore,
-        to: Utils.getDateShift(leftmostDate, columns),
-        cropLeft: true,
-        cropRight: true
-      });
-      return tiles;
-    }
+function DateCellSwitch({ roomNumber, date }: DateCellSwitchProps): JSX.Element | null {
+  const assignedValue = useAppSelector((state) => state.tiles.assignedMap[roomNumber][date]);
+  const grabbedTile = useAppSelector((state) => state.tiles.grabbedTile ? state.tiles.data[state.tiles.grabbedTile] : undefined);
+  const assignedTile = useAppSelector((state) => assignedValue ? state.tiles.data[assignedValue] : undefined);
+  const leftmostDate = useLeftmostDate();
+  const rightmostDate = useRightmostDate();
+  const oneDayBefore = Utils.getDateShift(leftmostDate, -1);
 
-    const dateCounterObj = new Date(oneDayBefore);
-    let freeSpace: FreeSpaceProps | null = null;
-
-    for (let i = 0; i < columns + 1; i++) {
-      const dateCounter = Utils.dateToString(dateCounterObj);
-      const assignedTile = assignedTilesForRoom[dateCounter];
-
-      if (!freeSpace) {
-        if (assignedTile && assignedTile !== "dropzone") {
-          const tile = state.tiles.data[assignedTile];
-          tiles.push(tile);
-          i += tile.nights;
-          dateCounterObj.setDate(dateCounterObj.getDate() + tile.nights + 1);
-        } else {
-          freeSpace = {
-            from: dateCounter,
-            to: dateCounter,
-            cropLeft: false,
-            cropRight: false
-          };
-          if (i === 0) {
-            freeSpace.cropLeft = true;
-          }
-          dateCounterObj.setDate(dateCounterObj.getDate() + 1);
-        }
-      } else {
-        if (assignedTile && assignedTile !== "dropzone") {
-          freeSpace.to = dateCounter;
-          tiles.push(freeSpace);
-          freeSpace = null;
-
-          const tile = state.tiles.data[assignedTile];
-          tiles.push(tile);
-          i += tile.nights - 1;
-          dateCounterObj.setDate(dateCounterObj.getDate() + tile.nights);
-        } else {
-          freeSpace.to = dateCounter;
-          dateCounterObj.setDate(dateCounterObj.getDate() + 1);
-        }
+  if (assignedValue === "dropzone") {
+    if (grabbedTile) {
+      if ((date === grabbedTile.from) || (date === oneDayBefore)) {
+        return <DropZone />;
       }
     }
-
-    if (freeSpace) {
-      freeSpace.cropRight = true;
-      tiles.push(freeSpace);
+  } else if (assignedValue !== undefined) {
+    if (assignedTile) {
+      if ((date === assignedTile.from) || (date === oneDayBefore)) {
+        return <Tile data={assignedTile} />;
+      }
     }
+  } else {
+    return (
+      <FreeSpace
+        from={date}
+        to={Utils.getDateShift(date, 1)}
+        cropLeft={date === oneDayBefore}
+        cropRight={date === rightmostDate}
+      />
+    );
+  }
 
-    return tiles;
-  });
+  return null;
+}
+
+function DropZone(): JSX.Element {
+  return <></>;
 }
