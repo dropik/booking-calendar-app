@@ -5,9 +5,9 @@ import { TileContext } from "./context";
 
 import Title from "./Title";
 import Body from "./Body";
-import TileSize from "./TileSize";
-import TileAlert from "./TileAlert";
-import TileContainer from "./TileContainer";
+import Size from "./Size";
+import Alert from "./Alert";
+import Container from "./Container";
 import Draggable from "./Draggable";
 
 type Props = {
@@ -17,16 +17,16 @@ type Props = {
 export default function Tile({ data }: Props): JSX.Element {
   return (
     <TileContext.Provider value={{ data: data, cropLeft: false, cropRight: false }}>
-      <TileSize>
+      <Size>
         <Draggable>
-          <TileAlert>
-            <TileContainer>
+          <Alert>
+            <Container>
               <Title />
               <Body />
-            </TileContainer>
-          </TileAlert>
+            </Container>
+          </Alert>
         </Draggable>
-      </TileSize>
+      </Size>
     </TileContext.Provider>
   );
 }

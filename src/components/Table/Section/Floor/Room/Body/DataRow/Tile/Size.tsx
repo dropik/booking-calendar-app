@@ -5,11 +5,11 @@ import * as Utils from "../../../../../../../../utils";
 import { useAppSelector, useLeftmostDate } from "../../../../../../../../redux/hooks";
 import { TileContext } from "./context";
 
-type Props = {
+type SizeProps = {
   children: ReactNode
 }
 
-export default function TileSize({ children }: Props): JSX.Element {
+export default function Size({ children }: SizeProps): JSX.Element {
   const data = useContext(TileContext).data;
   const leftmostDate = useLeftmostDate();
   const rightmostDate = useAppSelector((state) => Utils.getDateShift(state.table.leftmostDate, state.table.columns - 1));

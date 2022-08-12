@@ -5,11 +5,11 @@ import Badge from "@mui/material/Badge";
 import { useAppSelector } from "../../../../../../../../redux/hooks";
 import { TileContext } from "./context";
 
-type Props = {
+type AlertProps = {
   children: ReactNode
 };
 
-export default function TileAlert({ children }: Props): JSX.Element {
+export default function Alert({ children }: AlertProps): JSX.Element {
   const context = useContext(TileContext);
   const assignedRoomType = useAssignedRoomType(context.data.roomNumber);
   const personsInAssignedRoomType = useAppSelector((state) => assignedRoomType ? state.roomTypes.data[assignedRoomType] : undefined);

@@ -10,7 +10,7 @@ import { TileData, move } from "../../../../../../../redux/tilesSlice";
 import FreeSpace from "./FreeSpace";
 import Tile from "./Tile";
 import { TileContext } from "./Tile/context";
-import TileSize from "./Tile/TileSize";
+import Size from "./Tile/Size";
 import { SurfaceTint } from "../../../../../../m3/Tints";
 
 type Props = {
@@ -91,7 +91,7 @@ function DropZone({ roomNumber, data }: DropZoneProps): JSX.Element {
 
   return (
     <TileContext.Provider value={{ data: data, cropLeft: false, cropRight: false}}>
-      <TileSize>
+      <Size>
         <TileContext.Consumer>
           {
             (value) => (
@@ -132,7 +132,7 @@ function DropZone({ roomNumber, data }: DropZoneProps): JSX.Element {
             )
           }
         </TileContext.Consumer>
-      </TileSize>
+      </Size>
     </TileContext.Provider>
   );
 }

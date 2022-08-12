@@ -5,11 +5,11 @@ import Box from "@mui/material/Box";
 import { TileColor } from "../../../../../../../../redux/tilesSlice";
 import { TileContext } from "./context";
 
-type Props = {
+type ContainerProps = {
   children: ReactNode
 };
 
-export default function TileContainer({ children }: Props): JSX.Element {
+export default function Container({ children }: ContainerProps): JSX.Element {
   const { data, cropLeft, cropRight } = useContext(TileContext);
   const theme = useTheme();
 
