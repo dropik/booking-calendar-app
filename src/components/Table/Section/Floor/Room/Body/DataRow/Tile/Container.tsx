@@ -38,7 +38,8 @@ export default function Container({ children }: ContainerProps): JSX.Element {
         }),
         ...(cropLeft && {
           borderLeft: 0
-        })
+        }),
+        cursor: "move"
       }}
     >
       <Box sx={{
