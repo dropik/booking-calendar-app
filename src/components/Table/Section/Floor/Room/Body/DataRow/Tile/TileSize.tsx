@@ -1,10 +1,9 @@
-import React, { ReactNode, useContext, useEffect } from "react";
+import React, { ReactNode, useContext } from "react";
 import Grid from "@mui/material/Grid";
 
 import * as Utils from "../../../../../../../../utils";
-import { useAppDispatch, useAppSelector, useLeftmostDate } from "../../../../../../../../redux/hooks";
+import { useAppSelector, useLeftmostDate } from "../../../../../../../../redux/hooks";
 import { TileContext } from "./context";
-import { grab, drop } from "../../../../../../../../redux/tilesSlice";
 
 type Props = {
   children: ReactNode
@@ -12,7 +11,6 @@ type Props = {
 
 export default function TileSize({ children }: Props): JSX.Element {
   const data = useContext(TileContext).data;
-  const dispatch = useAppDispatch();
   const leftmostDate = useLeftmostDate();
   const rightmostDate = useAppSelector((state) => Utils.getDateShift(state.table.leftmostDate, state.table.columns - 1));
   const leftmostToArrival = Utils.daysBetweenDates(leftmostDate, data.from);
@@ -31,23 +29,10 @@ export default function TileSize({ children }: Props): JSX.Element {
     cropRight = true;
   }
 
-  useEffect(() => {
-    return () => {
-      dispatch(drop({ tileId: data.id }));
-    };
-  }, [dispatch, data.id]);
-
   return (
     <Grid
-      draggable
       item
       xs={size}
-      onDragStart={() => {
-        dispatch(grab({ tileId: data.id, mouseY: 0 }));
-      }}
-      onDragEnd={() => {
-        dispatch(drop({ tileId: data.id }));
-      }}
       sx={{
         ...(!cropRight && {
           paddingRight: "1.5px"
