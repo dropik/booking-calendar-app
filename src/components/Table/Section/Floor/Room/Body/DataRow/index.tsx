@@ -1,5 +1,4 @@
 import React from "react";
-import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 
@@ -11,7 +10,7 @@ import FreeSpace from "./FreeSpace";
 import Tile from "./Tile";
 import { TileContext } from "./Tile/context";
 import Size from "./Tile/Size";
-import { SurfaceTint } from "../../../../../../m3/Tints";
+import Container from "./Tile/Container";
 
 type Props = {
   roomNumber: number
@@ -78,49 +77,11 @@ type DropZoneProps = {
 };
 
 function DropZone({ roomNumber, data }: DropZoneProps): JSX.Element {
-  const theme = useTheme();
-
   return (
     <TileContext.Provider value={{ data: data, cropLeft: false, cropRight: false}}>
       <Size>
         <DropAccepter roomNumber={roomNumber}>
-          <TileContext.Consumer>
-            {
-              (value) => (
-                <Box
-                  sx={{
-                    display: "flex",
-                    position: "relative",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    height: "3rem",
-                    p: "1rem",
-                    borderRadius: "0.75rem",
-                    ...(value.cropLeft && {
-                      borderTopLeftRadius: 0,
-                      borderBottomLeftRadius: 0,
-                    }),
-                    ...(value.cropRight && {
-                      borderTopRightRadius: 0,
-                      borderBottomRightRadius: 0,
-                    }),
-                    border: `1px dashed ${theme.palette.outline.light}`,
-                    ...(value.cropRight && {
-                      borderRight: 0
-                    }),
-                    ...(value.cropLeft && {
-                      borderLeft: 0
-                    })
-                  }}
-                >
-                  <SurfaceTint sx={{
-                    backgroundColor: theme.palette.primary.light,
-                    opacity: theme.opacities.surface1
-                  }} />
-                </Box>
-              )
-            }
-          </TileContext.Consumer>
+          <Container dropZone={true} />
         </DropAccepter>
       </Size>
     </TileContext.Provider>

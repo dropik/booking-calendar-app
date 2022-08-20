@@ -4,13 +4,14 @@ import Box from "@mui/material/Box";
 
 import { TileColor } from "../../../../../../../../redux/tilesSlice";
 import { TileContext } from "./context";
+import { SurfaceTint } from "../../../../../../../m3/Tints";
 
 type ContainerProps = {
-  children: ReactNode,
-  dashedBorder?: boolean
+  children?: ReactNode,
+  dropZone?: boolean
 };
 
-export default function Container({ children, dashedBorder }: ContainerProps): JSX.Element {
+export default function Container({ children, dropZone }: ContainerProps): JSX.Element {
   const { data, cropLeft, cropRight } = useContext(TileContext);
   const theme = useTheme();
 
@@ -18,6 +19,7 @@ export default function Container({ children, dashedBorder }: ContainerProps): J
     <Box
       sx={{
         display: "flex",
+        position: "relative",
         flexDirection: "column",
         justifyContent: "center",
         height: "3rem",
@@ -31,9 +33,9 @@ export default function Container({ children, dashedBorder }: ContainerProps): J
           borderTopRightRadius: 0,
           borderBottomRightRadius: 0,
         }),
-        backgroundColor: theme.palette[`${data.color}Container`].light,
-        color: theme.palette[`on${data.color[0].toUpperCase()}${data.color.substring(1)}Container` as `on${Capitalize<TileColor>}Container`].light,
-        border: `1px ${dashedBorder ? "dashed" : "solid"} ${theme.palette.outline.light}`,
+        backgroundColor: dropZone === true ? "" : theme.palette[`${data.color}Container`].light,
+        color: dropZone === true ? "" : theme.palette[`on${data.color[0].toUpperCase()}${data.color.substring(1)}Container` as `on${Capitalize<TileColor>}Container`].light,
+        border: `1px ${dropZone === true ? "dashed" : "solid"} ${theme.palette.outline.light}`,
         ...(cropRight && {
           borderRight: 0
         }),
@@ -55,6 +57,12 @@ export default function Container({ children, dashedBorder }: ContainerProps): J
         }
       }}>
         {children}
+        {dropZone === true ? (
+          <SurfaceTint sx={{
+            backgroundColor: theme.palette.primary.light,
+            opacity: theme.opacities.surface1
+          }} />
+        ) : null}
       </Box>
     </Box>
   );
