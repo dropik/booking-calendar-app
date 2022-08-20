@@ -6,10 +6,11 @@ import { TileColor } from "../../../../../../../../redux/tilesSlice";
 import { TileContext } from "./context";
 
 type ContainerProps = {
-  children: ReactNode
+  children: ReactNode,
+  dashedBorder?: boolean
 };
 
-export default function Container({ children }: ContainerProps): JSX.Element {
+export default function Container({ children, dashedBorder }: ContainerProps): JSX.Element {
   const { data, cropLeft, cropRight } = useContext(TileContext);
   const theme = useTheme();
 
@@ -32,7 +33,7 @@ export default function Container({ children }: ContainerProps): JSX.Element {
         }),
         backgroundColor: theme.palette[`${data.color}Container`].light,
         color: theme.palette[`on${data.color[0].toUpperCase()}${data.color.substring(1)}Container` as `on${Capitalize<TileColor>}Container`].light,
-        border: `1px solid ${theme.palette.outline.light}`,
+        border: `1px ${dashedBorder ? "dashed" : "solid"} ${theme.palette.outline.light}`,
         ...(cropRight && {
           borderRight: 0
         }),
