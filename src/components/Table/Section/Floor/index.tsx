@@ -18,7 +18,11 @@ export default function Floor({ data }: FloorProps): JSX.Element {
         data.rooms.map((room, index) => (
           <Row key={room.number}>
             <Header room={room} />
-            <Body isLast={index === data.rooms.length - 1} roomNumber={room.number} />
+            <Body
+              isFirst={index === 0}
+              isLast={index === data.rooms.length - 1}
+              roomNumber={room.number}
+            />
           </Row>
         ))
       }

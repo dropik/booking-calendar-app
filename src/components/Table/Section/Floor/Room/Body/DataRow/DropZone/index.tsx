@@ -15,7 +15,7 @@ type DropZoneProps = {
 export default function DropZone({ roomNumber, data }: DropZoneProps): JSX.Element {
   return (
     <TileContext.Provider value={{ data: data, cropLeft: false, cropRight: false}}>
-      <Size>
+      <Size sx={{ pt: "calc(0.25rem - 1px)", pb: "calc(0.25rem - 1px)" }}>
         <DropAccepter roomNumber={roomNumber}>
           <Container dropZone={true} />
         </DropAccepter>

@@ -1,5 +1,5 @@
 import React, { ReactNode, useContext } from "react";
-import Grid from "@mui/material/Grid";
+import Grid, { GridProps } from "@mui/material/Grid";
 
 import * as Utils from "../../../../../../../../utils";
 import { useAppSelector, useLeftmostDate } from "../../../../../../../../redux/hooks";
@@ -7,9 +7,9 @@ import { TileContext } from "./context";
 
 type SizeProps = {
   children: ReactNode
-}
+} & GridProps;
 
-export default function Size({ children }: SizeProps): JSX.Element {
+export default function Size({ children, sx }: SizeProps): JSX.Element {
   const data = useContext(TileContext).data;
   const leftmostDate = useLeftmostDate();
   const rightmostDate = useAppSelector((state) => Utils.getDateShift(state.table.leftmostDate, state.table.columns - 1));
@@ -35,13 +35,14 @@ export default function Size({ children }: SizeProps): JSX.Element {
       xs={size}
       sx={{
         ...(!cropRight && {
-          paddingRight: "1.5px"
+          pr: "0.25rem"
         }),
         ...(!cropLeft && {
-          paddingLeft: "1.5px"
+          pl: "0.25rem"
         }),
-        pt: "1px",
-        pb: "1px"
+        pt: "0.25rem",
+        pb: "0.25rem",
+        ...sx
       }}
     >
       <TileContext.Provider value={{ data: data, cropLeft: cropLeft, cropRight: cropRight }}>

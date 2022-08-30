@@ -40,10 +40,10 @@ export default function Body({ tile }: BodyProps): JSX.Element {
         }
       }}
     >
-      <GridRow isLast={false} />
+      <GridRow isFirst={false} isLast={false} />
       <Grid container columns={columns} sx={{
         position: "absolute",
-        top: 0
+        top: -1
       }}>
         {freeSpace}
         <Tile data={tile} />
