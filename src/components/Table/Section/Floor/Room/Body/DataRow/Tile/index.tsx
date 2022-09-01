@@ -9,6 +9,7 @@ import Size from "./Size";
 import Alert from "./Alert";
 import Container from "./Container";
 import Draggable from "./Draggable";
+import ContextTrigger from "./ContextTrigger";
 
 type Props = {
   data: TileData
@@ -19,12 +20,14 @@ export default function Tile({ data }: Props): JSX.Element {
     <TileContext.Provider value={{ data: data, cropLeft: false, cropRight: false }}>
       <Size>
         <Draggable>
-          <Alert>
-            <Container>
-              <Title />
-              <Body />
-            </Container>
-          </Alert>
+          <ContextTrigger>
+            <Alert>
+              <Container>
+                <Title />
+                <Body />
+              </Container>
+            </Alert>
+          </ContextTrigger>
         </Draggable>
       </Size>
     </TileContext.Provider>
