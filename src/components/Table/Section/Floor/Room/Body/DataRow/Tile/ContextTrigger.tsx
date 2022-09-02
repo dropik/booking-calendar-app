@@ -9,15 +9,21 @@ type ContextTriggerProps = {
 
 export default function ContextTrigger({ children }: ContextTriggerProps): JSX.Element {
   const { data } = useContext(TileContext);
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [contextPos, setContextPos] = useState<{ top: number, left: number } | undefined>(undefined);
 
   function openContext(event: React.UIEvent<HTMLDivElement>) {
     event.preventDefault();
-    setAnchorEl(event.currentTarget);
+    let { x, y } = { x: 0, y: 0 };
+    const mouseEvent = event as React.MouseEvent<HTMLDivElement>;
+    if (mouseEvent !== undefined) {
+      x = mouseEvent.clientX;
+      y = mouseEvent.clientY;
+    }
+    setContextPos({ top: y, left: x });
   }
 
   function closeContext() {
-    setAnchorEl(null);
+    setContextPos(undefined);
   }
 
   return (
@@ -25,7 +31,8 @@ export default function ContextTrigger({ children }: ContextTriggerProps): JSX.E
       <Box onContextMenu={openContext}>{children}</Box>
       <TileContextMenu
         tileId={data.id}
-        anchorEl={anchorEl}
+        anchorReference="anchorPosition"
+        anchorPosition={contextPos}
         onClose={closeContext}
         unassigned={data.roomNumber === undefined}
       />

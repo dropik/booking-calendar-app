@@ -12,15 +12,17 @@ import ColorPicker from "./ColorPicker";
 
 type Props = {
   tileId: string,
-  anchorEl: HTMLElement | null,
+  anchorReference: "anchorEl" | "anchorPosition" | "none",
+  anchorEl?: HTMLElement,
+  anchorPosition?: { top: number, left: number },
   onClose: () => void,
   unassigned?: boolean
 };
 
-export default function TileContextMenu({ tileId, anchorEl, onClose, unassigned }: Props): JSX.Element {
+export default function TileContextMenu({ tileId, anchorReference, anchorEl, anchorPosition, onClose, unassigned }: Props): JSX.Element {
   const dispatch = useAppDispatch();
 
-  const open = Boolean(anchorEl);
+  const open = Boolean(anchorEl) || Boolean(anchorPosition);
   const id = open ? "tile-context-menu" : undefined;
 
   function showInfoDialog() {
@@ -34,7 +36,9 @@ export default function TileContextMenu({ tileId, anchorEl, onClose, unassigned 
   return (
     <Menu
       id={id}
+      anchorReference={anchorReference}
       anchorEl={anchorEl}
+      anchorPosition={anchorPosition}
       open={open}
       onClose={onClose}
       onAnyItemClick={onClose}
