@@ -27,6 +27,7 @@ export default function ContextTrigger({ children }: ContextTriggerProps): JSX.E
         tileId={data.id}
         anchorEl={anchorEl}
         onClose={closeContext}
+        unassigned={data.roomNumber === undefined}
       />
     </>
   );
