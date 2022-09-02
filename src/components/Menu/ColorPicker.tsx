@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import { useTheme, ThemePalettes } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 
 import { useAppDispatch } from "../../redux/hooks";
@@ -18,11 +17,10 @@ const colors: BookingColors[] = ["booking1", "booking2", "booking3", "booking4",
 
 export default function ColorPicker({ tileId }: Props): JSX.Element {
   const dispatch = useAppDispatch();
-  const theme = useTheme();
   const { onAnyItemClick } = useContext(MenuContext);
 
-  function changeColor(color: BookingColors) {
-    dispatch(TilesSlice.setColor({ tileId, color: theme.palette[`${color}Container` as ThemePalettes].main }));
+  function changeColor(color: TilesSlice.TileColor) {
+    dispatch(TilesSlice.setColor({ tileId, color: color }));
     onAnyItemClick();
   }
 
