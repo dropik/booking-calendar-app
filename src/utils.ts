@@ -3,6 +3,11 @@ export function remToPx(rem: number): number {
   return rem * fontSize;
 }
 
+export function pxToRem(px: number): number {
+  const fontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
+  return px / fontSize;
+}
+
 export function daysBetweenDates(from: string, to: string): number {
   const fromDate = new Date(from);
   const toDate = new Date(to);
