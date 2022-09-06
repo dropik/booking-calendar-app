@@ -10,6 +10,7 @@ import Alert from "./Alert";
 import Container from "./Container";
 import Draggable from "./Draggable";
 import ContextTrigger from "./ContextTrigger";
+import Expandable from "./Expandable";
 
 type Props = {
   data: TileData
@@ -21,12 +22,14 @@ export default function Tile({ data }: Props): JSX.Element {
       <Size>
         <Draggable>
           <ContextTrigger>
-            <Alert>
-              <Container>
-                <Title />
-                <Body />
-              </Container>
-            </Alert>
+            <Expandable>
+              <Alert>
+                <Container>
+                  <Title />
+                  <Body />
+                </Container>
+              </Alert>
+            </Expandable>
           </ContextTrigger>
         </Draggable>
       </Size>
