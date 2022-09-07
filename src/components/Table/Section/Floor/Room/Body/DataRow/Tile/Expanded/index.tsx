@@ -63,6 +63,9 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
         <Stack sx={{ pt: "0.5rem" }}>
           <Typography variant="bodySmall">{periodStr}</Typography>
           <Typography variant="bodySmall">{formattedRoomType}</Typography>
+          {data.roomNumber ? (
+            <Typography variant="bodySmall">{`Camera ${data.roomNumber}`}</Typography>
+          ) : null}
         </Stack>
       </Stack>
       <SurfaceTint sx={{
