@@ -42,7 +42,7 @@ export default function Container({ children, dropZone }: ContainerProps): JSX.E
         ...(cropLeft && {
           borderLeft: 0
         }),
-        cursor: "move"
+        cursor: "pointer"
       }}
     >
       <Box sx={{
