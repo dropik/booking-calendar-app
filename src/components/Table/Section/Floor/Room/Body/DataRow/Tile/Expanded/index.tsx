@@ -3,12 +3,15 @@ import { useTheme } from "@mui/material/styles";
 import Popover from "@mui/material/Popover";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import MoreVertOutlined from "@mui/icons-material/MoreVertOutlined";
 
 import * as Utils from "../../../../../../../../../utils";
 import { TileContext } from "../context";
+import { TileColor } from "../../../../../../../../../redux/tilesSlice";
+
 import M3IconButton from "../../../../../../../../m3/M3IconButton";
-import { MoreVertOutlined } from "@mui/icons-material";
 import { SurfaceTint } from "../../../../../../../../m3/Tints";
+import { ClientShortData } from "../../../../../../../../../api";
 
 type ExpandedProps = {
   anchorEl: HTMLElement | null,
@@ -18,6 +21,29 @@ type ExpandedProps = {
 export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Element {
   const { data } = useContext(TileContext);
   const theme = useTheme();
+
+  const clients: ClientShortData[] = [
+    {
+      id: "0",
+      name: "Ivan",
+      surname: "Petrov",
+      dateOfBirth: "1986/08/05",
+      placeOfBirth: "Canazei (TN)",
+      stateOfBirth: "Italia",
+      bookingId: "0",
+      bookingName: "Ivan Petrov"
+    },
+    {
+      id: "1",
+      name: "Vasya",
+      surname: "Pupkin",
+      dateOfBirth: "1986/08/05",
+      placeOfBirth: "Canazei (TN)",
+      stateOfBirth: "Italia",
+      bookingId: "0",
+      bookingName: "Ivan Petrov"
+    }
+  ];
 
   const open = Boolean(anchorEl);
   const id = open ? "expanded-tile" : undefined;
@@ -45,16 +71,23 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
         horizontal: "center",
         vertical: "center"
       }}
-      elevation={1}
+      elevation={2}
       marginThreshold={0}
       PaperProps={{
         sx: {
           width: `${anchorElWidthRemCaped}rem`,
-          borderRadius: "0.75rem"
+          borderRadius: "0.75rem",
+          backgroundColor: theme.palette.surface.light,
+          color: theme.palette.onSurface.light
         }
       }}
     >
-      <Stack spacing={0} sx={{ p: "1rem", backgroundColor: theme.palette[`${data.color}Container`].light }}>
+      <Stack spacing={0} sx={{
+        p: "1rem",
+        borderRadius: "inherit",
+        backgroundColor: theme.palette[`${data.color}Container`].light,
+        color: theme.palette[`on${data.color[0].toUpperCase()}${data.color.substring(1)}Container` as `on${Capitalize<TileColor>}Container`].light
+      }}>
         <Stack direction="row" justifyContent="space-between">
           <Typography variant="headlineMedium">{data.name}</Typography>
           <M3IconButton><MoreVertOutlined /></M3IconButton>
@@ -68,9 +101,26 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
           ) : null}
         </Stack>
       </Stack>
+      <Stack spacing={1} sx={{ p: "1rem" }}>
+        <Typography variant="titleLarge">Ospiti</Typography>
+        <Stack spacing={1} sx={{ p: "1rem" }}>
+          {clients.map((client) => (
+            <Stack key={client.id} spacing={0}>
+              <Typography variant="titleMedium">{`${client.name} ${client.surname}`}</Typography>
+              <Typography variant="bodySmall">
+                {
+                  `${(new Date(client.dateOfBirth)).toLocaleDateString()} -
+                  ${client.placeOfBirth} -
+                  ${client.stateOfBirth}`
+                }
+              </Typography>
+            </Stack>
+          ))}
+        </Stack>
+      </Stack>
       <SurfaceTint sx={{
         backgroundColor: theme.palette.primary.light,
-        opacity: theme.opacities.surface1
+        opacity: theme.opacities.surface2
       }} />
     </Popover>
   );

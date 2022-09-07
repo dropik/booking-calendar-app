@@ -57,7 +57,9 @@ export type ClientShortData = {
   bookingName: string,
   name: string,
   surname: string,
-  dateOfBirth: string
+  dateOfBirth: string,
+  placeOfBirth?: string,
+  stateOfBirth?: string
 };
 
 export function fetchHotelDataAsync(): Promise<{ data: HotelSlice.HotelData }> {
