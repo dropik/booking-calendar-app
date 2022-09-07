@@ -46,6 +46,7 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
         vertical: "center"
       }}
       elevation={1}
+      marginThreshold={0}
       PaperProps={{
         sx: {
           width: `${anchorElWidthRemCaped}rem`,
