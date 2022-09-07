@@ -6,6 +6,8 @@ import Typography from "@mui/material/Typography";
 
 import * as Utils from "../../../../../../../../../utils";
 import { TileContext } from "../context";
+import M3IconButton from "../../../../../../../../m3/M3IconButton";
+import { MoreVertOutlined } from "@mui/icons-material";
 
 type ExpandedProps = {
   anchorEl: HTMLElement | null,
@@ -51,7 +53,10 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
       }}
     >
       <Stack spacing={0} sx={{ p: "1rem", backgroundColor: theme.palette[`${data.color}Container`].light }}>
-        <Typography variant="headlineMedium">{data.name}</Typography>
+        <Stack direction="row" justifyContent="space-between">
+          <Typography variant="headlineMedium">{data.name}</Typography>
+          <M3IconButton><MoreVertOutlined /></M3IconButton>
+        </Stack>
         <Typography variant="titleMedium">{personsStr}</Typography>
         <Stack sx={{ pt: "0.5rem" }}>
           <Typography variant="bodySmall">{periodStr}</Typography>
