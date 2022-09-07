@@ -8,6 +8,7 @@ import * as Utils from "../../../../../../../../../utils";
 import { TileContext } from "../context";
 import M3IconButton from "../../../../../../../../m3/M3IconButton";
 import { MoreVertOutlined } from "@mui/icons-material";
+import { SurfaceTint } from "../../../../../../../../m3/Tints";
 
 type ExpandedProps = {
   anchorEl: HTMLElement | null,
@@ -63,6 +64,10 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
           <Typography variant="bodySmall">{formattedRoomType}</Typography>
         </Stack>
       </Stack>
+      <SurfaceTint sx={{
+        backgroundColor: theme.palette.primary.light,
+        opacity: theme.opacities.surface1
+      }} />
     </Popover>
   );
 }
