@@ -71,7 +71,7 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
         horizontal: "center",
         vertical: "center"
       }}
-      elevation={2}
+      elevation={1}
       marginThreshold={0}
       PaperProps={{
         sx: {
@@ -120,7 +120,7 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
       </Stack>
       <SurfaceTint sx={{
         backgroundColor: theme.palette.primary.light,
-        opacity: theme.opacities.surface2
+        opacity: theme.opacities.surface1
       }} />
     </Popover>
   );
