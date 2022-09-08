@@ -101,6 +101,10 @@ export async function fetchBookingById(bookingId: string): Promise<{ data: Booki
   return fetchJsonDataAsync<BookingData>(`/api/get/booking?id=${bookingId}`);
 }
 
+export async function fetchClientsByTile(tileId: string): Promise<{ data: ClientShortData[] }> {
+  return fetchJsonDataAsync<ClientShortData[]>(`/api/get/clients?tileId=${tileId}`);
+}
+
 export async function fetchClient(bookingId: string, clientId: string): Promise<{ data: ClientData }> {
   return fetchJsonDataAsync<ClientData>(`/api/get/client?bookingId=${bookingId}&clientId=${clientId}`);
 }

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import Popover from "@mui/material/Popover";
 import Stack from "@mui/material/Stack";
@@ -11,7 +11,7 @@ import { TileColor } from "../../../../../../../../../redux/tilesSlice";
 
 import M3IconButton from "../../../../../../../../m3/M3IconButton";
 import { SurfaceTint } from "../../../../../../../../m3/Tints";
-import { ClientShortData } from "../../../../../../../../../api";
+import { ClientShortData, fetchClientsByTile } from "../../../../../../../../../api";
 
 type ExpandedProps = {
   anchorEl: HTMLElement | null,
@@ -21,29 +21,7 @@ type ExpandedProps = {
 export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Element {
   const { data } = useContext(TileContext);
   const theme = useTheme();
-
-  const clients: ClientShortData[] = [
-    {
-      id: "0",
-      name: "Ivan",
-      surname: "Petrov",
-      dateOfBirth: "1986/08/05",
-      placeOfBirth: "Canazei (TN)",
-      stateOfBirth: "Italia",
-      bookingId: "0",
-      bookingName: "Ivan Petrov"
-    },
-    {
-      id: "1",
-      name: "Vasya",
-      surname: "Pupkin",
-      dateOfBirth: "1986/08/05",
-      placeOfBirth: "Canazei (TN)",
-      stateOfBirth: "Italia",
-      bookingId: "0",
-      bookingName: "Ivan Petrov"
-    }
-  ];
+  const [clients, setClients] = useState<ClientShortData[]>([]);
 
   const open = Boolean(anchorEl);
   const id = open ? "expanded-tile" : undefined;
@@ -56,6 +34,14 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
   const formattedTo = (new Date(Utils.getDateShift(data.from, data.nights))).toLocaleDateString();
   const periodStr = `${formattedFrom} - ${formattedTo}`;
   const formattedRoomType = `${data.entity[0].toLocaleUpperCase()}${data.entity.slice(1)}`;
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await fetchClientsByTile(data.id);
+      setClients(response.data);
+    }
+    fetchData().catch();
+  }, [data.id]);
 
   return (
     <Popover

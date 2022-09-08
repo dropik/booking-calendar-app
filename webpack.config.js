@@ -182,6 +182,31 @@ module.exports = {
         });
       });
 
+      devServer.app.get("/api/get/clients", (request, response) => {
+        response.json([
+          {
+            id: "0",
+            bookingId: "0",
+            bookingName: "Ivan Petrov",
+            name: "Ivan",
+            surname: "Petrov",
+            dateOfBirth: "1986-05-04",
+            placeOfBirth: "Canazei (TN)",
+            stateOfBirth: "Italia"
+          },
+          {
+            id: "1",
+            bookingId: "1",
+            bookingName: "Vasya Pupkin",
+            name: "Vasya",
+            surname: "Pupkin",
+            dateOfBirth: "1985-05-06",
+            placeOfBirth: "Canazei (TN)",
+            stateOfBirth: "Italia"
+          }
+        ]);
+      });
+
       devServer.app.get("/api/find/clients", (request, response) => {
         response.json([
           {
@@ -190,7 +215,9 @@ module.exports = {
             bookingName: "Ivan Petrov",
             name: "Ivan",
             surname: "Petrov",
-            dateOfBirth: "1986-05-04"
+            dateOfBirth: "1986-05-04",
+            placeOfBirth: "Canazei (TN)",
+            stateOfBirth: "Italia"
           },
           {
             id: "1",
@@ -198,7 +225,9 @@ module.exports = {
             bookingName: "Vasya Pupkin",
             name: "Vasya",
             surname: "Pupkin",
-            dateOfBirth: "1985-05-06"
+            dateOfBirth: "1985-05-06",
+            placeOfBirth: "Canazei (TN)",
+            stateOfBirth: "Italia"
           }
         ]);
       });
