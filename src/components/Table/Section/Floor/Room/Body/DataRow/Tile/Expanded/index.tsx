@@ -13,7 +13,8 @@ import M3IconButton from "../../../../../../../../m3/M3IconButton";
 import { SurfaceTint } from "../../../../../../../../m3/Tints";
 import { ClientShortData, fetchClientsByTile } from "../../../../../../../../../api";
 import { useAppSelector } from "../../../../../../../../../redux/hooks";
-import { ErrorOutlineOutlined } from "@mui/icons-material";
+import { ArrowForwardOutlined, ErrorOutlineOutlined } from "@mui/icons-material";
+import M3TextButton from "../../../../../../../../m3/M3TextButton";
 
 type ExpandedProps = {
   anchorEl: HTMLElement | null,
@@ -133,7 +134,7 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
           </Stack>
         ) : null}
         <Typography variant="titleLarge">Ospiti</Typography>
-        <Stack spacing={1} sx={{ p: "1rem" }}>
+        <Stack spacing={1} sx={{ pr: "1rem", pl: "1rem" }}>
           {clients.map((client) => (
             <Stack key={client.id} spacing={0}>
               <Typography variant="titleMedium">{`${client.name} ${client.surname}`}</Typography>
@@ -146,6 +147,9 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
               </Typography>
             </Stack>
           ))}
+        </Stack>
+        <Stack direction="row" justifyContent="end">
+          <M3TextButton startIcon={<ArrowForwardOutlined />}>Prenotazione</M3TextButton>
         </Stack>
       </Stack>
       <SurfaceTint sx={{
