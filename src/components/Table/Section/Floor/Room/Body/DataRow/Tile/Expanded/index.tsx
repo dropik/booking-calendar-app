@@ -12,6 +12,8 @@ import { TileColor } from "../../../../../../../../../redux/tilesSlice";
 import M3IconButton from "../../../../../../../../m3/M3IconButton";
 import { SurfaceTint } from "../../../../../../../../m3/Tints";
 import { ClientShortData, fetchClientsByTile } from "../../../../../../../../../api";
+import { useAppSelector } from "../../../../../../../../../redux/hooks";
+import { ErrorOutlineOutlined } from "@mui/icons-material";
 
 type ExpandedProps = {
   anchorEl: HTMLElement | null,
@@ -34,6 +36,35 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
   const formattedTo = (new Date(Utils.getDateShift(data.from, data.nights))).toLocaleDateString();
   const periodStr = `${formattedFrom} - ${formattedTo}`;
   const formattedRoomType = `${data.entity[0].toLocaleUpperCase()}${data.entity.slice(1)}`;
+
+  const errorType: "none" | "error" | "warning" = useAppSelector((state) => {
+    if (data.roomNumber) {
+      let assignedRoomType = "";
+      for (const floor of state.hotel.data.floors) {
+        for (const room of floor.rooms) {
+          if (room.number === data.roomNumber) {
+            assignedRoomType = room.type;
+            break;
+          }
+        }
+        if (assignedRoomType !== "") {
+          break;
+        }
+      }
+      const roomTypeAcceptedPersonsCount = state.roomTypes.data[assignedRoomType];
+      if (roomTypeAcceptedPersonsCount) {
+        if (!roomTypeAcceptedPersonsCount.includes(data.persons)) {
+          return "error";
+        }
+      }
+
+      if (assignedRoomType !== data.roomType) {
+        return "warning";
+      }
+    }
+
+    return "none";
+  });
 
   useEffect(() => {
     async function fetchData() {
@@ -88,6 +119,19 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
         </Stack>
       </Stack>
       <Stack spacing={1} sx={{ p: "1rem" }}>
+        {errorType !== "none" ? (
+          <Stack spacing={1} direction="row" sx={{
+            color: errorType === "error" ? theme.palette.error.light : theme.palette.warning.dark
+          }}>
+            <ErrorOutlineOutlined />
+            <Typography variant="bodySmall">
+              {errorType === "error" ?
+                "La stanza assegnata all'occupazione non è dedicata a questa quantità degli ospiti." :
+                "La tipologia della stanza assegnata non coincide con quella richiesta dall'occupazione."
+              }
+            </Typography>
+          </Stack>
+        ) : null}
         <Typography variant="titleLarge">Ospiti</Typography>
         <Stack spacing={1} sx={{ p: "1rem" }}>
           {clients.map((client) => (
