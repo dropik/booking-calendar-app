@@ -3,17 +3,19 @@ import { useTheme } from "@mui/material/styles";
 import Popover from "@mui/material/Popover";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import Collapse from "@mui/material/Collapse";
 import MoreVertOutlined from "@mui/icons-material/MoreVertOutlined";
+import ArrowForwardOutlined from "@mui/icons-material/ArrowForwardOutlined";
+import ErrorOutlineOutlined from "@mui/icons-material/ErrorOutlineOutlined";
 
 import * as Utils from "../../../../../../../../../utils";
+import { useAppSelector } from "../../../../../../../../../redux/hooks";
 import { TileContext } from "../context";
 import { TileColor } from "../../../../../../../../../redux/tilesSlice";
+import { ClientShortData, fetchClientsByTile } from "../../../../../../../../../api";
 
 import M3IconButton from "../../../../../../../../m3/M3IconButton";
 import { SurfaceTint } from "../../../../../../../../m3/Tints";
-import { ClientShortData, fetchClientsByTile } from "../../../../../../../../../api";
-import { useAppSelector } from "../../../../../../../../../redux/hooks";
-import { ArrowForwardOutlined, ErrorOutlineOutlined } from "@mui/icons-material";
 import M3TextButton from "../../../../../../../../m3/M3TextButton";
 
 type ExpandedProps = {
@@ -25,6 +27,7 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
   const { data } = useContext(TileContext);
   const theme = useTheme();
   const [clients, setClients] = useState<ClientShortData[]>([]);
+  const [openDetails, setOpenDetails] = useState(false);
 
   const open = Boolean(anchorEl);
   const id = open ? "expanded-tile" : undefined;
@@ -79,7 +82,9 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
     <Popover
       id={id}
       open={open}
-      onClose={onClose}
+      onClose={() => {
+        setOpenDetails(false);
+      }}
       anchorEl={anchorEl}
       anchorOrigin={{
         horizontal: "center",
@@ -91,12 +96,18 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
       }}
       elevation={1}
       marginThreshold={0}
+      transitionDuration={0}
       PaperProps={{
         sx: {
           width: `${anchorElWidthRemCaped}rem`,
           borderRadius: "0.75rem",
           backgroundColor: theme.palette.surface.light,
           color: theme.palette.onSurface.light
+        }
+      }}
+      TransitionProps={{
+        onEntered: () => {
+          setOpenDetails(true);
         }
       }}
     >
@@ -119,39 +130,43 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
           ) : null}
         </Stack>
       </Stack>
-      <Stack spacing={1} sx={{ p: "1rem" }}>
-        {errorType !== "none" ? (
-          <Stack spacing={1} direction="row" sx={{
-            color: errorType === "error" ? theme.palette.error.light : theme.palette.warning.dark
-          }}>
-            <ErrorOutlineOutlined />
-            <Typography variant="bodySmall">
-              {errorType === "error" ?
-                "La stanza assegnata all'occupazione non è dedicata a questa quantità degli ospiti." :
-                "La tipologia della stanza assegnata non coincide con quella richiesta dall'occupazione."
-              }
-            </Typography>
-          </Stack>
-        ) : null}
-        <Typography variant="titleLarge">Ospiti</Typography>
-        <Stack spacing={1} sx={{ pr: "1rem", pl: "1rem" }}>
-          {clients.map((client) => (
-            <Stack key={client.id} spacing={0}>
-              <Typography variant="titleMedium">{`${client.name} ${client.surname}`}</Typography>
+      <Collapse in={openDetails} onExited={() => {
+        onClose();
+      }}>
+        <Stack spacing={1} sx={{ p: "1rem" }}>
+          {errorType !== "none" ? (
+            <Stack spacing={1} direction="row" sx={{
+              color: errorType === "error" ? theme.palette.error.light : theme.palette.warning.dark
+            }}>
+              <ErrorOutlineOutlined />
               <Typography variant="bodySmall">
-                {
-                  `${(new Date(client.dateOfBirth)).toLocaleDateString()} -
-                  ${client.placeOfBirth} -
-                  ${client.stateOfBirth}`
+                {errorType === "error" ?
+                  "La stanza assegnata all'occupazione non è dedicata a questa quantità degli ospiti." :
+                  "La tipologia della stanza assegnata non coincide con quella richiesta dall'occupazione."
                 }
               </Typography>
             </Stack>
-          ))}
+          ) : null}
+          <Typography variant="titleLarge">Ospiti</Typography>
+          <Stack spacing={1} sx={{ pr: "1rem", pl: "1rem" }}>
+            {clients.map((client) => (
+              <Stack key={client.id} spacing={0}>
+                <Typography variant="titleMedium">{`${client.name} ${client.surname}`}</Typography>
+                <Typography variant="bodySmall">
+                  {
+                    `${(new Date(client.dateOfBirth)).toLocaleDateString()} -
+                    ${client.placeOfBirth} -
+                    ${client.stateOfBirth}`
+                  }
+                </Typography>
+              </Stack>
+            ))}
+          </Stack>
+          <Stack direction="row" justifyContent="end">
+            <M3TextButton startIcon={<ArrowForwardOutlined />}>Prenotazione</M3TextButton>
+          </Stack>
         </Stack>
-        <Stack direction="row" justifyContent="end">
-          <M3TextButton startIcon={<ArrowForwardOutlined />}>Prenotazione</M3TextButton>
-        </Stack>
-      </Stack>
+      </Collapse>
       <SurfaceTint sx={{
         backgroundColor: theme.palette.primary.light,
         opacity: theme.opacities.surface1
