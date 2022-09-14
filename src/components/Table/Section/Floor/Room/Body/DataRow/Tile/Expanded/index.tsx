@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import Popover from "@mui/material/Popover";
 import Stack from "@mui/material/Stack";
@@ -17,6 +17,7 @@ import { ClientShortData, fetchClientsByTile } from "../../../../../../../../../
 import M3IconButton from "../../../../../../../../m3/M3IconButton";
 import { SurfaceTint } from "../../../../../../../../m3/Tints";
 import M3TextButton from "../../../../../../../../m3/M3TextButton";
+import Box from "@mui/material/Box";
 
 type ExpandedProps = {
   anchorEl: HTMLElement | null,
@@ -28,6 +29,7 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
   const theme = useTheme();
   const [clients, setClients] = useState<ClientShortData[]>([]);
   const [openDetails, setOpenDetails] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
 
   const open = Boolean(anchorEl);
   const id = open ? "expanded-tile" : undefined;
@@ -70,6 +72,11 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
     return "none";
   });
 
+  const anchorElRect = anchorEl?.getBoundingClientRect();
+  const popoverRootPosition = anchorElRect ?
+    { top: 0, left: anchorElRect.x + anchorElRect.width / 2 } :
+    { top: 0, left: 0 };
+
   useEffect(() => {
     async function fetchData() {
       const response = await fetchClientsByTile(data.id);
@@ -85,24 +92,25 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
       onClose={() => {
         setOpenDetails(false);
       }}
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        horizontal: "center",
-        vertical: "center"
-      }}
+      anchorReference="anchorPosition"
+      anchorPosition={popoverRootPosition}
       transformOrigin={{
         horizontal: "center",
-        vertical: "center"
+        vertical: "top"
       }}
-      elevation={1}
+      elevation={0}
       marginThreshold={0}
       transitionDuration={0}
       PaperProps={{
         sx: {
+          display: "flex",
+          flexDirection: "column-reverse",
           width: `${anchorElWidthRemCaped}rem`,
-          borderRadius: "0.75rem",
-          backgroundColor: theme.palette.surface.light,
-          color: theme.palette.onSurface.light
+          height: "100vh",
+          maxHeight: "100vh",
+          backgroundColor: "transparent",
+          overflow: "visible",
+          pointerEvents: "none"
         }
       }}
       TransitionProps={{
@@ -111,66 +119,85 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
         }
       }}
     >
-      <Stack spacing={0} sx={{
-        p: "1rem",
-        borderRadius: "inherit",
-        backgroundColor: theme.palette[`${data.color}Container`].light,
-        color: theme.palette[`on${data.color[0].toUpperCase()}${data.color.substring(1)}Container` as `on${Capitalize<TileColor>}Container`].light
+      <Box sx={{
+        flexBasis: anchorElRect && headerRef.current ?
+          `calc(100vh - ${anchorElRect.y - (headerRef.current.getBoundingClientRect().height - anchorElRect.height) / 2}px)` :
+          undefined,
+        overflow: "visible"
       }}>
-        <Stack direction="row" justifyContent="space-between">
-          <Typography variant="headlineMedium">{data.name}</Typography>
-          <M3IconButton><MoreVertOutlined /></M3IconButton>
-        </Stack>
-        <Typography variant="titleMedium">{personsStr}</Typography>
-        <Stack sx={{ pt: "0.5rem" }}>
-          <Typography variant="bodySmall">{periodStr}</Typography>
-          <Typography variant="bodySmall">{formattedRoomType}</Typography>
-          {data.roomNumber ? (
-            <Typography variant="bodySmall">{`Camera ${data.roomNumber}`}</Typography>
-          ) : null}
-        </Stack>
-      </Stack>
-      <Collapse in={openDetails} onExited={() => {
-        onClose();
-      }}>
-        <Stack spacing={1} sx={{ p: "1rem" }}>
-          {errorType !== "none" ? (
-            <Stack spacing={1} direction="row" sx={{
-              color: errorType === "error" ? theme.palette.error.light : theme.palette.warning.dark
-            }}>
-              <ErrorOutlineOutlined />
-              <Typography variant="bodySmall">
-                {errorType === "error" ?
-                  "La stanza assegnata all'occupazione non è dedicata a questa quantità degli ospiti." :
-                  "La tipologia della stanza assegnata non coincide con quella richiesta dall'occupazione."
-                }
-              </Typography>
+        <Box sx={{
+          position: "relative",
+          borderRadius: "0.75rem",
+          backgroundColor: theme.palette.surface.light,
+          color: theme.palette.onSurface.light,
+          boxShadow: theme.shadows[1],
+          pointerEvents: "auto"
+        }}>
+          <Stack spacing={0} sx={{
+            p: "1rem",
+            borderRadius: "inherit",
+            backgroundColor: theme.palette[`${data.color}Container`].light,
+            color: theme.palette[`on${data.color[0].toUpperCase()}${data.color.substring(1)}Container` as `on${Capitalize<TileColor>}Container`].light
+          }} ref={headerRef}>
+            <Stack direction="row" justifyContent="space-between">
+              <Typography variant="headlineMedium">{data.name}</Typography>
+              <M3IconButton><MoreVertOutlined /></M3IconButton>
             </Stack>
-          ) : null}
-          <Typography variant="titleLarge">Ospiti</Typography>
-          <Stack spacing={1} sx={{ pr: "1rem", pl: "1rem" }}>
-            {clients.map((client) => (
-              <Stack key={client.id} spacing={0}>
-                <Typography variant="titleMedium">{`${client.name} ${client.surname}`}</Typography>
-                <Typography variant="bodySmall">
-                  {
-                    `${(new Date(client.dateOfBirth)).toLocaleDateString()} -
-                    ${client.placeOfBirth} -
-                    ${client.stateOfBirth}`
-                  }
-                </Typography>
+            <Typography variant="titleMedium">{personsStr}</Typography>
+            <Stack sx={{ pt: "0.5rem" }}>
+              <Typography variant="bodySmall">{periodStr}</Typography>
+              <Typography variant="bodySmall">{formattedRoomType}</Typography>
+              {data.roomNumber ? (
+                <Typography variant="bodySmall">{`Camera ${data.roomNumber}`}</Typography>
+              ) : null}
+            </Stack>
+          </Stack>
+          <Collapse in={openDetails} easing={{
+            enter: theme.transitions.easing.easeOut,
+            exit: theme.transitions.easing.fastOutSlowIn
+          }} onExited={() => {
+            onClose();
+          }}>
+            <Stack spacing={1} sx={{ p: "1rem" }}>
+              {errorType !== "none" ? (
+                <Stack spacing={1} direction="row" sx={{
+                  color: errorType === "error" ? theme.palette.error.light : theme.palette.warning.dark
+                }}>
+                  <ErrorOutlineOutlined />
+                  <Typography variant="bodySmall">
+                    {errorType === "error" ?
+                      "La stanza assegnata all'occupazione non è dedicata a questa quantità degli ospiti." :
+                      "La tipologia della stanza assegnata non coincide con quella richiesta dall'occupazione."
+                    }
+                  </Typography>
+                </Stack>
+              ) : null}
+              <Typography variant="titleLarge">Ospiti</Typography>
+              <Stack spacing={1} sx={{ pr: "1rem", pl: "1rem" }}>
+                {clients.map((client) => (
+                  <Stack key={client.id} spacing={0}>
+                    <Typography variant="titleMedium">{`${client.name} ${client.surname}`}</Typography>
+                    <Typography variant="bodySmall">
+                      {
+                        `${(new Date(client.dateOfBirth)).toLocaleDateString()} -
+                        ${client.placeOfBirth} -
+                        ${client.stateOfBirth}`
+                      }
+                    </Typography>
+                  </Stack>
+                ))}
               </Stack>
-            ))}
-          </Stack>
-          <Stack direction="row" justifyContent="end">
-            <M3TextButton startIcon={<ArrowForwardOutlined />}>Prenotazione</M3TextButton>
-          </Stack>
-        </Stack>
-      </Collapse>
-      <SurfaceTint sx={{
-        backgroundColor: theme.palette.primary.light,
-        opacity: theme.opacities.surface1
-      }} />
+              <Stack direction="row" justifyContent="end">
+                <M3TextButton>Mostra prenotazione</M3TextButton>
+              </Stack>
+            </Stack>
+          </Collapse>
+          <SurfaceTint sx={{
+            backgroundColor: theme.palette.primary.light,
+            opacity: theme.opacities.surface1
+          }} />
+        </Box>
+      </Box>
     </Popover>
   );
 }
