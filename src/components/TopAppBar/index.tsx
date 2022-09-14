@@ -12,7 +12,8 @@ import Tint from "./Tint";
 export default function Header(): JSX.Element {
   return (
     <M3AppBar sx={{
-      position: "sticky"
+      position: "sticky",
+      pr: "0 !important"
     }}>
       <Box sx={{
         display: "flex",
