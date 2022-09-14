@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import Popover from "@mui/material/Popover";
+import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Collapse from "@mui/material/Collapse";
 import MoreVertOutlined from "@mui/icons-material/MoreVertOutlined";
-import ArrowForwardOutlined from "@mui/icons-material/ArrowForwardOutlined";
 import ErrorOutlineOutlined from "@mui/icons-material/ErrorOutlineOutlined";
 
 import * as Utils from "../../../../../../../../../utils";
@@ -17,7 +17,6 @@ import { ClientShortData, fetchClientsByTile } from "../../../../../../../../../
 import M3IconButton from "../../../../../../../../m3/M3IconButton";
 import { SurfaceTint } from "../../../../../../../../m3/Tints";
 import M3TextButton from "../../../../../../../../m3/M3TextButton";
-import Box from "@mui/material/Box";
 
 type ExpandedProps = {
   anchorEl: HTMLElement | null,
@@ -100,6 +99,7 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
       }}
       elevation={0}
       transitionDuration={0}
+      keepMounted={true}
       PaperProps={{
         sx: {
           display: "flex",
