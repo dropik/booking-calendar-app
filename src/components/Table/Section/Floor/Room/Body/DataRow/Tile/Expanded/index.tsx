@@ -99,15 +99,14 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
         vertical: "top"
       }}
       elevation={0}
-      marginThreshold={0}
       transitionDuration={0}
       PaperProps={{
         sx: {
           display: "flex",
           flexDirection: "column-reverse",
           width: `${anchorElWidthRemCaped}rem`,
-          height: "100vh",
-          maxHeight: "100vh",
+          height: "calc(100vh - 2rem)",
+          maxHeight: "calc(100vh - 2rem)",
           backgroundColor: "transparent",
           overflow: "visible",
           pointerEvents: "none"
@@ -121,7 +120,7 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
     >
       <Box sx={{
         flexBasis: anchorElRect && headerRef.current ?
-          `calc(100vh - ${anchorElRect.y - (headerRef.current.getBoundingClientRect().height - anchorElRect.height) / 2}px)` :
+          `calc(100vh - 2rem - ${anchorElRect.y - (headerRef.current.getBoundingClientRect().height - anchorElRect.height) / 2}px)` :
           undefined,
         overflow: "visible"
       }}>
