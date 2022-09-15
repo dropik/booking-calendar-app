@@ -1,19 +1,12 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import Popover from "@mui/material/Popover";
 import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import Collapse from "@mui/material/Collapse";
-import ErrorOutlineOutlined from "@mui/icons-material/ErrorOutlineOutlined";
 
 import * as Utils from "../../../../../../../../../utils";
-import { useAppSelector } from "../../../../../../../../../redux/hooks";
-import { TileContext } from "../context";
-import { ClientShortData, fetchClientsByTile } from "../../../../../../../../../api";
 
-import M3TextButton from "../../../../../../../../m3/M3TextButton";
 import Header from "./Header";
+import Details from "./Details";
 import Tint from "./Tint";
 
 type ExpandedProps = {
@@ -22,9 +15,7 @@ type ExpandedProps = {
 };
 
 export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Element {
-  const { data } = useContext(TileContext);
   const theme = useTheme();
-  const [clients, setClients] = useState<ClientShortData[]>([]);
   const [openDetails, setOpenDetails] = useState(false);
   const headerRef = useRef<HTMLDivElement>(null);
 
@@ -34,47 +25,10 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
   const anchorElWidthRem = Utils.pxToRem(anchorElWidthPx);
   const anchorElWidthRemCaped = Math.max(anchorElWidthRem, 22.5);
 
-  const errorType: "none" | "error" | "warning" = useAppSelector((state) => {
-    if (data.roomNumber) {
-      let assignedRoomType = "";
-      for (const floor of state.hotel.data.floors) {
-        for (const room of floor.rooms) {
-          if (room.number === data.roomNumber) {
-            assignedRoomType = room.type;
-            break;
-          }
-        }
-        if (assignedRoomType !== "") {
-          break;
-        }
-      }
-      const roomTypeAcceptedPersonsCount = state.roomTypes.data[assignedRoomType];
-      if (roomTypeAcceptedPersonsCount) {
-        if (!roomTypeAcceptedPersonsCount.includes(data.persons)) {
-          return "error";
-        }
-      }
-
-      if (assignedRoomType !== data.roomType) {
-        return "warning";
-      }
-    }
-
-    return "none";
-  });
-
   const anchorElRect = anchorEl?.getBoundingClientRect();
   const popoverRootPosition = anchorElRect ?
     { top: 0, left: anchorElRect.x + anchorElRect.width / 2 } :
     { top: 0, left: 0 };
-
-  useEffect(() => {
-    async function fetchData() {
-      const response = await fetchClientsByTile(data.id);
-      setClients(response.data);
-    }
-    fetchData().catch();
-  }, [data.id]);
 
   return (
     <Popover
@@ -123,46 +77,7 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
           pointerEvents: "auto"
         }}>
           <Header ref={headerRef} />
-          <Collapse in={openDetails} easing={{
-            enter: theme.transitions.easing.easeOut,
-            exit: theme.transitions.easing.fastOutSlowIn
-          }} onExited={() => {
-            onClose();
-          }}>
-            <Stack spacing={1} sx={{ p: "1rem" }}>
-              {errorType !== "none" ? (
-                <Stack spacing={1} direction="row" sx={{
-                  color: errorType === "error" ? theme.palette.error.light : theme.palette.warning.dark
-                }}>
-                  <ErrorOutlineOutlined />
-                  <Typography variant="bodySmall">
-                    {errorType === "error" ?
-                      "La stanza assegnata all'occupazione non è dedicata a questa quantità degli ospiti." :
-                      "La tipologia della stanza assegnata non coincide con quella richiesta dall'occupazione."
-                    }
-                  </Typography>
-                </Stack>
-              ) : null}
-              <Typography variant="titleLarge">Ospiti</Typography>
-              <Stack spacing={1} sx={{ pr: "1rem", pl: "1rem" }}>
-                {clients.map((client) => (
-                  <Stack key={client.id} spacing={0}>
-                    <Typography variant="titleMedium">{`${client.name} ${client.surname}`}</Typography>
-                    <Typography variant="bodySmall">
-                      {
-                        `${(new Date(client.dateOfBirth)).toLocaleDateString()} -
-                        ${client.placeOfBirth} -
-                        ${client.stateOfBirth}`
-                      }
-                    </Typography>
-                  </Stack>
-                ))}
-              </Stack>
-              <Stack direction="row" justifyContent="end">
-                <M3TextButton>Mostra prenotazione</M3TextButton>
-              </Stack>
-            </Stack>
-          </Collapse>
+          <Details open={openDetails} onClose={onClose} />
           <Tint />
         </Box>
       </Box>
