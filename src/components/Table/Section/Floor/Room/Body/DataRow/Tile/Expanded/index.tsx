@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import Popover from "@mui/material/Popover";
-import Box from "@mui/material/Box";
 
 import * as Utils from "../../../../../../../../../utils";
 
@@ -8,6 +7,7 @@ import Container from "./Container";
 import Header from "./Header";
 import Details from "./Details";
 import Tint from "./Tint";
+import FlexBasisFix from "./FlexBasisFix";
 
 type ExpandedProps = {
   anchorEl: HTMLElement | null,
@@ -61,18 +61,13 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
         onEntered: () => { setOpenDetails(true); }
       }}
     >
-      <Box sx={{
-        flexBasis: anchorElRect && headerRef.current ?
-          `calc(100vh - 2rem - ${anchorElRect.y - (headerRef.current.getBoundingClientRect().height - anchorElRect.height) / 2}px)` :
-          undefined,
-        overflow: "visible"
-      }}>
+      <FlexBasisFix anchorElRect={anchorElRect} headerRef={headerRef}>
         <Container>
           <Header ref={headerRef} />
           <Details open={openDetails} onClose={onClose} />
           <Tint />
         </Container>
-      </Box>
+      </FlexBasisFix>
     </Popover>
   );
 }
