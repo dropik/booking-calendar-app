@@ -8,12 +8,12 @@ import { TileColor } from "../../../../../../../../../../redux/tilesSlice";
 import { TileContext } from "../../context";
 
 import HeadlineRow from "./HeadlineRow";
+import Persons from "./Persons";
 
 const Header = forwardRef<HTMLDivElement, {}>(function Header(_, ref): JSX.Element {
   const { data } = useContext(TileContext);
   const theme = useTheme();
 
-  const personsStr = `${data.persons} person${data.persons === 1 ? "a" : "e"}`;
   const formattedFrom = (new Date(data.from)).toLocaleDateString();
   const formattedTo = (new Date(Utils.getDateShift(data.from, data.nights))).toLocaleDateString();
   const periodStr = `${formattedFrom} - ${formattedTo}`;
@@ -27,7 +27,7 @@ const Header = forwardRef<HTMLDivElement, {}>(function Header(_, ref): JSX.Eleme
       color: theme.palette[`on${data.color[0].toUpperCase()}${data.color.substring(1)}Container` as `on${Capitalize<TileColor>}Container`].light
     }} ref={ref}>
       <HeadlineRow />
-      <Typography variant="titleMedium">{personsStr}</Typography>
+      <Persons />
       <Stack sx={{ pt: "0.5rem" }}>
         <Typography variant="bodySmall">{periodStr}</Typography>
         <Typography variant="bodySmall">{formattedRoomType}</Typography>
