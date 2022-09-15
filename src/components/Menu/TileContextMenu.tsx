@@ -23,8 +23,16 @@ export default function TileContextMenu({ tileId, anchorReference, anchorEl, anc
   const open = Boolean(anchorEl) || Boolean(anchorPosition);
   const id = open ? "tile-context-menu" : undefined;
 
-  function removeOccupation() {
+  function removeOccupation(): void {
     dispatch(TilesSlice.unassign({ tileId }));
+  }
+
+  function close(event: {}): void {
+    const clickEvent = event as React.UIEvent<HTMLDivElement>;
+    if (clickEvent) {
+      clickEvent.stopPropagation();
+    }
+    onClose();
   }
 
   return (
@@ -34,7 +42,7 @@ export default function TileContextMenu({ tileId, anchorReference, anchorEl, anc
       anchorEl={anchorEl}
       anchorPosition={anchorPosition}
       open={open}
-      onClose={onClose}
+      onClose={close}
       onAnyItemClick={onClose}
       anchorOrigin={{
         vertical: "top",
@@ -53,6 +61,9 @@ export default function TileContextMenu({ tileId, anchorReference, anchorEl, anc
           disabled: unassigned
         }
       ]}
+      PaperProps={{
+        onClick: (event) => { event.stopPropagation(); }
+      }}
     />
   );
 }
