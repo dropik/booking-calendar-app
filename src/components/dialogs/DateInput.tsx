@@ -17,7 +17,7 @@ export default function DateInput({ label, value, onChange, minValue, maxValue}:
     <M3DatePicker
       label={label}
       value={new Date(value)}
-      onChange={(date) => {
+      onChange={(date: Date | null) => {
         if (date) {
           onChange(Utils.dateToString(date));
         }
@@ -32,7 +32,6 @@ export default function DateInput({ label, value, onChange, minValue, maxValue}:
         }
         return false;
       }}
-      allowSameDateSelection
     />
   );
 }

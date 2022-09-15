@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDownOutlined";
-import Popover from "@mui/material/Popover";
 import Box from "@mui/material/Box";
+import Popover from "@mui/material/Popover";
 import Typography from "@mui/material/Typography";
 import ChevronLeftOutlined from "@mui/icons-material/ChevronLeftOutlined";
 import ChevronRightOutlined from "@mui/icons-material/ChevronRightOutlined";
@@ -96,12 +96,13 @@ export default function DateInput(): JSX.Element {
           {dateString}
         </Typography>
       </M3TextButton>
-      <Popover sx={{ opacity: 0 }} id={id} open={open} anchorEl={anchorEl}>
+      <Popover open={open} anchorReference="none" PaperProps={{ sx: { display: "none" } }}>
         <M3DatePicker
-          value={currentDate}
+          value={new Date(currentDate)}
           onChange={tryUpdateDate}
           renderInput={() => <></>}
           open={open}
+          onClose={() => { setAnchorEl(null); }}
           PopperProps={{
             anchorEl: ref.current,
             placement: "bottom-end"

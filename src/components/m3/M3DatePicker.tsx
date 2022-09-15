@@ -2,7 +2,7 @@ import React from "react";
 import { alpha, useTheme } from "@mui/material/styles";
 import { DatePicker, DatePickerProps } from "@mui/x-date-pickers/DatePicker";
 
-export default function M3DatePicker<TDate>({ ...props }: DatePickerProps<TDate>): JSX.Element {
+export default function M3DatePicker<TInputDate, TDate>({ ...props }: DatePickerProps<TInputDate, TDate>): JSX.Element {
   const theme = useTheme();
 
   return (
