@@ -1,16 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import Popover from "@mui/material/Popover";
 
 import * as Utils from "../../../../../../../../../utils";
+import ExpandedTileContext from "./context";
 
 type TilePopoverProps = {
   children: React.ReactNode,
-  anchorEl: HTMLElement | null,
   setOpenDetails: (value: boolean) => void,
-  anchorElRect?: DOMRect
 };
 
-export default function TilePopover({ children, anchorEl, setOpenDetails, anchorElRect }: TilePopoverProps): JSX.Element {
+export default function TilePopover({ children, setOpenDetails }: TilePopoverProps): JSX.Element {
+  const { anchorEl, anchorElRect } = useContext(ExpandedTileContext);
   const open = Boolean(anchorEl);
   const id = open ? "expanded-tile" : undefined;
 

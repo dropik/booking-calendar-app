@@ -1,5 +1,7 @@
 import React, { useRef, useState } from "react";
 
+import ExpandedTileContext from "./context";
+
 import TilePopover from "./TilePopover";
 import FlexBasisFix from "./FlexBasisFix";
 import Container from "./Container";
@@ -19,14 +21,20 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
   const anchorElRect = anchorEl?.getBoundingClientRect();
 
   return (
-    <TilePopover anchorEl={anchorEl} setOpenDetails={setOpenDetails} anchorElRect={anchorElRect}>
-      <FlexBasisFix anchorElRect={anchorElRect} headerRef={headerRef}>
-        <Container>
-          <Header ref={headerRef} />
-          <Details open={openDetails} onClose={onClose} />
-          <Tint />
-        </Container>
-      </FlexBasisFix>
-    </TilePopover>
+    <ExpandedTileContext.Provider value={{
+      anchorEl: anchorEl,
+      anchorElRect: anchorElRect,
+      onClose: onClose
+    }}>
+      <TilePopover setOpenDetails={setOpenDetails}>
+        <FlexBasisFix headerRef={headerRef}>
+          <Container>
+            <Header ref={headerRef} />
+            <Details open={openDetails} />
+            <Tint />
+          </Container>
+        </FlexBasisFix>
+      </TilePopover>
+    </ExpandedTileContext.Provider>
   );
 }
