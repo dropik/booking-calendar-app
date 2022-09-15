@@ -1,11 +1,9 @@
 import React from "react";
-import InfoIcon from "@mui/icons-material/InfoOutlined";
 import PaletteIcon from "@mui/icons-material/PaletteOutlined";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 
 import { useAppDispatch } from "../../redux/hooks";
 import * as TilesSlice from "../../redux/tilesSlice";
-import * as DialogSlice from "../../redux/dialogSlice";
 
 import Menu from ".";
 import ColorPicker from "./ColorPicker";
@@ -25,10 +23,6 @@ export default function TileContextMenu({ tileId, anchorReference, anchorEl, anc
   const open = Boolean(anchorEl) || Boolean(anchorPosition);
   const id = open ? "tile-context-menu" : undefined;
 
-  function showInfoDialog() {
-    dispatch(DialogSlice.showBookingDialog({ tileId }));
-  }
-
   function removeOccupation() {
     dispatch(TilesSlice.unassign({ tileId }));
   }
@@ -47,11 +41,6 @@ export default function TileContextMenu({ tileId, anchorReference, anchorEl, anc
         horizontal: "right"
       }}
       list={[
-        {
-          text: "Informazioni",
-          icon: <InfoIcon />,
-          onClick: showInfoDialog
-        },
         {
           text: "Assegna colore",
           icon: <PaletteIcon />,
