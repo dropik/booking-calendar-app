@@ -5,7 +5,6 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Collapse from "@mui/material/Collapse";
-import MoreVertOutlined from "@mui/icons-material/MoreVertOutlined";
 import ErrorOutlineOutlined from "@mui/icons-material/ErrorOutlineOutlined";
 
 import * as Utils from "../../../../../../../../../utils";
@@ -14,10 +13,9 @@ import { TileContext } from "../context";
 import { TileColor } from "../../../../../../../../../redux/tilesSlice";
 import { ClientShortData, fetchClientsByTile } from "../../../../../../../../../api";
 
-import M3IconButton from "../../../../../../../../m3/M3IconButton";
 import { SurfaceTint } from "../../../../../../../../m3/Tints";
 import M3TextButton from "../../../../../../../../m3/M3TextButton";
-import TileContextMenu from "../../../../../../../../Menu/TileContextMenu";
+import MoreButton from "./MoreButton";
 
 type ExpandedProps = {
   anchorEl: HTMLElement | null,
@@ -30,7 +28,6 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
   const [clients, setClients] = useState<ClientShortData[]>([]);
   const [openDetails, setOpenDetails] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
-  const [contextAnchorEl, setContextAnchorEl] = useState<HTMLElement | undefined>(undefined);
 
   const open = Boolean(anchorEl);
   const id = open ? "expanded-tile" : undefined;
@@ -86,14 +83,6 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
     fetchData().catch();
   }, [data.id]);
 
-  function openContext(event: React.UIEvent<HTMLButtonElement>): void {
-    setContextAnchorEl(event.currentTarget);
-  }
-
-  function closeContext(): void {
-    setContextAnchorEl(undefined);
-  }
-
   return (
     <Popover
       id={id}
@@ -148,22 +137,7 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
           }} ref={headerRef}>
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="headlineMedium">{data.name}</Typography>
-              <M3IconButton focused={Boolean(contextAnchorEl)} onClick={openContext}><MoreVertOutlined /></M3IconButton>
-              <TileContextMenu
-                tileId={data.id}
-                anchorReference="anchorEl"
-                anchorEl={contextAnchorEl}
-                anchorOrigin={{
-                  horizontal: "right",
-                  vertical: "bottom"
-                }}
-                transformOrigin={{
-                  horizontal: "right",
-                  vertical: "top"
-                }}
-                onClose={closeContext}
-                unassigned={data.roomNumber === undefined}
-              />
+              <MoreButton />
             </Stack>
             <Typography variant="titleMedium">{personsStr}</Typography>
             <Stack sx={{ pt: "0.5rem" }}>
