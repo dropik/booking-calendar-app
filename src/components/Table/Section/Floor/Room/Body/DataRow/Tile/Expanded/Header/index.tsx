@@ -1,7 +1,6 @@
 import React, { forwardRef, useContext } from "react";
 import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
 
 import { TileColor } from "../../../../../../../../../../redux/tilesSlice";
 import { TileContext } from "../../context";
@@ -10,6 +9,7 @@ import HeadlineRow from "./HeadlineRow";
 import Persons from "./Persons";
 import Period from "./Period";
 import RoomType from "./RoomType";
+import RoomNumber from "./RoomNumber";
 
 const Header = forwardRef<HTMLDivElement, {}>(function Header(_, ref): JSX.Element {
   const { data } = useContext(TileContext);
@@ -28,9 +28,7 @@ const Header = forwardRef<HTMLDivElement, {}>(function Header(_, ref): JSX.Eleme
       <Stack sx={{ pt: "0.5rem" }}>
         <Period />
         <RoomType />
-        {data.roomNumber ? (
-          <Typography variant="bodySmall">{`Camera ${data.roomNumber}`}</Typography>
-        ) : null}
+        <RoomNumber />
       </Stack>
     </Stack>
   );
