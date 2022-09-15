@@ -7,7 +7,7 @@ import * as Utils from "../../../../../../../../../../utils";
 import { TileColor } from "../../../../../../../../../../redux/tilesSlice";
 import { TileContext } from "../../context";
 
-import MoreButton from "./MoreButton";
+import HeadlineRow from "./HeadlineRow";
 
 const Header = forwardRef<HTMLDivElement, {}>(function Header(_, ref): JSX.Element {
   const { data } = useContext(TileContext);
@@ -26,10 +26,7 @@ const Header = forwardRef<HTMLDivElement, {}>(function Header(_, ref): JSX.Eleme
       backgroundColor: theme.palette[`${data.color}Container`].light,
       color: theme.palette[`on${data.color[0].toUpperCase()}${data.color.substring(1)}Container` as `on${Capitalize<TileColor>}Container`].light
     }} ref={ref}>
-      <Stack direction="row" justifyContent="space-between">
-        <Typography variant="headlineMedium">{data.name}</Typography>
-        <MoreButton />
-      </Stack>
+      <HeadlineRow />
       <Typography variant="titleMedium">{personsStr}</Typography>
       <Stack sx={{ pt: "0.5rem" }}>
         <Typography variant="bodySmall">{periodStr}</Typography>
