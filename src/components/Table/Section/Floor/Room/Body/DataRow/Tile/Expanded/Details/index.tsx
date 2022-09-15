@@ -9,6 +9,7 @@ import { TileContext } from "../../context";
 
 import M3TextButton from "../../../../../../../../../m3/M3TextButton";
 import Error from "./Error";
+import Client from "./Client";
 
 type DetailsProps = {
   open: boolean,
@@ -39,18 +40,7 @@ export default function Details({ open, onClose }: DetailsProps): JSX.Element {
         <Error />
         <Typography variant="titleLarge">Ospiti</Typography>
         <Stack spacing={1} sx={{ pr: "1rem", pl: "1rem" }}>
-          {clients.map((client) => (
-            <Stack key={client.id} spacing={0}>
-              <Typography variant="titleMedium">{`${client.name} ${client.surname}`}</Typography>
-              <Typography variant="bodySmall">
-                {
-                  `${(new Date(client.dateOfBirth)).toLocaleDateString()} -
-                  ${client.placeOfBirth} -
-                  ${client.stateOfBirth}`
-                }
-              </Typography>
-            </Stack>
-          ))}
+          {clients.map((client) => <Client key={client.id} client={client} />)}
         </Stack>
         <Stack direction="row" justifyContent="end">
           <M3TextButton>Mostra prenotazione</M3TextButton>
