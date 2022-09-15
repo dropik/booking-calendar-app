@@ -1,10 +1,10 @@
 import React, { useRef, useState } from "react";
-import { useTheme } from "@mui/material/styles";
 import Popover from "@mui/material/Popover";
 import Box from "@mui/material/Box";
 
 import * as Utils from "../../../../../../../../../utils";
 
+import Container from "./Container";
 import Header from "./Header";
 import Details from "./Details";
 import Tint from "./Tint";
@@ -15,7 +15,6 @@ type ExpandedProps = {
 };
 
 export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Element {
-  const theme = useTheme();
   const [openDetails, setOpenDetails] = useState(false);
   const headerRef = useRef<HTMLDivElement>(null);
 
@@ -68,18 +67,11 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
           undefined,
         overflow: "visible"
       }}>
-        <Box sx={{
-          position: "relative",
-          borderRadius: "0.75rem",
-          backgroundColor: theme.palette.surface.light,
-          color: theme.palette.onSurface.light,
-          boxShadow: theme.shadows[1],
-          pointerEvents: "auto"
-        }}>
+        <Container>
           <Header ref={headerRef} />
           <Details open={openDetails} onClose={onClose} />
           <Tint />
-        </Box>
+        </Container>
       </Box>
     </Popover>
   );
