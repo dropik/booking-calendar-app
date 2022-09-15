@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 
 import { ClientShortData, fetchClientsByTile } from "../../../../../../../../../../api";
 import { TileContext } from "../../context";
@@ -19,8 +20,11 @@ export default function Clients(): JSX.Element {
   }, [data.id]);
 
   return (
-    <Stack spacing={1} sx={{ pr: "1rem", pl: "1rem" }}>
-      {clients.map((client) => <Client key={client.id} client={client} />)}
-    </Stack>
+    <>
+      <Typography variant="titleLarge">Ospiti</Typography>
+      <Stack spacing={1} sx={{ pr: "1rem", pl: "1rem" }}>
+        {clients.map((client) => <Client key={client.id} client={client} />)}
+      </Stack>
+    </>
   );
 }

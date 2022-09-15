@@ -2,7 +2,6 @@ import React from "react";
 import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 import Collapse from "@mui/material/Collapse";
-import Typography from "@mui/material/Typography";
 
 import Error from "./Error";
 import Clients from "./Clients";
@@ -25,7 +24,6 @@ export default function Details({ open, onClose }: DetailsProps): JSX.Element {
     }}>
       <Stack spacing={1} sx={{ p: "1rem" }}>
         <Error />
-        <Typography variant="titleLarge">Ospiti</Typography>
         <Clients />
         <ShowBookingButton />
       </Stack>
