@@ -3,13 +3,12 @@ import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 import Collapse from "@mui/material/Collapse";
 import Typography from "@mui/material/Typography";
-import ErrorOutlineOutlined from "@mui/icons-material/ErrorOutlineOutlined";
 
 import { ClientShortData, fetchClientsByTile } from "../../../../../../../../../../api";
-import { useAppSelector } from "../../../../../../../../../../redux/hooks";
 import { TileContext } from "../../context";
 
 import M3TextButton from "../../../../../../../../../m3/M3TextButton";
+import Error from "./Error";
 
 type DetailsProps = {
   open: boolean,
@@ -20,35 +19,6 @@ export default function Details({ open, onClose }: DetailsProps): JSX.Element {
   const { data } = useContext(TileContext);
   const theme = useTheme();
   const [clients, setClients] = useState<ClientShortData[]>([]);
-
-  const errorType: "none" | "error" | "warning" = useAppSelector((state) => {
-    if (data.roomNumber) {
-      let assignedRoomType = "";
-      for (const floor of state.hotel.data.floors) {
-        for (const room of floor.rooms) {
-          if (room.number === data.roomNumber) {
-            assignedRoomType = room.type;
-            break;
-          }
-        }
-        if (assignedRoomType !== "") {
-          break;
-        }
-      }
-      const roomTypeAcceptedPersonsCount = state.roomTypes.data[assignedRoomType];
-      if (roomTypeAcceptedPersonsCount) {
-        if (!roomTypeAcceptedPersonsCount.includes(data.persons)) {
-          return "error";
-        }
-      }
-
-      if (assignedRoomType !== data.roomType) {
-        return "warning";
-      }
-    }
-
-    return "none";
-  });
 
   useEffect(() => {
     async function fetchData() {
@@ -66,19 +36,7 @@ export default function Details({ open, onClose }: DetailsProps): JSX.Element {
       onClose();
     }}>
       <Stack spacing={1} sx={{ p: "1rem" }}>
-        {errorType !== "none" ? (
-          <Stack spacing={1} direction="row" sx={{
-            color: errorType === "error" ? theme.palette.error.light : theme.palette.warning.dark
-          }}>
-            <ErrorOutlineOutlined />
-            <Typography variant="bodySmall">
-              {errorType === "error" ?
-                "La stanza assegnata all'occupazione non è dedicata a questa quantità degli ospiti." :
-                "La tipologia della stanza assegnata non coincide con quella richiesta dall'occupazione."
-              }
-            </Typography>
-          </Stack>
-        ) : null}
+        <Error />
         <Typography variant="titleLarge">Ospiti</Typography>
         <Stack spacing={1} sx={{ pr: "1rem", pl: "1rem" }}>
           {clients.map((client) => (

@@ -47,6 +47,38 @@ export function useRightmostDate(): string {
   return useAppSelector((state) => Utils.getDateShift(state.table.leftmostDate, state.table.columns - 1));
 }
 
+export function useErrorType(id: string): "none" | "warning" | "error" {
+  return useAppSelector((state) => {
+    const data = state.tiles.data[id];
+    if (data && data.roomNumber) {
+      let assignedRoomType = "";
+      for (const floor of state.hotel.data.floors) {
+        for (const room of floor.rooms) {
+          if (room.number === data.roomNumber) {
+            assignedRoomType = room.type;
+            break;
+          }
+        }
+        if (assignedRoomType !== "") {
+          break;
+        }
+      }
+      const roomTypeAcceptedPersonsCount = state.roomTypes.data[assignedRoomType];
+      if (roomTypeAcceptedPersonsCount) {
+        if (!roomTypeAcceptedPersonsCount.includes(data.persons)) {
+          return "error";
+        }
+      }
+
+      if (assignedRoomType !== data.roomType) {
+        return "warning";
+      }
+    }
+
+    return "none";
+  });
+}
+
 export const useCurrentDate:        () => string =
   () => useAppSelector((state) => state.table.currentDate);
 
