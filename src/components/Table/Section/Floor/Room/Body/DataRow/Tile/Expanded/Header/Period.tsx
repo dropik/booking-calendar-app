@@ -1,5 +1,6 @@
-import Typography from "@mui/material/Typography";
 import React, { useContext } from "react";
+import Typography from "@mui/material/Typography";
+
 import * as Utils from "../../../../../../../../../../utils";
 import { TileContext } from "../../context";
 

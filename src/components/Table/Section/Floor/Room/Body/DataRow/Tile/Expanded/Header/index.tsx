@@ -9,12 +9,12 @@ import { TileContext } from "../../context";
 import HeadlineRow from "./HeadlineRow";
 import Persons from "./Persons";
 import Period from "./Period";
+import RoomType from "./RoomType";
 
 const Header = forwardRef<HTMLDivElement, {}>(function Header(_, ref): JSX.Element {
   const { data } = useContext(TileContext);
   const theme = useTheme();
 
-  const formattedRoomType = `${data.entity[0].toLocaleUpperCase()}${data.entity.slice(1)}`;
 
   return (
     <Stack spacing={0} sx={{
@@ -27,7 +27,7 @@ const Header = forwardRef<HTMLDivElement, {}>(function Header(_, ref): JSX.Eleme
       <Persons />
       <Stack sx={{ pt: "0.5rem" }}>
         <Period />
-        <Typography variant="bodySmall">{formattedRoomType}</Typography>
+        <RoomType />
         {data.roomNumber ? (
           <Typography variant="bodySmall">{`Camera ${data.roomNumber}`}</Typography>
         ) : null}
