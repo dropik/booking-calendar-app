@@ -4,10 +4,9 @@ import Stack from "@mui/material/Stack";
 import Collapse from "@mui/material/Collapse";
 import Typography from "@mui/material/Typography";
 
-
-import M3TextButton from "../../../../../../../../../m3/M3TextButton";
 import Error from "./Error";
 import Clients from "./Clients";
+import ShowBookingButton from "./ShowBookingButton";
 
 type DetailsProps = {
   open: boolean,
@@ -28,9 +27,7 @@ export default function Details({ open, onClose }: DetailsProps): JSX.Element {
         <Error />
         <Typography variant="titleLarge">Ospiti</Typography>
         <Clients />
-        <Stack direction="row" justifyContent="end">
-          <M3TextButton>Mostra prenotazione</M3TextButton>
-        </Stack>
+        <ShowBookingButton />
       </Stack>
     </Collapse>
   );
