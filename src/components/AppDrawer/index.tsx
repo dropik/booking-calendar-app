@@ -1,12 +1,12 @@
 import React from "react";
 import { useTheme } from "@mui/material/styles";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import BookOutlinedIcon from "@mui/icons-material/BookOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import Drawer from "@mui/material/Drawer";
 import Fade from "@mui/material/Fade";
 import Box from "@mui/material/Box";
+import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
+import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
+import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import * as DialogSlice from "../../redux/dialogSlice";
@@ -14,13 +14,13 @@ import * as DialogSlice from "../../redux/dialogSlice";
 import DrawerLists from "./DrawerLists";
 
 export default function AppDrawer(): JSX.Element {
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   const open = useAppSelector((state) => state.drawer.open);
   const theme = useTheme();
 
-  function showDialog(dialog: DialogSlice.ZeroParameterDialog) {
-    dispatch(DialogSlice.show({ dialogType: dialog }));
-  }
+  // function showDialog(dialog: DialogSlice.ZeroParameterDialog) {
+  //   dispatch(DialogSlice.show({ dialogType: dialog }));
+  // }
 
   return (
     <Drawer
@@ -56,31 +56,24 @@ export default function AppDrawer(): JSX.Element {
                   icon: <CalendarMonthOutlinedIcon />,
                   onClick: () => void 0,
                   selected: true
-                }
-              ]
-            },
-            {
-              subheader: "Calcola",
-              items: [
-                {
-                  text: "Tassa di soggiorno",
-                  icon: <AttachMoneyIcon />,
-                  onClick: () => showDialog("cityTax")
-                }
-              ]
-            },
-            {
-              subheader: "Cerca",
-              items: [
-                {
-                  text: "Prenotazione",
-                  icon: <BookOutlinedIcon />,
-                  onClick: () => showDialog("findBooking")
                 },
                 {
-                  text: "Cliente",
-                  icon: <PersonOutlinedIcon />,
-                  onClick: () => showDialog("findClient")
+                  text: "Elenco prenotazioni",
+                  icon: <BookmarkBorderOutlinedIcon />,
+                  onClick: () => void 0,
+                  selected: false
+                },
+                {
+                  text: "Strumenti",
+                  icon: <CreateOutlinedIcon />,
+                  onClick: () => void 0,
+                  selected: false
+                },
+                {
+                  text: "Trova cliente",
+                  icon: <PersonOutlineOutlinedIcon />,
+                  onClick: () => void 0,
+                  selected: false
                 }
               ]
             }
