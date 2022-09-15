@@ -3,20 +3,17 @@ import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import * as Utils from "../../../../../../../../../../utils";
 import { TileColor } from "../../../../../../../../../../redux/tilesSlice";
 import { TileContext } from "../../context";
 
 import HeadlineRow from "./HeadlineRow";
 import Persons from "./Persons";
+import Period from "./Period";
 
 const Header = forwardRef<HTMLDivElement, {}>(function Header(_, ref): JSX.Element {
   const { data } = useContext(TileContext);
   const theme = useTheme();
 
-  const formattedFrom = (new Date(data.from)).toLocaleDateString();
-  const formattedTo = (new Date(Utils.getDateShift(data.from, data.nights))).toLocaleDateString();
-  const periodStr = `${formattedFrom} - ${formattedTo}`;
   const formattedRoomType = `${data.entity[0].toLocaleUpperCase()}${data.entity.slice(1)}`;
 
   return (
@@ -29,7 +26,7 @@ const Header = forwardRef<HTMLDivElement, {}>(function Header(_, ref): JSX.Eleme
       <HeadlineRow />
       <Persons />
       <Stack sx={{ pt: "0.5rem" }}>
-        <Typography variant="bodySmall">{periodStr}</Typography>
+        <Period />
         <Typography variant="bodySmall">{formattedRoomType}</Typography>
         {data.roomNumber ? (
           <Typography variant="bodySmall">{`Camera ${data.roomNumber}`}</Typography>
