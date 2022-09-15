@@ -1,5 +1,6 @@
-import Typography from "@mui/material/Typography";
 import React from "react";
+import Typography from "@mui/material/Typography";
+
 import { ClientShortData } from "../../../../../../../../../../../api";
 
 type FullNameProps = {
