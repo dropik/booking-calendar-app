@@ -13,11 +13,22 @@ type Props = {
   anchorReference: "anchorEl" | "anchorPosition" | "none",
   anchorEl?: HTMLElement,
   anchorPosition?: { top: number, left: number },
+  anchorOrigin?: { horizontal: "center" | "left" | "right", vertical: "bottom" | "center" | "top" },
+  transformOrigin?: { horizontal: "center" | "left" | "right", vertical: "bottom" | "center" | "top" },
   onClose: () => void,
   unassigned?: boolean
 };
 
-export default function TileContextMenu({ tileId, anchorReference, anchorEl, anchorPosition, onClose, unassigned }: Props): JSX.Element {
+export default function TileContextMenu({
+  tileId,
+  anchorReference,
+  anchorEl,
+  anchorPosition,
+  anchorOrigin,
+  transformOrigin,
+  onClose,
+  unassigned
+}: Props): JSX.Element {
   const dispatch = useAppDispatch();
 
   const open = Boolean(anchorEl) || Boolean(anchorPosition);
@@ -41,13 +52,11 @@ export default function TileContextMenu({ tileId, anchorReference, anchorEl, anc
       anchorReference={anchorReference}
       anchorEl={anchorEl}
       anchorPosition={anchorPosition}
+      anchorOrigin={anchorOrigin}
+      transformOrigin={transformOrigin}
       open={open}
       onClose={close}
       onAnyItemClick={onClose}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right"
-      }}
       list={[
         {
           text: "Assegna colore",
