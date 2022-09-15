@@ -10,12 +10,11 @@ import ErrorOutlineOutlined from "@mui/icons-material/ErrorOutlineOutlined";
 import * as Utils from "../../../../../../../../../utils";
 import { useAppSelector } from "../../../../../../../../../redux/hooks";
 import { TileContext } from "../context";
-import { TileColor } from "../../../../../../../../../redux/tilesSlice";
 import { ClientShortData, fetchClientsByTile } from "../../../../../../../../../api";
 
 import { SurfaceTint } from "../../../../../../../../m3/Tints";
 import M3TextButton from "../../../../../../../../m3/M3TextButton";
-import MoreButton from "./MoreButton";
+import Header from "./Header";
 
 type ExpandedProps = {
   anchorEl: HTMLElement | null,
@@ -27,19 +26,13 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
   const theme = useTheme();
   const [clients, setClients] = useState<ClientShortData[]>([]);
   const [openDetails, setOpenDetails] = useState(false);
-  const headerRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
 
   const open = Boolean(anchorEl);
   const id = open ? "expanded-tile" : undefined;
   const anchorElWidthPx = anchorEl ? anchorEl.getBoundingClientRect().width : 0;
   const anchorElWidthRem = Utils.pxToRem(anchorElWidthPx);
   const anchorElWidthRemCaped = Math.max(anchorElWidthRem, 22.5);
-
-  const personsStr = `${data.persons} person${data.persons === 1 ? "a" : "e"}`;
-  const formattedFrom = (new Date(data.from)).toLocaleDateString();
-  const formattedTo = (new Date(Utils.getDateShift(data.from, data.nights))).toLocaleDateString();
-  const periodStr = `${formattedFrom} - ${formattedTo}`;
-  const formattedRoomType = `${data.entity[0].toLocaleUpperCase()}${data.entity.slice(1)}`;
 
   const errorType: "none" | "error" | "warning" = useAppSelector((state) => {
     if (data.roomNumber) {
@@ -129,25 +122,7 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
           boxShadow: theme.shadows[1],
           pointerEvents: "auto"
         }}>
-          <Stack spacing={0} sx={{
-            p: "1rem",
-            borderRadius: "inherit",
-            backgroundColor: theme.palette[`${data.color}Container`].light,
-            color: theme.palette[`on${data.color[0].toUpperCase()}${data.color.substring(1)}Container` as `on${Capitalize<TileColor>}Container`].light
-          }} ref={headerRef}>
-            <Stack direction="row" justifyContent="space-between">
-              <Typography variant="headlineMedium">{data.name}</Typography>
-              <MoreButton />
-            </Stack>
-            <Typography variant="titleMedium">{personsStr}</Typography>
-            <Stack sx={{ pt: "0.5rem" }}>
-              <Typography variant="bodySmall">{periodStr}</Typography>
-              <Typography variant="bodySmall">{formattedRoomType}</Typography>
-              {data.roomNumber ? (
-                <Typography variant="bodySmall">{`Camera ${data.roomNumber}`}</Typography>
-              ) : null}
-            </Stack>
-          </Stack>
+          <Header ref={headerRef} />
           <Collapse in={openDetails} easing={{
             enter: theme.transitions.easing.easeOut,
             exit: theme.transitions.easing.fastOutSlowIn
