@@ -1,13 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import Typography from "@mui/material/Typography";
 
-import { ClientShortData } from "../../../../../../../../../../../api";
+import ClientContext from "./context";
 
-type FullNameProps = {
-  client: ClientShortData
-};
+export default function FullName(): JSX.Element {
+  const client = useContext(ClientContext);
 
-export default function FullName({ client }: FullNameProps): JSX.Element {
   return (
     <Typography variant="titleMedium">{`${client.name} ${client.surname}`}</Typography>
   );

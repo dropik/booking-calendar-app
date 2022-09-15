@@ -1,13 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import Typography from "@mui/material/Typography";
 
-import { ClientShortData } from "../../../../../../../../../../../api";
+import ClientContext from "./context";
 
-type BirthInfoProps = {
-  client: ClientShortData
-};
+export default function BirthInfo(): JSX.Element {
+  const client = useContext(ClientContext);
 
-export default function BirthInfo({ client }: BirthInfoProps): JSX.Element {
   return (
     <Typography variant="bodySmall">
       {

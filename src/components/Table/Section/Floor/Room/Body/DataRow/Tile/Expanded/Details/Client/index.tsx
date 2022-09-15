@@ -5,6 +5,7 @@ import { ClientShortData } from "../../../../../../../../../../../api";
 
 import FullName from "./FullName";
 import BirthInfo from "./BirthInfo";
+import ClientContext from "./context";
 
 type ClientProps = {
   client: ClientShortData
@@ -12,9 +13,11 @@ type ClientProps = {
 
 export default function Client({ client }: ClientProps): JSX.Element {
   return (
-    <Stack spacing={0}>
-      <FullName client={client} />
-      <BirthInfo client={client} />
-    </Stack>
+    <ClientContext.Provider value={client}>
+      <Stack spacing={0}>
+        <FullName />
+        <BirthInfo />
+      </Stack>
+    </ClientContext.Provider>
   );
 }
