@@ -12,9 +12,9 @@ import { useAppSelector } from "../../../../../../../../../redux/hooks";
 import { TileContext } from "../context";
 import { ClientShortData, fetchClientsByTile } from "../../../../../../../../../api";
 
-import { SurfaceTint } from "../../../../../../../../m3/Tints";
 import M3TextButton from "../../../../../../../../m3/M3TextButton";
 import Header from "./Header";
+import Tint from "./Tint";
 
 type ExpandedProps = {
   anchorEl: HTMLElement | null,
@@ -163,10 +163,7 @@ export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Elem
               </Stack>
             </Stack>
           </Collapse>
-          <SurfaceTint sx={{
-            backgroundColor: theme.palette.primary.light,
-            opacity: theme.opacities.surface1
-          }} />
+          <Tint />
         </Box>
       </Box>
     </Popover>
