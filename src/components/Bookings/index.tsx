@@ -28,7 +28,18 @@ export default function Bookings(): JSX.Element {
                 setFrom(Utils.dateToString(date));
               }
             }}
-            renderInput={(props) => <TextField {...props} id="from" label="Dal" />}
+            renderInput={({ error, ...props }) => (
+              <TextField
+                {...props}
+                id="from"
+                label="Dal"
+                error={error}
+                helperText={error ? "Periodo non valido" : null}
+              />
+            )}
+            shouldDisableDate={(date) => {
+              return Utils.daysBetweenDates(Utils.dateToString(date), to) < 0;
+            }}
           />
           <M3DatePicker
             value={new Date(to)}
@@ -37,7 +48,18 @@ export default function Bookings(): JSX.Element {
                 setTo(Utils.dateToString(date));
               }
             }}
-            renderInput={(props) => <TextField {...props} id="to" label="Al" />}
+            renderInput={({ error, ...props }) => (
+              <TextField
+                {...props}
+                id="to"
+                label="Al"
+                error={error}
+                helperText={error ? "Periodo non valido" : null}
+              />
+            )}
+            shouldDisableDate={(date) => {
+              return Utils.daysBetweenDates(from, Utils.dateToString(date)) < 0;
+            }}
           />
         </Stack>
         <TextField id="name" label="Nome" onChange={(event) => { setName(event.target.value); }} />
