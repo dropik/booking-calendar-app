@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 
-import DownloadMenu from "../../Menu/DownloadMenu";
-import M3IconButton from "../../m3/M3IconButton";
+import DownloadMenu from "../../../Menu/DownloadMenu";
+import M3IconButton from "../../../m3/M3IconButton";
 
 export default function DownloadButton(): JSX.Element {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
