@@ -27,7 +27,7 @@ export default function TopAppBar(): JSX.Element {
         <DrawerAdjacent sx={{ height: "100%" }}>
           <Routes>
             <Route path="/" element={<CalendarHeader />} />
-            <Route path="/bookings" element={<LargeHeaderTitle>Prenotazioni</LargeHeaderTitle>} />
+            <Route path="/bookings/*" element={<LargeHeaderTitle>Prenotazioni</LargeHeaderTitle>} />
             <Route path="/tools" element={<LargeHeaderTitle>Strumenti</LargeHeaderTitle>} />
             <Route path="/clients" element={<LargeHeaderTitle>Clienti</LargeHeaderTitle>} />
           </Routes>

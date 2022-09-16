@@ -48,24 +48,28 @@ export default function AppDrawer(): JSX.Element {
                 {
                   text: "Calendario",
                   link: "/",
+                  end: true,
                   icon: <CalendarMonthOutlinedIcon />,
                   onClick: () => void 0
                 },
                 {
                   text: "Elenco prenotazioni",
                   link: "/bookings",
+                  end: false,
                   icon: <BookmarkBorderOutlinedIcon />,
                   onClick: () => void 0
                 },
                 {
                   text: "Strumenti",
                   link: "/tools",
+                  end: true,
                   icon: <CreateOutlinedIcon />,
                   onClick: () => void 0
                 },
                 {
                   text: "Trova cliente",
                   link: "/clients",
+                  end: true,
                   icon: <PersonOutlineOutlinedIcon />,
                   onClick: () => void 0
                 }

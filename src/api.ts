@@ -34,7 +34,8 @@ export type BookingShortData = {
   id: string,
   name: string,
   from: string,
-  to: string
+  to: string,
+  occupations: number
 };
 
 export type DocumentType = "identityCard" | "drivingLicense" | "passport";
