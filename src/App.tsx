@@ -1,4 +1,5 @@
 import React from "react";
+import { BrowserRouter } from "react-router-dom";
 import Box from "@mui/material/Box";
 
 import M3GlobalStyles from "./components/m3/M3GlobalStyles";
@@ -17,18 +18,20 @@ export default function App(): JSX.Element {
 
 
   return (
-    <Box>
-      <M3GlobalStyles />
-      <ResizeHandler />
-      <ScrollingHandler />
-      <TopAppBar />
-      <AppDrawer />
-      <Table />
-      <SaveAndResetWidget />
-      <ConnectionError />
-      <Dialog />
-      <PoliceDownloadDialog />
-      <IstatDownloadDialog />
-    </Box>
+    <BrowserRouter>
+      <Box>
+        <M3GlobalStyles />
+        <ResizeHandler />
+        <ScrollingHandler />
+        <TopAppBar />
+        <AppDrawer />
+        <Table />
+        <SaveAndResetWidget />
+        <ConnectionError />
+        <Dialog />
+        <PoliceDownloadDialog />
+        <IstatDownloadDialog />
+      </Box>
+    </BrowserRouter>
   );
 }

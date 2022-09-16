@@ -8,19 +8,13 @@ import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlin
 import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import * as DialogSlice from "../../redux/dialogSlice";
+import { useAppSelector } from "../../redux/hooks";
 
 import DrawerLists from "./DrawerLists";
 
 export default function AppDrawer(): JSX.Element {
-  // const dispatch = useAppDispatch();
   const open = useAppSelector((state) => state.drawer.open);
   const theme = useTheme();
-
-  // function showDialog(dialog: DialogSlice.ZeroParameterDialog) {
-  //   dispatch(DialogSlice.show({ dialogType: dialog }));
-  // }
 
   return (
     <Drawer
@@ -53,27 +47,27 @@ export default function AppDrawer(): JSX.Element {
               items: [
                 {
                   text: "Calendario",
+                  link: "/",
                   icon: <CalendarMonthOutlinedIcon />,
-                  onClick: () => void 0,
-                  selected: true
+                  onClick: () => void 0
                 },
                 {
                   text: "Elenco prenotazioni",
+                  link: "/bookings",
                   icon: <BookmarkBorderOutlinedIcon />,
-                  onClick: () => void 0,
-                  selected: false
+                  onClick: () => void 0
                 },
                 {
                   text: "Strumenti",
+                  link: "/tools",
                   icon: <CreateOutlinedIcon />,
-                  onClick: () => void 0,
-                  selected: false
+                  onClick: () => void 0
                 },
                 {
                   text: "Trova cliente",
+                  link: "/clients",
                   icon: <PersonOutlineOutlinedIcon />,
-                  onClick: () => void 0,
-                  selected: false
+                  onClick: () => void 0
                 }
               ]
             }
