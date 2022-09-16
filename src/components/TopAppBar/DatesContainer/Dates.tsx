@@ -13,7 +13,7 @@ export default function Dates(): JSX.Element {
   return (
     <Box sx={{
       height: "100%",
-      ml: "7.5rem"
+      ml: "2.5rem"
     }}>
       <Grid container spacing={0} columns={7} sx={{
         height: "100%"

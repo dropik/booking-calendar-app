@@ -1,5 +1,6 @@
 import React from "react";
 import { useTheme } from "@mui/material/styles";
+import Box from "@mui/material/Box";
 import MenuIcon from "@mui/icons-material/Menu";
 
 import { useAppDispatch } from "../../redux/hooks";
@@ -16,13 +17,19 @@ export default function DrawerButton(): JSX.Element {
   }
 
   return (
-    <M3IconButton
-      onClick={openDrawer}
-      sx={{
-        color: theme.palette.onSurface.main
-      }}
-    >
-      <MenuIcon />
-    </M3IconButton>
+    <Box sx={{
+      display: "flex",
+      width: "5rem",
+      justifyContent: "center"
+    }}>
+      <M3IconButton
+        onClick={openDrawer}
+        sx={{
+          color: theme.palette.onSurface.main
+        }}
+      >
+        <MenuIcon />
+      </M3IconButton>
+    </Box>
   );
 }
