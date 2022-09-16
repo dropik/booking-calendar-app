@@ -1,4 +1,5 @@
 import React from "react";
+import { Route, Routes } from "react-router-dom";
 
 import M3AppBar from "../m3/M3AppBar";
 import CalendarHeader from "./CalendarHeader";
@@ -15,7 +16,12 @@ export default function TopAppBar(): JSX.Element {
       alignItems: "baseline"
     }}>
       <DrawerButton />
-      <CalendarHeader />
+      <Routes>
+        <Route path="/" element={<CalendarHeader />} />
+        <Route path="/bookings" element={"Prenotazioni"} />
+        <Route path="/tools" element={"Strumenti"} />
+        <Route path="/clients" element={"Clienti"} />
+      </Routes>
       <Tint />
     </M3AppBar>
   );
