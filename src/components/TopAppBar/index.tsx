@@ -23,12 +23,14 @@ export default function TopAppBar(): JSX.Element {
         display: "flex",
         flexDirection: "column"
       }}>
-        <Routes>
-          <Route path="/" element={<CalendarHeader />} />
-          <Route path="/bookings" element={<LargeHeaderTitle />} />
-          <Route path="/tools" element={"Strumenti"} />
-          <Route path="/clients" element={"Clienti"} />
-        </Routes>
+        <DrawerAdjacent sx={{ height: "100%" }}>
+          <Routes>
+            <Route path="/" element={<CalendarHeader />} />
+            <Route path="/bookings" element={<LargeHeaderTitle />} />
+            <Route path="/tools" element={"Strumenti"} />
+            <Route path="/clients" element={"Clienti"} />
+          </Routes>
+        </DrawerAdjacent>
       </Box>
       <Tint />
     </M3AppBar>
@@ -37,13 +39,11 @@ export default function TopAppBar(): JSX.Element {
 
 function LargeHeaderTitle(): JSX.Element {
   return (
-    <DrawerAdjacent>
-      <Typography variant="headlineMedium" sx={{
-        pl: "1rem",
-        pt: "5.5rem"
-      }}>
-        Prenotazioni
-      </Typography>
-    </DrawerAdjacent>
+    <Typography variant="headlineMedium" sx={{
+      pl: "1rem",
+      pt: "5.5rem"
+    }}>
+      Prenotazioni
+    </Typography>
   );
 }
