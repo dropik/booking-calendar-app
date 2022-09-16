@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 
-import { useDates } from "../../../redux/hooks";
+import { useDates } from "../../../../redux/hooks";
 
 import Day from "./Day";
 
