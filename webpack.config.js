@@ -135,35 +135,40 @@ module.exports = {
             name: "Ivan Petrov",
             from: "2022-02-02",
             to: "2022-02-05",
-            occupations: 1
+            occupations: 1,
+            color: "booking1"
           },
           {
             id: "1",
             name: "Vasya Pupkin",
             from: "2022-03-01",
             to: "2022-03-04",
-            occupations: 2
+            occupations: 2,
+            color: "booking2"
           },
           {
             id: "2",
             name: "Petr Sidorov",
             from: "2022-03-16",
             to: "2022-03-17",
-            occupations: 1
+            occupations: 1,
+            color: "booking3"
           },
           {
             id: "3",
             name: "Petr Ivanov",
             from: "2022-04-01",
             to: "2022-04-03",
-            occupations: 1
+            occupations: 1,
+            color: "booking4"
           },
           {
             id: "4",
             name: "Kirill Kirilov",
             from: "2022-04-02",
             to: "2022-04-03",
-            occupations: 1
+            occupations: 1,
+            color: "booking5"
           }
         ]);
       });
