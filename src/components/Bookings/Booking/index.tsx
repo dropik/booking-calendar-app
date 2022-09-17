@@ -1,0 +1,78 @@
+import React from "react";
+import { useTheme } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
+import { BookingShortData } from "../../../api";
+import { TileColor } from "../../../redux/tilesSlice";
+
+import M3ListItemButton from "../../m3/M3ListItemButton";
+import M3NavLink from "../../m3/M3NavLink";
+import BookingsListItemText from "./BookingsListItemText";
+
+type BookingProps = {
+  booking: BookingShortData
+};
+
+export default function Booking({ booking }: BookingProps): JSX.Element {
+  const theme = useTheme();
+
+  const nameSplit = booking.name.split(" ");
+  const initials = nameSplit.length === 1 ?
+    nameSplit[0][0].toLocaleUpperCase() :
+    `${nameSplit[0][0].toLocaleUpperCase()}${nameSplit[1][0].toLocaleUpperCase()}`;
+
+  return (
+    <M3NavLink to={`/bookings/${booking.id}`}>
+      {({ isActive }) => (
+        <M3ListItemButton selected={isActive} sx={{
+          height: "4.75rem",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+          borderRadius: "0.75rem"
+        }}>
+          <Box sx={{
+            flexBasis: "4rem",
+            pr: "1rem",
+            pt: "0.375rem"
+          }}>
+            <BookingsListItemText sx={{
+              width: "4rem",
+              height: "4rem",
+              textAlign: "center",
+              lineHeight: "4.5rem",
+              borderRadius: "2rem",
+              backgroundColor: theme.palette[`${booking.color}Container` as `${TileColor}Container`].light
+            }}>
+              <Typography variant="headlineSmall">
+                {initials}
+              </Typography>
+            </BookingsListItemText>
+          </Box>
+          <Stack spacing={0} sx={{
+            flexGrow: 1,
+            pt: "1rem",
+            pb: "1rem"
+          }}>
+            <BookingsListItemText>
+              <Typography variant="titleMedium">{booking.name}</Typography>
+            </BookingsListItemText>
+            <BookingsListItemText>
+              <Typography variant="bodySmall">{`${booking.from} - ${booking.to}`}</Typography>
+            </BookingsListItemText>
+          </Stack>
+          <BookingsListItemText sx={{
+            flexShrink: 1,
+            textAlign: "right",
+            paddingTop: "1rem"
+          }}>
+            <Typography variant="bodySmall">
+              {`${booking.occupations} stanz${booking.occupations === 1 ? "a" : "e"}`}
+            </Typography>
+          </BookingsListItemText>
+        </M3ListItemButton>
+      )}
+    </M3NavLink>
+  );
+}
