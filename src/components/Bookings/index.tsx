@@ -111,52 +111,54 @@ export default function Bookings(): JSX.Element {
 
             return (
               <M3NavLink key={booking.id} to={`/bookings/${booking.id}`}>
-                <M3ListItemButton sx={{
-                  height: "4.75rem",
-                  justifyContent: "space-between",
-                  alignItems: "flex-start",
-                  borderRadius: "0.75rem"
-                }}>
-                  <Box sx={{
-                    flexBasis: "4rem",
-                    pr: "1rem",
-                    pt: "0.375rem"
+                {({ isActive }) => (
+                  <M3ListItemButton selected={isActive} sx={{
+                    height: "4.75rem",
+                    justifyContent: "space-between",
+                    alignItems: "flex-start",
+                    borderRadius: "0.75rem"
                   }}>
-                    <BookingsListItemText sx={{
-                      width: "4rem",
-                      height: "4rem",
-                      textAlign: "center",
-                      lineHeight: "4.5rem",
-                      borderRadius: "2rem",
-                      backgroundColor: theme.palette[`${booking.color}Container` as `${TileColor}Container`].light
+                    <Box sx={{
+                      flexBasis: "4rem",
+                      pr: "1rem",
+                      pt: "0.375rem"
                     }}>
-                      <Typography variant="headlineSmall">
-                        {initials}
+                      <BookingsListItemText sx={{
+                        width: "4rem",
+                        height: "4rem",
+                        textAlign: "center",
+                        lineHeight: "4.5rem",
+                        borderRadius: "2rem",
+                        backgroundColor: theme.palette[`${booking.color}Container` as `${TileColor}Container`].light
+                      }}>
+                        <Typography variant="headlineSmall">
+                          {initials}
+                        </Typography>
+                      </BookingsListItemText>
+                    </Box>
+                    <Stack spacing={0} sx={{
+                      flexGrow: 1,
+                      pt: "1rem",
+                      pb: "1rem"
+                    }}>
+                      <BookingsListItemText>
+                        <Typography variant="titleMedium">{booking.name}</Typography>
+                      </BookingsListItemText>
+                      <BookingsListItemText>
+                        <Typography variant="bodySmall">{`${booking.from} - ${booking.to}`}</Typography>
+                      </BookingsListItemText>
+                    </Stack>
+                    <BookingsListItemText sx={{
+                      flexShrink: 1,
+                      textAlign: "right",
+                      paddingTop: "1rem"
+                    }}>
+                      <Typography variant="bodySmall">
+                        {`${booking.occupations} stanz${booking.occupations === 1 ? "a" : "e"}`}
                       </Typography>
                     </BookingsListItemText>
-                  </Box>
-                  <Stack spacing={0} sx={{
-                    flexGrow: 1,
-                    pt: "1rem",
-                    pb: "1rem"
-                  }}>
-                    <BookingsListItemText>
-                      <Typography variant="titleMedium">{booking.name}</Typography>
-                    </BookingsListItemText>
-                    <BookingsListItemText>
-                      <Typography variant="bodySmall">{`${booking.from} - ${booking.to}`}</Typography>
-                    </BookingsListItemText>
-                  </Stack>
-                  <BookingsListItemText sx={{
-                    flexShrink: 1,
-                    textAlign: "right",
-                    paddingTop: "1rem"
-                  }}>
-                    <Typography variant="bodySmall">
-                      {`${booking.occupations} stanz${booking.occupations === 1 ? "a" : "e"}`}
-                    </Typography>
-                  </BookingsListItemText>
-                </M3ListItemButton>
+                  </M3ListItemButton>
+                )}
               </M3NavLink>
             );
           })}
