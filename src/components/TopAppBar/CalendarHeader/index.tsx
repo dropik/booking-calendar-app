@@ -7,7 +7,6 @@ import DatesContainer from "./DatesContainer";
 export default function CalendarHeader(): JSX.Element {
   return (
     <Box sx={{
-      ml: "2.5rem",
       height: "100%",
       display: "flex",
       flexDirection: "column"

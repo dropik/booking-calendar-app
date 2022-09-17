@@ -24,6 +24,7 @@ export default function DrawerAdjacent({ children, sx, ...props }: BoxProps): JS
         alignItems: "inherit",
         justifyContent: "inherit",
         overflow: "hidden",
+        ml: "5rem",
         transition: theme.transitions.create(["margin"], {
           easing: theme.transitions.easing.fastOutSlowIn,
           duration: theme.transitions.duration.long,

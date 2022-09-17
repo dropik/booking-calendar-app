@@ -1,5 +1,8 @@
 import React, { ReactNode } from "react";
+import { useTheme } from "@mui/material/styles";
+import Box from "@mui/material/Box";
 import List from "@mui/material/List";
+import Fade from "@mui/material/Fade";
 
 import M3ListSubheader from "../m3/M3ListSubheader";
 import M3ListItemButton from "../m3/M3ListItemButton";
@@ -9,6 +12,7 @@ import M3Divider from "../m3/M3Divider";
 import M3NavLink from "../m3/M3NavLink";
 
 type Props = {
+  open: boolean,
   lists: {
     subheader?: string,
     items: {
@@ -21,7 +25,9 @@ type Props = {
   }[]
 }
 
-export default function DrawerLists({ lists }: Props): JSX.Element {
+export default function DrawerLists({ open, lists }: Props): JSX.Element {
+  const theme = useTheme();
+
   return (
     <>
       {lists.map((list) => (
@@ -36,9 +42,22 @@ export default function DrawerLists({ lists }: Props): JSX.Element {
             {list.items.map((item) => (
               <M3NavLink key={item.link} end={item.end} to={item.link} style={{ textDecoration: "none" }}>
                 {({ isActive }) => (
-                  <M3ListItemButton onClick={item.onClick} selected={isActive}>
+                  <M3ListItemButton onClick={item.onClick} selected={isActive} sx={{
+                    transition: theme.transitions.create(["height", "margin-bottom"], {
+                      easing: theme.transitions.easing.fastOutSlowIn,
+                      duration: theme.transitions.duration.long
+                    }),
+                    ...(!open && {
+                      height: "2rem",
+                      mb: "2rem"
+                    })
+                  }}>
                     <M3ListItemIcon>{item.icon}</M3ListItemIcon>
-                    <M3ListItemText>{item.text}</M3ListItemText>
+                    <Fade in={open} easing={theme.transitions.easing.fastOutSlowIn}>
+                      <Box>
+                        <M3ListItemText>{item.text}</M3ListItemText>
+                      </Box>
+                    </Fade>
                   </M3ListItemButton>
                 )}
               </M3NavLink>

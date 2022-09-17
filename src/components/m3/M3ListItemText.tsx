@@ -9,6 +9,7 @@ export default function M3ListItemText({ children, sx, ...props }: ListItemTextP
   return (
     <ListItemText {...props} sx={{
       color: theme.palette.onSurface.main,
+      whiteSpace: "nowrap",
       ".MuiDrawer-root &" :{
         color: theme.palette.onSurfaceVariant.main,
         ".Mui-selected &": {

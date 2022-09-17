@@ -18,6 +18,7 @@ export default function DrawerButton(): JSX.Element {
 
   return (
     <Box sx={{
+      position: "absolut",
       display: "flex",
       width: "5rem",
       justifyContent: "center"
