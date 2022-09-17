@@ -1,15 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import Typography from "@mui/material/Typography";
 
-import { BookingShortData } from "../../../api";
-
+import BookingContext from "./context";
 import BookingsListItemText from "./BookingsListItemText";
 
-type RoomsCountProps = {
-  booking: BookingShortData
-};
+export default function RoomsCount(): JSX.Element {
+  const booking = useContext(BookingContext);
 
-export default function RoomsCount({ booking }: RoomsCountProps): JSX.Element {
   return (
     <BookingsListItemText sx={{
       flexShrink: 1,

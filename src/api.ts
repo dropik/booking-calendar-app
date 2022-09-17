@@ -36,7 +36,7 @@ export type BookingShortData = {
   from: string,
   to: string,
   occupations: number,
-  color: string
+  color: TilesSlice.TileColor
 };
 
 export type DocumentType = "identityCard" | "drivingLicense" | "passport";
