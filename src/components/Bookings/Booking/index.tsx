@@ -10,6 +10,7 @@ import { TileColor } from "../../../redux/tilesSlice";
 import M3ListItemButton from "../../m3/M3ListItemButton";
 import M3NavLink from "../../m3/M3NavLink";
 import BookingsListItemText from "./BookingsListItemText";
+import RoomsCount from "./RoomsCount";
 
 type BookingProps = {
   booking: BookingShortData
@@ -62,15 +63,7 @@ export default function Booking({ booking }: BookingProps): JSX.Element {
               <Typography variant="bodySmall">{`${booking.from} - ${booking.to}`}</Typography>
             </BookingsListItemText>
           </Stack>
-          <BookingsListItemText sx={{
-            flexShrink: 1,
-            textAlign: "right",
-            paddingTop: "1rem"
-          }}>
-            <Typography variant="bodySmall">
-              {`${booking.occupations} stanz${booking.occupations === 1 ? "a" : "e"}`}
-            </Typography>
-          </BookingsListItemText>
+          <RoomsCount booking={booking} />
         </M3ListItemButton>
       )}
     </M3NavLink>
