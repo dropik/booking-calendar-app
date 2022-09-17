@@ -1,5 +1,4 @@
 import React, { ReactNode } from "react";
-import { NavLink } from "react-router-dom";
 import List from "@mui/material/List";
 
 import M3ListSubheader from "../m3/M3ListSubheader";
@@ -7,6 +6,7 @@ import M3ListItemButton from "../m3/M3ListItemButton";
 import M3ListItemIcon from "../m3/M3ListItemIcon";
 import M3ListItemText from "../m3/M3ListItemText";
 import M3Divider from "../m3/M3Divider";
+import M3NavLink from "../m3/M3NavLink";
 
 type Props = {
   lists: {
@@ -34,14 +34,14 @@ export default function DrawerLists({ lists }: Props): JSX.Element {
             }
           >
             {list.items.map((item) => (
-              <NavLink key={item.link} end={item.end} to={item.link} style={{ textDecoration: "none" }}>
+              <M3NavLink key={item.link} end={item.end} to={item.link} style={{ textDecoration: "none" }}>
                 {({ isActive }) => (
                   <M3ListItemButton onClick={item.onClick} selected={isActive}>
                     <M3ListItemIcon>{item.icon}</M3ListItemIcon>
                     <M3ListItemText>{item.text}</M3ListItemText>
                   </M3ListItemButton>
                 )}
-              </NavLink>
+              </M3NavLink>
             ))}
           </List>
         </React.Fragment>

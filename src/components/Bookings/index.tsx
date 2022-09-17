@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 
@@ -8,6 +8,7 @@ import { BookingShortData, fetchBookings } from "../../api";
 import { useCurrentDate } from "../../redux/hooks";
 
 import M3DatePicker from "../m3/M3DatePicker";
+import M3NavLink from "../m3/M3NavLink";
 
 export default function Bookings(): JSX.Element {
   const currentDate = useCurrentDate();
@@ -95,9 +96,9 @@ export default function Bookings(): JSX.Element {
         </Stack>
         <Stack spacing={0}>
           {bookings.map((booking) => (
-            <NavLink key={booking.id} to={`/bookings/${booking.id}`}>
+            <M3NavLink key={booking.id} to={`/bookings/${booking.id}`}>
               {booking.name}
-            </NavLink>
+            </M3NavLink>
           ))}
         </Stack>
       </Stack>
