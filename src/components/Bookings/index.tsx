@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { styled, useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import { Outlet } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { ListItemTextProps } from "@mui/material/ListItemText";
 
 import * as Utils from "../../utils";
 import { BookingShortData, fetchBookings } from "../../api";
@@ -15,7 +14,7 @@ import { TileColor } from "../../redux/tilesSlice";
 import M3DatePicker from "../m3/M3DatePicker";
 import M3NavLink from "../m3/M3NavLink";
 import M3ListItemButton from "../m3/M3ListItemButton";
-import M3ListItemText from "../m3/M3ListItemText";
+import BookingsListItemText from "./BookingsListItemText";
 
 export default function Bookings(): JSX.Element {
   const theme = useTheme();
@@ -168,8 +167,3 @@ export default function Bookings(): JSX.Element {
     </Stack>
   );
 }
-
-const BookingsListItemText = styled(M3ListItemText)<ListItemTextProps>(() => ({
-  marginTop: 0,
-  marginBottom: 0
-}));
