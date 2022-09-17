@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 import BookingContext from "./context";
-import BookingsListItemText from "./BookingsListItemText";
+import ListItemText from "./ListItemText";
 
 export default function Initials(): JSX.Element {
   const theme = useTheme();
@@ -21,7 +21,7 @@ export default function Initials(): JSX.Element {
       pr: "1rem",
       pt: "0.375rem"
     }}>
-      <BookingsListItemText sx={{
+      <ListItemText sx={{
         width: "4rem",
         height: "4rem",
         textAlign: "center",
@@ -32,7 +32,7 @@ export default function Initials(): JSX.Element {
         <Typography variant="headlineSmall">
           {initials}
         </Typography>
-      </BookingsListItemText>
+      </ListItemText>
     </Box>
   );
 }

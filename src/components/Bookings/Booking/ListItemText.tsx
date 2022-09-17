@@ -3,9 +3,9 @@ import { ListItemTextProps } from "@mui/material/ListItemText";
 
 import M3ListItemText from "../../m3/M3ListItemText";
 
-const BookingsListItemText = styled(M3ListItemText)<ListItemTextProps>(() => ({
+const ListItemText = styled(M3ListItemText)<ListItemTextProps>(() => ({
   marginTop: 0,
   marginBottom: 0
 }));
 
-export default BookingsListItemText;
+export default ListItemText;

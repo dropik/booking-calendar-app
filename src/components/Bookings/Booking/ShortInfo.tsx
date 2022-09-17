@@ -3,7 +3,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 import BookingContext from "./context";
-import BookingsListItemText from "./BookingsListItemText";
+import ListItemText from "./ListItemText";
 
 export default function ShortInfo(): JSX.Element {
   const booking = useContext(BookingContext);
@@ -14,12 +14,12 @@ export default function ShortInfo(): JSX.Element {
       pt: "1rem",
       pb: "1rem"
     }}>
-      <BookingsListItemText>
+      <ListItemText>
         <Typography variant="titleMedium">{booking.name}</Typography>
-      </BookingsListItemText>
-      <BookingsListItemText>
+      </ListItemText>
+      <ListItemText>
         <Typography variant="bodySmall">{`${booking.from} - ${booking.to}`}</Typography>
-      </BookingsListItemText>
+      </ListItemText>
     </Stack>
   );
 }
