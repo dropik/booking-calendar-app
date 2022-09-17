@@ -8,6 +8,9 @@ import ListItemText from "./ListItemText";
 export default function ShortInfo(): JSX.Element {
   const booking = useContext(BookingContext);
 
+  const formattedFrom = (new Date(booking.from)).toLocaleDateString();
+  const formattedTo = (new Date(booking.to)).toLocaleDateString();
+
   return (
     <Stack spacing={0} sx={{
       flexGrow: 1,
@@ -18,7 +21,7 @@ export default function ShortInfo(): JSX.Element {
         <Typography variant="titleMedium">{booking.name}</Typography>
       </ListItemText>
       <ListItemText>
-        <Typography variant="bodySmall">{`${booking.from} - ${booking.to}`}</Typography>
+        <Typography variant="bodySmall">{`${formattedFrom} - ${formattedTo}`}</Typography>
       </ListItemText>
     </Stack>
   );
