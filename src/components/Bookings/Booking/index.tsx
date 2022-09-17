@@ -1,7 +1,6 @@
 import React from "react";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 import { BookingShortData } from "../../../api";
@@ -10,6 +9,7 @@ import BookingContext from "./context";
 import M3ListItemButton from "../../m3/M3ListItemButton";
 import M3NavLink from "../../m3/M3NavLink";
 import BookingsListItemText from "./BookingsListItemText";
+import ShortInfo from "./ShortInfo";
 import RoomsCount from "./RoomsCount";
 
 type BookingProps = {
@@ -52,18 +52,7 @@ export default function Booking({ booking }: BookingProps): JSX.Element {
                 </Typography>
               </BookingsListItemText>
             </Box>
-            <Stack spacing={0} sx={{
-              flexGrow: 1,
-              pt: "1rem",
-              pb: "1rem"
-            }}>
-              <BookingsListItemText>
-                <Typography variant="titleMedium">{booking.name}</Typography>
-              </BookingsListItemText>
-              <BookingsListItemText>
-                <Typography variant="bodySmall">{`${booking.from} - ${booking.to}`}</Typography>
-              </BookingsListItemText>
-            </Stack>
+            <ShortInfo />
             <RoomsCount />
           </M3ListItemButton>
         )}
