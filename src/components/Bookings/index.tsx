@@ -1,81 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import { Outlet } from "react-router-dom";
 import Stack from "@mui/material/Stack";
-import TextField from "@mui/material/TextField";
 
-import * as Utils from "../../utils";
-import { useCurrentDate } from "../../redux/hooks";
 
-import M3DatePicker from "../m3/M3DatePicker";
+import Form from "./Form";
 import List from "./List";
 
 export default function Bookings(): JSX.Element {
-  const currentDate = useCurrentDate();
-  const [from, setFrom] = useState(currentDate);
-  const [to, setTo] = useState(Utils.getDateShift(currentDate, 1));
-  const [name, setName] = useState("");
-  const [isFromValid, setIsFromValid] = useState(true);
-  const [isToValid, setIsToValid] = useState(true);
-
-  const isValid = isFromValid && isToValid;
-
   return (
     <Stack spacing={2} direction="row" sx={{ pl: "1rem", pr: "1rem" }}>
       <Stack spacing={0} sx={{ width: "25rem" }}>
-        <Stack spacing={1} sx={{ pt: "1rem", pb: "1rem" }}>
-          <Stack spacing={1} direction="row">
-            <M3DatePicker
-              value={new Date(from)}
-              onChange={(date: Date | null) => {
-                if (date) {
-                  setFrom(Utils.dateToString(date));
-                  setIsFromValid(false);
-                }
-              }}
-              onAccept={() => setIsFromValid(true)}
-              onError={(reason) => setIsFromValid(reason === null)}
-              renderInput={({ error, ...props }) => (
-                <TextField
-                  {...props}
-                  id="from"
-                  label="Dal"
-                  onBlur={() => setIsFromValid(!error)}
-                  error={error}
-                  helperText={error ? "Periodo non valido" : null}
-                />
-              )}
-              shouldDisableDate={(date) => {
-                return Utils.daysBetweenDates(Utils.dateToString(date), to) < 0;
-              }}
-            />
-            <M3DatePicker
-              value={new Date(to)}
-              onChange={(date: Date | null) => {
-                if (date) {
-                  setTo(Utils.dateToString(date));
-                  setIsToValid(false);
-                }
-              }}
-              onAccept={() => setIsToValid(true)}
-              onError={(reason) => setIsToValid(reason === null)}
-              renderInput={({ error, ...props }) => (
-                <TextField
-                  {...props}
-                  id="to"
-                  label="Al"
-                  onBlur={() => setIsToValid(!error)}
-                  error={error}
-                  helperText={error ? "Periodo non valido" : null}
-                />
-              )}
-              shouldDisableDate={(date) => {
-                return Utils.daysBetweenDates(from, Utils.dateToString(date)) < 0;
-              }}
-            />
-          </Stack>
-          <TextField id="name" label="Nome" onChange={(event) => { setName(event.target.value); }} />
-        </Stack>
-        <List name={name} from={from} to={to} isValid={isValid} />
+        <Form>
+          {(name, from, to, isValid) => <List name={name} from={from} to={to} isValid={isValid} />}
+        </Form>
       </Stack>
       <Outlet />
     </Stack>
