@@ -1,42 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 
 import * as Utils from "../../utils";
-import { BookingShortData, fetchBookings } from "../../api";
 import { useCurrentDate } from "../../redux/hooks";
 
 import M3DatePicker from "../m3/M3DatePicker";
-import Booking from "./Booking";
+import List from "./List";
 
 export default function Bookings(): JSX.Element {
   const currentDate = useCurrentDate();
   const [from, setFrom] = useState(currentDate);
   const [to, setTo] = useState(Utils.getDateShift(currentDate, 1));
   const [name, setName] = useState("");
-  const [bookings, setBookings] = useState<BookingShortData[]>([]);
   const [isFromValid, setIsFromValid] = useState(true);
   const [isToValid, setIsToValid] = useState(true);
 
   const isValid = isFromValid && isToValid;
-
-  useEffect(() => {
-    let subscribed = true;
-
-    async function fetchData() {
-      if (isValid) {
-        const response = await fetchBookings(name, from, to);
-        if (subscribed) {
-          setBookings(response.data);
-        }
-      }
-    }
-
-    fetchData();
-
-    return () => { subscribed = false; };
-  }, [name, from, to, isValid]);
 
   return (
     <Stack spacing={2} direction="row" sx={{ pl: "1rem", pr: "1rem" }}>
@@ -94,9 +75,7 @@ export default function Bookings(): JSX.Element {
           </Stack>
           <TextField id="name" label="Nome" onChange={(event) => { setName(event.target.value); }} />
         </Stack>
-        <Stack spacing={0}>
-          {bookings.map((booking) => <Booking key={booking.id} booking={booking}/>)}
-        </Stack>
+        <List name={name} from={from} to={to} isValid={isValid} />
       </Stack>
       <Outlet />
     </Stack>
