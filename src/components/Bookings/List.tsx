@@ -33,7 +33,7 @@ export default function List({ name, from, to, isValid }: ListProps): JSX.Elemen
   }, [name, from, to, isValid]);
 
   return (
-    <Stack spacing={0}>
+    <Stack spacing={0} sx={{ mt: "9.5rem", height: "calc(100vh - 19rem)", overflow: "scroll" }}>
       {bookings.map((booking) => <Booking key={booking.id} booking={booking}/>)}
     </Stack>
   );

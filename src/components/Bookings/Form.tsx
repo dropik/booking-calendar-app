@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 
@@ -13,6 +14,7 @@ type FormProps = {
 };
 
 export default function Form({ children }: FormProps): JSX.Element {
+  const theme = useTheme();
   const currentDate = useCurrentDate();
   const [from, setFrom] = useState(currentDate);
   const [to, setTo] = useState(Utils.getDateShift(currentDate, 1));
@@ -24,7 +26,14 @@ export default function Form({ children }: FormProps): JSX.Element {
 
   return (
     <>
-      <Stack spacing={1} sx={{ p: "1rem" }}>
+      <Stack spacing={1} sx={{
+        position: "fixed",
+        width: "25rem",
+        boxSizing: "border-box",
+        p: "1rem",
+        zIndex: theme.zIndex.appBar,
+        backgroundColor: theme.palette.surface.light
+      }}>
         <Stack spacing={1} direction="row">
           <FromDateInput from={from} to={to} setFrom={setFrom} setIsFromValid={setIsFromValid} />
           <ToDateInput from={from} to={to} setTo={setTo} setIsToValid={setIsToValid} />

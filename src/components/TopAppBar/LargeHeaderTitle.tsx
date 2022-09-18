@@ -8,7 +8,7 @@ type LargeHeaderTitleProps = {
 export default function LargeHeaderTitle({ children }: LargeHeaderTitleProps): JSX.Element {
   return (
     <Typography variant="headlineMedium" sx={{
-      pl: "1rem",
+      pl: "2rem",
       pt: "5.5rem"
     }}>
       {children}
