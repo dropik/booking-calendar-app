@@ -1,12 +1,14 @@
 import React from "react";
-import Box from "@mui/material/Box";
 import { Route, Routes } from "react-router-dom";
+import Stack from "@mui/material/Stack";
 
 import M3AppBar from "../m3/M3AppBar";
 import DrawerAdjacent from "../m3/DrawerAdjacent";
 import CalendarHeader from "./CalendarHeader";
 import DrawerButton from "./DrawerButton";
 import Tint from "./Tint";
+import BookingsHeader from "./BookingsHeader";
+import BookingDetailsHeader from "./BookingDetailsHeader";
 import LargeHeaderTitle from "./LargeHeaderTitle";
 
 export default function TopAppBar(): JSX.Element {
@@ -18,21 +20,18 @@ export default function TopAppBar(): JSX.Element {
       flexDirection: "row"
     }}>
       <DrawerButton />
-      <Box sx={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column"
-      }}>
-        <DrawerAdjacent sx={{ height: "100%" }}>
+      <DrawerAdjacent sx={{ width: "100%", height: "100%" }}>
+        <Stack spacing={2} direction="row" sx={{ width: "100%", height: "100%" }}>
           <Routes>
             <Route path="/" element={<CalendarHeader />} />
-            <Route path="/bookings/*" element={<LargeHeaderTitle>Prenotazioni</LargeHeaderTitle>} />
-            <Route path="/tools" element={<LargeHeaderTitle>Strumenti</LargeHeaderTitle>} />
-            <Route path="/clients" element={<LargeHeaderTitle>Clienti</LargeHeaderTitle>} />
+            <Route path="bookings" element={<BookingsHeader />}>
+              <Route path=":bookingId" element={<BookingDetailsHeader />} />
+            </Route>
+            <Route path="tools" element={<LargeHeaderTitle>Strumenti</LargeHeaderTitle>} />
+            <Route path="clients" element={<LargeHeaderTitle>Clienti</LargeHeaderTitle>} />
           </Routes>
-        </DrawerAdjacent>
-      </Box>
+        </Stack>
+      </DrawerAdjacent>
       <Tint />
     </M3AppBar>
   );

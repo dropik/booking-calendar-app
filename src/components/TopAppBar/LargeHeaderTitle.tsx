@@ -1,4 +1,5 @@
 import React from "react";
+import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 type LargeHeaderTitleProps = {
@@ -7,11 +8,16 @@ type LargeHeaderTitleProps = {
 
 export default function LargeHeaderTitle({ children }: LargeHeaderTitleProps): JSX.Element {
   return (
-    <Typography variant="headlineMedium" sx={{
+    <Box sx={{
       pl: "2rem",
-      pt: "5.5rem"
+      pt: "5.75rem",
+      flexBasis: "26rem",
+      flexShrink: 0,
+      boxSizing: "border-box"
     }}>
-      {children}
-    </Typography>
+      <Typography variant="headlineMedium">
+        {children}
+      </Typography>
+    </Box>
   );
 }
