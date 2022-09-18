@@ -24,7 +24,7 @@ export default function Form({ children }: FormProps): JSX.Element {
 
   return (
     <>
-      <Stack spacing={1} sx={{ pt: "1rem", pb: "1rem" }}>
+      <Stack spacing={1} sx={{ p: "1rem" }}>
         <Stack spacing={1} direction="row">
           <FromDateInput from={from} to={to} setFrom={setFrom} setIsFromValid={setIsFromValid} />
           <ToDateInput from={from} to={to} setTo={setTo} setIsToValid={setIsToValid} />
