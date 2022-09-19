@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 
-import { BookingData, fetchBookingById } from "../../api";
+import { fetchBookingById } from "../../api";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { setBookingData, unsetBookingData } from "../../redux/bookingSlice";
 
 export default function BookingDetails(): JSX.Element {
   const theme = useTheme();
   const { bookingId } = useParams();
-  const [data, setData] = useState<BookingData | undefined>(undefined);
+  const dispatch = useAppDispatch();
+  const data = useAppSelector((state) => state.booking.data);
 
   useEffect(() => {
     let isSubscribed = true;
@@ -18,7 +21,7 @@ export default function BookingDetails(): JSX.Element {
         const response = await fetchBookingById(bookingId);
 
         if (isSubscribed) {
-          setData(response.data);
+          dispatch(setBookingData(response.data));
         }
       }
     }
@@ -27,9 +30,9 @@ export default function BookingDetails(): JSX.Element {
 
     return () => {
       isSubscribed = false;
-      setData(undefined);
+      dispatch(unsetBookingData());
     };
-  }, [bookingId]);
+  }, [dispatch, bookingId]);
 
   return (
     <Stack spacing={2} sx={{

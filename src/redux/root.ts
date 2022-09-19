@@ -9,6 +9,7 @@ import drawer from "./drawerSlice";
 import dialog from "./dialogSlice";
 import connectionError from "./connectionErrorSlice";
 import layout from "./layoutSlice";
+import booking from "./bookingSlice";
 
 export default combineReducers(
   {
@@ -20,6 +21,7 @@ export default combineReducers(
     drawer,
     dialog,
     connectionError,
-    layout
+    layout,
+    booking
   }
 );
