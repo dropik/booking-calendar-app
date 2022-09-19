@@ -5,7 +5,7 @@ import Stack from "@mui/material/Stack";
 
 import { fetchBookingById } from "../../api";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { setBookingData, unsetBookingData } from "../../redux/bookingSlice";
+import { setBookingData, setScrollTop, unsetBookingData } from "../../redux/bookingSlice";
 
 export default function BookingDetails(): JSX.Element {
   const theme = useTheme();
@@ -35,16 +35,47 @@ export default function BookingDetails(): JSX.Element {
   }, [dispatch, bookingId]);
 
   return (
-    <Stack spacing={2} sx={{
-      position: "relative",
-      height: "calc(100vh - 10.5rem)",
-      flexGrow: 1,
-      backgroundColor: theme.palette.surfaceVariant.light,
-      color: theme.palette.onSurfaceVariant.light,
-      borderBottomRightRadius: "0.75rem",
-      borderBottomLeftRadius: "0.75rem"
-    }}>
-      {data?.name}
+    <Stack
+      spacing={2}
+      sx={{
+        position: "relative",
+        height: "calc(100vh - 10.5rem)",
+        flexGrow: 1,
+        backgroundColor: theme.palette.surfaceVariant.light,
+        color: theme.palette.onSurfaceVariant.light,
+        borderBottomRightRadius: "0.75rem",
+        borderBottomLeftRadius: "0.75rem",
+        overflowY: "auto"
+      }}
+      onScroll={(event) => {
+        dispatch(setScrollTop(event.currentTarget.scrollTop));
+      }}
+    >
+      <Stack spacing={2}>
+        <div>{data?.name}</div>
+        <div>{data?.name}</div>
+        <div>{data?.name}</div>
+        <div>{data?.name}</div>
+        <div>{data?.name}</div>
+        <div>{data?.name}</div>
+        <div>{data?.name}</div>
+        <div>{data?.name}</div>
+        <div>{data?.name}</div>
+        <div>{data?.name}</div>
+        <div>{data?.name}</div>
+        <div>{data?.name}</div>
+        <div>{data?.name}</div>
+        <div>{data?.name}</div>
+        <div>{data?.name}</div>
+        <div>{data?.name}</div>
+        <div>{data?.name}</div>
+        <div>{data?.name}</div>
+        <div>{data?.name}</div>
+        <div>{data?.name}</div>
+        <div>{data?.name}</div>
+        <div>{data?.name}</div>
+        <div>{data?.name}</div>
+      </Stack>
     </Stack>
   );
 }
