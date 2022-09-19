@@ -43,6 +43,7 @@ export default function DrawerLists({ open, lists }: Props): JSX.Element {
               <M3NavLink key={item.link} end={item.end} to={item.link} style={{ textDecoration: "none" }}>
                 {({ isActive }) => (
                   <M3ListItemButton onClick={item.onClick} selected={isActive} sx={{
+                    overflow: "hidden",
                     transition: theme.transitions.create(["height", "margin-bottom"], {
                       easing: theme.transitions.easing.fastOutSlowIn,
                       duration: theme.transitions.duration.long
