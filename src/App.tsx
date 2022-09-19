@@ -7,6 +7,7 @@ import ResizeHandler from "./components/ResizeHandler";
 import ScrollingHandler from "./components/ScrollingHandler";
 import TopAppBar from "./components/TopAppBar";
 import AppDrawer from "./components/AppDrawer";
+import DrawerButton from "./components/DrawerButton";
 import AppRoutes from "./components/AppRoutes";
 import SaveAndResetWidget from "./components/SaveAndResetWidget";
 import ConnectionError from "./components/ConnectionError";
@@ -25,6 +26,7 @@ export default function App(): JSX.Element {
         <ScrollingHandler />
         <TopAppBar />
         <AppDrawer />
+        <DrawerButton />
         <AppRoutes />
         <SaveAndResetWidget />
         <ConnectionError />

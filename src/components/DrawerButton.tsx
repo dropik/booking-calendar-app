@@ -3,10 +3,10 @@ import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MenuIcon from "@mui/icons-material/Menu";
 
-import { useAppDispatch } from "../../redux/hooks";
-import * as DrawerSlice from "../../redux/drawerSlice";
+import { useAppDispatch } from "../redux/hooks";
+import * as DrawerSlice from "../redux/drawerSlice";
 
-import M3IconButton from "../m3/M3IconButton";
+import M3IconButton from "./m3/M3IconButton";
 
 export default function DrawerButton(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -18,10 +18,10 @@ export default function DrawerButton(): JSX.Element {
 
   return (
     <Box sx={{
-      position: "absolute",
-      display: "flex",
-      width: "5rem",
-      justifyContent: "center"
+      position: "fixed",
+      top: "0.75rem",
+      left: "1.25rem",
+      zIndex: theme.zIndex.appBar
     }}>
       <M3IconButton
         onClick={openDrawer}

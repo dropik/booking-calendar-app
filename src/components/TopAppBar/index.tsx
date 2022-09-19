@@ -5,7 +5,6 @@ import Stack from "@mui/material/Stack";
 import M3AppBar from "../m3/M3AppBar";
 import DrawerAdjacent from "../m3/DrawerAdjacent";
 import CalendarHeader from "./CalendarHeader";
-import DrawerButton from "./DrawerButton";
 import Tint from "./Tint";
 import BookingsHeader from "./BookingsHeader";
 import BookingDetailsHeader from "./BookingDetailsHeader";
@@ -19,7 +18,6 @@ export default function TopAppBar(): JSX.Element {
       display: "flex",
       flexDirection: "row"
     }}>
-      <DrawerButton />
       <DrawerAdjacent sx={{ width: "100%", height: "100%" }}>
         <Stack spacing={0} direction="row" sx={{ width: "100%", height: "100%" }}>
           <Routes>
