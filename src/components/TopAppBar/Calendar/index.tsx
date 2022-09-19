@@ -5,7 +5,7 @@ import TopAppBar from "..";
 import UpperHeader from "./UpperHeader";
 import DatesContainer from "./DatesContainer";
 
-export default function CalendarHeader(): JSX.Element {
+export default function Calendar(): JSX.Element {
   return (
     <TopAppBar>
       <Stack sx={{
