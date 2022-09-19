@@ -5,7 +5,6 @@ import Box from "@mui/material/Box";
 import M3GlobalStyles from "./components/m3/M3GlobalStyles";
 import ResizeHandler from "./components/ResizeHandler";
 import ScrollingHandler from "./components/ScrollingHandler";
-import TopAppBar from "./components/TopAppBar";
 import AppDrawer from "./components/AppDrawer";
 import DrawerButton from "./components/DrawerButton";
 import AppRoutes from "./components/AppRoutes";
@@ -22,17 +21,16 @@ export default function App(): JSX.Element {
     <BrowserRouter>
       <Box>
         <M3GlobalStyles />
-        <ResizeHandler />
-        <ScrollingHandler />
-        <TopAppBar />
+        <AppRoutes />
         <AppDrawer />
         <DrawerButton />
-        <AppRoutes />
         <SaveAndResetWidget />
         <ConnectionError />
         <Dialog />
         <PoliceDownloadDialog />
         <IstatDownloadDialog />
+        <ResizeHandler />
+        <ScrollingHandler />
       </Box>
     </BrowserRouter>
   );
