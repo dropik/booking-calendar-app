@@ -30,7 +30,8 @@ export default function Form({ children }: FormProps): JSX.Element {
         position: "fixed",
         width: "25rem",
         boxSizing: "border-box",
-        p: "1rem",
+        pt: "1rem",
+        pb: "1rem",
         zIndex: theme.zIndex.appBar,
         backgroundColor: theme.palette.surface.light
       }}>

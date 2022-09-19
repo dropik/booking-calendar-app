@@ -10,7 +10,9 @@ export default function BookingDetails(): JSX.Element {
       position: "relative",
       flexGrow: 1,
       backgroundColor: theme.palette.surfaceVariant.light,
-      color: theme.palette.onSurfaceVariant.light
+      color: theme.palette.onSurfaceVariant.light,
+      borderBottomRightRadius: "0.75rem",
+      borderBottomLeftRadius: "0.75rem"
     }}>
       Ivan Petrov
     </Stack>
