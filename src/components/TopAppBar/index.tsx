@@ -21,7 +21,7 @@ export default function TopAppBar(): JSX.Element {
     }}>
       <DrawerButton />
       <DrawerAdjacent sx={{ width: "100%", height: "100%" }}>
-        <Stack spacing={2} direction="row" sx={{ width: "100%", height: "100%" }}>
+        <Stack spacing={0} direction="row" sx={{ width: "100%", height: "100%" }}>
           <Routes>
             <Route path="/" element={<CalendarHeader />} />
             <Route path="bookings" element={<BookingsHeader />}>
