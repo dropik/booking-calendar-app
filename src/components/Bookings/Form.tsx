@@ -28,8 +28,7 @@ export default function Form({ children }: FormProps): JSX.Element {
   return (
     <>
       <Stack spacing={1} sx={{
-        position: "fixed",
-        width: "25rem",
+        position: "sticky",
         boxSizing: "border-box",
         pt: "1rem",
         pb: "1rem",
