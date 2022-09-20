@@ -84,16 +84,20 @@ export default function BookingDetails(): JSX.Element {
         </Stack>
       </Box>
       <Definer value={data}>
-        {(booking) => (<Stack spacing={2} sx={{
-          maxHeight: "calc(100vh - 5rem)",
-          overflowY: "auto"
-        }}>
-          {booking.rooms.map((room, index) => (
-            <TileContext.Provider key={room.id} value={{ data: room, cropRight: false, cropLeft: false }}>
-              <ExpandableTile variant="in-content" isFirst={index === 0} />
-            </TileContext.Provider>
-          ))}
-        </Stack>)}
+        {(booking) => (
+          <Stack spacing={1} sx={{
+            maxHeight: "calc(100vh - 5rem)",
+            overflowY: "auto",
+            boxSizing: "border-box",
+            pb: "1rem"
+          }}>
+            {booking.rooms.map((room, index) => (
+              <TileContext.Provider key={room.id} value={{ data: room, cropRight: false, cropLeft: false }}>
+                <ExpandableTile variant="in-content" isFirst={index === 0} />
+              </TileContext.Provider>
+            ))}
+          </Stack>
+        )}
       </Definer>
     </Stack>
   );

@@ -16,7 +16,7 @@ type ExpandableProps = {
 };
 
 export default function ExpandableTile({ variant, anchorEl, onClose, isFirst }: ExpandableProps): JSX.Element {
-  const [openDetails, setOpenDetails] = useState(false);
+  const [openDetails, setOpenDetails] = useState(variant === "in-content");
   const headerRef = useRef<HTMLDivElement>(null);
 
   const anchorElRect = anchorEl?.getBoundingClientRect();
