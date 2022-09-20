@@ -3,13 +3,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { BookingData } from "../api";
 
 export type State = {
-  data?: BookingData,
-  scrollTop: number
+  data?: BookingData
 };
 
-const initialState: State = {
-  scrollTop: 0
-};
+const initialState: State = { };
 
 export const bookingSlice = createSlice({
   name: "booking",
@@ -20,13 +17,10 @@ export const bookingSlice = createSlice({
     },
     unsetBookingData: (state) => {
       state.data = undefined;
-    },
-    setScrollTop: (state, action: PayloadAction<number>) => {
-      state.scrollTop = action.payload;
     }
   }
 });
 
-export const { setBookingData, unsetBookingData, setScrollTop } = bookingSlice.actions;
+export const { setBookingData, unsetBookingData } = bookingSlice.actions;
 
 export default bookingSlice.reducer;

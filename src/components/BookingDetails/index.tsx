@@ -5,7 +5,7 @@ import Stack from "@mui/material/Stack";
 
 import { fetchBookingById } from "../../api";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { setBookingData, setScrollTop, unsetBookingData } from "../../redux/bookingSlice";
+import { setBookingData, unsetBookingData } from "../../redux/bookingSlice";
 
 export default function BookingDetails(): JSX.Element {
   const theme = useTheme();
@@ -46,9 +46,6 @@ export default function BookingDetails(): JSX.Element {
         borderBottomRightRadius: "0.75rem",
         borderBottomLeftRadius: "0.75rem",
         overflowY: "auto"
-      }}
-      onScroll={(event) => {
-        dispatch(setScrollTop(event.currentTarget.scrollTop));
       }}
     >
       <Stack spacing={2}>
