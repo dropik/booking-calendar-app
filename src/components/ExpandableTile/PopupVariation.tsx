@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 
+import ExpandableTileContext from "./context";
 import FlexBasisFix from "./FlexBasisFix";
 import TilePopover from "./TilePopover";
 
 type PopupVariationProps = {
-  children: React.ReactNode,
-  variant: "popup" | "in-content"
+  children: React.ReactNode
 };
 
-export default function PopupVariation({ children, variant }: PopupVariationProps): JSX.Element {
+export default function PopupVariation({ children }: PopupVariationProps): JSX.Element {
+  const { variant } = useContext(ExpandableTileContext);
+
   if (variant === "popup") {
     return (
       <TilePopover>

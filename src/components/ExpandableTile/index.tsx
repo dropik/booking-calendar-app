@@ -22,13 +22,14 @@ export default function ExpandableTile({ variant, anchorEl, onClose }: Expandabl
 
   return (
     <ExpandableTileContext.Provider value={{
+      variant: variant,
       anchorEl: anchorEl,
       anchorElRect: anchorElRect,
       onClose: onClose,
       setOpenDetails: setOpenDetails,
       headerRef: headerRef
     }}>
-      <PopupVariation variant={variant}>
+      <PopupVariation>
         <Container>
           <Header ref={headerRef} />
           <Details open={openDetails} />

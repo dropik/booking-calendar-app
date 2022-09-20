@@ -1,6 +1,7 @@
 import { createContext } from "react";
 
 type ExpandableTileContextType = {
+  variant: "popup" | "in-content",
   anchorEl?: HTMLElement,
   anchorElRect?: DOMRect,
   onClose?: () => void,
@@ -9,6 +10,7 @@ type ExpandableTileContextType = {
 }
 
 const ExpandableTileContext = createContext<ExpandableTileContextType>({
+  variant: "popup",
   setOpenDetails: () => void 0,
   headerRef: { current: null }
 });
