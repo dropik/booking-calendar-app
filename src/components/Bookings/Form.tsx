@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 
 import * as Utils from "../../utils";
@@ -33,8 +34,10 @@ export default function Form({ children }: FormProps): JSX.Element {
         pt: "1rem",
         pb: "1rem",
         zIndex: theme.zIndex.appBar,
-        backgroundColor: theme.palette.surface.light
+        backgroundColor: theme.palette.surface.light,
+        borderRadius: "0.75rem"
       }}>
+        <Typography variant="displaySmall" sx={{ pt: "5rem", pb: "2rem", textAlign: "center" }}>Prenotazioni</Typography>
         <Stack spacing={1} direction="row">
           <FromDateInput from={from} to={to} setFrom={setFrom} setIsFromValid={setIsFromValid} />
           <ToDateInput from={from} to={to} setTo={setTo} setIsToValid={setIsToValid} />
