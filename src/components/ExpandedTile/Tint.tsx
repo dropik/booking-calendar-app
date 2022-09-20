@@ -1,7 +1,7 @@
 import React from "react";
 import { useTheme } from "@mui/material/styles";
 
-import { SurfaceTint } from "../../m3/Tints";
+import { SurfaceTint } from "../m3/Tints";
 
 export default function Tint(): JSX.Element {
   const theme = useTheme();

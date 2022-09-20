@@ -4,8 +4,8 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import ErrorOutlineOutlined from "@mui/icons-material/ErrorOutlineOutlined";
 
-import { useErrorType } from "../../../../redux/hooks";
-import { TileContext } from "../../context";
+import { useErrorType } from "../../../redux/hooks";
+import { TileContext } from "../../Tile/context";
 
 export default function Error(): JSX.Element | null {
   const { data } = useContext(TileContext);

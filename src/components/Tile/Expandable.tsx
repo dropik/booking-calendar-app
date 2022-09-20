@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
-import Expanded from "./Expanded";
+import ExpandedTile from "../ExpandedTile";
 
 type ExpandableProps = {
   children: React.ReactNode
@@ -20,7 +20,7 @@ export default function Expandable({ children }: ExpandableProps): JSX.Element {
       }}>
         {children}
       </Box>
-      <Expanded anchorEl={anchorEl} onClose={close} />
+      <ExpandedTile anchorEl={anchorEl} onClose={close} />
     </>
   );
 }

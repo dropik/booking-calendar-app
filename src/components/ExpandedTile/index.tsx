@@ -14,7 +14,7 @@ type ExpandedProps = {
   onClose: () => void
 };
 
-export default function Expanded({ anchorEl, onClose }: ExpandedProps): JSX.Element {
+export default function ExpandedTile({ anchorEl, onClose }: ExpandedProps): JSX.Element {
   const [openDetails, setOpenDetails] = useState(false);
   const headerRef = useRef<HTMLDivElement>(null);
 

@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import { TileContext } from "../../context";
+import { TileContext } from "../../Tile/context";
 
 import MoreButton from "./MoreButton";
 

@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-import { ClientShortData } from "../../../../../api";
+import { ClientShortData } from "../../../../api";
 
 const ClientContext = createContext<ClientShortData>({
   id: "",

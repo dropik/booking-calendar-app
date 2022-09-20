@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import Typography from "@mui/material/Typography";
 
-import { TileContext } from "../../context";
+import { TileContext } from "../../Tile/context";
 
 export default function Persons(): JSX.Element {
   const { data } = useContext(TileContext);

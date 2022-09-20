@@ -2,8 +2,8 @@ import React, { forwardRef, useContext } from "react";
 import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 
-import { TileColor } from "../../../../redux/tilesSlice";
-import { TileContext } from "../../context";
+import { TileColor } from "../../../redux/tilesSlice";
+import { TileContext } from "../../Tile/context";
 
 type ContainerProps = {
   children: React.ReactNode
