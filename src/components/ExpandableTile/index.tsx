@@ -11,7 +11,7 @@ import PopupVariation from "./PopupVariation";
 type ExpandableProps = {
   variant: "popup" | "in-content",
   anchorEl?: HTMLElement,
-  onClose: () => void
+  onClose?: () => void
 };
 
 export default function ExpandableTile({ variant, anchorEl, onClose }: ExpandableProps): JSX.Element {

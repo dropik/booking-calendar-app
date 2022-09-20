@@ -90,7 +90,7 @@ export default function BookingDetails(): JSX.Element {
         }}>
           {booking.rooms.map((room) => (
             <TileContext.Provider key={room.id} value={{ data: room, cropRight: false, cropLeft: false }}>
-              <ExpandableTile variant="in-content" onClose={() => void 0}/>
+              <ExpandableTile variant="in-content"/>
             </TileContext.Provider>
           ))}
         </Stack>)}
