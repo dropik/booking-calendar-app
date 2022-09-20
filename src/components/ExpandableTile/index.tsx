@@ -11,10 +11,11 @@ import PopupVariation from "./PopupVariation";
 type ExpandableProps = {
   variant: "popup" | "in-content",
   anchorEl?: HTMLElement,
-  onClose?: () => void
+  onClose?: () => void,
+  isFirst?: boolean
 };
 
-export default function ExpandableTile({ variant, anchorEl, onClose }: ExpandableProps): JSX.Element {
+export default function ExpandableTile({ variant, anchorEl, onClose, isFirst }: ExpandableProps): JSX.Element {
   const [openDetails, setOpenDetails] = useState(false);
   const headerRef = useRef<HTMLDivElement>(null);
 
@@ -30,7 +31,7 @@ export default function ExpandableTile({ variant, anchorEl, onClose }: Expandabl
       headerRef: headerRef
     }}>
       <PopupVariation>
-        <Container>
+        <Container isFirst={isFirst}>
           <Header ref={headerRef} />
           <Details open={openDetails} />
           <Tint />

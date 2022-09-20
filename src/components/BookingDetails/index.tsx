@@ -88,9 +88,9 @@ export default function BookingDetails(): JSX.Element {
           maxHeight: "calc(100vh - 5rem)",
           overflowY: "auto"
         }}>
-          {booking.rooms.map((room) => (
+          {booking.rooms.map((room, index) => (
             <TileContext.Provider key={room.id} value={{ data: room, cropRight: false, cropLeft: false }}>
-              <ExpandableTile variant="in-content"/>
+              <ExpandableTile variant="in-content" isFirst={index === 0} />
             </TileContext.Provider>
           ))}
         </Stack>)}
