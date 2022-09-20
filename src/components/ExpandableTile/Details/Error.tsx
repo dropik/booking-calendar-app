@@ -18,7 +18,8 @@ export default function Error(): JSX.Element | null {
 
   return (
     <Stack spacing={1} direction="row" sx={{
-      color: errorColor
+      color: errorColor,
+      alignItems: "center"
     }}>
       <ErrorOutlineOutlined />
       <Typography variant="bodySmall">{errorMsg}</Typography>
