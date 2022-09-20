@@ -1,6 +1,6 @@
 import React from "react";
 
-import { TileData } from "../../../../../../../../redux/tilesSlice";
+import { TileData } from "../../redux/tilesSlice";
 import { TileContext } from "./context";
 
 import Title from "./Title";

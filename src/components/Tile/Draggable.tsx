@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from "react";
 import Box from "@mui/material/Box";
 
-import { useAppDispatch } from "../../../../../../../../redux/hooks";
-import { grab, drop } from "../../../../../../../../redux/tilesSlice";
+import { useAppDispatch } from "../../redux/hooks";
+import { grab, drop } from "../../redux/tilesSlice";
 import { TileContext } from "./context";
 
 type DraggableProps = {

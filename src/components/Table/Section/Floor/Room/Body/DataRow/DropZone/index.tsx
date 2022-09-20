@@ -1,10 +1,10 @@
 import React from "react";
 
 import { TileData } from "../../../../../../../../redux/tilesSlice";
-import { TileContext } from "../Tile/context";
+import { TileContext } from "../../../../../../../Tile/context";
 
-import Container from "../Tile/Container";
-import Size from "../Tile/Size";
+import Container from "../../../../../../../Tile/Container";
+import Size from "../../../../../../../Tile/Size";
 import DropAccepter from "./DropAccepter";
 
 type DropZoneProps = {

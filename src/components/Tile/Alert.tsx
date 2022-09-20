@@ -2,7 +2,7 @@ import React, { ReactNode, useContext } from "react";
 import { useTheme } from "@mui/material/styles";
 import Badge from "@mui/material/Badge";
 
-import { useAppSelector } from "../../../../../../../../redux/hooks";
+import { useAppSelector } from "../../redux/hooks";
 import { TileContext } from "./context";
 
 type AlertProps = {

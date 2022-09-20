@@ -2,9 +2,9 @@ import React, { ReactNode, useContext } from "react";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 
-import { TileColor } from "../../../../../../../../redux/tilesSlice";
+import { TileColor } from "../../redux/tilesSlice";
 import { TileContext } from "./context";
-import { SurfaceTint } from "../../../../../../../m3/Tints";
+import { SurfaceTint } from "../m3/Tints";
 
 type ContainerProps = {
   children?: ReactNode,

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import { ClientShortData, fetchClientsByTile } from "../../../../../../../../../../api";
+import { ClientShortData, fetchClientsByTile } from "../../../../api";
 import { TileContext } from "../../context";
 
 import Client from "./Client";

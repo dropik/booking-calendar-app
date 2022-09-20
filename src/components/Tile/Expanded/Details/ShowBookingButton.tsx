@@ -1,7 +1,7 @@
 import React from "react";
 import Stack from "@mui/material/Stack";
 
-import M3TextButton from "../../../../../../../../../m3/M3TextButton";
+import M3TextButton from "../../../m3/M3TextButton";
 
 export default function ShowBookingButton(): JSX.Element {
   return (

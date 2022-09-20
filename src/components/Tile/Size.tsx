@@ -1,8 +1,8 @@
 import React, { ReactNode, useContext } from "react";
 import Grid, { GridProps } from "@mui/material/Grid";
 
-import * as Utils from "../../../../../../../../utils";
-import { useAppSelector, useLeftmostDate } from "../../../../../../../../redux/hooks";
+import * as Utils from "../../utils";
+import { useAppSelector, useLeftmostDate } from "../../redux/hooks";
 import { TileContext } from "./context";
 
 type SizeProps = {

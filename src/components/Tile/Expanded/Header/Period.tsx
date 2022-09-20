@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import Typography from "@mui/material/Typography";
 
-import * as Utils from "../../../../../../../../../../utils";
+import * as Utils from "../../../../utils";
 import { TileContext } from "../../context";
 
 export default function Period(): JSX.Element {

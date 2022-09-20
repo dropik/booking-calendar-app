@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector, useColumns, useLeftmostDate } from "../
 import { TileData, unassign } from "../../../../redux/tilesSlice";
 
 import FreeSpace from "../Floor/Room/Body/DataRow/FreeSpace";
-import Tile from "../Floor/Room/Body/DataRow/Tile";
+import Tile from "../../../Tile";
 import GridRow from "../Floor/Room/Body/GridRow";
 import RowBody from "../Row/Body";
 

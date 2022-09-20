@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import Box from "@mui/material/Box";
-import TileContextMenu from "../../../../../../../Menu/TileContextMenu";
+import TileContextMenu from "../Menu/TileContextMenu";
 import { TileContext } from "./context";
 
 type ContextTriggerProps = {

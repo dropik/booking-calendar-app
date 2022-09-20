@@ -81,34 +81,16 @@ export default function BookingDetails(): JSX.Element {
           </Definer>
         </Stack>
       </Box>
-      <Stack spacing={2} sx={{
-        maxHeight: "calc(100vh - 5rem)",
-        overflowY: "auto"
-      }}>
-        <div>{data?.name}</div>
-        <div>{data?.name}</div>
-        <div>{data?.name}</div>
-        <div>{data?.name}</div>
-        <div>{data?.name}</div>
-        <div>{data?.name}</div>
-        <div>{data?.name}</div>
-        <div>{data?.name}</div>
-        <div>{data?.name}</div>
-        <div>{data?.name}</div>
-        <div>{data?.name}</div>
-        <div>{data?.name}</div>
-        <div>{data?.name}</div>
-        <div>{data?.name}</div>
-        <div>{data?.name}</div>
-        <div>{data?.name}</div>
-        <div>{data?.name}</div>
-        <div>{data?.name}</div>
-        <div>{data?.name}</div>
-        <div>{data?.name}</div>
-        <div>{data?.name}</div>
-        <div>{data?.name}</div>
-        <div>{data?.name}</div>
-      </Stack>
+      <Definer value={data}>
+        {(booking) => (<Stack spacing={2} sx={{
+          maxHeight: "calc(100vh - 5rem)",
+          overflowY: "auto"
+        }}>
+          {booking.rooms.map((room) => (
+            <>{room.roomNumber}</>
+          ))}
+        </Stack>)}
+      </Definer>
     </Stack>
   );
 }

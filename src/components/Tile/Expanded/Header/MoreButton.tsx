@@ -3,8 +3,8 @@ import MoreVertOutlined from "@mui/icons-material/MoreVertOutlined";
 
 import { TileContext } from "../../context";
 
-import M3IconButton from "../../../../../../../../../m3/M3IconButton";
-import TileContextMenu from "../../../../../../../../../Menu/TileContextMenu";
+import M3IconButton from "../../../m3/M3IconButton";
+import TileContextMenu from "../../../Menu/TileContextMenu";
 
 export default function MoreButton(): JSX.Element {
   const { data } = useContext(TileContext);

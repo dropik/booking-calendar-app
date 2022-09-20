@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-import { TileData } from "../../../../../../../../redux/tilesSlice";
+import { TileData } from "../../redux/tilesSlice";
 
 export const TileContext = createContext<{
   data: TileData,

@@ -1,7 +1,7 @@
 import React from "react";
 import Stack from "@mui/material/Stack";
 
-import { ClientShortData } from "../../../../../../../../../../../api";
+import { ClientShortData } from "../../../../../api";
 
 import FullName from "./FullName";
 import BirthInfo from "./BirthInfo";
