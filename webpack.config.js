@@ -83,46 +83,27 @@ module.exports = {
           rooms: [
             {
               id: "1",
-              type: "camera matrimoniale/doppia",
-              entity: "camera matrimoniale",
+              bookingId: "1",
+              name: "Vasya Pupkin",
               from: "2022-02-02",
-              to: "2022-02-05",
-              guests: [
-                {
-                  id: "0",
-                  name: "Vasya",
-                  surname: "Pupkin",
-                  dateOfBirth: "1985-05-06"
-                },
-                {
-                  id: "1",
-                  name: "Masha",
-                  surname: "Pupkina",
-                  dateOfBirth: "1987-07-20"
-                }
-              ]
+              nights: 3,
+              roomType: "camera matrimoniale/doppia",
+              entity: "camera matrimoniale",
+              persons: 2,
+              color: "booking1",
+              roomNumber: 3
             },
             {
               id: "2",
-              type: "camera matrimoniale/doppia",
-              entity: "camera matrimoniale",
+              bookingId: "1",
+              name: "Ivan Petrov",
               from: "2022-02-02",
-              to: "2022-02-05",
-              roomNumber: 5,
-              guests: [
-                {
-                  id: "2",
-                  name: "Ivan",
-                  surname: "Petrov",
-                  dateOfBirth: "1990-08-20"
-                },
-                {
-                  id: "3",
-                  name: "Natasha",
-                  surname: "Petrova",
-                  dateOfBirth: "1991-05-09"
-                }
-              ]
+              nights: 3,
+              roomType: "camera matrimoniale/doppia",
+              entity: "camera matrimoniale",
+              persons: 2,
+              color: "booking1",
+              roomNumber: 5
             }
           ]
         });

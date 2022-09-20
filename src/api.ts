@@ -14,20 +14,7 @@ export type BookingData = {
   name: string,
   from: string,
   to: string,
-  rooms: {
-    id: string,
-    type: string,
-    entity: string,
-    from: string,
-    to: string,
-    roomNumber?: number,
-    guests: {
-      id: string,
-      name: string,
-      surname: string,
-      dateOfBirth: string
-    }[]
-  }[]
+  rooms: TilesSlice.TileData[]
 };
 
 export type BookingShortData = {
