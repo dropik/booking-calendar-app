@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { useTheme } from "@mui/material/styles";
 import Collapse from "@mui/material/Collapse";
 
-import ExpandedTileContext from "../context";
+import ExpandableTileContext from "../context";
 
 type DetailsCollapseProps = {
   children: React.ReactNode,
@@ -10,7 +10,7 @@ type DetailsCollapseProps = {
 };
 
 export default function DetailsCollapse({ children, open }: DetailsCollapseProps): JSX.Element {
-  const { onClose } = useContext(ExpandedTileContext);
+  const { onClose } = useContext(ExpandableTileContext);
   const theme = useTheme();
 
   return (

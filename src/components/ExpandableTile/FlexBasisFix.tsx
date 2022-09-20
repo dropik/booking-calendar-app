@@ -1,15 +1,14 @@
 import React, { useContext } from "react";
 import Box from "@mui/material/Box";
 
-import ExpandedTileContext from "./context";
+import ExpandableTileContext from "./context";
 
 type FlexBasisFixProps = {
-  children: React.ReactNode,
-  headerRef: React.RefObject<HTMLDivElement>
+  children: React.ReactNode
 };
 
-export default function FlexBasisFix({ children, headerRef }: FlexBasisFixProps): JSX.Element {
-  const { anchorElRect } = useContext(ExpandedTileContext);
+export default function FlexBasisFix({ children }: FlexBasisFixProps): JSX.Element {
+  const { anchorElRect, headerRef } = useContext(ExpandableTileContext);
 
   return (
     <Box sx={{

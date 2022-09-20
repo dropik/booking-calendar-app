@@ -10,6 +10,8 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { setBookingData, unsetBookingData } from "../../redux/bookingSlice";
 
 import Definer from "../Definer";
+import { TileContext } from "../Tile/context";
+import ExpandableTile from "../ExpandableTile";
 
 export default function BookingDetails(): JSX.Element {
   const theme = useTheme();
@@ -87,7 +89,9 @@ export default function BookingDetails(): JSX.Element {
           overflowY: "auto"
         }}>
           {booking.rooms.map((room) => (
-            <>{room.roomNumber}</>
+            <TileContext.Provider key={room.id} value={{ data: room, cropRight: false, cropLeft: false }}>
+              <ExpandableTile variant="in-content" onClose={() => void 0}/>
+            </TileContext.Provider>
           ))}
         </Stack>)}
       </Definer>

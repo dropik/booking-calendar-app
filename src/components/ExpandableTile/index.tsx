@@ -1,40 +1,40 @@
 import React, { useRef, useState } from "react";
 
-import ExpandedTileContext from "./context";
+import ExpandableTileContext from "./context";
 
-import TilePopover from "./TilePopover";
-import FlexBasisFix from "./FlexBasisFix";
 import Container from "./Container";
 import Header from "./Header";
 import Details from "./Details";
 import Tint from "./Tint";
+import PopupVariation from "./PopupVariation";
 
 type ExpandableProps = {
+  variant: "popup" | "in-content",
   anchorEl?: HTMLElement,
   onClose: () => void
 };
 
-export default function ExpandableTile({ anchorEl, onClose }: ExpandableProps): JSX.Element {
+export default function ExpandableTile({ variant, anchorEl, onClose }: ExpandableProps): JSX.Element {
   const [openDetails, setOpenDetails] = useState(false);
   const headerRef = useRef<HTMLDivElement>(null);
 
   const anchorElRect = anchorEl?.getBoundingClientRect();
 
   return (
-    <ExpandedTileContext.Provider value={{
+    <ExpandableTileContext.Provider value={{
       anchorEl: anchorEl,
       anchorElRect: anchorElRect,
-      onClose: onClose
+      onClose: onClose,
+      setOpenDetails: setOpenDetails,
+      headerRef: headerRef
     }}>
-      <TilePopover setOpenDetails={setOpenDetails}>
-        <FlexBasisFix headerRef={headerRef}>
-          <Container>
-            <Header ref={headerRef} />
-            <Details open={openDetails} />
-            <Tint />
-          </Container>
-        </FlexBasisFix>
-      </TilePopover>
-    </ExpandedTileContext.Provider>
+      <PopupVariation variant={variant}>
+        <Container>
+          <Header ref={headerRef} />
+          <Details open={openDetails} />
+          <Tint />
+        </Container>
+      </PopupVariation>
+    </ExpandableTileContext.Provider>
   );
 }

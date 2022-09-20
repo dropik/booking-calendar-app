@@ -20,7 +20,7 @@ export default function Expandable({ children }: ExpandableProps): JSX.Element {
       }}>
         {children}
       </Box>
-      <ExpandableTile anchorEl={anchorEl} onClose={close} />
+      <ExpandableTile variant="popup" anchorEl={anchorEl} onClose={close} />
     </>
   );
 }
