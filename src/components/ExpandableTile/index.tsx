@@ -9,12 +9,12 @@ import Header from "./Header";
 import Details from "./Details";
 import Tint from "./Tint";
 
-type ExpandedProps = {
+type ExpandableProps = {
   anchorEl?: HTMLElement,
   onClose: () => void
 };
 
-export default function ExpandedTile({ anchorEl, onClose }: ExpandedProps): JSX.Element {
+export default function ExpandableTile({ anchorEl, onClose }: ExpandableProps): JSX.Element {
   const [openDetails, setOpenDetails] = useState(false);
   const headerRef = useRef<HTMLDivElement>(null);
 
