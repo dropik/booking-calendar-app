@@ -17,7 +17,7 @@ export default function Container({ children }: ContainerProps): JSX.Element {
       position: "relative",
       borderRadius: "0.75rem",
       backgroundColor: theme.palette.surface.light,
-      color: theme.palette.onSurface.light,
+      color: variant === "popup" ? theme.palette.onSurface.light : theme.palette.onSurfaceVariant.light,
       boxShadow: theme.shadows[variant === "popup" ? 1 : 0],
       pointerEvents: "auto"
     }}>
