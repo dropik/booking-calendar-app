@@ -7,10 +7,10 @@ type ExpandableProps = {
 };
 
 export default function Expandable({ children }: ExpandableProps): JSX.Element {
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined>(undefined);
 
   function close() {
-    setAnchorEl(null);
+    setAnchorEl(undefined);
   }
 
   return (

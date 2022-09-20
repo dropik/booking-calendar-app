@@ -10,7 +10,7 @@ import Details from "./Details";
 import Tint from "./Tint";
 
 type ExpandedProps = {
-  anchorEl: HTMLElement | null,
+  anchorEl?: HTMLElement,
   onClose: () => void
 };
 
