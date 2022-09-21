@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import ExpandMoreOutlined from "@mui/icons-material/ExpandMoreOutlined";
+import ExpandLessOutlined from "@mui/icons-material/ExpandLessOutlined";
 
 import { ClientData } from "../../../api";
 import { useAppSelector } from "../../../redux/hooks";
 
 import M3IconButton from "../../m3/M3IconButton";
 import M3TextButton from "../../m3/M3TextButton";
+import Collapse from "@mui/material/Collapse";
 
 type ClientCardProps = {
   client: ClientData
@@ -18,6 +20,7 @@ type ClientCardProps = {
 export default function ClientCard({ client }: ClientCardProps): JSX.Element {
   const theme = useTheme();
   const drawerOpened = useAppSelector((state) => state.drawer.open);
+  const [open, setOpen] = useState(false);
 
   const formattedFrom = (new Date(client.booking.from)).toLocaleDateString();
   const formattedTo = (new Date(client.booking.to)).toLocaleDateString();
@@ -29,7 +32,8 @@ export default function ClientCard({ client }: ClientCardProps): JSX.Element {
         borderRadius: "0.75rem",
         border: `1px solid ${theme.palette.outline.light}`,
         mr: "0.5rem",
-        mb: "0.5rem"
+        mb: "0.5rem",
+        overflow: "hidden"
       }}>
         <Stack sx={{ p: "1rem" }}>
           <Typography variant="headlineMedium">{`${client.name} ${client.surname}`}</Typography>
@@ -38,22 +42,26 @@ export default function ClientCard({ client }: ClientCardProps): JSX.Element {
             <Typography variant="bodySmall">
               {`${client.placeOfBirth ? `${client.placeOfBirth} - ` : ""}${client.stateOfBirth}`}
             </Typography>
-            <M3IconButton><ExpandMoreOutlined /></M3IconButton>
+            <M3IconButton onClick={() => setOpen(!open)}>
+              {open ? <ExpandLessOutlined /> : <ExpandMoreOutlined />}
+            </M3IconButton>
           </Stack>
         </Stack>
-        <Stack spacing={2} sx={{
-          p: "1rem",
-          borderTop: `1px solid ${theme.palette.outline.light}`
-        }}>
-          <Typography variant="titleLarge">Prenotazione</Typography>
-          <Stack sx={{ pl: "1rem" }}>
-            <Typography variant="titleMedium">{client.booking.name}</Typography>
-            <Typography variant="bodySmall">{periodStr}</Typography>
+        <Collapse in={open} easing={theme.transitions.easing.fastOutSlowIn}>
+          <Stack spacing={2} sx={{
+            p: "1rem",
+            borderTop: `1px solid ${theme.palette.outline.light}`
+          }}>
+            <Typography variant="titleLarge">Prenotazione</Typography>
+            <Stack sx={{ pl: "1rem" }}>
+              <Typography variant="titleMedium">{client.booking.name}</Typography>
+              <Typography variant="bodySmall">{periodStr}</Typography>
+            </Stack>
+            <Stack alignItems="flex-end">
+              <M3TextButton>Mostra prenotazione</M3TextButton>
+            </Stack>
           </Stack>
-          <Stack alignItems="flex-end">
-            <M3TextButton>Mostra prenotazione</M3TextButton>
-          </Stack>
-        </Stack>
+        </Collapse>
       </Stack>
     </Grid>
   );
