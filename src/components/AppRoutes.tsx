@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import Table from "./Table";
 import Bookings from "./Bookings";
 import BookingDetails from "./BookingDetails";
+import Clients from "./Clients";
 
 export default function AppRoutes(): JSX.Element {
   return (
@@ -13,7 +14,7 @@ export default function AppRoutes(): JSX.Element {
         <Route path=":bookingId" element={<BookingDetails />} />
       </Route>
       <Route path="tools" element={"Strumenti"} />
-      <Route path="clients" element={"Clienti"} />
+      <Route path="clients" element={<Clients />} />
     </Routes>
   );
 }
