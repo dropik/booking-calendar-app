@@ -114,8 +114,8 @@ export async function fetchBookings(nameOrId: string, from: string, to: string):
   return fetchJsonDataAsync<BookingShortData[]>(`/api/find/bookings?nameOrId=${nameOrId}&from=${from}&to=${to}`);
 }
 
-export async function fetchClients(name: string, surname: string): Promise<{ data: ClientShortData[] }> {
-  return fetchJsonDataAsync<ClientShortData[]>(`/api/find/clients?name=${name}&surname=${surname}`);
+export async function fetchClients(query: string): Promise<{ data: ClientData[] }> {
+  return fetchJsonDataAsync<ClientData[]>(`/api/find/clients?query=${query}`);
 }
 
 async function fetchBlobDataAsync(query: string): Promise<{ data: Blob }> {
