@@ -10,6 +10,7 @@ import Cancel from "@mui/icons-material/Cancel";
 import ExpandMoreOutlined from "@mui/icons-material/ExpandMoreOutlined";
 
 import { ClientData, fetchClients } from "../../api";
+import { useAppSelector } from "../../redux/hooks";
 
 import DrawerAdjacent from "../m3/DrawerAdjacent";
 import M3IconButton from "../m3/M3IconButton";
@@ -19,6 +20,7 @@ export default function Clients(): JSX.Element {
   const [query, setQuery] = useState("");
   const [clients, setClients] = useState<ClientData[]>([]);
   const theme = useTheme();
+  const drawerOpened = useAppSelector((state) => state.drawer.open);
 
   useEffect(() => {
     if (query === "") {
@@ -75,14 +77,14 @@ export default function Clients(): JSX.Element {
             />
           </Stack>
         </Stack>
-        <Grid container spacing={0} direction="row" columns={4}>
+        <Grid container spacing={0} direction="row" columns={12}>
           {clients.map((client) => {
             const formattedFrom = (new Date(client.booking.from)).toLocaleDateString();
             const formattedTo = (new Date(client.booking.to)).toLocaleDateString();
             const periodStr = `${formattedFrom} - ${formattedTo}`;
 
             return (
-              <Grid item key={client.id} xs={1} >
+              <Grid item key={client.id} xs={drawerOpened ? 4 : 3} >
                 <Stack sx={{
                   borderRadius: "0.75rem",
                   border: `1px solid ${theme.palette.outline.light}`,
