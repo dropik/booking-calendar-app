@@ -235,6 +235,40 @@ module.exports = {
               occupations: 1,
               color: "booking2"
             }
+          },
+          {
+            id: "2",
+            name: "Ilja",
+            surname: "Maksimov",
+            dateOfBirth: "1985-05-06",
+            stateOfBirth: "Russia",
+            documentNumber: "",
+            documentType: "identityCard",
+            booking: {
+              id: "2",
+              name: "Vasya Pupkin",
+              from: "2022-02-25",
+              to: "2022-02-26",
+              occupations: 1,
+              color: "booking2"
+            }
+          },
+          {
+            id: "3",
+            name: "Stepan",
+            surname: "Ogurzov",
+            dateOfBirth: "1985-05-06",
+            stateOfBirth: "Russia",
+            documentNumber: "",
+            documentType: "identityCard",
+            booking: {
+              id: "2",
+              name: "Vasya Pupkin",
+              from: "2022-02-25",
+              to: "2022-02-26",
+              occupations: 1,
+              color: "booking2"
+            }
           }
         ]);
       });
