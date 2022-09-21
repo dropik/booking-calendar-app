@@ -10,6 +10,7 @@ import dialog from "./dialogSlice";
 import connectionError from "./connectionErrorSlice";
 import layout from "./layoutSlice";
 import booking from "./bookingSlice";
+import bookingsForm from "./bookingsFormSlice";
 
 export default combineReducers(
   {
@@ -22,6 +23,7 @@ export default combineReducers(
     dialog,
     connectionError,
     layout,
-    booking
+    booking,
+    bookingsForm
   }
 );

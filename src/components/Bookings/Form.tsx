@@ -4,8 +4,8 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 
-import * as Utils from "../../utils";
-import { useCurrentDate } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { setBookingsFormFrom, setBookingsFormName, setBookingsFormTo } from "../../redux/bookingsFormSlice";
 
 import FromDateInput from "./FromDateInput";
 import ToDateInput from "./ToDateInput";
@@ -16,14 +16,26 @@ type FormProps = {
 
 export default function Form({ children }: FormProps): JSX.Element {
   const theme = useTheme();
-  const currentDate = useCurrentDate();
-  const [from, setFrom] = useState(currentDate);
-  const [to, setTo] = useState(Utils.getDateShift(currentDate, 1));
-  const [name, setName] = useState("");
+  const dispatch = useAppDispatch();
+  const from = useAppSelector((state) => state.bookingsForm.from);
+  const to = useAppSelector((state) => state.bookingsForm.to);
+  const name = useAppSelector((state) => state.bookingsForm.name);
   const [isFromValid, setIsFromValid] = useState(true);
   const [isToValid, setIsToValid] = useState(true);
 
   const isValid = isFromValid && isToValid;
+
+  function setFrom(value: string): void {
+    dispatch(setBookingsFormFrom(value));
+  }
+
+  function setTo(value: string): void {
+    dispatch(setBookingsFormTo(value));
+  }
+
+  function setName(value: string): void {
+    dispatch(setBookingsFormName(value));
+  }
 
   return (
     <>
