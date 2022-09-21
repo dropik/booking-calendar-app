@@ -202,23 +202,39 @@ module.exports = {
         response.json([
           {
             id: "0",
-            bookingId: "0",
-            bookingName: "Ivan Petrov",
             name: "Ivan",
             surname: "Petrov",
             dateOfBirth: "1986-05-04",
             placeOfBirth: "Canazei (TN)",
-            stateOfBirth: "Italia"
+            stateOfBirth: "Italia",
+            documentNumber: "",
+            documentType: "identityCard",
+            booking: {
+              id: "0",
+              name: "Ivan Petrov",
+              from: "2022-02-05",
+              to: "2022-02-07",
+              occupations: 1,
+              color: "booking1"
+            }
           },
           {
             id: "1",
-            bookingId: "1",
-            bookingName: "Vasya Pupkin",
             name: "Vasya",
             surname: "Pupkin",
             dateOfBirth: "1985-05-06",
             placeOfBirth: "Canazei (TN)",
-            stateOfBirth: "Italia"
+            stateOfBirth: "Italia",
+            documentNumber: "",
+            documentType: "identityCard",
+            booking: {
+              id: "1",
+              name: "Vasya Pupkin",
+              from: "2022-02-25",
+              to: "2022-02-26",
+              occupations: 1,
+              color: "booking2"
+            }
           }
         ]);
       });
