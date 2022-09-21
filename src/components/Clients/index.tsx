@@ -5,10 +5,12 @@ import Typography from "@mui/material/Typography";
 import InputAdornment from "@mui/material/InputAdornment";
 import Box from "@mui/material/Box";
 import SearchOutlined from "@mui/icons-material/SearchOutlined";
+import Cancel from "@mui/icons-material/Cancel";
 
 import { ClientData, fetchClients } from "../../api";
 
 import DrawerAdjacent from "../m3/DrawerAdjacent";
+import M3IconButton from "../m3/M3IconButton";
 
 export default function Clients(): JSX.Element {
   const [query, setQuery] = useState("");
@@ -50,12 +52,15 @@ export default function Clients(): JSX.Element {
           <Typography variant="displaySmall" sx={{ pt: "5rem" }}>Clienti</Typography>
           <Stack spacing={1} direction="row">
             <TextField
+              value={query}
               placeholder="Cerca cliente"
               InputProps={{
-                endAdornment: (
+                endAdornment: query === "" ? (
                   <InputAdornment position="end">
                     <SearchOutlined />
                   </InputAdornment>
+                ) : (
+                  <M3IconButton onClick={() => setQuery("")}><Cancel /></M3IconButton>
                 ),
                 sx: {
                   borderRadius: "1.75rem",
