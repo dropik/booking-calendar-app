@@ -1,17 +1,19 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
+import Collapse from "@mui/material/Collapse";
 import Typography from "@mui/material/Typography";
 import ExpandMoreOutlined from "@mui/icons-material/ExpandMoreOutlined";
 import ExpandLessOutlined from "@mui/icons-material/ExpandLessOutlined";
 
 import { ClientData } from "../../../api";
-import { useAppSelector } from "../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { setBookingsFormFrom, setBookingsFormName, setBookingsFormTo } from "../../../redux/bookingsFormSlice";
 
 import M3IconButton from "../../m3/M3IconButton";
 import M3TextButton from "../../m3/M3TextButton";
-import Collapse from "@mui/material/Collapse";
 
 type ClientCardProps = {
   client: ClientData
@@ -19,6 +21,7 @@ type ClientCardProps = {
 
 export default function ClientCard({ client }: ClientCardProps): JSX.Element {
   const theme = useTheme();
+  const dispatch = useAppDispatch();
   const drawerOpened = useAppSelector((state) => state.drawer.open);
   const [open, setOpen] = useState(false);
 
@@ -58,7 +61,15 @@ export default function ClientCard({ client }: ClientCardProps): JSX.Element {
               <Typography variant="bodySmall">{periodStr}</Typography>
             </Stack>
             <Stack alignItems="flex-end">
-              <M3TextButton>Mostra prenotazione</M3TextButton>
+              <Link to={`/bookings/${client.booking.id}`} style={{ textDecoration: "none" }}>
+                <M3TextButton onClick={() => {
+                  dispatch(setBookingsFormFrom(client.booking.from));
+                  dispatch(setBookingsFormTo(client.booking.to));
+                  dispatch(setBookingsFormName(client.booking.name));
+                }}>
+                  Mostra prenotazione
+                </M3TextButton>
+              </Link>
             </Stack>
           </Stack>
         </Collapse>

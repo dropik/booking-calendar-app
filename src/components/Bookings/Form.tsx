@@ -53,7 +53,7 @@ export default function Form({ children }: FormProps): JSX.Element {
           <FromDateInput from={from} to={to} setFrom={setFrom} setIsFromValid={setIsFromValid} />
           <ToDateInput from={from} to={to} setTo={setTo} setIsToValid={setIsToValid} />
         </Stack>
-        <TextField id="name" label="Nome" onChange={(event) => { setName(event.target.value); }} />
+        <TextField value={name} id="name" label="Nome" onChange={(event) => { setName(event.target.value); }} />
       </Stack>
       {children(name, from, to, isValid)}
     </>
