@@ -14,6 +14,7 @@ import DrawerAdjacent from "../m3/DrawerAdjacent";
 import M3DatePicker from "../m3/M3DatePicker";
 import M3TextButton from "../m3/M3TextButton";
 import { SurfaceTint } from "../m3/Tints";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function Tools(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -26,6 +27,7 @@ export default function Tools(): JSX.Element {
   const theme = useTheme();
   const drawerOpened = useAppSelector((state) => state.drawer.open);
   const [cityTaxData, setCityTaxData] = useState<CityTaxData | undefined>(undefined);
+  const [isCityTaxLoading, setIsCityTaxLoading] = useState(false);
 
   const isValid = isFromValid && isToValid;
   const openDetails = cityTaxData !== undefined;
@@ -37,10 +39,13 @@ export default function Tools(): JSX.Element {
         setCityTaxData(response.data);
       } catch (error) {
         dispatch(showError());
+      } finally {
+        setIsCityTaxLoading(false);
       }
     }
 
     if (isValid) {
+      setIsCityTaxLoading(true);
       fetchDataAsync();
     }
   }
@@ -139,7 +144,10 @@ export default function Tools(): JSX.Element {
                 </Stack>
               </Stack>
               <Stack direction="row" justifyContent="flex-end">
-                <M3TextButton onClick={calculateCityTax}>Calcola</M3TextButton>
+                {isCityTaxLoading ?
+                  <CircularProgress color="primary" /> :
+                  <M3TextButton onClick={calculateCityTax}>Calcola</M3TextButton>
+                }
               </Stack>
               <SurfaceTint sx={{
                 backgroundColor: theme.palette.primary.light,
