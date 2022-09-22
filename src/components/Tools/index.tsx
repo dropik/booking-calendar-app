@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import Collapse from "@mui/material/Collapse";
 import TextField from "@mui/material/TextField";
 
+import { CityTaxData, fetchCityTaxAsync } from "../../api";
 import * as Utils from "../../utils";
-import { useAppSelector, useCurrentDate } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector, useCurrentDate } from "../../redux/hooks";
+import { show as showError } from "../../redux/connectionErrorSlice";
 
 import DrawerAdjacent from "../m3/DrawerAdjacent";
 import M3DatePicker from "../m3/M3DatePicker";
@@ -13,6 +16,7 @@ import M3TextButton from "../m3/M3TextButton";
 import { SurfaceTint } from "../m3/Tints";
 
 export default function Tools(): JSX.Element {
+  const dispatch = useAppDispatch();
   const currentDate = useCurrentDate();
   const [downloadDate, setDownloadDate] = useState(currentDate);
   const [from, setFrom] = useState(currentDate);
@@ -21,8 +25,25 @@ export default function Tools(): JSX.Element {
   const [isToValid, setIsToValid] = useState(true);
   const theme = useTheme();
   const drawerOpened = useAppSelector((state) => state.drawer.open);
+  const [cityTaxData, setCityTaxData] = useState<CityTaxData | undefined>(undefined);
 
   const isValid = isFromValid && isToValid;
+  const openDetails = cityTaxData !== undefined;
+
+  function calculateCityTax(): void {
+    async function fetchDataAsync(): Promise<void> {
+      try {
+        const response = await fetchCityTaxAsync(from, to);
+        setCityTaxData(response.data);
+      } catch (error) {
+        dispatch(showError());
+      }
+    }
+
+    if (isValid) {
+      fetchDataAsync();
+    }
+  }
 
   return (
     <DrawerAdjacent>
@@ -61,8 +82,7 @@ export default function Tools(): JSX.Element {
           </Stack>
           <Stack direction="row" sx={{
             border: `1px solid ${theme.palette.outline.light}`,
-            borderRadius: "0.75rem",
-            flexGrow: 1
+            borderRadius: "0.75rem"
           }}>
             <Stack spacing={2} sx={{
               position: "relative",
@@ -70,7 +90,6 @@ export default function Tools(): JSX.Element {
               p: "1rem",
               borderRadius: "0.75rem",
               color: theme.palette.onSurfaceVariant.light,
-              flexShrink: 1
             }}>
               <Stack spacing={2}>
                 <Typography variant="headlineMedium">Tassa di soggiorno</Typography>
@@ -120,7 +139,7 @@ export default function Tools(): JSX.Element {
                 </Stack>
               </Stack>
               <Stack direction="row" justifyContent="flex-end">
-                <M3TextButton>Calcola</M3TextButton>
+                <M3TextButton onClick={calculateCityTax}>Calcola</M3TextButton>
               </Stack>
               <SurfaceTint sx={{
                 backgroundColor: theme.palette.primary.light,
@@ -129,20 +148,22 @@ export default function Tools(): JSX.Element {
               }}
               />
             </Stack>
-            <Stack spacing={2} sx={{ p: "1rem", flexGrow: 1 }}>
-              <Stack direction="row" justifyContent="space-between" sx={{ pt: "1rem", pb: "1rem" }}>
-                <Typography variant="titleMedium">Regolari</Typography>
-                <Typography variant="bodyMedium">8 presenze</Typography>
+            <Collapse in={openDetails} orientation="horizontal">
+              <Stack spacing={2} sx={{ p: "1rem" }}>
+                <Stack direction="row" spacing={2} justifyContent="space-between" sx={{ pt: "1rem", pb: "1rem" }}>
+                  <Typography variant="titleMedium" sx={{ whiteSpace: "nowrap" }}>Regolari</Typography>
+                  <Typography variant="bodyMedium" sx={{ whiteSpace: "nowrap" }}>8 presenze</Typography>
+                </Stack>
+                <Stack direction="row" spacing={2} justifyContent="space-between" sx={{ pt: "1rem", pb: "1rem" }}>
+                  <Typography variant="titleMedium" sx={{ whiteSpace: "nowrap" }}>{"Bambini <14"}</Typography>
+                  <Typography variant="bodyMedium" sx={{ whiteSpace: "nowrap" }}>2 presenze</Typography>
+                </Stack>
+                <Stack direction="row" spacing={2} justifyContent="space-between" sx={{ pt: "1rem", pb: "1rem" }}>
+                  <Typography variant="titleMedium" sx={{ whiteSpace: "nowrap" }}>{"Permanenze >10 giorni"}</Typography>
+                  <Typography variant="bodyMedium" sx={{ whiteSpace: "nowrap" }}>0 presenze</Typography>
+                </Stack>
               </Stack>
-              <Stack direction="row" justifyContent="space-between" sx={{ pt: "1rem", pb: "1rem" }}>
-                <Typography variant="titleMedium">{"Bambini <14"}</Typography>
-                <Typography variant="bodyMedium">2 presenze</Typography>
-              </Stack>
-              <Stack direction="row" justifyContent="space-between" sx={{ pt: "1rem", pb: "1rem" }}>
-                <Typography variant="titleMedium">{"Permanenze >10 giorni"}</Typography>
-                <Typography variant="bodyMedium">0 presenze</Typography>
-              </Stack>
-            </Stack>
+            </Collapse>
           </Stack>
         </Stack>
       </Stack>
