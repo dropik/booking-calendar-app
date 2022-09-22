@@ -1,14 +1,15 @@
 import React, { useState } from "react";
+import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+
+import * as Utils from "../../utils";
+import { useAppSelector, useCurrentDate } from "../../redux/hooks";
 
 import DrawerAdjacent from "../m3/DrawerAdjacent";
 import M3DatePicker from "../m3/M3DatePicker";
-import { useAppSelector, useCurrentDate } from "../../redux/hooks";
-import * as Utils from "../../utils";
-import TextField from "@mui/material/TextField";
 import M3TextButton from "../m3/M3TextButton";
-import { useTheme } from "@mui/material/styles";
 import { SurfaceTint } from "../m3/Tints";
 
 export default function Tools(): JSX.Element {
@@ -16,8 +17,12 @@ export default function Tools(): JSX.Element {
   const [downloadDate, setDownloadDate] = useState(currentDate);
   const [from, setFrom] = useState(currentDate);
   const [to, setTo] = useState(Utils.getDateShift(currentDate, 1));
+  const [isFromValid, setIsFromValid] = useState(true);
+  const [isToValid, setIsToValid] = useState(true);
   const theme = useTheme();
   const drawerOpened = useAppSelector((state) => state.drawer.open);
+
+  const isValid = isFromValid && isToValid;
 
   return (
     <DrawerAdjacent>
@@ -74,19 +79,43 @@ export default function Tools(): JSX.Element {
                     value={new Date(from)}
                     onChange={(date: Date | null) => {
                       if (date) {
+                        setIsFromValid(false);
                         setFrom(Utils.dateToString(date));
                       }
                     }}
-                    renderInput={(props) => <TextField {...props} label="Dal" />}
+                    onAccept={() => setIsFromValid(true)}
+                    onError={(reason) => setIsFromValid(reason === null)}
+                    shouldDisableDate={(date) => Utils.daysBetweenDates(to, Utils.dateToString(date)) > 0}
+                    renderInput={({ error, ...props }) => (
+                      <TextField
+                        {...props}
+                        label="Dal"
+                        error={error}
+                        helperText={error ? "Periodo non valido" : undefined}
+                        onBlur={() => setIsFromValid(!error)}
+                      />
+                    )}
                   />
                   <M3DatePicker
                     value={new Date(to)}
                     onChange={(date: Date | null) => {
                       if (date) {
+                        setIsToValid(false);
                         setTo(Utils.dateToString(date));
                       }
                     }}
-                    renderInput={(props) => <TextField {...props} label="Al" />}
+                    onAccept={() => setIsToValid(true)}
+                    onError={(reason) => setIsToValid(reason === null)}
+                    shouldDisableDate={(date) => Utils.daysBetweenDates(Utils.dateToString(date), from) > 0}
+                    renderInput={({ error, ...props }) => (
+                      <TextField
+                        {...props}
+                        label="Al"
+                        error={error}
+                        helperText={error ? "Periodo non valido" : undefined}
+                        onBlur={() => setIsToValid(!error)}
+                      />
+                    )}
                   />
                 </Stack>
               </Stack>
