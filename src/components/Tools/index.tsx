@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Collapse from "@mui/material/Collapse";
 import TextField from "@mui/material/TextField";
 
-import { CityTaxData, fetchCityTaxAsync } from "../../api";
+import { CityTaxData, fetchCityTaxAsync, fetchIstatDataAsync, fetchPoliceDataAsync } from "../../api";
 import * as Utils from "../../utils";
 import { useAppDispatch, useAppSelector, useCurrentDate } from "../../redux/hooks";
 import { show as showError } from "../../redux/connectionErrorSlice";
@@ -28,6 +28,8 @@ export default function Tools(): JSX.Element {
   const drawerOpened = useAppSelector((state) => state.drawer.open);
   const [cityTaxData, setCityTaxData] = useState<CityTaxData | undefined>(undefined);
   const [isCityTaxLoading, setIsCityTaxLoading] = useState(false);
+  const anchorRef = useRef<HTMLAnchorElement>(null);
+  const [isDownloadDataLoading, setIsDownloadDataLoading] = useState(false);
 
   const isValid = isFromValid && isToValid;
   const openDetails = cityTaxData !== undefined;
@@ -50,6 +52,34 @@ export default function Tools(): JSX.Element {
     }
   }
 
+  function download(
+    onFetchAsync: (date: string) => Promise<{ data: Blob }>,
+    setFilename: (value: string) => string
+  ): void {
+    async function fetchDataAsync() {
+      try {
+        const response = await onFetchAsync(downloadDate);
+        const data = response.data;
+        if (anchorRef.current) {
+          if (data.size > 0) {
+            anchorRef.current.href = URL.createObjectURL(data);
+            anchorRef.current.download = setFilename(downloadDate);
+            anchorRef.current.click();
+          } else {
+            //setNoData(true);
+          }
+        }
+      } catch (error) {
+        dispatch(showError());
+      } finally {
+        setIsDownloadDataLoading(false);
+      }
+    }
+
+    setIsDownloadDataLoading(true);
+    fetchDataAsync();
+  }
+
   return (
     <DrawerAdjacent>
       <Stack spacing={2} sx={{ pr: "1rem" }}>
@@ -63,6 +93,7 @@ export default function Tools(): JSX.Element {
             flexShrink: 1,
             color: theme.palette.onSurfaceVariant.light
           }}>
+            <a ref={anchorRef}></a>
             <Stack spacing={2}>
               <Typography variant="headlineMedium">Scarica dati</Typography>
               <M3DatePicker
@@ -76,8 +107,12 @@ export default function Tools(): JSX.Element {
               />
             </Stack>
             <Stack spacing={1} direction="row" justifyContent="flex-end">
-              <M3TextButton>Polizia</M3TextButton>
-              <M3TextButton>ISTAT</M3TextButton>
+              {isDownloadDataLoading ? <CircularProgress color="primary" /> : (
+                <>
+                  <M3TextButton onClick={() => download(fetchPoliceDataAsync, (date) => `polizia-${date}.txt`)}>Polizia</M3TextButton>
+                  <M3TextButton onClick={() => download(fetchIstatDataAsync, (date) => `istat-${date}.pdf`)}>ISTAT</M3TextButton>
+                </>
+              )}
             </Stack>
             <SurfaceTint sx={{
               backgroundColor: theme.palette.primary.light,
