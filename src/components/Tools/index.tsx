@@ -8,7 +8,7 @@ import TextField from "@mui/material/TextField";
 import { CityTaxData, fetchCityTaxAsync, fetchIstatDataAsync, fetchPoliceDataAsync } from "../../api";
 import * as Utils from "../../utils";
 import { useAppDispatch, useAppSelector, useCurrentDate } from "../../redux/hooks";
-import { show as showError } from "../../redux/snackbarMessageSlice";
+import { show as showMessage } from "../../redux/snackbarMessageSlice";
 
 import DrawerAdjacent from "../m3/DrawerAdjacent";
 import M3DatePicker from "../m3/M3DatePicker";
@@ -40,7 +40,7 @@ export default function Tools(): JSX.Element {
         const response = await fetchCityTaxAsync(from, to);
         setCityTaxData(response.data);
       } catch (error) {
-        dispatch(showError());
+        dispatch(showMessage({ type: "error" }));
       } finally {
         setIsCityTaxLoading(false);
       }
@@ -66,11 +66,11 @@ export default function Tools(): JSX.Element {
             anchorRef.current.download = setFilename(downloadDate);
             anchorRef.current.click();
           } else {
-            //setNoData(true);
+            dispatch(showMessage({ type: "info", message: "Niente data da scaricare!" }));
           }
         }
       } catch (error) {
-        dispatch(showError());
+        dispatch(showMessage({ type: "error" }));
       } finally {
         setIsDownloadDataLoading(false);
       }
