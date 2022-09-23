@@ -15,6 +15,7 @@ import M3DatePicker from "../m3/M3DatePicker";
 import M3TextButton from "../m3/M3TextButton";
 import { SurfaceTint } from "../m3/Tints";
 import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
 export default function Tools(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -191,22 +192,24 @@ export default function Tools(): JSX.Element {
               }}
               />
             </Stack>
-            <Collapse in={openDetails} orientation="horizontal">
-              <Stack spacing={2} sx={{ p: "1rem" }}>
-                <Stack direction="row" spacing={2} justifyContent="space-between" sx={{ pt: "1rem", pb: "1rem" }}>
-                  <Typography variant="titleMedium" sx={{ whiteSpace: "nowrap" }}>Regolari</Typography>
-                  <Typography variant="bodyMedium" sx={{ whiteSpace: "nowrap" }}>8 presenze</Typography>
+            <Box>
+              <Collapse in={openDetails} orientation="horizontal">
+                <Stack spacing={2} sx={{ p: "1rem" }}>
+                  <Stack direction="row" spacing={2} justifyContent="space-between" sx={{ pt: "1rem", pb: "1rem" }}>
+                    <Typography variant="titleMedium" sx={{ whiteSpace: "nowrap" }}>Regolari</Typography>
+                    <Typography variant="bodyMedium" sx={{ whiteSpace: "nowrap" }}>8 presenze</Typography>
+                  </Stack>
+                  <Stack direction="row" spacing={2} justifyContent="space-between" sx={{ pt: "1rem", pb: "1rem" }}>
+                    <Typography variant="titleMedium" sx={{ whiteSpace: "nowrap" }}>{"Bambini <14"}</Typography>
+                    <Typography variant="bodyMedium" sx={{ whiteSpace: "nowrap" }}>2 presenze</Typography>
+                  </Stack>
+                  <Stack direction="row" spacing={2} justifyContent="space-between" sx={{ pt: "1rem", pb: "1rem" }}>
+                    <Typography variant="titleMedium" sx={{ whiteSpace: "nowrap" }}>{"Permanenze >10 giorni"}</Typography>
+                    <Typography variant="bodyMedium" sx={{ whiteSpace: "nowrap" }}>0 presenze</Typography>
+                  </Stack>
                 </Stack>
-                <Stack direction="row" spacing={2} justifyContent="space-between" sx={{ pt: "1rem", pb: "1rem" }}>
-                  <Typography variant="titleMedium" sx={{ whiteSpace: "nowrap" }}>{"Bambini <14"}</Typography>
-                  <Typography variant="bodyMedium" sx={{ whiteSpace: "nowrap" }}>2 presenze</Typography>
-                </Stack>
-                <Stack direction="row" spacing={2} justifyContent="space-between" sx={{ pt: "1rem", pb: "1rem" }}>
-                  <Typography variant="titleMedium" sx={{ whiteSpace: "nowrap" }}>{"Permanenze >10 giorni"}</Typography>
-                  <Typography variant="bodyMedium" sx={{ whiteSpace: "nowrap" }}>0 presenze</Typography>
-                </Stack>
-              </Stack>
-            </Collapse>
+              </Collapse>
+            </Box>
           </Stack>
         </Stack>
       </Stack>
