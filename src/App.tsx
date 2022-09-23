@@ -9,7 +9,7 @@ import AppDrawer from "./components/AppDrawer";
 import DrawerButton from "./components/DrawerButton";
 import AppRoutes from "./components/AppRoutes";
 import SaveAndResetWidget from "./components/SaveAndResetWidget";
-import ConnectionError from "./components/ConnectionError";
+import SnackbarMessage from "./components/SnackbarMessage";
 import Dialog from "./components/Dialog";
 import PoliceDownloadDialog from "./components/dialogs/PoliceDownloadDialog";
 import IstatDownloadDialog from "./components/dialogs/IstatDownloadDialog";
@@ -25,7 +25,7 @@ export default function App(): JSX.Element {
         <AppDrawer />
         <DrawerButton />
         <SaveAndResetWidget />
-        <ConnectionError />
+        <SnackbarMessage />
         <Dialog />
         <PoliceDownloadDialog />
         <IstatDownloadDialog />

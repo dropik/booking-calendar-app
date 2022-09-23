@@ -7,7 +7,7 @@ import * as Api from "../../api";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { SaveAndResetWidgetContext } from ".";
 import * as TilesSlice from "../../redux/tilesSlice";
-import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
+import * as ConnectionErrorSlice from "../../redux/snackbarMessageSlice";
 
 import M3Snackbar from "../m3/M3Snackbar";
 import M3Card from "../m3/M3Card";

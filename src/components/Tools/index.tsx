@@ -8,7 +8,7 @@ import TextField from "@mui/material/TextField";
 import { CityTaxData, fetchCityTaxAsync, fetchIstatDataAsync, fetchPoliceDataAsync } from "../../api";
 import * as Utils from "../../utils";
 import { useAppDispatch, useAppSelector, useCurrentDate } from "../../redux/hooks";
-import { show as showError } from "../../redux/connectionErrorSlice";
+import { show as showError } from "../../redux/snackbarMessageSlice";
 
 import DrawerAdjacent from "../m3/DrawerAdjacent";
 import M3DatePicker from "../m3/M3DatePicker";
@@ -93,7 +93,6 @@ export default function Tools(): JSX.Element {
             flexShrink: 1,
             color: theme.palette.onSurfaceVariant.light
           }}>
-            <a ref={anchorRef}></a>
             <Stack spacing={2}>
               <Typography variant="headlineMedium">Scarica dati</Typography>
               <M3DatePicker
@@ -105,6 +104,7 @@ export default function Tools(): JSX.Element {
                 }}
                 renderInput={(props) => <TextField {...props} />}
               />
+              <a ref={anchorRef}></a>
             </Stack>
             <Stack spacing={1} direction="row" justifyContent="flex-end">
               {isDownloadDataLoading ? <CircularProgress color="primary" /> : (

@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import * as Utils from "../../utils";
 import { useAppDispatch, useAppSelector, useCurrentDate } from "../../redux/hooks";
 import * as DialogSlice from "../../redux/dialogSlice";
-import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
+import * as ConnectionErrorSlice from "../../redux/snackbarMessageSlice";
 
 import { SurfaceTint } from "../m3/Tints";
 import DownloadDialogBody from "./DownloadDialogBody";

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 
 import { useAppDispatch, useCurrentDate } from "../../redux/hooks";
-import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
+import * as ConnectionErrorSlice from "../../redux/snackbarMessageSlice";
 import * as Api from "../../api";
 import * as Utils from "../../utils";
 import { DialogContainerContext } from "./DialogContainer";

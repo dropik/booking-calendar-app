@@ -3,7 +3,7 @@ import { AnyAction } from "@reduxjs/toolkit";
 
 import * as Api from "../../api";
 import { useAppDispatch } from "../../redux/hooks";
-import * as ConnectionErrorSlice from "../../redux/connectionErrorSlice";
+import * as ConnectionErrorSlice from "../../redux/snackbarMessageSlice";
 import { FindDialogContext } from "./FindDialogBody";
 
 type Props<T extends Api.BookingShortData | Api.ClientShortData> = {

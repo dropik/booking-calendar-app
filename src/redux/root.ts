@@ -7,7 +7,7 @@ import tiles from "./tilesSlice";
 import roomTypes from "./roomTypesSlice";
 import drawer from "./drawerSlice";
 import dialog from "./dialogSlice";
-import connectionError from "./connectionErrorSlice";
+import snackbarMessage from "./snackbarMessageSlice";
 import layout from "./layoutSlice";
 import booking from "./bookingSlice";
 import bookingsForm from "./bookingsFormSlice";
@@ -21,7 +21,7 @@ export default combineReducers(
     roomTypes,
     drawer,
     dialog,
-    connectionError,
+    snackbarMessage,
     layout,
     booking,
     bookingsForm
