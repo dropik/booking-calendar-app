@@ -10,3 +10,5 @@
 - Real-time backend synchronization for updating tiles.
 - Table fragmentation system??
 - Police data sending directly to police web portal??
+- Fix date picker scroll thing and tinting.
+- Better transition between calendar tile and expanded tile.
