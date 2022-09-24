@@ -10,9 +10,6 @@ import DrawerButton from "./components/DrawerButton";
 import AppRoutes from "./components/AppRoutes";
 import SaveAndResetWidget from "./components/SaveAndResetWidget";
 import SnackbarMessage from "./components/SnackbarMessage";
-import Dialog from "./components/Dialog";
-import PoliceDownloadDialog from "./components/dialogs/PoliceDownloadDialog";
-import IstatDownloadDialog from "./components/dialogs/IstatDownloadDialog";
 
 export default function App(): JSX.Element {
 
@@ -26,9 +23,6 @@ export default function App(): JSX.Element {
         <DrawerButton />
         <SaveAndResetWidget />
         <SnackbarMessage />
-        <Dialog />
-        <PoliceDownloadDialog />
-        <IstatDownloadDialog />
         <ResizeHandler />
         <ScrollingHandler />
       </Box>
