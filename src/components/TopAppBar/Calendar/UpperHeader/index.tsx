@@ -1,29 +1,29 @@
 import React from "react";
-import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 
 import DateInput from "./DateInput";
 
 export default function UpperHeader(): JSX.Element {
   return (
-    <Box sx={{
-      display: "flex",
+    <Grid container columns={3} sx={{
       height: "4rem",
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-between"
     }}>
-      <Box sx={{
+      <Grid item xs={1} sx={{
         display: "flex",
-        alignItems: "baseline"
+        alignItems: "center"
       }}>
-
         <DateInput />
-      </Box>
-      <Typography variant="titleLarge" sx={{
-        textAlign: "center"
-      }}>Booking Calendar</Typography>
-      <Box sx={{ pr: "0.5rem" }}></Box>
-    </Box>
+      </Grid>
+      <Grid item xs={1} sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+      }}>
+        <Typography variant="titleLarge">
+          Booking Calendar
+        </Typography>
+      </Grid>
+    </Grid>
   );
 }
