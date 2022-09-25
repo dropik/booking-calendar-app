@@ -7,7 +7,7 @@ import * as Api from "../../api";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { SaveAndResetWidgetContext } from ".";
 import * as TilesSlice from "../../redux/tilesSlice";
-import * as ConnectionErrorSlice from "../../redux/snackbarMessageSlice";
+import { show as showMessage } from "../../redux/snackbarMessageSlice";
 
 import M3Snackbar from "../m3/M3Snackbar";
 import M3Card from "../m3/M3Card";
@@ -29,7 +29,7 @@ export default function ActionButtons(): JSX.Element {
         dispatch(TilesSlice.saveChanges());
         setStatus("fulfilled");
       } catch (error) {
-        dispatch(ConnectionErrorSlice.show());
+        dispatch(showMessage({ type: "error" }));
         setStatus("idle");
       }
     }
