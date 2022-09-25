@@ -6,6 +6,7 @@ import MenuOpenOutlinedIcon from "@mui/icons-material/MenuOpenOutlined";
 
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { toggle as toggleDrawer } from "../redux/drawerSlice";
+import { adjustColumns } from "../redux/tableSlice";
 
 import M3IconButton from "./m3/M3IconButton";
 
@@ -16,6 +17,7 @@ export default function DrawerButton(): JSX.Element {
 
   function openDrawer() {
     dispatch(toggleDrawer());
+    dispatch(adjustColumns({ drawerOpened: !open }));
   }
 
   return (

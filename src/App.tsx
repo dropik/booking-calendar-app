@@ -10,7 +10,6 @@ import DrawerButton from "./components/DrawerButton";
 import AppRoutes from "./components/AppRoutes";
 import SaveAndResetWidget from "./components/SaveAndResetWidget";
 import SnackbarMessage from "./components/SnackbarMessage";
-import ColumnsAdjuster from "./components/ColumnsAdjuster";
 
 export default function App(): JSX.Element {
 
@@ -26,7 +25,6 @@ export default function App(): JSX.Element {
         <SnackbarMessage />
         <ResizeHandler />
         <ScrollingHandler />
-        <ColumnsAdjuster />
       </Box>
     </BrowserRouter>
   );
