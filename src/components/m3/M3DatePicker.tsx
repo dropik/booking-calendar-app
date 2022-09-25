@@ -9,27 +9,26 @@ export default function M3DatePicker<TInputDate, TDate>({ ...props }: DatePicker
     <DatePicker
       {...props}
       PaperProps={{
+        elevation: 2,
         sx: {
           backgroundColor: theme.palette.surface.main,
-          boxShadow: theme.shadows[2],
           color: theme.palette.onSurface.main,
-          borderRadius: "0.25rem",
-          "& .MuiDialogActions-root": {
-            position: "absolute",
+          borderRadius: "0.75rem",
+          "::after": {
+            content: "' '",
             pointerEvents: "none",
+            position: "absolute",
             top: 0,
             bottom: 0,
             left: 0,
             right: 0,
-            zIndex: 1,
-            backgroundColor: theme.palette.surfaceTint.main,
-            opacity: theme.opacities.surface2
+            backgroundColor: theme.palette.primary.light,
+            opacity: theme.opacities.surface2,
+            borderRadius: "0.75rem",
+            zIndex: 9999
           },
           "& .MuiSvgIcon-root": {
             color: theme.palette.onSurfaceVariant.main
-          },
-          "& div[role=presentation]": {
-            overflow: "visible"
           },
           "& .MuiCalendarPicker-viewTransitionContainer": {
             borderTop: `0.0625rem solid ${theme.palette.surfaceVariant.main}`
@@ -49,43 +48,26 @@ export default function M3DatePicker<TInputDate, TDate>({ ...props }: DatePicker
             "&:hover": {
               backgroundColor: alpha(theme.palette.onSurface.main, theme.opacities.hover)
             },
+            "&.Mui-disabled": {
+              color: theme.palette.onSurface.light,
+              opacity: 0.38
+            },
             "&.Mui-selected": {
               backgroundColor: theme.palette.primary.main,
               color: theme.palette.onPrimary.main,
-              "::before": {
-                content: "' '",
-                position: "absolute",
-                pointerEvents: "none",
-                borderRadius: "inherit",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: theme.palette.onPrimary.main,
-                opacity: 0
-              },
               "&:hover": {
                 boxShadow: theme.shadows[1],
-                backgroundColor: theme.palette.primary.main,
-                "::before": {
-                  opacity: theme.opacities.hover
-                }
+                backgroundColor: theme.palette.primary.main
               },
               "&:focus": {
-                backgroundColor: theme.palette.primary.main,
+                backgroundColor: theme.palette.primary.main
               },
               "&:focus-visible": {
                 boxShadow: theme.shadows[0],
-                backgroundColor: theme.palette.primary.main,
-                "::before": {
-                  opacity: theme.opacities.focus
-                }
+                backgroundColor: theme.palette.primary.main
               },
               "&:active": {
-                backgroundColor: theme.palette.primary.main,
-                "::before": {
-                  opacity: theme.opacities.hover
-                }
+                backgroundColor: theme.palette.primary.main
               }
             }
           }
