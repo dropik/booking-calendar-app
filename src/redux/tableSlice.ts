@@ -14,14 +14,13 @@ export type State = {
   columns: number,
   offsetHeight: number,
   clientHeight: number,
-  lastFetchPeriod: FetchPeriod,
-  fetchReason: "changeDate" | "expand"
+  lastFetchPeriod: FetchPeriod
 };
 
 function getInitialState(): State {
   const initialDate = Utils.dateToString(new Date());
   const leftmostDate = Utils.getDateShift(initialDate, -3);
-  const columns = getInitialColumnsAmount();
+  const columns = getColumnsAmount(false);
 
   return {
     currentDate: initialDate,
@@ -32,8 +31,7 @@ function getInitialState(): State {
     lastFetchPeriod: {
       from: leftmostDate,
       to: Utils.getDateShift(leftmostDate, columns - 1)
-    },
-    fetchReason: "changeDate"
+    }
   };
 }
 
@@ -49,29 +47,31 @@ export const tableSlice = createSlice({
       updateStateByNewDate(state, action.payload.date);
     },
     goNext: (state) => {
-      updateStateByNewDate(state, Utils.getDateShift(state.currentDate, 7));
+      updateStateByNewDate(state, Utils.getDateShift(state.currentDate, state.columns));
     },
     goPrev: (state) => {
-      updateStateByNewDate(state, Utils.getDateShift(state.currentDate, -7));
+      updateStateByNewDate(state, Utils.getDateShift(state.currentDate, -state.columns));
+    },
+    adjustColumns: (state, action: PayloadAction<{ drawerOpened: boolean }>) => {
+      state.columns = getColumnsAmount(action.payload.drawerOpened);
+      state.lastFetchPeriod.from = state.leftmostDate;
+      state.lastFetchPeriod.to = Utils.getDateShift(state.leftmostDate, state.columns - 1);
     }
   }
 });
 
-export const { updateHeights, changeDate, goNext, goPrev } = tableSlice.actions;
+export const { updateHeights, changeDate, goNext, goPrev, adjustColumns } = tableSlice.actions;
 
 export default tableSlice.reducer;
 
 function updateStateByNewDate(state: WritableDraft<State>, date: string): void {
   state.currentDate = date;
   state.leftmostDate = Utils.getDateShift(date, -3);
-  state.columns = getInitialColumnsAmount();
-  state.lastFetchPeriod = {
-    from: state.leftmostDate,
-    to: Utils.getDateShift(state.leftmostDate, state.columns - 1)
-  };
-  state.fetchReason = "changeDate";
+  state.lastFetchPeriod.from = state.leftmostDate,
+  state.lastFetchPeriod.to = Utils.getDateShift(state.leftmostDate, state.columns - 1);
 }
 
-function getInitialColumnsAmount(): number {
-  return 7;
+function getColumnsAmount(drawerOpened: boolean): number {
+  const marginLeftRem = (drawerOpened ? 22.5 : 5) + 7.5;
+  return Math.floor(Utils.pxToRem(window.innerWidth - (Utils.remToPx(marginLeftRem) + 1)) / 8);
 }
