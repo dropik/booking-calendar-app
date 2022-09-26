@@ -1,5 +1,4 @@
 - Real API calls.
-- Input escaping.
 - Handle connection errors.
 - Handle waiting while fetch.
 - Handle touchscreen.
