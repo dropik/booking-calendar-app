@@ -10,6 +10,6 @@ export default function RoomType(): JSX.Element {
   const formattedRoomType = data ? `${data.entity[0].toLocaleUpperCase()}${data.entity.slice(1)}` : undefined;
 
   return (
-    <Typography variant="bodySmall">{formattedRoomType ? formattedRoomType : <M3Skeleton />}</Typography>
+    <Typography variant="bodySmall">{formattedRoomType ? formattedRoomType : <M3Skeleton width="8rem" />}</Typography>
   );
 }

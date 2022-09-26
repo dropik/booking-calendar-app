@@ -14,6 +14,6 @@ export default function Period(): JSX.Element {
     undefined;
 
   return (
-    <Typography variant="bodySmall">{periodStr ? periodStr : <M3Skeleton />}</Typography>
+    <Typography variant="bodySmall">{periodStr ? periodStr : <M3Skeleton width="8rem" />}</Typography>
   );
 }

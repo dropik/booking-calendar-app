@@ -10,6 +10,6 @@ export default function Persons(): JSX.Element {
   const personsStr = data ? `${data.persons} person${data.persons === 1 ? "a" : "e"}` : undefined;
 
   return (
-    <Typography variant="titleMedium">{personsStr ? personsStr : <M3Skeleton />}</Typography>
+    <Typography variant="titleMedium">{personsStr ? personsStr : <M3Skeleton width="5rem" />}</Typography>
   );
 }

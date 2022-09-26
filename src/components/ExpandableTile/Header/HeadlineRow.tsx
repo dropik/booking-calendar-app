@@ -14,7 +14,7 @@ export default function HeadlineRow(): JSX.Element {
 
   return (
     <Stack direction="row" justifyContent="space-between">
-      <Typography variant="headlineMedium">{data ? data.name : <M3Skeleton />}</Typography>
+      <Typography variant="headlineMedium">{data ? data.name : <M3Skeleton width="10rem" />}</Typography>
       {variant === "popup" ? <MoreButton /> : null}
     </Stack>
   );
