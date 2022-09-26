@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
@@ -10,10 +10,14 @@ import { TileContext } from "../../Tile/context";
 import Client from "./Client";
 import Skeleton from "./Skeleton";
 
-export default function Clients(): JSX.Element {
+type ClientsProps = {
+  clients: ClientData[],
+  setClients: (value: ClientData[]) => void
+};
+
+export default function Clients({ clients, setClients }: ClientsProps): JSX.Element {
   const dispatch = useAppDispatch();
   const { data } = useContext(TileContext);
-  const [clients, setClients] = useState<ClientData[]>([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -25,7 +29,9 @@ export default function Clients(): JSX.Element {
       }
     }
     fetchData();
-  }, [data.id, dispatch]);
+
+    return () => setClients([]);
+  }, [data.id, dispatch, setClients]);
 
   return (
     <>
