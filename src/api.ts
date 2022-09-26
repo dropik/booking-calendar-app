@@ -69,6 +69,10 @@ export async function fetchBookingById(bookingId: string): Promise<{ data: Booki
   return fetchJsonDataAsync<BookingData>(`/api/get/booking?id=${bookingId}`);
 }
 
+export async function fetchBookingShortById(bookingId: string): Promise<{ data: BookingShortData}> {
+  return fetchJsonDataAsync<BookingShortData>(`/api/get/booking-short?id=${bookingId}`);
+}
+
 export async function fetchClientsByTile(tileId: string): Promise<{ data: ClientShortData[] }> {
   return fetchJsonDataAsync<ClientShortData[]>(`/api/get/clients?tileId=${tileId}`);
 }
