@@ -42,7 +42,6 @@ export type ClientData = {
 export type ClientShortData = {
   id: string,
   bookingId: string,
-  bookingName: string,
   name: string,
   surname: string,
   dateOfBirth: string,
