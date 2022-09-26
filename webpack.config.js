@@ -176,31 +176,11 @@ module.exports = {
         ]);
       });
 
-      devServer.app.get("/api/get/client", (_, response) => {
-        response.json({
-          id: "0",
-          name: "Ivan",
-          surname: "Petrov",
-          dateOfBirth: "1986-05-04",
-          placeOfBirth: "Canazei",
-          stateOfBirth: "Italia",
-          documentNumber: "000000",
-          documentType: "identityCard",
-          booking: {
-            id: "0",
-            name: "Ivan Petrov",
-            from: "2022-02-02",
-            to: "2022-02-05"
-          }
-        });
-      });
-
       devServer.app.get("/api/get/clients", (_, response) => {
         response.json([
           {
             id: "0",
             bookingId: "0",
-            bookingName: "Ivan Petrov",
             name: "Ivan",
             surname: "Petrov",
             dateOfBirth: "1986-05-04",
@@ -210,7 +190,6 @@ module.exports = {
           {
             id: "1",
             bookingId: "1",
-            bookingName: "Vasya Pupkin",
             name: "Vasya",
             surname: "Pupkin",
             dateOfBirth: "1985-05-06",
@@ -224,73 +203,37 @@ module.exports = {
         response.json([
           {
             id: "0",
+            bookingId: "0",
             name: "Ivan",
             surname: "Petrov",
             dateOfBirth: "1986-05-04",
             placeOfBirth: "Canazei (TN)",
-            stateOfBirth: "Italia",
-            documentNumber: "",
-            documentType: "identityCard",
-            booking: {
-              id: "0",
-              name: "Ivan Petrov",
-              from: "2022-02-05",
-              to: "2022-02-07",
-              occupations: 1,
-              color: "booking1"
-            }
+            stateOfBirth: "Italia"
           },
           {
             id: "1",
             name: "Vasya",
+            bookingId: "1",
             surname: "Pupkin",
             dateOfBirth: "1985-05-06",
             placeOfBirth: "Canazei (TN)",
-            stateOfBirth: "Italia",
-            documentNumber: "",
-            documentType: "identityCard",
-            booking: {
-              id: "1",
-              name: "Vasya Pupkin",
-              from: "2022-02-25",
-              to: "2022-02-26",
-              occupations: 1,
-              color: "booking2"
-            }
+            stateOfBirth: "Italia"
           },
           {
             id: "2",
+            bookingId: "2",
             name: "Ilja",
             surname: "Maksimov",
             dateOfBirth: "1985-05-06",
-            stateOfBirth: "Russia",
-            documentNumber: "",
-            documentType: "identityCard",
-            booking: {
-              id: "2",
-              name: "Vasya Pupkin",
-              from: "2022-02-25",
-              to: "2022-02-26",
-              occupations: 1,
-              color: "booking2"
-            }
+            stateOfBirth: "Russia"
           },
           {
             id: "3",
+            bookingId: "2",
             name: "Stepan",
             surname: "Ogurzov",
             dateOfBirth: "1985-05-06",
-            stateOfBirth: "Russia",
-            documentNumber: "",
-            documentType: "identityCard",
-            booking: {
-              id: "2",
-              name: "Vasya Pupkin",
-              from: "2022-02-25",
-              to: "2022-02-26",
-              occupations: 1,
-              color: "booking2"
-            }
+            stateOfBirth: "Russia"
           }
         ]);
       });

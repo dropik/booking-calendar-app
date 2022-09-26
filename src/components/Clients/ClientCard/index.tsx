@@ -40,7 +40,7 @@ export default function ClientCard({ client }: ClientCardProps): JSX.Element {
         </M3IconButton>
       </Stack>
       <Collapse mountOnEnter unmountOnExit in={open} easing={theme.transitions.easing.fastOutSlowIn}>
-        <Details bookingId={client.booking.id} />
+        <Details bookingId={client.bookingId} />
       </Collapse>
     </Stack>
   );

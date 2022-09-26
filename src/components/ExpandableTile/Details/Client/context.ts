@@ -1,8 +1,8 @@
 import { createContext } from "react";
 
-import { ClientShortData } from "../../../../api";
+import { ClientData } from "../../../../api";
 
-const ClientContext = createContext<ClientShortData>({
+const ClientContext = createContext<ClientData>({
   id: "",
   bookingId: "",
   name: "",

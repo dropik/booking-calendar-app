@@ -25,21 +25,7 @@ export type BookingShortData = {
   color: TileColor
 };
 
-export type DocumentType = "identityCard" | "drivingLicense" | "passport";
-
 export type ClientData = {
-  id: string,
-  name: string,
-  surname: string,
-  dateOfBirth: string,
-  placeOfBirth: string,
-  stateOfBirth: string,
-  documentNumber: string,
-  documentType: DocumentType,
-  booking: BookingShortData
-};
-
-export type ClientShortData = {
   id: string,
   bookingId: string,
   name: string,
@@ -73,8 +59,8 @@ export async function fetchBookingShortById(bookingId: string): Promise<{ data: 
   return fetchJsonDataAsync<BookingShortData>(`/api/get/booking-short?id=${bookingId}`);
 }
 
-export async function fetchClientsByTile(tileId: string): Promise<{ data: ClientShortData[] }> {
-  return fetchJsonDataAsync<ClientShortData[]>(`/api/get/clients?tileId=${tileId}`);
+export async function fetchClientsByTile(tileId: string): Promise<{ data: ClientData[] }> {
+  return fetchJsonDataAsync<ClientData[]>(`/api/get/clients?tileId=${tileId}`);
 }
 
 export async function fetchPoliceDataAsync(date: string): Promise<{ data: Blob }> {
