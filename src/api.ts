@@ -74,10 +74,6 @@ export async function fetchClientsByTile(tileId: string): Promise<{ data: Client
   return fetchJsonDataAsync<ClientShortData[]>(`/api/get/clients?tileId=${tileId}`);
 }
 
-export async function fetchClient(bookingId: string, clientId: string): Promise<{ data: ClientData }> {
-  return fetchJsonDataAsync<ClientData>(`/api/get/client?bookingId=${bookingId}&clientId=${clientId}`);
-}
-
 export async function fetchPoliceDataAsync(date: string): Promise<{ data: Blob }> {
   return fetchBlobDataAsync(`/api/export/police?date=${date}`);
 }
