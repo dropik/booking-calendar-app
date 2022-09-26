@@ -1,14 +1,28 @@
 const path = require("path");
+const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
+const ReactRefreshTypeScript = require("react-refresh-typescript");
+
+const isDevelopment = process.env.NODE_ENV !== "production";
 
 module.exports = {
   entry: "./src/index.tsx",
-  mode: "development",
+  mode: isDevelopment ? "development" : "production",
   module: {
     rules: [
       {
         test: /\.tsx?$/,
-        use: "ts-loader",
         exclude: /node_modules/,
+        use: [
+          {
+            loader: require.resolve("ts-loader"),
+            options: {
+              getCustomTransformers: () => ({
+                before: [isDevelopment && ReactRefreshTypeScript()].filter(Boolean)
+              }),
+              transpileOnly: isDevelopment
+            }
+          }
+        ]
       },
       {
         test: /\.css$/,
@@ -24,6 +38,7 @@ module.exports = {
     publicPath: "/dist/",
     filename: "bundle.js",
   },
+  plugins: [isDevelopment && new ReactRefreshWebpackPlugin()].filter(Boolean),
   devServer: {
     static: {
       directory: path.join(__dirname, "public"),
@@ -68,46 +83,27 @@ module.exports = {
           rooms: [
             {
               id: "1",
-              type: "camera matrimoniale/doppia",
-              entity: "camera matrimoniale",
+              bookingId: "1",
+              name: "Vasya Pupkin",
               from: "2022-02-02",
-              to: "2022-02-05",
-              guests: [
-                {
-                  id: "0",
-                  name: "Vasya",
-                  surname: "Pupkin",
-                  dateOfBirth: "1985-05-06"
-                },
-                {
-                  id: "1",
-                  name: "Masha",
-                  surname: "Pupkina",
-                  dateOfBirth: "1987-07-20"
-                }
-              ]
+              nights: 3,
+              roomType: "camera matrimoniale/doppia",
+              entity: "camera matrimoniale",
+              persons: 2,
+              color: "booking1",
+              roomNumber: 3
             },
             {
               id: "2",
-              type: "camera matrimoniale/doppia",
-              entity: "camera matrimoniale",
+              bookingId: "1",
+              name: "Ivan Petrov",
               from: "2022-02-02",
-              to: "2022-02-05",
-              roomNumber: 5,
-              guests: [
-                {
-                  id: "2",
-                  name: "Ivan",
-                  surname: "Petrov",
-                  dateOfBirth: "1990-08-20"
-                },
-                {
-                  id: "3",
-                  name: "Natasha",
-                  surname: "Petrova",
-                  dateOfBirth: "1991-05-09"
-                }
-              ]
+              nights: 3,
+              roomType: "camera matrimoniale/doppia",
+              entity: "camera matrimoniale",
+              persons: 2,
+              color: "booking1",
+              roomNumber: 5
             }
           ]
         });
@@ -119,31 +115,41 @@ module.exports = {
             id: "0",
             name: "Ivan Petrov",
             from: "2022-02-02",
-            to: "2022-02-05"
+            to: "2022-02-05",
+            occupations: 1,
+            color: "booking1"
           },
           {
             id: "1",
             name: "Vasya Pupkin",
             from: "2022-03-01",
-            to: "2022-03-04"
+            to: "2022-03-04",
+            occupations: 2,
+            color: "booking2"
           },
           {
             id: "2",
             name: "Petr Sidorov",
             from: "2022-03-16",
-            to: "2022-03-17"
+            to: "2022-03-17",
+            occupations: 1,
+            color: "booking3"
           },
           {
             id: "3",
             name: "Petr Ivanov",
             from: "2022-04-01",
-            to: "2022-04-03"
+            to: "2022-04-03",
+            occupations: 1,
+            color: "booking4"
           },
           {
             id: "4",
             name: "Kirill Kirilov",
             from: "2022-04-02",
-            to: "2022-04-03"
+            to: "2022-04-03",
+            occupations: 1,
+            color: "booking5"
           }
         ]);
       });
@@ -167,7 +173,7 @@ module.exports = {
         });
       });
 
-      devServer.app.get("/api/find/clients", (request, response) => {
+      devServer.app.get("/api/get/clients", (request, response) => {
         response.json([
           {
             id: "0",
@@ -175,7 +181,9 @@ module.exports = {
             bookingName: "Ivan Petrov",
             name: "Ivan",
             surname: "Petrov",
-            dateOfBirth: "1986-05-04"
+            dateOfBirth: "1986-05-04",
+            placeOfBirth: "Canazei (TN)",
+            stateOfBirth: "Italia"
           },
           {
             id: "1",
@@ -183,7 +191,84 @@ module.exports = {
             bookingName: "Vasya Pupkin",
             name: "Vasya",
             surname: "Pupkin",
-            dateOfBirth: "1985-05-06"
+            dateOfBirth: "1985-05-06",
+            placeOfBirth: "Canazei (TN)",
+            stateOfBirth: "Italia"
+          }
+        ]);
+      });
+
+      devServer.app.get("/api/find/clients", (request, response) => {
+        response.json([
+          {
+            id: "0",
+            name: "Ivan",
+            surname: "Petrov",
+            dateOfBirth: "1986-05-04",
+            placeOfBirth: "Canazei (TN)",
+            stateOfBirth: "Italia",
+            documentNumber: "",
+            documentType: "identityCard",
+            booking: {
+              id: "0",
+              name: "Ivan Petrov",
+              from: "2022-02-05",
+              to: "2022-02-07",
+              occupations: 1,
+              color: "booking1"
+            }
+          },
+          {
+            id: "1",
+            name: "Vasya",
+            surname: "Pupkin",
+            dateOfBirth: "1985-05-06",
+            placeOfBirth: "Canazei (TN)",
+            stateOfBirth: "Italia",
+            documentNumber: "",
+            documentType: "identityCard",
+            booking: {
+              id: "1",
+              name: "Vasya Pupkin",
+              from: "2022-02-25",
+              to: "2022-02-26",
+              occupations: 1,
+              color: "booking2"
+            }
+          },
+          {
+            id: "2",
+            name: "Ilja",
+            surname: "Maksimov",
+            dateOfBirth: "1985-05-06",
+            stateOfBirth: "Russia",
+            documentNumber: "",
+            documentType: "identityCard",
+            booking: {
+              id: "2",
+              name: "Vasya Pupkin",
+              from: "2022-02-25",
+              to: "2022-02-26",
+              occupations: 1,
+              color: "booking2"
+            }
+          },
+          {
+            id: "3",
+            name: "Stepan",
+            surname: "Ogurzov",
+            dateOfBirth: "1985-05-06",
+            stateOfBirth: "Russia",
+            documentNumber: "",
+            documentType: "identityCard",
+            booking: {
+              id: "2",
+              name: "Vasya Pupkin",
+              from: "2022-02-25",
+              to: "2022-02-26",
+              occupations: 1,
+              color: "booking2"
+            }
           }
         ]);
       });

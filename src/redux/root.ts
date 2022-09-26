@@ -5,10 +5,12 @@ import hotel from "./hotelSlice";
 import scroll from "./scrollSlice";
 import tiles from "./tilesSlice";
 import roomTypes from "./roomTypesSlice";
-import poppers from "./poppersSlice";
-import sidemenu from "./sidemenuSlice";
+import drawer from "./drawerSlice";
 import dialog from "./dialogSlice";
-import connectionError from "./connectionErrorSlice";
+import snackbarMessage from "./snackbarMessageSlice";
+import layout from "./layoutSlice";
+import booking from "./bookingSlice";
+import bookingsForm from "./bookingsFormSlice";
 
 export default combineReducers(
   {
@@ -17,9 +19,11 @@ export default combineReducers(
     scroll,
     tiles,
     roomTypes,
-    poppers,
-    sidemenu,
+    drawer,
     dialog,
-    connectionError
+    snackbarMessage,
+    layout,
+    booking,
+    bookingsForm
   }
 );

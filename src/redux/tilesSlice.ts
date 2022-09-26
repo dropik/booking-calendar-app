@@ -5,6 +5,9 @@ import * as Api from "../api";
 import * as Utils from "../utils";
 
 import * as TableSlice from "./tableSlice";
+import * as HotelSlice from "./hotelSlice";
+
+export type TileColor = "booking1" | "booking2" | "booking3" | "booking4" | "booking5" | "booking6" | "booking7" | "booking8";
 
 export type TileData = {
   id: string,
@@ -15,7 +18,7 @@ export type TileData = {
   roomType: string,
   entity: string,
   persons: number,
-  colour: string,
+  color: TileColor,
   roomNumber?: number
 };
 
@@ -24,8 +27,8 @@ export type ChangesMap = {
     roomChanged: boolean,
     originalRoom?: number,
     newRoom?: number,
-    originalColour?: string,
-    newColour?: string
+    originalColor?: TileColor,
+    newColor?: TileColor
   }
 };
 
@@ -52,7 +55,6 @@ export type State = {
   },
   changesMap: ChangesMap,
   grabbedTile?: string,
-  selectedDate?: string
   mouseYOnGrab: number
 };
 
@@ -91,16 +93,51 @@ export const tilesSlice = createSlice({
       state.grabbedTile = action.payload.tileId;
       state.grabbedMap[action.payload.tileId] = true;
       state.mouseYOnGrab = action.payload.mouseY;
+
+      const tile = state.data[action.payload.tileId];
+      for (const roomNumber in state.assignedMap) {
+        let revert = false;
+        const dateCounter = new Date(tile.from);
+        for (let i = 0; i < tile.nights; i++) {
+          const x = Utils.dateToString(dateCounter);
+          dateCounter.setDate(dateCounter.getDate() + 1);
+          if (!state.assignedMap[roomNumber][x]) {
+            state.assignedMap[roomNumber][x] = "dropzone";
+          } else {
+            revert = true;
+            dateCounter.setDate(dateCounter.getDate() - 2);
+            break;
+          }
+        }
+
+        if (revert) {
+          let x = Utils.dateToString(dateCounter);
+          while (Utils.daysBetweenDates(tile.from, x) >= 0) {
+            state.assignedMap[roomNumber][x] = undefined;
+            dateCounter.setDate(dateCounter.getDate() - 1);
+            x = Utils.dateToString(dateCounter);
+          }
+        }
+      }
     },
     drop: (state, action: PayloadAction<{ tileId: string }>) => {
       state.grabbedTile = undefined;
       state.grabbedMap[action.payload.tileId] = false;
       state.mouseYOnGrab = 0;
+
+      const tile = state.data[action.payload.tileId];
+      for (const roomNumber in state.assignedMap) {
+        if (state.assignedMap[roomNumber][tile.from] === "dropzone") {
+          const dateCounter = new Date(tile.from);
+          for (let i = 0; i < tile.nights; i++) {
+            const x = Utils.dateToString(dateCounter);
+            dateCounter.setDate(dateCounter.getDate() + 1);
+            state.assignedMap[roomNumber][x] = undefined;
+          }
+        }
+      }
     },
-    toggleDate: (state, action: PayloadAction<{ date: string | undefined }>) => {
-      state.selectedDate = state.selectedDate === action.payload.date ? undefined : action.payload.date;
-    },
-    removeAssignment: (state, action: PayloadAction<{ tileId: string }>) => {
+    unassign: (state, action: PayloadAction<{ tileId: string }>) => {
       tryRemoveAssignment(state, action);
       checkChangeReturnedToOriginal(state, action.payload.tileId);
     },
@@ -111,19 +148,19 @@ export const tilesSlice = createSlice({
       unassignChangedTiles(state);
       reassignTiles(state);
     },
-    setColour: (state, action: PayloadAction<{ tileId: string, colour: string }>) => {
+    setColor: (state, action: PayloadAction<{ tileId: string, color: TileColor }>) => {
       const booking = state.data[action.payload.tileId].bookingId;
       state.bookingsMap[booking].forEach((tileId) => {
         if (state.changesMap[tileId] === undefined) {
           state.changesMap[tileId] = {
             roomChanged: false,
-            originalColour: state.data[tileId].colour
+            originalColor: state.data[tileId].color
           };
-        } else if (state.changesMap[tileId].originalColour === undefined) {
-          state.changesMap[tileId].originalColour = state.data[tileId].colour;
+        } else if (state.changesMap[tileId].originalColor === undefined) {
+          state.changesMap[tileId].originalColor = state.data[tileId].color;
         }
-        state.changesMap[tileId].newColour = action.payload.colour;
-        state.data[tileId].colour = action.payload.colour;
+        state.changesMap[tileId].newColor = action.payload.color;
+        state.data[tileId].color = action.payload.color;
         checkChangeReturnedToOriginal(state, tileId);
       });
     }
@@ -139,11 +176,20 @@ export const tilesSlice = createSlice({
       })
       .addCase(fetchAsync.rejected, (state) => {
         state.status = "failed";
+      })
+      .addCase(HotelSlice.fetchAsync.fulfilled, (state, action) => {
+        action.payload.floors.forEach((floor) => {
+          floor.rooms.forEach((room) => {
+            if (!state.assignedMap[room.number]) {
+              state.assignedMap[room.number] = { };
+            }
+          });
+        });
       });
   }
 });
 
-export const { move, grab, drop, toggleDate, removeAssignment, saveChanges, undoChanges, setColour } = tilesSlice.actions;
+export const { move, grab, drop, unassign, saveChanges, undoChanges, setColor } = tilesSlice.actions;
 
 export default tilesSlice.reducer;
 
@@ -262,9 +308,9 @@ function reassignTiles(state: WritableDraft<State>): void {
       }
     }
 
-    const originalColour = state.changesMap[tileId].originalColour;
-    if (originalColour) {
-      state.data[tileId].colour = originalColour;
+    const originalColor = state.changesMap[tileId].originalColor;
+    if (originalColor) {
+      state.data[tileId].color = originalColor;
     }
 
     delete state.changesMap[tileId];
@@ -275,7 +321,7 @@ function checkChangeReturnedToOriginal(state: WritableDraft<State>, tileId: stri
   if (
     state.changesMap[tileId] &&
     (state.changesMap[tileId].originalRoom === state.changesMap[tileId].newRoom) &&
-    (state.changesMap[tileId].originalColour === state.changesMap[tileId].newColour)
+    (state.changesMap[tileId].originalColor === state.changesMap[tileId].newColor)
   ) {
     delete state.changesMap[tileId];
   }
@@ -317,7 +363,7 @@ function checkHasCollision(
   const dateCounter = new Date(tileData.from);
   for (let i = 0; i < tileData.nights; i++) {
     const x = Utils.dateToString(dateCounter);
-    if (state.assignedMap[newY][x] !== undefined) {
+    if ((state.assignedMap[newY][x] !== undefined) && (state.assignedMap[newY][x] !== "dropzone")) {
       return true;
     }
     dateCounter.setDate(dateCounter.getDate() + 1);

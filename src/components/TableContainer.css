@@ -1,9 +1,0 @@
-.table-container {
-  position: absolute;
-  top: calc(8rem + 4px);
-  width: calc(100% - 7rem - 6px);
-  max-height: calc(100% - 8.5rem - 4px);
-  margin-left: calc(6rem + 4px);
-  overflow: scroll;
-  overscroll-behavior: none;
-}

@@ -1,47 +1,31 @@
-import React, { useEffect } from "react";
+import React from "react";
+import { BrowserRouter } from "react-router-dom";
+import Box from "@mui/material/Box";
 
-import Header from "./components/Header";
-import Hotel from "./components/Hotel";
-import TableContainer from "./components/TableContainer";
-import Sidemenu from "./components/Sidemenu";
-import Dialog from "./components/Dialog";
-
-import "@fontsource/roboto/300.css";
-import "@fontsource/roboto/400.css";
-import "@fontsource/roboto/500.css";
-import "@fontsource/roboto/700.css";
-import "./App.css";
+import M3GlobalStyles from "./components/m3/M3GlobalStyles";
+import ResizeHandler from "./components/ResizeHandler";
+import ScrollingHandler from "./components/ScrollingHandler";
+import AppDrawer from "./components/AppDrawer";
+import DrawerButton from "./components/DrawerButton";
+import AppRoutes from "./components/AppRoutes";
+import SaveAndResetWidget from "./components/SaveAndResetWidget";
+import SnackbarMessage from "./components/SnackbarMessage";
 
 export default function App(): JSX.Element {
-  useWindowCursorGrabbingEffect();
+
 
   return (
-    <div className="app">
-      <Header />
-      <Hotel />
-      <TableContainer />
-      <Sidemenu />
-      <Dialog />
-    </div>
+    <BrowserRouter>
+      <Box>
+        <M3GlobalStyles />
+        <AppRoutes />
+        <AppDrawer />
+        <DrawerButton />
+        <SaveAndResetWidget />
+        <SnackbarMessage />
+        <ResizeHandler />
+        <ScrollingHandler />
+      </Box>
+    </BrowserRouter>
   );
-}
-
-function useWindowCursorGrabbingEffect(): void {
-  useEffect(() => {
-    function setCursorGrabbing() {
-      document.documentElement.classList.add("tile-grabbing");
-    }
-
-    function unsetCursorGrabbing() {
-      document.documentElement.classList.remove("tile-grabbing");
-    }
-
-    window.addEventListener("mousedown", setCursorGrabbing);
-    window.addEventListener("mouseup", unsetCursorGrabbing);
-
-    return () => {
-      window.removeEventListener("mousedown", setCursorGrabbing);
-      window.removeEventListener("mouseup", unsetCursorGrabbing);
-    };
-  }, []);
 }

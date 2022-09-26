@@ -14,27 +14,16 @@ export type BookingData = {
   name: string,
   from: string,
   to: string,
-  rooms: {
-    id: string,
-    type: string,
-    entity: string,
-    from: string,
-    to: string,
-    roomNumber?: number,
-    guests: {
-      id: string,
-      name: string,
-      surname: string,
-      dateOfBirth: string
-    }[]
-  }[]
+  rooms: TilesSlice.TileData[]
 };
 
 export type BookingShortData = {
   id: string,
   name: string,
   from: string,
-  to: string
+  to: string,
+  occupations: number,
+  color: TilesSlice.TileColor
 };
 
 export type DocumentType = "identityCard" | "drivingLicense" | "passport";
@@ -57,7 +46,9 @@ export type ClientShortData = {
   bookingName: string,
   name: string,
   surname: string,
-  dateOfBirth: string
+  dateOfBirth: string,
+  placeOfBirth?: string,
+  stateOfBirth?: string
 };
 
 export function fetchHotelDataAsync(): Promise<{ data: HotelSlice.HotelData }> {
@@ -99,6 +90,10 @@ export async function fetchBookingById(bookingId: string): Promise<{ data: Booki
   return fetchJsonDataAsync<BookingData>(`/api/get/booking?id=${bookingId}`);
 }
 
+export async function fetchClientsByTile(tileId: string): Promise<{ data: ClientShortData[] }> {
+  return fetchJsonDataAsync<ClientShortData[]>(`/api/get/clients?tileId=${tileId}`);
+}
+
 export async function fetchClient(bookingId: string, clientId: string): Promise<{ data: ClientData }> {
   return fetchJsonDataAsync<ClientData>(`/api/get/client?bookingId=${bookingId}&clientId=${clientId}`);
 }
@@ -119,8 +114,8 @@ export async function fetchBookings(nameOrId: string, from: string, to: string):
   return fetchJsonDataAsync<BookingShortData[]>(`/api/find/bookings?nameOrId=${nameOrId}&from=${from}&to=${to}`);
 }
 
-export async function fetchClients(name: string, surname: string): Promise<{ data: ClientShortData[] }> {
-  return fetchJsonDataAsync<ClientShortData[]>(`/api/find/clients?name=${name}&surname=${surname}`);
+export async function fetchClients(query: string): Promise<{ data: ClientData[] }> {
+  return fetchJsonDataAsync<ClientData[]>(`/api/find/clients?query=${query}`);
 }
 
 async function fetchBlobDataAsync(query: string): Promise<{ data: Blob }> {

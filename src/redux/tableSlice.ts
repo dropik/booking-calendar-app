@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { WritableDraft } from "immer/dist/internal";
 
 import * as Utils from "../utils";
-import * as Globals from "../globals";
 
 export type FetchPeriod = {
   from: string,
@@ -9,20 +9,21 @@ export type FetchPeriod = {
 };
 
 export type State = {
+  currentDate: string,
   leftmostDate: string,
   columns: number,
   offsetHeight: number,
   clientHeight: number,
-  lastFetchPeriod: FetchPeriod,
-  fetchReason: "changeDate" | "expand"
+  lastFetchPeriod: FetchPeriod
 };
 
 function getInitialState(): State {
   const initialDate = Utils.dateToString(new Date());
-  const leftmostDate = Utils.getDateShift(initialDate, -Globals.TABLE_PRELOAD_AMOUNT);
-  const columns = getInitialColumnsAmount();
+  const leftmostDate = Utils.getDateShift(initialDate, -3);
+  const columns = getColumnsAmount();
 
   return {
+    currentDate: initialDate,
     leftmostDate: leftmostDate,
     columns: columns,
     offsetHeight: 0,
@@ -30,8 +31,7 @@ function getInitialState(): State {
     lastFetchPeriod: {
       from: leftmostDate,
       to: Utils.getDateShift(leftmostDate, columns - 1)
-    },
-    fetchReason: "changeDate"
+    }
   };
 }
 
@@ -44,42 +44,33 @@ export const tableSlice = createSlice({
       state.clientHeight = action.payload.clientHeight;
     },
     changeDate: (state, action: PayloadAction<{ date: string }>) => {
-      state.leftmostDate = Utils.getDateShift(action.payload.date, -Globals.TABLE_PRELOAD_AMOUNT);
-      state.columns = getInitialColumnsAmount();
-      state.lastFetchPeriod = {
-        from: state.leftmostDate,
-        to: Utils.getDateShift(state.leftmostDate, state.columns - 1)
-      };
-      state.fetchReason = "changeDate";
+      updateStateByNewDate(state, action.payload.date);
     },
-    expandLeft: (state) => {
-      state.leftmostDate = Utils.getDateShift(state.leftmostDate, -Globals.TABLE_PRELOAD_AMOUNT);
-      state.columns += Globals.TABLE_PRELOAD_AMOUNT;
-      state.lastFetchPeriod = {
-        from: state.leftmostDate,
-        to: Utils.getDateShift(state.leftmostDate, Globals.TABLE_PRELOAD_AMOUNT - 1)
-      };
-      state.fetchReason = "expand";
+    goNext: (state) => {
+      updateStateByNewDate(state, Utils.getDateShift(state.currentDate, state.columns));
     },
-    expandRight: (state) => {
-      state.columns += Globals.TABLE_PRELOAD_AMOUNT;
-      state.lastFetchPeriod = {
-        from: Utils.getDateShift(state.leftmostDate, state.columns - Globals.TABLE_PRELOAD_AMOUNT),
-        to: Utils.getDateShift(state.leftmostDate, state.columns - 1)
-      };
-      state.fetchReason = "expand";
+    goPrev: (state) => {
+      updateStateByNewDate(state, Utils.getDateShift(state.currentDate, -state.columns));
+    },
+    adjustColumns: (state) => {
+      state.columns = getColumnsAmount();
+      state.lastFetchPeriod.from = state.leftmostDate;
+      state.lastFetchPeriod.to = Utils.getDateShift(state.leftmostDate, state.columns - 1);
     }
   }
 });
 
-export const { updateHeights, changeDate, expandLeft, expandRight } = tableSlice.actions;
+export const { updateHeights, changeDate, goNext, goPrev, adjustColumns } = tableSlice.actions;
 
 export default tableSlice.reducer;
 
-function getInitialColumnsAmount() {
-  const sidebarWidth = Utils.remToPx(6);
-  const tableCellWidth = Utils.remToPx(4);
-  let columns = Math.ceil((document.documentElement.clientWidth - sidebarWidth) / tableCellWidth);
-  columns += Globals.TABLE_PRELOAD_AMOUNT * 2;
-  return columns;
+function updateStateByNewDate(state: WritableDraft<State>, date: string): void {
+  state.currentDate = date;
+  state.leftmostDate = Utils.getDateShift(date, -3);
+  state.lastFetchPeriod.from = state.leftmostDate,
+  state.lastFetchPeriod.to = Utils.getDateShift(state.leftmostDate, state.columns - 1);
+}
+
+function getColumnsAmount(): number {
+  return Math.floor(Utils.pxToRem(window.innerWidth - (Utils.remToPx(12.5) + 1)) / 8);
 }
