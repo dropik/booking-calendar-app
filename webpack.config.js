@@ -4,6 +4,9 @@ const ReactRefreshTypeScript = require("react-refresh-typescript");
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
+let lastSessionId = 0;
+let lastServedSessionId = "";
+
 module.exports = {
   entry: "./src/index.tsx",
   mode: isDevelopment ? "development" : "production",
@@ -46,6 +49,14 @@ module.exports = {
     },
     port: 3000,
     hot: true,
+    headers: (req) => {
+      if (req.url === "/") {
+        lastSessionId = Math.floor(Math.random() * 100000);
+      }
+      return {
+        "Set-Cookie": `sessionId=${lastSessionId}`
+      };
+    },
     setupMiddlewares: (middlewares, devServer) => {
       if (!devServer) {
         throw new Error("webpack-dev-server is not defined");
@@ -66,7 +77,7 @@ module.exports = {
         response.send("Exported!");
       });
 
-      devServer.app.get("/api/calc/tax", (request, response) => {
+      devServer.app.get("/api/calc/tax", (_, response) => {
         response.json({
           standard: 100,
           children: 12,
@@ -74,7 +85,7 @@ module.exports = {
         });
       });
 
-      devServer.app.get("/api/get/booking", (request, response) => {
+      devServer.app.get("/api/get/booking", (_, response) => {
         response.json({
           id: "1",
           name: "Vasya Pupkin",
@@ -109,7 +120,7 @@ module.exports = {
         });
       });
 
-      devServer.app.get("/api/find/bookings", (request, response) => {
+      devServer.app.get("/api/find/bookings", (_, response) => {
         response.json([
           {
             id: "0",
@@ -154,7 +165,7 @@ module.exports = {
         ]);
       });
 
-      devServer.app.get("/api/get/client", (request, response) => {
+      devServer.app.get("/api/get/client", (_, response) => {
         response.json({
           id: "0",
           name: "Ivan",
@@ -173,7 +184,7 @@ module.exports = {
         });
       });
 
-      devServer.app.get("/api/get/clients", (request, response) => {
+      devServer.app.get("/api/get/clients", (_, response) => {
         response.json([
           {
             id: "0",
@@ -198,7 +209,7 @@ module.exports = {
         ]);
       });
 
-      devServer.app.get("/api/find/clients", (request, response) => {
+      devServer.app.get("/api/find/clients", (_, response) => {
         response.json([
           {
             id: "0",
@@ -271,6 +282,195 @@ module.exports = {
             }
           }
         ]);
+      });
+
+      devServer.app.get("/api/get/hotel", (_, response) => {
+        response.json({
+          floors: [
+            {
+              name: "piano 1",
+              rooms: [
+                {
+                  number: 1,
+                  type: "camera tripla standard",
+                },
+                {
+                  number: 2,
+                  type: "appartamento",
+                },
+                {
+                  number: 3,
+                  type: "camera matrimoniale/doppia",
+                },
+                {
+                  number: 4,
+                  type: "camera tripla",
+                },
+                {
+                  number: 5,
+                  type: "camera matrimoniale/doppia",
+                },
+              ],
+            },
+            {
+              name: "piano 2",
+              rooms: [
+                {
+                  number: 6,
+                  type: "camera matrimoniale/doppia",
+                },
+                {
+                  number: 7,
+                  type: "camera matrimoniale/doppia",
+                },
+                {
+                  number: 8,
+                  type: "camera singola",
+                },
+                {
+                  number: 9,
+                  type: "camera matrimoniale/doppia",
+                },
+                {
+                  number: 10,
+                  type: "camera matrimoniale/doppia economy",
+                },
+                {
+                  number: 11,
+                  type: "camera tripla",
+                },
+                {
+                  number: 12,
+                  type: "camera matrimoniale/doppia",
+                },
+              ],
+            },
+          ]
+        });
+      });
+
+      devServer.app.get("/api/get/room-types", (_, response) => {
+        response.json({
+          "camera singola": [1],
+          "camera matrimoniale/doppia":  [1, 2],
+          "camera matrimoniale/doppia economy":  [1, 2],
+          "camera tripla":  [2, 3],
+          "camera tripla standard":  [2, 3],
+          "appartamento":  [3, 4],
+        });
+      });
+
+
+      devServer.app.get("/api/get/tiles", (request, response) => {
+        const cookieStr = request.headers["cookie"];
+        const cookieSplit = cookieStr.split("=");
+        const sessionId = cookieSplit[1];
+
+        if (sessionId !== lastServedSessionId) {
+          response.json([
+            {
+              id: "0",
+              bookingId: "0",
+              name: "Petr Ivanov",
+              from: "2022-02-15",
+              nights: 40,
+              roomType: "camera matrimoniale/doppia",
+              entity: "camera doppia",
+              persons: 2,
+              color: "booking1",
+              roomNumber: 3
+            },
+            {
+              id: "1",
+              bookingId: "1",
+              name: "Ivan Petrov",
+              from: "2022-02-25",
+              nights: 2,
+              roomType: "camera matrimoniale/doppia",
+              entity: "camera doppia",
+              persons: 2,
+              color: "booking2",
+              roomNumber: 2
+            },
+            {
+              id: "2",
+              bookingId: "2",
+              name: "Vasya Pupkin",
+              from: "2022-02-20",
+              nights: 3,
+              roomType: "camera matrimoniale/doppia",
+              entity: "camera doppia",
+              persons: 2,
+              color: "booking3",
+              roomNumber: 6
+            },
+            {
+              id: "3",
+              bookingId: "3",
+              name: "Petr Petrov",
+              from: "2022-03-01",
+              nights: 4,
+              roomType: "camera tripla",
+              entity: "camera tripla",
+              persons: 3,
+              color: "booking4"
+            },
+            {
+              id: "4",
+              bookingId: "4",
+              name: "Ivan Vasiliev",
+              from: "2022-02-28",
+              nights: 4,
+              roomType: "camera singola",
+              entity: "camera singola",
+              persons: 1,
+              color: "booking5"
+            },
+            {
+              id: "5",
+              bookingId: "5",
+              name: "Vasya Ivanov",
+              from: "2022-03-01",
+              nights: 60,
+              roomType: "camera matrimoniale/doppia",
+              entity: "camera doppia",
+              persons: 2,
+              color: "booking6"
+            },
+            {
+              id: "6",
+              bookingId: "1",
+              name: "Sasha Smirnov",
+              from: "2022-02-25",
+              nights: 2,
+              roomType: "camera matrimoniale/doppia",
+              entity: "camera doppia",
+              persons: 2,
+              color: "booking2",
+              roomNumber: 5
+            },
+            {
+              id: "7",
+              bookingId: "7",
+              name: "Sasha Smirnov",
+              from: "2022-02-23",
+              nights: 2,
+              roomType: "camera matrimoniale/doppia",
+              entity: "camera doppia",
+              persons: 2,
+              color: "booking3",
+              roomNumber: 5
+            }
+          ]);
+
+          lastServedSessionId = sessionId;
+        } else {
+          response.json([]);
+        }
+      });
+
+      devServer.app.post("/api/post/changes", (_, response) => {
+        response.send("ok");
       });
 
       return middlewares;
