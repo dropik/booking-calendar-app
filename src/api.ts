@@ -1,7 +1,7 @@
 import * as Mocks from "./mocks";
-import * as HotelSlice from "./redux/hotelSlice";
 import * as TilesSlice from "./redux/tilesSlice";
 import * as RoomTypesSlice from "./redux/roomTypesSlice";
+import { HotelData } from "./redux/hotelSlice";
 
 export type CityTaxData = {
   standard: number,
@@ -51,10 +51,8 @@ export type ClientShortData = {
   stateOfBirth?: string
 };
 
-export function fetchHotelDataAsync(): Promise<{ data: HotelSlice.HotelData }> {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve({ data: Mocks.hotel }), 500);
-  });
+export function fetchHotelDataAsync(): Promise<{ data: HotelData }> {
+  return fetchJsonDataAsync<HotelData>("/api/get/hotel");
 }
 
 export function fetchRoomTypesAsync(): Promise<{ data: RoomTypesSlice.RoomTypeData }> {
