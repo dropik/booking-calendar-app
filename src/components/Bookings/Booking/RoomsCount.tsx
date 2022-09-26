@@ -11,7 +11,7 @@ export default function RoomsCount(): JSX.Element {
     <ListItemText sx={{
       flexShrink: 1,
       textAlign: "right",
-      paddingTop: "1rem"
+      pt: "1rem"
     }}>
       <Typography variant="bodySmall">
         {`${booking.occupations} stanz${booking.occupations === 1 ? "a" : "e"}`}

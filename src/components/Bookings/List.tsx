@@ -7,6 +7,7 @@ import { useAppDispatch } from "../../redux/hooks";
 import { show as showMessage } from "../../redux/snackbarMessageSlice";
 
 import Booking from "./Booking";
+import Skeleton from "./Skeleton";
 
 type ListProps = {
   name: string,
@@ -43,7 +44,9 @@ export default function List({ name, from, to, isValid }: ListProps): JSX.Elemen
   return (
     <Box sx={{ maxHeight: "calc(100vh - 20.75rem)", overflowY: "auto" }}>
       <Stack spacing={0} sx={{ position: "relative", pb: "1rem" }}>
-        {bookings.map((booking) => <Booking key={booking.id} booking={booking}/>)}
+        {bookings.length > 0 ?
+          bookings.map((booking) => <Booking key={booking.id} booking={booking}/>) :
+          <Skeleton />}
       </Stack>
     </Box>
   );
