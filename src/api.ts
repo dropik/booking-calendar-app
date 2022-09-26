@@ -1,7 +1,7 @@
 import * as Mocks from "./mocks";
 import * as TilesSlice from "./redux/tilesSlice";
-import * as RoomTypesSlice from "./redux/roomTypesSlice";
 import { HotelData } from "./redux/hotelSlice";
+import { RoomTypeData } from "./redux/roomTypesSlice";
 
 export type CityTaxData = {
   standard: number,
@@ -55,10 +55,8 @@ export function fetchHotelDataAsync(): Promise<{ data: HotelData }> {
   return fetchJsonDataAsync<HotelData>("/api/get/hotel");
 }
 
-export function fetchRoomTypesAsync(): Promise<{ data: RoomTypesSlice.RoomTypeData }> {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve({ data: Mocks.roomTypes }), 500);
-  });
+export function fetchRoomTypesAsync(): Promise<{ data: RoomTypeData }> {
+  return fetchJsonDataAsync<RoomTypeData>("/api/get/room-types");
 }
 
 let isTilesFetched = false;

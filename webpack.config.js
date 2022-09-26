@@ -338,6 +338,17 @@ module.exports = {
         });
       });
 
+      devServer.app.get("/api/get/room-types", (_, response) => {
+        response.json({
+          "camera singola": [1],
+          "camera matrimoniale/doppia":  [1, 2],
+          "camera matrimoniale/doppia economy":  [1, 2],
+          "camera tripla":  [2, 3],
+          "camera tripla standard":  [2, 3],
+          "appartamento":  [3, 4],
+        });
+      });
+
       return middlewares;
     }
   },
