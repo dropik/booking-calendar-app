@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import * as Api from "../api";
+import { fetchHotelDataAsync } from "../api";
+import { show as showMessage } from "./snackbarMessageSlice";
 
 export type RoomData = {
   number: number,
@@ -28,9 +29,14 @@ const initialState: State = {
 
 export const fetchAsync = createAsyncThunk(
   "hotel/fetch",
-  async () => {
-    const response = await Api.fetchHotelDataAsync();
-    return response.data;
+  async (_, thunkApi) => {
+    try {
+      const response = await fetchHotelDataAsync();
+      return response.data;
+    } catch (error) {
+      thunkApi.dispatch(showMessage({ type: "error" }));
+      throw thunkApi.rejectWithValue({});
+    }
   }
 );
 
