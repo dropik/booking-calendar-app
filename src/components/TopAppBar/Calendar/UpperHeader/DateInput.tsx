@@ -23,7 +23,7 @@ export default function DateInput(): JSX.Element {
 
   const leftmostDateObj = new Date(leftmostDate);
   const rightmostDateObj = new Date(leftmostDate);
-  rightmostDateObj.setDate(rightmostDateObj.getDate() + columns);
+  rightmostDateObj.setDate(rightmostDateObj.getDate() + columns - 1);
   let leftmostMonth = leftmostDateObj.toLocaleDateString("default", { month: "long" });
   if (leftmostMonth.length > 4) {
     leftmostMonth = leftmostDateObj.toLocaleDateString("default", { month: "short" });

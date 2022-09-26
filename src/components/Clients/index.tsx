@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
@@ -7,14 +8,15 @@ import SearchOutlined from "@mui/icons-material/SearchOutlined";
 import Cancel from "@mui/icons-material/Cancel";
 
 import { ClientData, fetchClients } from "../../api";
-import { useAppSelector } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { show as showMessage } from "../../redux/snackbarMessageSlice";
 
 import DrawerAdjacent from "../m3/DrawerAdjacent";
 import M3IconButton from "../m3/M3IconButton";
 import ClientCard from "./ClientCard";
-import Box from "@mui/material/Box";
 
 export default function Clients(): JSX.Element {
+  const dispatch = useAppDispatch();
   const [query, setQuery] = useState("");
   const [clients, setClients] = useState<ClientData[]>([]);
   const drawerOpened = useAppSelector((state) => state.drawer.open);
@@ -30,9 +32,13 @@ export default function Clients(): JSX.Element {
 
     async function fetchData() {
       if (query !== "") {
-        const response = await fetchClients(query);
-        if (isSubscribed) {
-          setClients(response.data);
+        try {
+          const response = await fetchClients(query);
+          if (isSubscribed) {
+            setClients(response.data);
+          }
+        } catch(error) {
+          dispatch(showMessage({ type: "error" }));
         }
       }
     }
@@ -40,7 +46,7 @@ export default function Clients(): JSX.Element {
     fetchData();
 
     return () => { isSubscribed = false; };
-  }, [query]);
+  }, [dispatch, query]);
 
   return (
     <DrawerAdjacent>

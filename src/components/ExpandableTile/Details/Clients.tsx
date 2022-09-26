@@ -2,22 +2,29 @@ import React, { useContext, useEffect, useState } from "react";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import { ClientShortData, fetchClientsByTile } from "../../../api";
+import { ClientData, fetchClientsByTile } from "../../../api";
+import { show as showMessage } from "../../../redux/snackbarMessageSlice";
+import { useAppDispatch } from "../../../redux/hooks";
 import { TileContext } from "../../Tile/context";
 
 import Client from "./Client";
 
 export default function Clients(): JSX.Element {
+  const dispatch = useAppDispatch();
   const { data } = useContext(TileContext);
-  const [clients, setClients] = useState<ClientShortData[]>([]);
+  const [clients, setClients] = useState<ClientData[]>([]);
 
   useEffect(() => {
     async function fetchData() {
-      const response = await fetchClientsByTile(data.id);
-      setClients(response.data);
+      try {
+        const response = await fetchClientsByTile(data.id);
+        setClients(response.data);
+      } catch(error) {
+        dispatch(showMessage({ type: "error" }));
+      }
     }
-    fetchData().catch();
-  }, [data.id]);
+    fetchData();
+  }, [data.id, dispatch]);
 
   return (
     <>

@@ -1,14 +1,14 @@
 import React from "react";
 import Stack from "@mui/material/Stack";
 
-import { ClientShortData } from "../../../../api";
+import { ClientData } from "../../../../api";
 
 import FullName from "./FullName";
 import BirthInfo from "./BirthInfo";
 import ClientContext from "./context";
 
 type ClientProps = {
-  client: ClientShortData
+  client: ClientData
 };
 
 export default function Client({ client }: ClientProps): JSX.Element {

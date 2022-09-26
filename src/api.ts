@@ -25,24 +25,9 @@ export type BookingShortData = {
   color: TileColor
 };
 
-export type DocumentType = "identityCard" | "drivingLicense" | "passport";
-
 export type ClientData = {
   id: string,
-  name: string,
-  surname: string,
-  dateOfBirth: string,
-  placeOfBirth: string,
-  stateOfBirth: string,
-  documentNumber: string,
-  documentType: DocumentType,
-  booking: BookingShortData
-};
-
-export type ClientShortData = {
-  id: string,
   bookingId: string,
-  bookingName: string,
   name: string,
   surname: string,
   dateOfBirth: string,
@@ -66,20 +51,16 @@ export function postChangesAsync(changes: ChangesMap): Promise<void> {
   return postDataAsync("/api/post/changes", changes);
 }
 
-export async function fetchBookingByTile(tileId: string): Promise<{ data: BookingData }> {
-  return fetchJsonDataAsync<BookingData>(`/api/get/booking?tileId=${tileId}`);
-}
-
 export async function fetchBookingById(bookingId: string): Promise<{ data: BookingData }> {
   return fetchJsonDataAsync<BookingData>(`/api/get/booking?id=${bookingId}`);
 }
 
-export async function fetchClientsByTile(tileId: string): Promise<{ data: ClientShortData[] }> {
-  return fetchJsonDataAsync<ClientShortData[]>(`/api/get/clients?tileId=${tileId}`);
+export async function fetchBookingShortById(bookingId: string): Promise<{ data: BookingShortData}> {
+  return fetchJsonDataAsync<BookingShortData>(`/api/get/booking-short?id=${bookingId}`);
 }
 
-export async function fetchClient(bookingId: string, clientId: string): Promise<{ data: ClientData }> {
-  return fetchJsonDataAsync<ClientData>(`/api/get/client?bookingId=${bookingId}&clientId=${clientId}`);
+export async function fetchClientsByTile(tileId: string): Promise<{ data: ClientData[] }> {
+  return fetchJsonDataAsync<ClientData[]>(`/api/get/clients?tileId=${tileId}`);
 }
 
 export async function fetchPoliceDataAsync(date: string): Promise<{ data: Blob }> {

@@ -3,6 +3,8 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 
 import { BookingShortData, fetchBookings } from "../../api";
+import { useAppDispatch } from "../../redux/hooks";
+import { show as showMessage } from "../../redux/snackbarMessageSlice";
 
 import Booking from "./Booking";
 
@@ -14,6 +16,7 @@ type ListProps = {
 }
 
 export default function List({ name, from, to, isValid }: ListProps): JSX.Element {
+  const dispatch = useAppDispatch();
   const [bookings, setBookings] = useState<BookingShortData[]>([]);
 
   useEffect(() => {
@@ -21,9 +24,13 @@ export default function List({ name, from, to, isValid }: ListProps): JSX.Elemen
 
     async function fetchData() {
       if (isValid) {
-        const response = await fetchBookings(name, from, to);
-        if (subscribed) {
-          setBookings(response.data);
+        try {
+          const response = await fetchBookings(name, from, to);
+          if (subscribed) {
+            setBookings(response.data);
+          }
+        } catch(error) {
+          dispatch(showMessage({ type: "error" }));
         }
       }
     }
@@ -31,7 +38,7 @@ export default function List({ name, from, to, isValid }: ListProps): JSX.Elemen
     fetchData();
 
     return () => { subscribed = false; };
-  }, [name, from, to, isValid]);
+  }, [dispatch, name, from, to, isValid]);
 
   return (
     <Box sx={{ maxHeight: "calc(100vh - 20.75rem)", overflowY: "auto" }}>

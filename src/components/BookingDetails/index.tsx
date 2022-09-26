@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import { fetchBookingById } from "../../api";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { setBookingData, unsetBookingData } from "../../redux/bookingSlice";
+import { show as showMessage } from "../../redux/snackbarMessageSlice";
 
 import Definer from "../Definer";
 import { TileContext } from "../Tile/context";
@@ -24,10 +25,14 @@ export default function BookingDetails(): JSX.Element {
 
     async function fetchData() {
       if (bookingId) {
-        const response = await fetchBookingById(bookingId);
+        try {
+          const response = await fetchBookingById(bookingId);
 
-        if (isSubscribed) {
-          dispatch(setBookingData(response.data));
+          if (isSubscribed) {
+            dispatch(setBookingData(response.data));
+          }
+        } catch(error) {
+          dispatch(showMessage({ type: "error" }));
         }
       }
     }
