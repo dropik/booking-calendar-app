@@ -120,6 +120,17 @@ module.exports = {
         });
       });
 
+      devServer.app.get("/api/get/booking-short", (_, response) => {
+        response.json({
+          id: "1",
+          name: "Vasya Pupkin",
+          from: "2022-02-02",
+          to: "2022-02-05",
+          occupations: 2,
+          color: "booking1"
+        });
+      });
+
       devServer.app.get("/api/find/bookings", (_, response) => {
         response.json([
           {
