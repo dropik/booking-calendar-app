@@ -19,7 +19,9 @@ export default function Clients(): JSX.Element {
   const dispatch = useAppDispatch();
   const [query, setQuery] = useState("");
   const [clients, setClients] = useState<ClientData[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const drawerOpened = useAppSelector((state) => state.drawer.open);
+  const skeletonClients = [0, 1];
 
   useEffect(() => {
     if (query === "") {
@@ -31,19 +33,22 @@ export default function Clients(): JSX.Element {
     let isSubscribed = true;
 
     async function fetchData() {
-      if (query !== "") {
-        try {
-          const response = await fetchClients(query);
-          if (isSubscribed) {
-            setClients(response.data);
-          }
-        } catch(error) {
-          dispatch(showMessage({ type: "error" }));
+      try {
+        const response = await fetchClients(query);
+        if (isSubscribed) {
+          setClients(response.data);
         }
+      } catch(error) {
+        dispatch(showMessage({ type: "error" }));
+      } finally {
+        setIsLoading(false);
       }
     }
 
-    fetchData();
+    if (query !== "") {
+      setIsLoading(true);
+      fetchData();
+    }
 
     return () => { isSubscribed = false; };
   }, [dispatch, query]);
@@ -84,7 +89,9 @@ export default function Clients(): JSX.Element {
           display: "grid",
           gridTemplateColumns: `repeat(${drawerOpened ? 3 : 4}, 1fr)`
         }}>
-          {clients.map((client) => <ClientCard key={client.id} client={client} />)}
+          {(isLoading && clients.length === 0) ?
+            skeletonClients.map((client) => <ClientCard key={client} />) :
+            clients.map((client) => <ClientCard key={client.id} client={client} />)}
         </Box>
       </Stack>
     </DrawerAdjacent>

@@ -10,9 +10,10 @@ import { ClientData } from "../../../api";
 
 import M3IconButton from "../../m3/M3IconButton";
 import Details from "./Details";
+import M3Skeleton from "../../m3/M3Skeleton";
 
 type ClientCardProps = {
-  client: ClientData
+  client?: ClientData
 };
 
 export default function ClientCard({ client }: ClientCardProps): JSX.Element {
@@ -29,19 +30,23 @@ export default function ClientCard({ client }: ClientCardProps): JSX.Element {
     }}>
       <Stack spacing={2} sx={{ position: "relative", p: "1rem", flexGrow: 1 }}>
         <Stack>
-          <Typography variant="headlineMedium">{`${client.name} ${client.surname}`}</Typography>
-          <Typography variant="titleMedium">{(new Date(client.dateOfBirth).toLocaleDateString())}</Typography>
+          <Typography variant="headlineMedium">{client ? `${client.name} ${client.surname}` : <M3Skeleton width="10rem" />}</Typography>
+          <Typography variant="titleMedium">{client ? (new Date(client.dateOfBirth).toLocaleDateString()) : <M3Skeleton width="6rem" />}</Typography>
         </Stack>
         <Typography variant="bodySmall">
-          {`${client.placeOfBirth ? `${client.placeOfBirth} - ` : ""}${client.stateOfBirth}`}
+          {client ? `${client.placeOfBirth ? `${client.placeOfBirth} - ` : ""}${client.stateOfBirth}` : <M3Skeleton width="9rem" />}
         </Typography>
-        <M3IconButton sx={{ position: "absolute", right: "1rem", bottom: "0.5rem" }} onClick={() => setOpen(!open)}>
-          {open ? <ExpandLessOutlined /> : <ExpandMoreOutlined />}
-        </M3IconButton>
+        {client ? (
+          <M3IconButton sx={{ position: "absolute", right: "1rem", bottom: "0.5rem" }} onClick={() => setOpen(!open)}>
+            {open ? <ExpandLessOutlined /> : <ExpandMoreOutlined />}
+          </M3IconButton>
+        ) : null}
       </Stack>
-      <Collapse mountOnEnter unmountOnExit in={open} easing={theme.transitions.easing.fastOutSlowIn}>
-        <Details bookingId={client.bookingId} />
-      </Collapse>
+      {client ? (
+        <Collapse mountOnEnter unmountOnExit in={open} easing={theme.transitions.easing.fastOutSlowIn}>
+          <Details bookingId={client.bookingId} />
+        </Collapse>
+      ) : null}
     </Stack>
   );
 }
