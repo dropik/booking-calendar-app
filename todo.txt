@@ -1,4 +1,3 @@
-- Prettier interface.
 - Real API calls.
 - Input escaping.
 - Handle connection errors.
@@ -6,4 +5,3 @@
 - Handle touchscreen.
 - Real-time backend synchronization for updating tiles.
 - Police data sending directly to police web portal??
-- Better transition between calendar tile and expanded tile.
