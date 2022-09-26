@@ -13,7 +13,7 @@ export default function FlexBasisFix({ children }: FlexBasisFixProps): JSX.Eleme
   return (
     <Box sx={{
       flexBasis: anchorElRect && headerRef.current ?
-        `calc(100vh - 2rem - ${anchorElRect.y - (headerRef.current.getBoundingClientRect().height - anchorElRect.height) / 2}px)` :
+        `calc(100vh - 1rem - ${anchorElRect.y - (headerRef.current.getBoundingClientRect().height - anchorElRect.height) / 2}px)` :
         undefined,
       overflow: "visible"
     }}>
