@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
 
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { useAppDispatch } from "../redux/hooks";
 import { addAdjustRequest } from "../redux/layoutSlice";
 import { adjustColumns } from "../redux/tableSlice";
 
 export default function ResizeHandler(): JSX.Element {
   const dispatch = useAppDispatch();
-  const drawerOpened = useAppSelector((state) => state.drawer.open);
 
   useEffect(() => {
     function dispatchAddAdjustRequest(): void {
@@ -14,7 +13,7 @@ export default function ResizeHandler(): JSX.Element {
     }
 
     function dispatchAdjustColumns(): void {
-      dispatch(adjustColumns({ drawerOpened }));
+      dispatch(adjustColumns());
     }
 
     window.addEventListener("resize", dispatchAddAdjustRequest);
@@ -23,7 +22,7 @@ export default function ResizeHandler(): JSX.Element {
       window.removeEventListener("resize", dispatchAddAdjustRequest);
       window.removeEventListener("resize", dispatchAdjustColumns);
     };
-  }, [dispatch, drawerOpened]);
+  }, [dispatch]);
 
   return <></>;
 }

@@ -20,7 +20,7 @@ export type State = {
 function getInitialState(): State {
   const initialDate = Utils.dateToString(new Date());
   const leftmostDate = Utils.getDateShift(initialDate, -3);
-  const columns = getColumnsAmount(false);
+  const columns = getColumnsAmount();
 
   return {
     currentDate: initialDate,
@@ -52,8 +52,8 @@ export const tableSlice = createSlice({
     goPrev: (state) => {
       updateStateByNewDate(state, Utils.getDateShift(state.currentDate, -state.columns));
     },
-    adjustColumns: (state, action: PayloadAction<{ drawerOpened: boolean }>) => {
-      state.columns = getColumnsAmount(action.payload.drawerOpened);
+    adjustColumns: (state) => {
+      state.columns = getColumnsAmount();
       state.lastFetchPeriod.from = state.leftmostDate;
       state.lastFetchPeriod.to = Utils.getDateShift(state.leftmostDate, state.columns - 1);
     }
@@ -71,7 +71,6 @@ function updateStateByNewDate(state: WritableDraft<State>, date: string): void {
   state.lastFetchPeriod.to = Utils.getDateShift(state.leftmostDate, state.columns - 1);
 }
 
-function getColumnsAmount(drawerOpened: boolean): number {
-  const marginLeftRem = (drawerOpened ? 22.5 : 5) + 7.5;
-  return Math.floor(Utils.pxToRem(window.innerWidth - (Utils.remToPx(marginLeftRem) + 1)) / 8);
+function getColumnsAmount(): number {
+  return Math.floor(Utils.pxToRem(window.innerWidth - (Utils.remToPx(12.5) + 1)) / 8);
 }
