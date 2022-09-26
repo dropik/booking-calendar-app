@@ -1,7 +1,6 @@
-import * as Mocks from "./mocks";
-import * as TilesSlice from "./redux/tilesSlice";
 import { HotelData } from "./redux/hotelSlice";
 import { RoomTypeData } from "./redux/roomTypesSlice";
+import { ChangesMap, TileColor, TileData } from "./redux/tilesSlice";
 
 export type CityTaxData = {
   standard: number,
@@ -14,7 +13,7 @@ export type BookingData = {
   name: string,
   from: string,
   to: string,
-  rooms: TilesSlice.TileData[]
+  rooms: TileData[]
 };
 
 export type BookingShortData = {
@@ -23,7 +22,7 @@ export type BookingShortData = {
   from: string,
   to: string,
   occupations: number,
-  color: TilesSlice.TileColor
+  color: TileColor
 };
 
 export type DocumentType = "identityCard" | "drivingLicense" | "passport";
@@ -59,20 +58,11 @@ export function fetchRoomTypesAsync(): Promise<{ data: RoomTypeData }> {
   return fetchJsonDataAsync<RoomTypeData>("/api/get/room-types");
 }
 
-let isTilesFetched = false;
-export function fetchTilesAsync(from: string, to: string): Promise<{ data: TilesSlice.TileData[] }> {
-  console.log(`fetching tiles from ${from} to ${to}...`);
-  return new Promise((resolve) => {
-    if (isTilesFetched) {
-      setTimeout(() => resolve({ data: [] }), 500);
-    } else {
-      setTimeout(() => resolve({ data: Mocks.tiles }), 500);
-    }
-    isTilesFetched = true;
-  });
+export function fetchTilesAsync(from: string, to: string): Promise<{ data: TileData[] }> {
+  return fetchJsonDataAsync<TileData[]>(`/api/get/tiles?from=${from}&to=${to}`);
 }
 
-export function postChangesAsync(changes: TilesSlice.ChangesMap): Promise<{ data: "ok" }> {
+export function postChangesAsync(changes: ChangesMap): Promise<{ data: "ok" }> {
   return new Promise((resolve) => {
     setTimeout(() => resolve({ data: "ok" }), 1000);
   });
