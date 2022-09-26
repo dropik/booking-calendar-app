@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { WritableDraft } from "immer/dist/internal";
 
-import * as Api from "../api";
 import * as Utils from "../utils";
+import { fetchTilesAsync } from "../api";
+import { show as showMessage } from "./snackbarMessageSlice";
 
 import * as TableSlice from "./tableSlice";
 import * as HotelSlice from "./hotelSlice";
@@ -71,9 +72,14 @@ const initialState: State = {
 
 export const fetchAsync = createAsyncThunk(
   "tiles/fetch",
-  async (arg: TableSlice.FetchPeriod) => {
-    const response = await Api.fetchTilesAsync(arg.from, arg.to);
-    return response.data;
+  async (arg: TableSlice.FetchPeriod, thunkApi) => {
+    try {
+      const response = await fetchTilesAsync(arg.from, arg.to);
+      return response.data;
+    } catch(error) {
+      thunkApi.dispatch(showMessage({ type: "error" }));
+      throw thunkApi.rejectWithValue([]);
+    }
   }
 );
 
