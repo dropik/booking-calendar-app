@@ -5,10 +5,23 @@ import { useAppSelector, useLeftmostDate } from "../../redux/hooks";
 import { getCanvasFontSize, getTextWidth } from "./utils";
 import { TableContext } from "../Table/TextWidthCanvas";
 import { TileContext } from "./context";
+import { TileData } from "../../redux/tilesSlice";
 
+export default function Title(): JSX.Element | null {
+  const { data } = useContext(TileContext);
 
-export default function Title(): JSX.Element {
-  const data = useContext(TileContext).data;
+  if (!data) {
+    return null;
+  }
+
+  return <TitleWrappee data={data} />;
+}
+
+type TitleWrappeeProps = {
+  data: TileData
+};
+
+function TitleWrappee({ data }: TitleWrappeeProps): JSX.Element {
   const canvasRef = useContext(TableContext).canvasRef;
   const leftmostDate = useLeftmostDate();
   const adjustLayoutRequestId = useAppSelector((state) => state.layout.adjustLayoutRequestId);

@@ -9,7 +9,20 @@ import { TileContext } from "../../Tile/context";
 
 export default function Error(): JSX.Element | null {
   const { data } = useContext(TileContext);
-  const errorType = useErrorType(data.id);
+
+  if (!data) {
+    return null;
+  }
+
+  return <ErrorWrappee tileId={data.id} />;
+}
+
+type ErrorWrappeeProps = {
+  tileId: string
+};
+
+function ErrorWrappee({ tileId }: ErrorWrappeeProps): JSX.Element | null {
+  const errorType = useErrorType(tileId);
   const { errorColor, errorMsg } = useErrorParams(errorType);
 
   if (errorType === "none") {

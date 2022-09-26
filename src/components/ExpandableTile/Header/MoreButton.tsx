@@ -6,9 +6,13 @@ import { TileContext } from "../../Tile/context";
 import M3IconButton from "../../m3/M3IconButton";
 import TileContextMenu from "../../Menu/TileContextMenu";
 
-export default function MoreButton(): JSX.Element {
+export default function MoreButton(): JSX.Element | null {
   const { data } = useContext(TileContext);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined>(undefined);
+
+  if (!data) {
+    return null;
+  }
 
   function open(event: React.UIEvent<HTMLButtonElement>): void {
     setAnchorEl(event.currentTarget);

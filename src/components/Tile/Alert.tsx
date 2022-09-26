@@ -4,23 +4,39 @@ import Badge from "@mui/material/Badge";
 
 import { useAppSelector } from "../../redux/hooks";
 import { TileContext } from "./context";
+import { TileData } from "../../redux/tilesSlice";
 
 type AlertProps = {
   children: ReactNode
 };
 
 export default function Alert({ children }: AlertProps): JSX.Element {
-  const context = useContext(TileContext);
-  const assignedRoomType = useAssignedRoomType(context.data.roomNumber);
+  const { data } = useContext(TileContext);
+
+  if (!data) {
+    return <>{children}</>;
+  }
+
+  return <AlertWrappee data={data}>{children}</AlertWrappee>;
+}
+
+type AlertWrappeeProps = {
+  children: ReactNode,
+  data: TileData
+}
+
+function AlertWrappee({ children, data }: AlertWrappeeProps): JSX.Element {
+  const { cropRight } = useContext(TileContext);
+  const assignedRoomType = useAssignedRoomType(data.roomNumber);
   const personsInAssignedRoomType = useAppSelector((state) => assignedRoomType ? state.roomTypes.data[assignedRoomType] : undefined);
-  const badgeColor = useBadgeColor(personsInAssignedRoomType, assignedRoomType);
+  const badgeColor = useBadgeColor(data, personsInAssignedRoomType, assignedRoomType);
 
   return (
     <Badge
       anchorOrigin={{
         vertical: "top",
         horizontal: "right",
-        ...(context.cropRight && {
+        ...(cropRight && {
           horizontal: "left"
         })
       }}
@@ -32,7 +48,7 @@ export default function Alert({ children }: AlertProps): JSX.Element {
           backgroundColor: badgeColor,
           top: "0.75rem",
           right: "0.75rem",
-          ...(context.cropRight && {
+          ...(cropRight && {
             right: "auto",
             left: "0.75rem"
           })
@@ -56,14 +72,13 @@ function useAssignedRoomType(roomNumber: number | undefined): string | undefined
   });
 }
 
-function useBadgeColor(personsInAssignedRoomType: number[] | undefined, assignedRoomType: string | undefined): string {
+function useBadgeColor(data: TileData, personsInAssignedRoomType: number[] | undefined, assignedRoomType: string | undefined): string {
   const theme = useTheme();
-  const context = useContext(TileContext);
 
   if (personsInAssignedRoomType) {
-    if (!personsInAssignedRoomType.includes(context.data.persons)) {
+    if (!personsInAssignedRoomType.includes(data.persons)) {
       return theme.palette.error.light;
-    } else if (assignedRoomType !== context.data.roomType) {
+    } else if (assignedRoomType !== data.roomType) {
       return theme.palette.warning.dark;
     }
   }

@@ -26,7 +26,7 @@ export default function ShowBookingButton({ show }: ShowBookingButtonProps): JSX
 
   return (
     <Stack direction="row" justifyContent="end">
-      {show ? (
+      {show && data ? (
         <Link to={`/bookings/${data.bookingId}`} style={{ textDecoration: "none" }}>
           <M3TextButton onClick={() => {
             dispatch(setBookingsFormFrom(data.from));

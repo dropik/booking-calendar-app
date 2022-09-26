@@ -22,8 +22,10 @@ export default function Clients({ clients, setClients }: ClientsProps): JSX.Elem
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetchClientsByTile(data.id);
-        setClients(response.data);
+        if (data) {
+          const response = await fetchClientsByTile(data.id);
+          setClients(response.data);
+        }
       } catch(error) {
         dispatch(showMessage({ type: "error" }));
       }
@@ -31,7 +33,7 @@ export default function Clients({ clients, setClients }: ClientsProps): JSX.Elem
     fetchData();
 
     return () => setClients([]);
-  }, [data.id, dispatch, setClients]);
+  }, [data, dispatch, setClients]);
 
   return (
     <>
