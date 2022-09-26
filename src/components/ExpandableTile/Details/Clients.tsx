@@ -8,6 +8,7 @@ import { useAppDispatch } from "../../../redux/hooks";
 import { TileContext } from "../../Tile/context";
 
 import Client from "./Client";
+import Skeleton from "./Skeleton";
 
 export default function Clients(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -30,7 +31,9 @@ export default function Clients(): JSX.Element {
     <>
       <Typography variant="titleLarge">Ospiti</Typography>
       <Stack spacing={1} sx={{ pr: "1rem", pl: "1rem" }}>
-        {clients.map((client) => <Client key={client.id} client={client} />)}
+        {clients.length > 0 ?
+          clients.map((client) => <Client key={client.id} client={client} />) :
+          <Skeleton />}
       </Stack>
     </>
   );
