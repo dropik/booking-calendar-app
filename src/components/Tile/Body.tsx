@@ -9,7 +9,7 @@ import { TileContext } from "./context";
 export default function Body(): JSX.Element {
   const data = useContext(TileContext).data;
   const canvasRef = useContext(TableContext).canvasRef;
-  const significantEntity = data.entity.replace("Camera ", "").replace("camera ", "");
+  const significantEntity = data ? data.entity.replace("Camera ", "").replace("camera ", "") : "";
   const leftmostDate = useLeftmostDate();
   const adjustLayoutRequestId = useAppSelector((state) => state.layout.adjustLayoutRequestId);
   const bodyRef = useRef<HTMLSpanElement>(null);

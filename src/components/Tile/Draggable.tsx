@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import Box from "@mui/material/Box";
 
 import { useAppDispatch } from "../../redux/hooks";
-import { grab, drop } from "../../redux/tilesSlice";
+import { grab, drop, TileData } from "../../redux/tilesSlice";
 import { TileContext } from "./context";
 
 type DraggableProps = {
@@ -10,8 +10,22 @@ type DraggableProps = {
 };
 
 export default function Draggable({ children }: DraggableProps): JSX.Element {
-  const dispatch = useAppDispatch();
   const data = useContext(TileContext).data;
+
+  if (!data) {
+    return <>{children}</>;
+  }
+
+  return <DraggableWrappee data={data}>{children}</DraggableWrappee>;
+}
+
+type DraggableWrappeeProps = {
+  children: React.ReactNode,
+  data: TileData
+};
+
+function DraggableWrappee({ children, data }: DraggableWrappeeProps): JSX.Element {
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     return () => {

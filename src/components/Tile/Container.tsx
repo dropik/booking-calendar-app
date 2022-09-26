@@ -33,8 +33,8 @@ export default function Container({ children, dropZone }: ContainerProps): JSX.E
           borderTopRightRadius: 0,
           borderBottomRightRadius: 0,
         }),
-        backgroundColor: dropZone === true ? "" : theme.palette[`${data.color}Container`].light,
-        color: dropZone === true ? "" : theme.palette[`on${data.color[0].toUpperCase()}${data.color.substring(1)}Container` as `on${Capitalize<TileColor>}Container`].light,
+        backgroundColor: (!data || dropZone === true) ? "" : theme.palette[`${data.color}Container`].light,
+        color: (!data || dropZone === true) ? "" : theme.palette[`on${data.color[0].toUpperCase()}${data.color.substring(1)}Container` as `on${Capitalize<TileColor>}Container`].light,
         border: dropZone ? `1px dashed ${theme.palette.outline.light}` : null,
         ...(cropRight && {
           borderRight: 0

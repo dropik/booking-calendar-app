@@ -6,7 +6,7 @@ import { TileContext } from "../../Tile/context";
 export default function RoomNumber(): JSX.Element | null {
   const { data } = useContext(TileContext);
 
-  if (data.roomNumber) {
+  if (data && data.roomNumber) {
     return (
       <Typography variant="bodySmall">{`Camera ${data.roomNumber}`}</Typography>
     );

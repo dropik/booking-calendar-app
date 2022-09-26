@@ -2,8 +2,10 @@ import React, { useRef, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import TextField from "@mui/material/TextField";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import { CityTaxData, fetchCityTaxAsync, fetchIstatDataAsync, fetchPoliceDataAsync } from "../../api";
 import * as Utils from "../../utils";
@@ -14,8 +16,7 @@ import DrawerAdjacent from "../m3/DrawerAdjacent";
 import M3DatePicker from "../m3/M3DatePicker";
 import M3TextButton from "../m3/M3TextButton";
 import { SurfaceTint } from "../m3/Tints";
-import CircularProgress from "@mui/material/CircularProgress";
-import Box from "@mui/material/Box";
+import M3Skeleton from "../m3/M3Skeleton";
 
 export default function Tools(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -197,15 +198,15 @@ export default function Tools(): JSX.Element {
                 <Stack spacing={2} sx={{ p: "1rem" }}>
                   <Stack direction="row" spacing={2} justifyContent="space-between" sx={{ pt: "1rem", pb: "1rem" }}>
                     <Typography variant="titleMedium" sx={{ whiteSpace: "nowrap" }}>Regolari</Typography>
-                    <Typography variant="bodyMedium" sx={{ whiteSpace: "nowrap" }}>8 presenze</Typography>
+                    <Typography variant="bodyMedium" sx={{ whiteSpace: "nowrap" }}>{!isCityTaxLoading ? "8 presenze" : <M3Skeleton width="4rem" />}</Typography>
                   </Stack>
                   <Stack direction="row" spacing={2} justifyContent="space-between" sx={{ pt: "1rem", pb: "1rem" }}>
                     <Typography variant="titleMedium" sx={{ whiteSpace: "nowrap" }}>{"Bambini <14"}</Typography>
-                    <Typography variant="bodyMedium" sx={{ whiteSpace: "nowrap" }}>2 presenze</Typography>
+                    <Typography variant="bodyMedium" sx={{ whiteSpace: "nowrap" }}>{!isCityTaxLoading ? "2 presenze" : <M3Skeleton width="4rem" />}</Typography>
                   </Stack>
                   <Stack direction="row" spacing={2} justifyContent="space-between" sx={{ pt: "1rem", pb: "1rem" }}>
                     <Typography variant="titleMedium" sx={{ whiteSpace: "nowrap" }}>{"Permanenze >10 giorni"}</Typography>
-                    <Typography variant="bodyMedium" sx={{ whiteSpace: "nowrap" }}>0 presenze</Typography>
+                    <Typography variant="bodyMedium" sx={{ whiteSpace: "nowrap" }}>{!isCityTaxLoading ? "0 presenze" : <M3Skeleton width="4rem" />}</Typography>
                   </Stack>
                 </Stack>
               </Collapse>

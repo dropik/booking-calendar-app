@@ -29,13 +29,15 @@ export default function ContextTrigger({ children }: ContextTriggerProps): JSX.E
   return (
     <>
       <Box onContextMenu={openContext}>{children}</Box>
-      <TileContextMenu
-        tileId={data.id}
-        anchorReference="anchorPosition"
-        anchorPosition={contextPos}
-        onClose={closeContext}
-        unassigned={data.roomNumber === undefined}
-      />
+      {data ? (
+        <TileContextMenu
+          tileId={data.id}
+          anchorReference="anchorPosition"
+          anchorPosition={contextPos}
+          onClose={closeContext}
+          unassigned={data.roomNumber === undefined}
+        />
+      ) : null}
     </>
   );
 }

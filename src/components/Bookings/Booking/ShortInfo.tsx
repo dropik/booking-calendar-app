@@ -12,7 +12,7 @@ export default function ShortInfo(): JSX.Element {
   const formattedTo = (new Date(booking.to)).toLocaleDateString();
 
   return (
-    <Stack spacing={0} sx={{
+    <Stack sx={{
       flexGrow: 1,
       pt: "1rem",
       pb: "1rem"

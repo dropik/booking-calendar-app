@@ -9,7 +9,6 @@ import drawer from "./drawerSlice";
 import dialog from "./dialogSlice";
 import snackbarMessage from "./snackbarMessageSlice";
 import layout from "./layoutSlice";
-import booking from "./bookingSlice";
 import bookingsForm from "./bookingsFormSlice";
 
 export default combineReducers(
@@ -23,7 +22,6 @@ export default combineReducers(
     dialog,
     snackbarMessage,
     layout,
-    booking,
     bookingsForm
   }
 );

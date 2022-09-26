@@ -19,8 +19,8 @@ const Container = forwardRef<HTMLDivElement, ContainerProps>(function Container(
     <Stack spacing={0} sx={{
       p: "1rem",
       borderRadius: "inherit",
-      backgroundColor: variant === "popup" ? theme.palette[`${data.color}Container`].light : undefined,
-      color: variant === "popup" ? theme.palette[`on${data.color[0].toUpperCase()}${data.color.substring(1)}Container` as `on${Capitalize<TileColor>}Container`].light : undefined
+      backgroundColor: (variant === "popup" && data) ? theme.palette[`${data.color}Container`].light : undefined,
+      color: (variant === "popup" && data) ? theme.palette[`on${data.color[0].toUpperCase()}${data.color.substring(1)}Container` as `on${Capitalize<TileColor>}Container`].light : undefined
     }} ref={ref}>
       {children}
     </Stack>

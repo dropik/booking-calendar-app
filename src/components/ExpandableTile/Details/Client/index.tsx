@@ -14,7 +14,7 @@ type ClientProps = {
 export default function Client({ client }: ClientProps): JSX.Element {
   return (
     <ClientContext.Provider value={client}>
-      <Stack spacing={0}>
+      <Stack>
         <FullName />
         <BirthInfo />
       </Stack>

@@ -1,24 +1,28 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import { fetchBookingById } from "../../api";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { setBookingData, unsetBookingData } from "../../redux/bookingSlice";
+import { BookingData, fetchBookingById } from "../../api";
+import { useAppDispatch } from "../../redux/hooks";
 import { show as showMessage } from "../../redux/snackbarMessageSlice";
 
-import Definer from "../Definer";
 import { TileContext } from "../Tile/context";
 import ExpandableTile from "../ExpandableTile";
+import M3Skeleton from "../m3/M3Skeleton";
 
 export default function BookingDetails(): JSX.Element {
   const theme = useTheme();
   const { bookingId } = useParams();
   const dispatch = useAppDispatch();
-  const data = useAppSelector((state) => state.booking.data);
+  const [booking, setBooking] = useState<BookingData | undefined>(undefined);
+  const skeletonRooms = [0, 1];
+
+  const periodStr = booking ?
+    `${(new Date(booking.from)).toLocaleDateString()} - ${(new Date(booking.to)).toLocaleDateString()}` :
+    undefined;
 
   useEffect(() => {
     let isSubscribed = true;
@@ -29,7 +33,7 @@ export default function BookingDetails(): JSX.Element {
           const response = await fetchBookingById(bookingId);
 
           if (isSubscribed) {
-            dispatch(setBookingData(response.data));
+            setBooking(response.data);
           }
         } catch(error) {
           dispatch(showMessage({ type: "error" }));
@@ -41,7 +45,7 @@ export default function BookingDetails(): JSX.Element {
 
     return () => {
       isSubscribed = false;
-      dispatch(unsetBookingData());
+      setBooking(undefined);
     };
   }, [dispatch, bookingId]);
 
@@ -72,38 +76,26 @@ export default function BookingDetails(): JSX.Element {
           pr: "1rem",
           pl: "1rem"
         }}>
-          <Definer value={data}>
-            {(booking) => {
-              const formattedFrom = (new Date(booking.from)).toLocaleDateString();
-              const formattedTo = (new Date(booking.to)).toLocaleDateString();
-              const periodStr = `${formattedFrom} - ${formattedTo}`;
-
-              return (
-                <>
-                  <Typography variant="titleMedium">{booking.name}</Typography>
-                  <Typography variant="bodySmall">{periodStr}</Typography>
-                </>
-              );
-            }}
-          </Definer>
+          <Typography variant="titleMedium">{booking ? booking.name : <M3Skeleton width="6rem" />}</Typography>
+          <Typography variant="bodySmall">{periodStr ? periodStr : <M3Skeleton width="10rem" />}</Typography>
         </Stack>
       </Box>
-      <Definer value={data}>
-        {(booking) => (
-          <Stack spacing={1} sx={{
-            maxHeight: "calc(100vh - 5rem)",
-            overflowY: "auto",
-            boxSizing: "border-box",
-            pb: "1rem"
-          }}>
-            {booking.rooms.map((room, index) => (
-              <TileContext.Provider key={room.id} value={{ data: room, cropRight: false, cropLeft: false }}>
-                <ExpandableTile variant="in-content" isFirst={index === 0} />
-              </TileContext.Provider>
-            ))}
-          </Stack>
-        )}
-      </Definer>
+      <Stack spacing={1} sx={{
+        maxHeight: "calc(100vh - 5rem)",
+        overflowY: "auto",
+        boxSizing: "border-box",
+        pb: "1rem"
+      }}>
+        {booking ? booking.rooms.map((room, index) => (
+          <TileContext.Provider key={room.id} value={{ data: room, cropRight: false, cropLeft: false }}>
+            <ExpandableTile variant="in-content" isFirst={index === 0} />
+          </TileContext.Provider>
+        )) : skeletonRooms.map((room) => (
+          <TileContext.Provider key={room} value={{ cropRight: false, cropLeft: false }}>
+            <ExpandableTile variant="in-content" isFirst={room === 0} />
+          </TileContext.Provider>
+        ))}
+      </Stack>
     </Stack>
   );
 }
