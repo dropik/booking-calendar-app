@@ -4,7 +4,6 @@ const ReactRefreshTypeScript = require("react-refresh-typescript");
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
-let lastSessionId = 0;
 let lastServedSessionId = "";
 
 module.exports = {
@@ -49,12 +48,9 @@ module.exports = {
     },
     port: 3000,
     hot: true,
-    headers: (req) => {
-      if (req.url === "/") {
-        lastSessionId = Math.floor(Math.random() * 100000);
-      }
+    headers: () => {
       return {
-        "Set-Cookie": `sessionId=${lastSessionId}`
+        "Set-Cookie": `sessionId=${Math.floor(Math.random() * 100000)}`
       };
     },
     setupMiddlewares: (middlewares, devServer) => {
@@ -313,7 +309,6 @@ module.exports = {
           "appartamento":  [3, 4],
         });
       });
-
 
       devServer.app.get("/api/get/tiles", (request, response) => {
         const cookieStr = request.headers["cookie"];
