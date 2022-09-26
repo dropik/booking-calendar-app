@@ -12,12 +12,17 @@ import { show as showMessage } from "../../redux/snackbarMessageSlice";
 import Definer from "../Definer";
 import { TileContext } from "../Tile/context";
 import ExpandableTile from "../ExpandableTile";
+import M3Skeleton from "../m3/M3Skeleton";
 
 export default function BookingDetails(): JSX.Element {
   const theme = useTheme();
   const { bookingId } = useParams();
   const dispatch = useAppDispatch();
   const [booking, setBooking] = useState<BookingData | undefined>(undefined);
+
+  const periodStr = booking ?
+    `${(new Date(booking.from)).toLocaleDateString()} - ${(new Date(booking.to)).toLocaleDateString()}` :
+    undefined;
 
   useEffect(() => {
     let isSubscribed = true;
@@ -71,20 +76,8 @@ export default function BookingDetails(): JSX.Element {
           pr: "1rem",
           pl: "1rem"
         }}>
-          <Definer value={booking}>
-            {(booking) => {
-              const formattedFrom = (new Date(booking.from)).toLocaleDateString();
-              const formattedTo = (new Date(booking.to)).toLocaleDateString();
-              const periodStr = `${formattedFrom} - ${formattedTo}`;
-
-              return (
-                <>
-                  <Typography variant="titleMedium">{booking.name}</Typography>
-                  <Typography variant="bodySmall">{periodStr}</Typography>
-                </>
-              );
-            }}
-          </Definer>
+          <Typography variant="titleMedium">{booking ? booking.name : <M3Skeleton width="6rem" />}</Typography>
+          <Typography variant="bodySmall">{periodStr ? periodStr : <M3Skeleton width="10rem" />}</Typography>
         </Stack>
       </Box>
       <Definer value={booking}>
