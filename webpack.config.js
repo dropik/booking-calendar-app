@@ -77,7 +77,7 @@ module.exports = {
         response.send("Exported!");
       });
 
-      devServer.app.get("/api/calc/tax", (request, response) => {
+      devServer.app.get("/api/calc/tax", (_, response) => {
         response.json({
           standard: 100,
           children: 12,
@@ -85,7 +85,7 @@ module.exports = {
         });
       });
 
-      devServer.app.get("/api/get/booking", (request, response) => {
+      devServer.app.get("/api/get/booking", (_, response) => {
         response.json({
           id: "1",
           name: "Vasya Pupkin",
@@ -120,7 +120,7 @@ module.exports = {
         });
       });
 
-      devServer.app.get("/api/find/bookings", (request, response) => {
+      devServer.app.get("/api/find/bookings", (_, response) => {
         response.json([
           {
             id: "0",
@@ -165,7 +165,7 @@ module.exports = {
         ]);
       });
 
-      devServer.app.get("/api/get/client", (request, response) => {
+      devServer.app.get("/api/get/client", (_, response) => {
         response.json({
           id: "0",
           name: "Ivan",
@@ -184,7 +184,7 @@ module.exports = {
         });
       });
 
-      devServer.app.get("/api/get/clients", (request, response) => {
+      devServer.app.get("/api/get/clients", (_, response) => {
         response.json([
           {
             id: "0",
@@ -209,7 +209,7 @@ module.exports = {
         ]);
       });
 
-      devServer.app.get("/api/find/clients", (request, response) => {
+      devServer.app.get("/api/find/clients", (_, response) => {
         response.json([
           {
             id: "0",
@@ -467,6 +467,10 @@ module.exports = {
         } else {
           response.json([]);
         }
+      });
+
+      devServer.app.post("/api/post/changes", (_, response) => {
+        response.send("ok");
       });
 
       return middlewares;

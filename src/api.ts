@@ -62,10 +62,8 @@ export function fetchTilesAsync(from: string, to: string): Promise<{ data: TileD
   return fetchJsonDataAsync<TileData[]>(`/api/get/tiles?from=${from}&to=${to}`);
 }
 
-export function postChangesAsync(changes: ChangesMap): Promise<{ data: "ok" }> {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve({ data: "ok" }), 1000);
-  });
+export function postChangesAsync(changes: ChangesMap): Promise<void> {
+  return postDataAsync("/api/post/changes", changes);
 }
 
 export async function fetchBookingByTile(tileId: string): Promise<{ data: BookingData }> {
@@ -127,4 +125,26 @@ async function fetchJsonDataAsync<T>(query: string): Promise<{ data: T }> {
   }
   await sleep(500);
   return { data };
+}
+
+async function postDataAsync<T>(url: string, data: T): Promise<void> {
+  const response = await fetch(url, {
+    method: "POST",
+    mode: "cors",
+    cache: "no-cache",
+    credentials: "same-origin",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    redirect: "follow",
+    referrerPolicy: "no-referrer",
+    body: JSON.stringify(data)
+  });
+  if (!response.ok) {
+    throw new Error("Response error");
+  }
+  function sleep(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+  await sleep(500);
 }
