@@ -66,10 +66,6 @@ export function postChangesAsync(changes: ChangesMap): Promise<void> {
   return postDataAsync("/api/post/changes", changes);
 }
 
-export async function fetchBookingByTile(tileId: string): Promise<{ data: BookingData }> {
-  return fetchJsonDataAsync<BookingData>(`/api/get/booking?tileId=${tileId}`);
-}
-
 export async function fetchBookingById(bookingId: string): Promise<{ data: BookingData }> {
   return fetchJsonDataAsync<BookingData>(`/api/get/booking?id=${bookingId}`);
 }
