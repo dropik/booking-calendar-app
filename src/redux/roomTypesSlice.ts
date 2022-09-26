@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import * as Api from "../api";
+import { fetchRoomTypesAsync } from "../api";
+import { show as showMessage } from "./snackbarMessageSlice";
 
 export type RoomTypeData = {
   [key: string]: number[]
@@ -18,9 +19,14 @@ const initialState: State = {
 
 export const fetchAsync = createAsyncThunk(
   "roomTypes/fetch",
-  async () => {
-    const response = await Api.fetchRoomTypesAsync();
-    return response.data;
+  async (_, thunkApi) => {
+    try {
+      const response = await fetchRoomTypesAsync();
+      return response.data;
+    } catch(error) {
+      thunkApi.dispatch(showMessage({ type: "error" }));
+      throw thunkApi.rejectWithValue({});
+    }
   }
 );
 
