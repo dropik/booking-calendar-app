@@ -48,7 +48,11 @@ export const roomTypesSlice = createSlice({
       })
       .addCase(fetchAsync.fulfilled, (state, action) => {
         state.status = "idle";
-        state.data = action.payload;
+        state.data = {};
+        const roomTypes = action.payload;
+        for (const { name, minOccupancy, maxOccupancy } of roomTypes) {
+          state.data[name] = { minOccupancy, maxOccupancy };
+        }
       })
       .addCase(fetchAsync.rejected, (state) => {
         state.status = "failed";

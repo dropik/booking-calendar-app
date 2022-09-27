@@ -35,12 +35,18 @@ export type ClientData = {
   stateOfBirth?: string
 };
 
+export type RoomType = {
+  name: string,
+  minOccupancy: number,
+  maxOccupancy: number,
+};
+
 export function fetchHotelDataAsync(): Promise<{ data: HotelData }> {
   return fetchJsonDataAsync<HotelData>("/api/v1/hotel");
 }
 
-export function fetchRoomTypesAsync(): Promise<{ data: RoomTypes }> {
-  return fetchJsonDataAsync<RoomTypes>("/api/v1/room-types");
+export function fetchRoomTypesAsync(): Promise<{ data: RoomType[] }> {
+  return fetchJsonDataAsync<RoomType[]>("/api/v1/room-types");
 }
 
 export function fetchTilesAsync(from: string, to: string): Promise<{ data: TileData[] }> {

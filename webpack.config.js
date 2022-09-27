@@ -300,32 +300,38 @@ module.exports = {
       });
 
       devServer.app.get("/api/v1/room-types", (_, response) => {
-        response.json({
-          "camera singola": {
+        response.json([
+          {
+            name: "camera singola",
             minOccupancy: 1,
             maxOccupancy: 1
           },
-          "camera matrimoniale/doppia": {
+          {
+            name: "camera matrimoniale/doppia",
             minOccupancy: 1,
             maxOccupancy: 2
           },
-          "camera matrimoniale/doppia economy": {
+          {
+            name: "camera matrimoniale/doppia economy",
             minOccupancy: 1,
             maxOccupancy: 2
           },
-          "camera tripla": {
+          {
+            name: "camera tripla",
             minOccupancy: 2,
             maxOccupancy: 3
           },
-          "camera tripla standard": {
+          {
+            name: "camera tripla standard",
             minOccupancy: 2,
             maxOccupancy: 3
           },
-          "appartamento": {
+          {
+            name: "appartamento",
             minOccupancy: 3,
             maxOccupancy: 4
           },
-        });
+        ]);
       });
 
       devServer.app.get("/api/v1/tiles", (request, response) => {
