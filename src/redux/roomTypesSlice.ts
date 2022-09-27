@@ -3,12 +3,17 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fetchRoomTypesAsync } from "../api";
 import { show as showMessage } from "./snackbarMessageSlice";
 
-export type RoomTypeData = {
-  [key: string]: number[]
+export type RoomType = {
+  minOccupancy: number,
+  maxOccupancy: number
+};
+
+export type RoomTypes = {
+  [key: string]: RoomType
 };
 
 export type State = {
-  data: RoomTypeData,
+  data: RoomTypes,
   status: "idle" | "loading" | "failed"
 };
 
@@ -43,7 +48,11 @@ export const roomTypesSlice = createSlice({
       })
       .addCase(fetchAsync.fulfilled, (state, action) => {
         state.status = "idle";
-        state.data = action.payload;
+        state.data = {};
+        const roomTypes = action.payload;
+        for (const { name, minOccupancy, maxOccupancy } of roomTypes) {
+          state.data[name] = { minOccupancy, maxOccupancy };
+        }
       })
       .addCase(fetchAsync.rejected, (state) => {
         state.status = "failed";

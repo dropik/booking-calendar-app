@@ -1,5 +1,4 @@
 import { HotelData } from "./redux/hotelSlice";
-import { RoomTypeData } from "./redux/roomTypesSlice";
 import { ChangesMap, TileColor, TileData } from "./redux/tilesSlice";
 
 export type CityTaxData = {
@@ -35,12 +34,18 @@ export type ClientData = {
   stateOfBirth?: string
 };
 
+export type RoomType = {
+  name: string,
+  minOccupancy: number,
+  maxOccupancy: number,
+};
+
 export function fetchHotelDataAsync(): Promise<{ data: HotelData }> {
   return fetchJsonDataAsync<HotelData>("/api/v1/hotel");
 }
 
-export function fetchRoomTypesAsync(): Promise<{ data: RoomTypeData }> {
-  return fetchJsonDataAsync<RoomTypeData>("/api/v1/room-types");
+export function fetchRoomTypesAsync(): Promise<{ data: RoomType[] }> {
+  return fetchJsonDataAsync<RoomType[]>("/api/v1/room-types");
 }
 
 export function fetchTilesAsync(from: string, to: string): Promise<{ data: TileData[] }> {
@@ -101,10 +106,6 @@ async function fetchJsonDataAsync<T>(query: string): Promise<{ data: T }> {
   if (!data) {
     throw new Error("Response error");
   }
-  function sleep(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-  await sleep(500);
   return { data };
 }
 
@@ -124,8 +125,4 @@ async function postDataAsync<T>(url: string, data: T): Promise<void> {
   if (!response.ok) {
     throw new Error("Response error");
   }
-  function sleep(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-  await sleep(500);
 }

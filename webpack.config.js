@@ -59,367 +59,413 @@ module.exports = {
       }
 
       devServer.app.get("/api/v1/stats/police", (request, response) => {
-        const date = new Date(request.query["date"]);
-        if (date.getDate() % 2 === 0) {
-          response.send("Exported!");
-        } else {
-          response.send("");
-        }
+        setTimeout(() => {
+          const date = new Date(request.query["date"]);
+          if (date.getDate() % 2 === 0) {
+            response.send("Exported!");
+          } else {
+            response.send("");
+          }
+        }, 500);
       });
 
       devServer.app.get("/api/v1/stats/istat", (request, response) => {
-        response.set("content-type", "application/pdf");
-        response.set("content-disposition", `attachment; filename="istat-${request.query["date"]}.pdf"`);
-        response.send("Exported!");
+        setTimeout(() => {
+          response.set("content-type", "application/pdf");
+          response.set("content-disposition", `attachment; filename="istat-${request.query["date"]}.pdf"`);
+          response.send("Exported!");
+        }, 500);
       });
 
       devServer.app.get("/api/v1/stats/city-tax", (_, response) => {
-        response.json({
-          standard: 100,
-          children: 12,
-          over10Days: 2
-        });
+        setTimeout(() => {
+          response.json({
+            standard: 100,
+            children: 12,
+            over10Days: 2
+          });
+        }, 500);
       });
 
       devServer.app.get("/api/v1/booking", (_, response) => {
-        response.json({
-          id: "1",
-          name: "Vasya Pupkin",
-          from: "2022-02-02",
-          to: "2022-02-05",
-          rooms: [
-            {
-              id: "1",
-              bookingId: "1",
-              name: "Vasya Pupkin",
-              from: "2022-02-02",
-              nights: 3,
-              roomType: "camera matrimoniale/doppia",
-              entity: "camera matrimoniale",
-              persons: 2,
-              color: "booking1",
-              roomNumber: 3
-            },
-            {
-              id: "2",
-              bookingId: "1",
-              name: "Ivan Petrov",
-              from: "2022-02-02",
-              nights: 3,
-              roomType: "camera matrimoniale/doppia",
-              entity: "camera matrimoniale",
-              persons: 2,
-              color: "booking1",
-              roomNumber: 5
-            }
-          ]
-        });
+        setTimeout(() => {
+          response.json({
+            id: "1",
+            name: "Vasya Pupkin",
+            from: "2022-02-02",
+            to: "2022-02-05",
+            rooms: [
+              {
+                id: "1",
+                bookingId: "1",
+                name: "Vasya Pupkin",
+                from: "2022-02-02",
+                nights: 3,
+                roomType: "camera matrimoniale/doppia",
+                entity: "camera matrimoniale",
+                persons: 2,
+                color: "booking1",
+                roomNumber: 3
+              },
+              {
+                id: "2",
+                bookingId: "1",
+                name: "Ivan Petrov",
+                from: "2022-02-02",
+                nights: 3,
+                roomType: "camera matrimoniale/doppia",
+                entity: "camera matrimoniale",
+                persons: 2,
+                color: "booking1",
+                roomNumber: 5
+              }
+            ]
+          });
+        }, 500);
       });
 
       devServer.app.get("/api/v1/booking-short", (_, response) => {
-        response.json({
-          id: "1",
-          name: "Vasya Pupkin",
-          from: "2022-02-02",
-          to: "2022-02-05",
-          occupations: 2,
-          color: "booking1"
-        });
+        setTimeout(() => {
+          response.json({
+            id: "1",
+            name: "Vasya Pupkin",
+            from: "2022-02-02",
+            to: "2022-02-05",
+            occupations: 2,
+            color: "booking1"
+          });
+        }, 500);
       });
 
       devServer.app.get("/api/v1/bookings", (_, response) => {
-        response.json([
-          {
-            id: "0",
-            name: "Ivan Petrov",
-            from: "2022-02-02",
-            to: "2022-02-05",
-            occupations: 1,
-            color: "booking1"
-          },
-          {
-            id: "1",
-            name: "Vasya Pupkin",
-            from: "2022-03-01",
-            to: "2022-03-04",
-            occupations: 2,
-            color: "booking2"
-          },
-          {
-            id: "2",
-            name: "Petr Sidorov",
-            from: "2022-03-16",
-            to: "2022-03-17",
-            occupations: 1,
-            color: "booking3"
-          },
-          {
-            id: "3",
-            name: "Petr Ivanov",
-            from: "2022-04-01",
-            to: "2022-04-03",
-            occupations: 1,
-            color: "booking4"
-          },
-          {
-            id: "4",
-            name: "Kirill Kirilov",
-            from: "2022-04-02",
-            to: "2022-04-03",
-            occupations: 1,
-            color: "booking5"
-          }
-        ]);
-      });
-
-      devServer.app.get("/api/v1/clients", (request, response) => {
-        if (request.query["tileId"]) {
+        setTimeout(() => {
           response.json([
             {
               id: "0",
-              bookingId: "0",
-              name: "Ivan",
-              surname: "Petrov",
-              dateOfBirth: "1986-05-04",
-              placeOfBirth: "Canazei (TN)",
-              stateOfBirth: "Italia"
-            },
-            {
-              id: "1",
-              bookingId: "1",
-              name: "Vasya",
-              surname: "Pupkin",
-              dateOfBirth: "1985-05-06",
-              placeOfBirth: "Canazei (TN)",
-              stateOfBirth: "Italia"
-            }
-          ]);
-        } else {
-          response.json([
-            {
-              id: "0",
-              bookingId: "0",
-              name: "Ivan",
-              surname: "Petrov",
-              dateOfBirth: "1986-05-04",
-              placeOfBirth: "Canazei (TN)",
-              stateOfBirth: "Italia"
-            },
-            {
-              id: "1",
-              name: "Vasya",
-              bookingId: "1",
-              surname: "Pupkin",
-              dateOfBirth: "1985-05-06",
-              placeOfBirth: "Canazei (TN)",
-              stateOfBirth: "Italia"
-            },
-            {
-              id: "2",
-              bookingId: "2",
-              name: "Ilja",
-              surname: "Maksimov",
-              dateOfBirth: "1985-05-06",
-              stateOfBirth: "Russia"
-            },
-            {
-              id: "3",
-              bookingId: "2",
-              name: "Stepan",
-              surname: "Ogurzov",
-              dateOfBirth: "1985-05-06",
-              stateOfBirth: "Russia"
-            }
-          ]);
-        }
-      });
-
-      devServer.app.get("/api/v1/hotel", (_, response) => {
-        response.json({
-          floors: [
-            {
-              name: "piano 1",
-              rooms: [
-                {
-                  number: 1,
-                  type: "camera tripla standard",
-                },
-                {
-                  number: 2,
-                  type: "appartamento",
-                },
-                {
-                  number: 3,
-                  type: "camera matrimoniale/doppia",
-                },
-                {
-                  number: 4,
-                  type: "camera tripla",
-                },
-                {
-                  number: 5,
-                  type: "camera matrimoniale/doppia",
-                },
-              ],
-            },
-            {
-              name: "piano 2",
-              rooms: [
-                {
-                  number: 6,
-                  type: "camera matrimoniale/doppia",
-                },
-                {
-                  number: 7,
-                  type: "camera matrimoniale/doppia",
-                },
-                {
-                  number: 8,
-                  type: "camera singola",
-                },
-                {
-                  number: 9,
-                  type: "camera matrimoniale/doppia",
-                },
-                {
-                  number: 10,
-                  type: "camera matrimoniale/doppia economy",
-                },
-                {
-                  number: 11,
-                  type: "camera tripla",
-                },
-                {
-                  number: 12,
-                  type: "camera matrimoniale/doppia",
-                },
-              ],
-            },
-          ]
-        });
-      });
-
-      devServer.app.get("/api/v1/room-types", (_, response) => {
-        response.json({
-          "camera singola": [1],
-          "camera matrimoniale/doppia":  [1, 2],
-          "camera matrimoniale/doppia economy":  [1, 2],
-          "camera tripla":  [2, 3],
-          "camera tripla standard":  [2, 3],
-          "appartamento":  [3, 4],
-        });
-      });
-
-      devServer.app.get("/api/v1/tiles", (request, response) => {
-        const cookieStr = request.headers["cookie"];
-        const cookieSplit = cookieStr.split("=");
-        const sessionId = cookieSplit[1];
-
-        if (sessionId !== lastServedSessionId) {
-          response.json([
-            {
-              id: "0",
-              bookingId: "0",
-              name: "Petr Ivanov",
-              from: "2022-02-15",
-              nights: 40,
-              roomType: "camera matrimoniale/doppia",
-              entity: "camera doppia",
-              persons: 2,
-              color: "booking1",
-              roomNumber: 3
-            },
-            {
-              id: "1",
-              bookingId: "1",
               name: "Ivan Petrov",
-              from: "2022-02-25",
-              nights: 2,
-              roomType: "camera matrimoniale/doppia",
-              entity: "camera doppia",
-              persons: 2,
-              color: "booking2",
-              roomNumber: 2
+              from: "2022-02-02",
+              to: "2022-02-05",
+              occupations: 1,
+              color: "booking1"
+            },
+            {
+              id: "1",
+              name: "Vasya Pupkin",
+              from: "2022-03-01",
+              to: "2022-03-04",
+              occupations: 2,
+              color: "booking2"
             },
             {
               id: "2",
-              bookingId: "2",
-              name: "Vasya Pupkin",
-              from: "2022-02-20",
-              nights: 3,
-              roomType: "camera matrimoniale/doppia",
-              entity: "camera doppia",
-              persons: 2,
-              color: "booking3",
-              roomNumber: 6
+              name: "Petr Sidorov",
+              from: "2022-03-16",
+              to: "2022-03-17",
+              occupations: 1,
+              color: "booking3"
             },
             {
               id: "3",
-              bookingId: "3",
-              name: "Petr Petrov",
-              from: "2022-03-01",
-              nights: 4,
-              roomType: "camera tripla",
-              entity: "camera tripla",
-              persons: 3,
+              name: "Petr Ivanov",
+              from: "2022-04-01",
+              to: "2022-04-03",
+              occupations: 1,
               color: "booking4"
             },
             {
               id: "4",
-              bookingId: "4",
-              name: "Ivan Vasiliev",
-              from: "2022-02-28",
-              nights: 4,
-              roomType: "camera singola",
-              entity: "camera singola",
-              persons: 1,
+              name: "Kirill Kirilov",
+              from: "2022-04-02",
+              to: "2022-04-03",
+              occupations: 1,
               color: "booking5"
-            },
-            {
-              id: "5",
-              bookingId: "5",
-              name: "Vasya Ivanov",
-              from: "2022-03-01",
-              nights: 60,
-              roomType: "camera matrimoniale/doppia",
-              entity: "camera doppia",
-              persons: 2,
-              color: "booking6"
-            },
-            {
-              id: "6",
-              bookingId: "1",
-              name: "Sasha Smirnov",
-              from: "2022-02-25",
-              nights: 2,
-              roomType: "camera matrimoniale/doppia",
-              entity: "camera doppia",
-              persons: 2,
-              color: "booking2",
-              roomNumber: 5
-            },
-            {
-              id: "7",
-              bookingId: "7",
-              name: "Sasha Smirnov",
-              from: "2022-02-23",
-              nights: 2,
-              roomType: "camera matrimoniale/doppia",
-              entity: "camera doppia",
-              persons: 2,
-              color: "booking3",
-              roomNumber: 5
             }
           ]);
+        }, 500);
+      });
 
-          lastServedSessionId = sessionId;
-        } else {
-          response.json([]);
-        }
+      devServer.app.get("/api/v1/clients", (request, response) => {
+        setTimeout(() => {
+          if (request.query["tileId"]) {
+            response.json([
+              {
+                id: "0",
+                bookingId: "0",
+                name: "Ivan",
+                surname: "Petrov",
+                dateOfBirth: "1986-05-04",
+                placeOfBirth: "Canazei (TN)",
+                stateOfBirth: "Italia"
+              },
+              {
+                id: "1",
+                bookingId: "1",
+                name: "Vasya",
+                surname: "Pupkin",
+                dateOfBirth: "1985-05-06",
+                placeOfBirth: "Canazei (TN)",
+                stateOfBirth: "Italia"
+              }
+            ]);
+          } else {
+            response.json([
+              {
+                id: "0",
+                bookingId: "0",
+                name: "Ivan",
+                surname: "Petrov",
+                dateOfBirth: "1986-05-04",
+                placeOfBirth: "Canazei (TN)",
+                stateOfBirth: "Italia"
+              },
+              {
+                id: "1",
+                name: "Vasya",
+                bookingId: "1",
+                surname: "Pupkin",
+                dateOfBirth: "1985-05-06",
+                placeOfBirth: "Canazei (TN)",
+                stateOfBirth: "Italia"
+              },
+              {
+                id: "2",
+                bookingId: "2",
+                name: "Ilja",
+                surname: "Maksimov",
+                dateOfBirth: "1985-05-06",
+                stateOfBirth: "Russia"
+              },
+              {
+                id: "3",
+                bookingId: "2",
+                name: "Stepan",
+                surname: "Ogurzov",
+                dateOfBirth: "1985-05-06",
+                stateOfBirth: "Russia"
+              }
+            ]);
+          }
+        }, 500);
+      });
+
+      devServer.app.get("/api/v1/hotel", (_, response) => {
+        setTimeout(() => {
+          response.json({
+            floors: [
+              {
+                name: "piano 1",
+                rooms: [
+                  {
+                    number: 1,
+                    type: "camera tripla standard",
+                  },
+                  {
+                    number: 2,
+                    type: "appartamento",
+                  },
+                  {
+                    number: 3,
+                    type: "camera matrimoniale/doppia",
+                  },
+                  {
+                    number: 4,
+                    type: "camera tripla",
+                  },
+                  {
+                    number: 5,
+                    type: "camera matrimoniale/doppia",
+                  },
+                ],
+              },
+              {
+                name: "piano 2",
+                rooms: [
+                  {
+                    number: 6,
+                    type: "camera matrimoniale/doppia",
+                  },
+                  {
+                    number: 7,
+                    type: "camera matrimoniale/doppia",
+                  },
+                  {
+                    number: 8,
+                    type: "camera singola",
+                  },
+                  {
+                    number: 9,
+                    type: "camera matrimoniale/doppia",
+                  },
+                  {
+                    number: 10,
+                    type: "camera matrimoniale/doppia economy",
+                  },
+                  {
+                    number: 11,
+                    type: "camera tripla",
+                  },
+                  {
+                    number: 12,
+                    type: "camera matrimoniale/doppia",
+                  },
+                ],
+              },
+            ]
+          });
+        }, 500);
+      });
+
+      devServer.app.get("/api/v1/room-types", (_, response) => {
+        setTimeout(() => {
+          response.json([
+            {
+              name: "camera singola",
+              minOccupancy: 1,
+              maxOccupancy: 1
+            },
+            {
+              name: "camera matrimoniale/doppia",
+              minOccupancy: 1,
+              maxOccupancy: 2
+            },
+            {
+              name: "camera matrimoniale/doppia economy",
+              minOccupancy: 1,
+              maxOccupancy: 2
+            },
+            {
+              name: "camera tripla",
+              minOccupancy: 2,
+              maxOccupancy: 3
+            },
+            {
+              name: "camera tripla standard",
+              minOccupancy: 2,
+              maxOccupancy: 3
+            },
+            {
+              name: "appartamento",
+              minOccupancy: 3,
+              maxOccupancy: 4
+            },
+          ]);
+        }, 500);
+      });
+
+      devServer.app.get("/api/v1/tiles", (request, response) => {
+        setTimeout(() => {
+          const cookieStr = request.headers["cookie"];
+          const cookieSplit = cookieStr.split("=");
+          const sessionId = cookieSplit[1];
+
+          if (sessionId !== lastServedSessionId) {
+            response.json([
+              {
+                id: "0",
+                bookingId: "0",
+                name: "Petr Ivanov",
+                from: "2022-02-15",
+                nights: 40,
+                roomType: "camera matrimoniale/doppia",
+                entity: "camera doppia",
+                persons: 2,
+                color: "booking1",
+                roomNumber: 3
+              },
+              {
+                id: "1",
+                bookingId: "1",
+                name: "Ivan Petrov",
+                from: "2022-02-25",
+                nights: 2,
+                roomType: "camera matrimoniale/doppia",
+                entity: "camera doppia",
+                persons: 2,
+                color: "booking2",
+                roomNumber: 2
+              },
+              {
+                id: "2",
+                bookingId: "2",
+                name: "Vasya Pupkin",
+                from: "2022-02-20",
+                nights: 3,
+                roomType: "camera matrimoniale/doppia",
+                entity: "camera doppia",
+                persons: 2,
+                color: "booking3",
+                roomNumber: 6
+              },
+              {
+                id: "3",
+                bookingId: "3",
+                name: "Petr Petrov",
+                from: "2022-03-01",
+                nights: 4,
+                roomType: "camera tripla",
+                entity: "camera tripla",
+                persons: 3,
+                color: "booking4"
+              },
+              {
+                id: "4",
+                bookingId: "4",
+                name: "Ivan Vasiliev",
+                from: "2022-02-28",
+                nights: 4,
+                roomType: "camera singola",
+                entity: "camera singola",
+                persons: 1,
+                color: "booking5"
+              },
+              {
+                id: "5",
+                bookingId: "5",
+                name: "Vasya Ivanov",
+                from: "2022-03-01",
+                nights: 60,
+                roomType: "camera matrimoniale/doppia",
+                entity: "camera doppia",
+                persons: 2,
+                color: "booking6"
+              },
+              {
+                id: "6",
+                bookingId: "1",
+                name: "Sasha Smirnov",
+                from: "2022-02-25",
+                nights: 2,
+                roomType: "camera matrimoniale/doppia",
+                entity: "camera doppia",
+                persons: 2,
+                color: "booking2",
+                roomNumber: 5
+              },
+              {
+                id: "7",
+                bookingId: "7",
+                name: "Sasha Smirnov",
+                from: "2022-02-23",
+                nights: 2,
+                roomType: "camera matrimoniale/doppia",
+                entity: "camera doppia",
+                persons: 2,
+                color: "booking3",
+                roomNumber: 5
+              }
+            ]);
+
+            lastServedSessionId = sessionId;
+          } else {
+            response.json([]);
+          }
+        }, 500);
       });
 
       devServer.app.post("/api/v1/changes", (_, response) => {
-        response.send("ok");
+        setTimeout(() => {
+          response.send("ok");
+        }, 500);
       });
 
       return middlewares;

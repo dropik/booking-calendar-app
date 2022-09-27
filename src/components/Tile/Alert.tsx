@@ -5,6 +5,7 @@ import Badge from "@mui/material/Badge";
 import { useAppSelector } from "../../redux/hooks";
 import { TileContext } from "./context";
 import { TileData } from "../../redux/tilesSlice";
+import { RoomType } from "../../redux/roomTypesSlice";
 
 type AlertProps = {
   children: ReactNode
@@ -28,8 +29,8 @@ type AlertWrappeeProps = {
 function AlertWrappee({ children, data }: AlertWrappeeProps): JSX.Element {
   const { cropRight } = useContext(TileContext);
   const assignedRoomType = useAssignedRoomType(data.roomNumber);
-  const personsInAssignedRoomType = useAppSelector((state) => assignedRoomType ? state.roomTypes.data[assignedRoomType] : undefined);
-  const badgeColor = useBadgeColor(data, personsInAssignedRoomType, assignedRoomType);
+  const occupancy = useAppSelector((state) => assignedRoomType ? state.roomTypes.data[assignedRoomType] : undefined);
+  const badgeColor = useBadgeColor(data, occupancy, assignedRoomType);
 
   return (
     <Badge
@@ -72,11 +73,11 @@ function useAssignedRoomType(roomNumber: number | undefined): string | undefined
   });
 }
 
-function useBadgeColor(data: TileData, personsInAssignedRoomType: number[] | undefined, assignedRoomType: string | undefined): string {
+function useBadgeColor(data: TileData, occupancy: RoomType | undefined, assignedRoomType: string | undefined): string {
   const theme = useTheme();
 
-  if (personsInAssignedRoomType) {
-    if (!personsInAssignedRoomType.includes(data.persons)) {
+  if (occupancy) {
+    if ((data.persons < occupancy.minOccupancy) || (data.persons > occupancy.maxOccupancy)) {
       return theme.palette.error.light;
     } else if (assignedRoomType !== data.roomType) {
       return theme.palette.warning.dark;
