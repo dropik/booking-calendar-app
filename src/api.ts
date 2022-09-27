@@ -1,5 +1,4 @@
 import { HotelData } from "./redux/hotelSlice";
-import { RoomTypes } from "./redux/roomTypesSlice";
 import { ChangesMap, TileColor, TileData } from "./redux/tilesSlice";
 
 export type CityTaxData = {
@@ -107,10 +106,6 @@ async function fetchJsonDataAsync<T>(query: string): Promise<{ data: T }> {
   if (!data) {
     throw new Error("Response error");
   }
-  function sleep(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-  await sleep(500);
   return { data };
 }
 
@@ -130,8 +125,4 @@ async function postDataAsync<T>(url: string, data: T): Promise<void> {
   if (!response.ok) {
     throw new Error("Response error");
   }
-  function sleep(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-  await sleep(500);
 }
