@@ -1,3 +1,2 @@
 - Handle touchscreen.
-- Real-time backend synchronization for updating tiles.
 - Police data sending directly to police web portal??
