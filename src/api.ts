@@ -1,5 +1,5 @@
 import { HotelData } from "./redux/hotelSlice";
-import { RoomTypeData } from "./redux/roomTypesSlice";
+import { RoomTypes } from "./redux/roomTypesSlice";
 import { ChangesMap, TileColor, TileData } from "./redux/tilesSlice";
 
 export type CityTaxData = {
@@ -39,8 +39,8 @@ export function fetchHotelDataAsync(): Promise<{ data: HotelData }> {
   return fetchJsonDataAsync<HotelData>("/api/v1/hotel");
 }
 
-export function fetchRoomTypesAsync(): Promise<{ data: RoomTypeData }> {
-  return fetchJsonDataAsync<RoomTypeData>("/api/v1/room-types");
+export function fetchRoomTypesAsync(): Promise<{ data: RoomTypes }> {
+  return fetchJsonDataAsync<RoomTypes>("/api/v1/room-types");
 }
 
 export function fetchTilesAsync(from: string, to: string): Promise<{ data: TileData[] }> {

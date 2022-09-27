@@ -301,12 +301,30 @@ module.exports = {
 
       devServer.app.get("/api/v1/room-types", (_, response) => {
         response.json({
-          "camera singola": [1],
-          "camera matrimoniale/doppia":  [1, 2],
-          "camera matrimoniale/doppia economy":  [1, 2],
-          "camera tripla":  [2, 3],
-          "camera tripla standard":  [2, 3],
-          "appartamento":  [3, 4],
+          "camera singola": {
+            minOccupancy: 1,
+            maxOccupancy: 1
+          },
+          "camera matrimoniale/doppia": {
+            minOccupancy: 1,
+            maxOccupancy: 2
+          },
+          "camera matrimoniale/doppia economy": {
+            minOccupancy: 1,
+            maxOccupancy: 2
+          },
+          "camera tripla": {
+            minOccupancy: 2,
+            maxOccupancy: 3
+          },
+          "camera tripla standard": {
+            minOccupancy: 2,
+            maxOccupancy: 3
+          },
+          "appartamento": {
+            minOccupancy: 3,
+            maxOccupancy: 4
+          },
         });
       });
 

@@ -63,9 +63,9 @@ export function useErrorType(id: string): "none" | "warning" | "error" {
           break;
         }
       }
-      const roomTypeAcceptedPersonsCount = state.roomTypes.data[assignedRoomType];
-      if (roomTypeAcceptedPersonsCount) {
-        if (!roomTypeAcceptedPersonsCount.includes(data.persons)) {
+      const occupancy = state.roomTypes.data[assignedRoomType];
+      if (occupancy) {
+        if ((data.persons < occupancy.minOccupancy) || (data.persons > occupancy.maxOccupancy)) {
           return "error";
         }
       }
