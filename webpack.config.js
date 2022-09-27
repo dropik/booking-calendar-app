@@ -58,7 +58,7 @@ module.exports = {
         throw new Error("webpack-dev-server is not defined");
       }
 
-      devServer.app.get("/api/export/police", (request, response) => {
+      devServer.app.get("/api/v1/stats/police", (request, response) => {
         const date = new Date(request.query["date"]);
         if (date.getDate() % 2 === 0) {
           response.send("Exported!");
@@ -67,13 +67,13 @@ module.exports = {
         }
       });
 
-      devServer.app.get("/api/export/istat", (request, response) => {
+      devServer.app.get("/api/v1/stats/istat", (request, response) => {
         response.set("content-type", "application/pdf");
         response.set("content-disposition", `attachment; filename="istat-${request.query["date"]}.pdf"`);
         response.send("Exported!");
       });
 
-      devServer.app.get("/api/calc/tax", (_, response) => {
+      devServer.app.get("/api/v1/stats/city-tax", (_, response) => {
         response.json({
           standard: 100,
           children: 12,
@@ -81,7 +81,7 @@ module.exports = {
         });
       });
 
-      devServer.app.get("/api/get/booking", (_, response) => {
+      devServer.app.get("/api/v1/booking", (_, response) => {
         response.json({
           id: "1",
           name: "Vasya Pupkin",
@@ -116,7 +116,7 @@ module.exports = {
         });
       });
 
-      devServer.app.get("/api/get/booking-short", (_, response) => {
+      devServer.app.get("/api/v1/booking-short", (_, response) => {
         response.json({
           id: "1",
           name: "Vasya Pupkin",
@@ -127,7 +127,7 @@ module.exports = {
         });
       });
 
-      devServer.app.get("/api/find/bookings", (_, response) => {
+      devServer.app.get("/api/v1/bookings", (_, response) => {
         response.json([
           {
             id: "0",
@@ -172,69 +172,69 @@ module.exports = {
         ]);
       });
 
-      devServer.app.get("/api/get/clients", (_, response) => {
-        response.json([
-          {
-            id: "0",
-            bookingId: "0",
-            name: "Ivan",
-            surname: "Petrov",
-            dateOfBirth: "1986-05-04",
-            placeOfBirth: "Canazei (TN)",
-            stateOfBirth: "Italia"
-          },
-          {
-            id: "1",
-            bookingId: "1",
-            name: "Vasya",
-            surname: "Pupkin",
-            dateOfBirth: "1985-05-06",
-            placeOfBirth: "Canazei (TN)",
-            stateOfBirth: "Italia"
-          }
-        ]);
+      devServer.app.get("/api/v1/clients", (request, response) => {
+        if (request.query["tileId"]) {
+          response.json([
+            {
+              id: "0",
+              bookingId: "0",
+              name: "Ivan",
+              surname: "Petrov",
+              dateOfBirth: "1986-05-04",
+              placeOfBirth: "Canazei (TN)",
+              stateOfBirth: "Italia"
+            },
+            {
+              id: "1",
+              bookingId: "1",
+              name: "Vasya",
+              surname: "Pupkin",
+              dateOfBirth: "1985-05-06",
+              placeOfBirth: "Canazei (TN)",
+              stateOfBirth: "Italia"
+            }
+          ]);
+        } else {
+          response.json([
+            {
+              id: "0",
+              bookingId: "0",
+              name: "Ivan",
+              surname: "Petrov",
+              dateOfBirth: "1986-05-04",
+              placeOfBirth: "Canazei (TN)",
+              stateOfBirth: "Italia"
+            },
+            {
+              id: "1",
+              name: "Vasya",
+              bookingId: "1",
+              surname: "Pupkin",
+              dateOfBirth: "1985-05-06",
+              placeOfBirth: "Canazei (TN)",
+              stateOfBirth: "Italia"
+            },
+            {
+              id: "2",
+              bookingId: "2",
+              name: "Ilja",
+              surname: "Maksimov",
+              dateOfBirth: "1985-05-06",
+              stateOfBirth: "Russia"
+            },
+            {
+              id: "3",
+              bookingId: "2",
+              name: "Stepan",
+              surname: "Ogurzov",
+              dateOfBirth: "1985-05-06",
+              stateOfBirth: "Russia"
+            }
+          ]);
+        }
       });
 
-      devServer.app.get("/api/find/clients", (_, response) => {
-        response.json([
-          {
-            id: "0",
-            bookingId: "0",
-            name: "Ivan",
-            surname: "Petrov",
-            dateOfBirth: "1986-05-04",
-            placeOfBirth: "Canazei (TN)",
-            stateOfBirth: "Italia"
-          },
-          {
-            id: "1",
-            name: "Vasya",
-            bookingId: "1",
-            surname: "Pupkin",
-            dateOfBirth: "1985-05-06",
-            placeOfBirth: "Canazei (TN)",
-            stateOfBirth: "Italia"
-          },
-          {
-            id: "2",
-            bookingId: "2",
-            name: "Ilja",
-            surname: "Maksimov",
-            dateOfBirth: "1985-05-06",
-            stateOfBirth: "Russia"
-          },
-          {
-            id: "3",
-            bookingId: "2",
-            name: "Stepan",
-            surname: "Ogurzov",
-            dateOfBirth: "1985-05-06",
-            stateOfBirth: "Russia"
-          }
-        ]);
-      });
-
-      devServer.app.get("/api/get/hotel", (_, response) => {
+      devServer.app.get("/api/v1/hotel", (_, response) => {
         response.json({
           floors: [
             {
@@ -299,7 +299,7 @@ module.exports = {
         });
       });
 
-      devServer.app.get("/api/get/room-types", (_, response) => {
+      devServer.app.get("/api/v1/room-types", (_, response) => {
         response.json({
           "camera singola": [1],
           "camera matrimoniale/doppia":  [1, 2],
@@ -310,7 +310,7 @@ module.exports = {
         });
       });
 
-      devServer.app.get("/api/get/tiles", (request, response) => {
+      devServer.app.get("/api/v1/tiles", (request, response) => {
         const cookieStr = request.headers["cookie"];
         const cookieSplit = cookieStr.split("=");
         const sessionId = cookieSplit[1];
@@ -418,7 +418,7 @@ module.exports = {
         }
       });
 
-      devServer.app.post("/api/post/changes", (_, response) => {
+      devServer.app.post("/api/v1/changes", (_, response) => {
         response.send("ok");
       });
 

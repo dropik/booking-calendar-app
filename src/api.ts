@@ -36,51 +36,51 @@ export type ClientData = {
 };
 
 export function fetchHotelDataAsync(): Promise<{ data: HotelData }> {
-  return fetchJsonDataAsync<HotelData>("/api/get/hotel");
+  return fetchJsonDataAsync<HotelData>("/api/v1/hotel");
 }
 
 export function fetchRoomTypesAsync(): Promise<{ data: RoomTypeData }> {
-  return fetchJsonDataAsync<RoomTypeData>("/api/get/room-types");
+  return fetchJsonDataAsync<RoomTypeData>("/api/v1/room-types");
 }
 
 export function fetchTilesAsync(from: string, to: string): Promise<{ data: TileData[] }> {
-  return fetchJsonDataAsync<TileData[]>(`/api/get/tiles?from=${from}&to=${to}`);
+  return fetchJsonDataAsync<TileData[]>(`/api/v1/tiles?from=${from}&to=${to}`);
 }
 
 export function postChangesAsync(changes: ChangesMap): Promise<void> {
-  return postDataAsync("/api/post/changes", changes);
+  return postDataAsync("/api/v1/changes", changes);
 }
 
 export async function fetchBookingById(bookingId: string): Promise<{ data: BookingData }> {
-  return fetchJsonDataAsync<BookingData>(`/api/get/booking?id=${bookingId}`);
+  return fetchJsonDataAsync<BookingData>(`/api/v1/booking?id=${bookingId}`);
 }
 
 export async function fetchBookingShortById(bookingId: string): Promise<{ data: BookingShortData}> {
-  return fetchJsonDataAsync<BookingShortData>(`/api/get/booking-short?id=${bookingId}`);
+  return fetchJsonDataAsync<BookingShortData>(`/api/v1/booking-short?id=${bookingId}`);
 }
 
 export async function fetchClientsByTile(tileId: string): Promise<{ data: ClientData[] }> {
-  return fetchJsonDataAsync<ClientData[]>(`/api/get/clients?tileId=${tileId}`);
+  return fetchJsonDataAsync<ClientData[]>(`/api/v1/clients?tileId=${tileId}`);
 }
 
 export async function fetchPoliceDataAsync(date: string): Promise<{ data: Blob }> {
-  return fetchBlobDataAsync(`/api/export/police?date=${date}`);
+  return fetchBlobDataAsync(`/api/v1/stats/police?date=${date}`);
 }
 
 export async function fetchIstatDataAsync(date: string): Promise<{ data: Blob }> {
-  return fetchBlobDataAsync(`/api/export/istat?date=${date}`);
+  return fetchBlobDataAsync(`/api/v1/stats/istat?date=${date}`);
 }
 
 export async function fetchCityTaxAsync(from: string, to: string): Promise<{ data: CityTaxData }> {
-  return fetchJsonDataAsync<CityTaxData>(`/api/calc/tax?from=${from}&to=${to}`);
+  return fetchJsonDataAsync<CityTaxData>(`/api/v1/stats/city-tax?from=${from}&to=${to}`);
 }
 
 export async function fetchBookings(nameOrId: string, from: string, to: string): Promise<{ data: BookingShortData[] }> {
-  return fetchJsonDataAsync<BookingShortData[]>(`/api/find/bookings?nameOrId=${nameOrId}&from=${from}&to=${to}`);
+  return fetchJsonDataAsync<BookingShortData[]>(`/api/v1/bookings?nameOrId=${nameOrId}&from=${from}&to=${to}`);
 }
 
 export async function fetchClients(query: string): Promise<{ data: ClientData[] }> {
-  return fetchJsonDataAsync<ClientData[]>(`/api/find/clients?query=${query}`);
+  return fetchJsonDataAsync<ClientData[]>(`/api/v1/clients?query=${query}`);
 }
 
 async function fetchBlobDataAsync(query: string): Promise<{ data: Blob }> {
