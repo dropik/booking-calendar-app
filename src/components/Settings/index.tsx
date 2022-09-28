@@ -31,7 +31,7 @@ export default function Settings(): JSX.Element {
   return (
     <DrawerAdjacent>
       <Stack spacing={2} sx={{ pr: "1rem", pb: "1rem" }}>
-        <Typography variant="displayMedium" sx={{ pt: "4rem", pl: "1rem" }}>Piani</Typography>
+        <Typography variant="displayLarge" sx={{ pt: "4rem", pl: "1rem" }}>Piani</Typography>
         <Stack spacing={3}>
           {floorsReady ?
             floorIds.map((floorId) => {
