@@ -13,6 +13,7 @@ import DrawerAdjacent from "../m3/DrawerAdjacent";
 import M3IconButton from "../m3/M3IconButton";
 import CreateFloorDialog from "./CreateFloorDialog";
 import Skeleton from "./Skeleton";
+import Room from "./Room";
 import { SurfaceTint } from "../m3/Tints";
 import M3FilledButton from "../m3/M3FilledButton";
 
@@ -60,50 +61,7 @@ export default function Settings(): JSX.Element {
                     }} />
                   </Paper>
                   <Stack>
-                    {roomIds.map((roomId) => {
-                      const room = floor.rooms[roomId];
-                      const roomType = `${room.type[0].toLocaleUpperCase()}${room.type.slice(1)}`;
-
-                      return (
-                        <Stack key={roomId} direction="row" sx={{
-                          borderBottom: `1px solid ${theme.palette.outline.light}`,
-                          p: "1rem",
-                          justifyContent: "space-between",
-                          alignItems: "center"
-                        }}>
-                          <Stack direction="row" alignItems="center">
-                            <Stack direction="row" sx={{ flexBasis: "10rem", flexShrink: 0 }}>
-                              <Typography variant="titleLarge">{`Camera ${room.number}`}</Typography>
-                            </Stack>
-                            <Stack direction="row" spacing={1}>
-                              <M3IconButton sx={{
-                                borderRadius: "1.25rem",
-                                border: `1px solid ${theme.palette.outline.light}`
-                              }}>
-                                <EditOutlinedIcon />
-                              </M3IconButton>
-                              <M3IconButton sx={{
-                                borderRadius: "1.25rem",
-                                border: `1px solid ${theme.palette.outline.light}`
-                              }}>
-                                <DeleteOutlineOutlinedIcon />
-                              </M3IconButton>
-                            </Stack>
-                          </Stack>
-                          <Stack direction="row" sx={{
-                            borderRadius: "0.5rem",
-                            border: `1px solid ${theme.palette.outline.light}`,
-                            height: "2rem",
-                            boxSizing: "border-box",
-                            alignItems: "center",
-                            pl: "1rem",
-                            pr: "1rem"
-                          }}>
-                            <Typography variant="labelLarge">{roomType}</Typography>
-                          </Stack>
-                        </Stack>
-                      );
-                    })}
+                    {roomIds.map((roomId) => <Room key={roomId} id={roomId} />)}
                   </Stack>
                 </Stack>
               );

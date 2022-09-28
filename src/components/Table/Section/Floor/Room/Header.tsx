@@ -1,7 +1,7 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 
-import { Room } from "../../../../../redux/floorsSlice";
+import { Room } from "../../../../../redux/roomsSlice";
 import RowHeader from "../../Row/Header";
 
 type HeaderProps = {
