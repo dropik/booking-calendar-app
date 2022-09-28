@@ -5,6 +5,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 import M3Skeleton from "../m3/M3Skeleton";
+import { SurfaceTint } from "../m3/Tints";
 
 export default function Skeleton(): JSX.Element {
   const theme = useTheme();
@@ -16,37 +17,36 @@ export default function Skeleton(): JSX.Element {
         const emptyRooms = [0, 1];
 
         return (
-          <Paper key={floor} elevation={0} sx={{
-            position: "relative",
-            borderRadius: "0.75rem",
-            overflow: "hidden",
-            width: "100%",
-            maxWidth: "35rem",
-            p: "1rem",
-            border: `1px solid ${theme.palette.outline.light}`,
-            pb: "4rem"
-          }}>
-            <Stack spacing={2}>
-              <Typography variant="headlineLarge"><M3Skeleton width="8rem" /></Typography>
-              <Stack spacing={1}>
-                {emptyRooms.map((room) => (
-                  <Paper key={room} elevation={0} sx={{
-                    position: "relative",
-                    p: "1rem",
-                    borderRadius: "0.75rem",
-                    overflow: "hidden",
-                    backgroundColor: theme.palette.surfaceVariant.light,
-                    color: theme.palette.onSurfaceVariant.light
-                  }}>
-                    <Stack>
-                      <Typography variant="headlineSmall"><M3Skeleton width="1rem" /></Typography>
-                      <Typography variant="labelLarge"><M3Skeleton width="10rem" /></Typography>
-                    </Stack>
-                  </Paper>
-                ))}
-              </Stack>
+          <Stack key={floor}>
+            <Paper elevation={1} sx={{
+              p: "1rem",
+              position: "relative",
+              borderRadius: "0.75rem",
+              boxSizing: "border-box",
+              height: "8rem"
+            }}>
+              <Typography variant="headlineLarge"><M3Skeleton width="6rem" /></Typography>
+              <SurfaceTint sx={{
+                backgroundColor: theme.palette.primary.light,
+                opacity: theme.opacities.surface1
+              }} />
+            </Paper>
+            <Stack>
+              {emptyRooms.map((room) => (
+                <Stack key={room} sx={{
+                  borderBottom: `1px solid ${theme.palette.outline.light}`,
+                  p: "1rem",
+                  height: "4.5rem",
+                  boxSizing: "border-box"
+                }}>
+                  <Stack direction="row" justifyContent="space-between">
+                    <Typography variant="titleLarge"><M3Skeleton width="5rem" /></Typography>
+                    <Typography variant="bodySmall"><M3Skeleton width="10rem" /></Typography>
+                  </Stack>
+                </Stack>
+              ))}
             </Stack>
-          </Paper>
+          </Stack>
         );
       })}
     </>

@@ -5,7 +5,6 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 
 import { useAppDispatch, useAppSelector, useFloors } from "../../redux/hooks";
 import { fetchAsync as fetchFloorsAsync } from "../../redux/floorsSlice";
@@ -14,6 +13,8 @@ import DrawerAdjacent from "../m3/DrawerAdjacent";
 import M3IconButton from "../m3/M3IconButton";
 import CreateFloorDialog from "./CreateFloorDialog";
 import Skeleton from "./Skeleton";
+import { SurfaceTint } from "../m3/Tints";
+import M3FilledButton from "../m3/M3FilledButton";
 
 export default function Settings(): JSX.Element {
   const theme = useTheme();
@@ -31,7 +32,7 @@ export default function Settings(): JSX.Element {
     <DrawerAdjacent>
       <Stack spacing={2} sx={{ pr: "1rem", pb: "1rem" }}>
         <Typography variant="displayMedium" sx={{ pt: "4rem", pl: "1rem" }}>Piani</Typography>
-        <Stack spacing={1}>
+        <Stack spacing={3}>
           {floorsReady ?
             floorIds.map((floorId) => {
               const floor = floors[floorId];
@@ -39,53 +40,50 @@ export default function Settings(): JSX.Element {
               const roomIds = Object.keys(floor.rooms);
 
               return (
-                <Paper key={floorId} elevation={0} sx={{
-                  position: "relative",
-                  borderRadius: "0.75rem",
-                  overflow: "hidden",
-                  maxWidth: "35rem",
-                  p: "1rem",
-                  border: `1px solid ${theme.palette.outline.light}`
-                }}>
-                  <Stack spacing={2}>
-                    <Stack direction="row" justifyContent="space-between">
-                      <Stack direction="row" spacing={1}>
+                <Stack key={floorId}>
+                  <Paper elevation={1} sx={{ p: "1rem", position: "relative", borderRadius: "0.75rem" }}>
+                    <Stack spacing={2}>
+                      <Stack direction="row" justifyContent="space-between">
                         <Typography variant="headlineLarge">{floorName}</Typography>
-                        <M3IconButton><EditOutlinedIcon /></M3IconButton>
+                        <Stack direction="row" justifyContent="space-between">
+                          <M3IconButton><EditOutlinedIcon /></M3IconButton>
+                          <M3IconButton><DeleteOutlineOutlinedIcon /></M3IconButton>
+                        </Stack>
                       </Stack>
-                      <M3IconButton><DeleteOutlineOutlinedIcon /></M3IconButton>
+                      <Stack direction="row">
+                        <M3FilledButton>Crea camera</M3FilledButton>
+                      </Stack>
                     </Stack>
-                    <Stack spacing={1}>
-                      {roomIds.map((roomId) => {
-                        const room = floor.rooms[roomId];
-                        const roomType = `${room.type[0].toLocaleUpperCase()}${room.type.slice(1)}`;
+                    <SurfaceTint sx={{
+                      backgroundColor: theme.palette.primary.light,
+                      opacity: theme.opacities.surface1
+                    }} />
+                  </Paper>
+                  <Stack>
+                    {roomIds.map((roomId) => {
+                      const room = floor.rooms[roomId];
+                      const roomType = `${room.type[0].toLocaleUpperCase()}${room.type.slice(1)}`;
 
-                        return (
-                          <Paper key={roomId} elevation={0} sx={{
-                            position: "relative",
-                            p: "1rem",
-                            borderRadius: "0.75rem",
-                            overflow: "hidden",
-                            backgroundColor: theme.palette.surfaceVariant.light,
-                            color: theme.palette.onSurfaceVariant.light
-                          }}>
-                            <Stack direction="row" justifyContent="space-between" alignItems="center">
-                              <Stack sx={{ flexGrow: 1 }}>
-                                <Typography variant="headlineSmall">{`Camera ${room.number}`}</Typography>
-                                <Typography variant="labelLarge">{roomType}</Typography>
-                              </Stack>
+                      return (
+                        <Stack key={roomId} spacing={1} sx={{
+                          borderBottom: `1px solid ${theme.palette.outline.light}`,
+                          p: "1rem"
+                        }}>
+                          <Stack direction="row" justifyContent="space-between">
+                            <Stack direction="row" spacing={4} alignItems="center">
+                              <Typography variant="titleLarge">{`Camera ${room.number}`}</Typography>
                               <Stack direction="row">
                                 <M3IconButton><EditOutlinedIcon /></M3IconButton>
                                 <M3IconButton><DeleteOutlineOutlinedIcon /></M3IconButton>
                               </Stack>
                             </Stack>
-                          </Paper>
-                        );
-                      })}
-                      <M3IconButton><AddCircleOutlineOutlinedIcon /></M3IconButton>
-                    </Stack>
+                            <Typography variant="bodySmall">{roomType}</Typography>
+                          </Stack>
+                        </Stack>
+                      );
+                    })}
                   </Stack>
-                </Paper>
+                </Stack>
               );
             }) : <Skeleton />}
         </Stack>
