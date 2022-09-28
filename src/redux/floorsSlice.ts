@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { fetchFloorsAsync } from "../api";
 import { show as showMessage } from "./snackbarMessageSlice";
+import { fetchAsync as fetchRoomsAsync } from "./roomsSlice";
 
 export type Floor = {
   name: string,
@@ -30,7 +31,7 @@ export const fetchAsync = createAsyncThunk(
       return response.data;
     } catch (error) {
       thunkApi.dispatch(showMessage({ type: "error" }));
-      throw thunkApi.rejectWithValue({});
+      throw thunkApi.rejectWithValue([]);
     }
   }
 );
@@ -84,15 +85,24 @@ export const floorsSlice = createSlice({
         state.status = "idle";
         const data = action.payload;
         for (const floor of data) {
-          const rooms: string[] = [];
-          for (const room of floor.rooms) {
-            rooms.push(room.id);
+          if (!state.data[floor.id]) {
+            state.data[floor.id] = { name: floor.name, roomIds: [] };
+          } else {
+            state.data[floor.id].name = floor.name;
           }
-          state.data[floor.id] = { name: floor.name, roomIds: rooms };
         }
       })
       .addCase(fetchAsync.rejected, (state) => {
         state.status = "failed";
+      })
+      .addCase(fetchRoomsAsync.fulfilled, (state, action) => {
+        const rooms = action.payload;
+        for (const room of rooms) {
+          if (!state.data[room.floorId]) {
+            state.data[room.floorId] = { name: "", roomIds: [] };
+          }
+          state.data[room.floorId].roomIds.push(room.id);
+        }
       });
   }
 });

@@ -8,6 +8,7 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 
 import { useAppDispatch, useAppSelector, useFloors } from "../../redux/hooks";
 import { fetchAsync as fetchFloorsAsync } from "../../redux/floorsSlice";
+import { fetchAsync as fetchRoomsAsync } from "../../redux/roomsSlice";
 
 import DrawerAdjacent from "../m3/DrawerAdjacent";
 import M3IconButton from "../m3/M3IconButton";
@@ -27,6 +28,10 @@ export default function Settings(): JSX.Element {
 
   useEffect(() => {
     dispatch(fetchFloorsAsync());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchRoomsAsync());
   }, [dispatch]);
 
   return (
