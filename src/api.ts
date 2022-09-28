@@ -1,4 +1,3 @@
-import { HotelData } from "./redux/hotelSlice";
 import { ChangesMap, TileColor, TileData } from "./redux/tilesSlice";
 
 export type CityTaxData = {
@@ -34,14 +33,49 @@ export type ClientData = {
   stateOfBirth?: string
 };
 
+export type Room = {
+  id: string,
+  number: number,
+  type: string
+};
+
+export type Floor = {
+  id: string,
+  rooms: Room[]
+};
+
 export type RoomType = {
   name: string,
   minOccupancy: number,
   maxOccupancy: number,
 };
 
-export function fetchHotelDataAsync(): Promise<{ data: HotelData }> {
-  return fetchJsonDataAsync<HotelData>("/api/v1/hotel");
+export function fetchHotelDataAsync(): Promise<{ data: Floor[] }> {
+  return fetchJsonDataAsync<Floor[]>("/api/v1/hotel/floors");
+}
+
+export function postFloorAsync(floor: { name: string }): Promise<{ id: string }> {
+  return postDataAsync("/api/v1/hotel/floors", floor);
+}
+
+export function putFloorAsync(floor: { id: string, name: string }): Promise<void> {
+  return putDataAsync(`api/v1/hotel/floors/${floor.id}`, floor);
+}
+
+export function deleteFloorAsync(floorId: string): Promise<void> {
+  return deleteDataAsync(`api/v1/hotel/floors/${floorId}`);
+}
+
+export function postRoomAsync(room: { floorId: string, number: number, type: string }): Promise<{ id: string }> {
+  return postDataAsync(`api/v1/hotel/floors/${room.floorId}/rooms`, room);
+}
+
+export function putRoomAsync(room: { id: string, floorId: string, number: number, type: string }): Promise<void> {
+  return putDataAsync(`api/v1/hotel/floors/${room.floorId}/rooms/${room.id}`, room);
+}
+
+export function deleteRoomAsync(floorId: string, roomId: string): Promise<void> {
+  return deleteDataAsync(`api/v1/hotel/floors/${floorId}/rooms/${roomId}`);
 }
 
 export function fetchRoomTypesAsync(): Promise<{ data: RoomType[] }> {
@@ -109,7 +143,7 @@ async function fetchJsonDataAsync<T>(query: string): Promise<{ data: T }> {
   return { data };
 }
 
-async function postDataAsync<T>(url: string, data: T): Promise<void> {
+async function postDataAsync<TData, TResponse>(url: string, data: TData): Promise<TResponse> {
   const response = await fetch(url, {
     method: "POST",
     mode: "cors",
@@ -121,6 +155,43 @@ async function postDataAsync<T>(url: string, data: T): Promise<void> {
     redirect: "follow",
     referrerPolicy: "no-referrer",
     body: JSON.stringify(data)
+  });
+  if (!response.ok) {
+    throw new Error("Response error");
+  }
+  const responseData = await response.json() as TResponse;
+  if (!responseData) {
+    throw new Error("Response erorr");
+  }
+  return responseData;
+}
+
+async function putDataAsync<T>(url: string, data: T): Promise<void> {
+  const response = await fetch(url, {
+    method: "PUT",
+    mode: "cors",
+    cache: "no-cache",
+    credentials: "same-origin",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    redirect: "follow",
+    referrerPolicy: "no-referrer",
+    body: JSON.stringify(data)
+  });
+  if (!response.ok) {
+    throw new Error("Response error");
+  }
+}
+
+async function deleteDataAsync(url: string): Promise<void> {
+  const response = await fetch(url, {
+    method: "DELETE",
+    mode: "cors",
+    cache: "no-cache",
+    credentials: "same-origin",
+    redirect: "follow",
+    referrerPolicy: "no-referrer"
   });
   if (!response.ok) {
     throw new Error("Response error");

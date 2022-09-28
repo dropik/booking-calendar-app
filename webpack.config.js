@@ -243,70 +243,118 @@ module.exports = {
         }, 500);
       });
 
-      devServer.app.get("/api/v1/hotel", (_, response) => {
+      devServer.app.get("/api/v1/hotel/floors", (_, response) => {
         setTimeout(() => {
-          response.json({
-            floors: [
-              {
-                name: "piano 1",
-                rooms: [
-                  {
-                    number: 1,
-                    type: "camera tripla standard",
-                  },
-                  {
-                    number: 2,
-                    type: "appartamento",
-                  },
-                  {
-                    number: 3,
-                    type: "camera matrimoniale/doppia",
-                  },
-                  {
-                    number: 4,
-                    type: "camera tripla",
-                  },
-                  {
-                    number: 5,
-                    type: "camera matrimoniale/doppia",
-                  },
-                ],
-              },
-              {
-                name: "piano 2",
-                rooms: [
-                  {
-                    number: 6,
-                    type: "camera matrimoniale/doppia",
-                  },
-                  {
-                    number: 7,
-                    type: "camera matrimoniale/doppia",
-                  },
-                  {
-                    number: 8,
-                    type: "camera singola",
-                  },
-                  {
-                    number: 9,
-                    type: "camera matrimoniale/doppia",
-                  },
-                  {
-                    number: 10,
-                    type: "camera matrimoniale/doppia economy",
-                  },
-                  {
-                    number: 11,
-                    type: "camera tripla",
-                  },
-                  {
-                    number: 12,
-                    type: "camera matrimoniale/doppia",
-                  },
-                ],
-              },
-            ]
-          });
+          response.json([
+            {
+              id: "0",
+              name: "piano 1",
+              rooms: [
+                {
+                  id: "0",
+                  number: 1,
+                  type: "camera tripla standard",
+                },
+                {
+                  id: "1",
+                  number: 2,
+                  type: "appartamento",
+                },
+                {
+                  id: "2",
+                  number: 3,
+                  type: "camera matrimoniale/doppia",
+                },
+                {
+                  id: "3",
+                  number: 4,
+                  type: "camera tripla",
+                },
+                {
+                  id: "4",
+                  number: 5,
+                  type: "camera matrimoniale/doppia",
+                },
+              ],
+            },
+            {
+              id: "1",
+              name: "piano 2",
+              rooms: [
+                {
+                  id: "5",
+                  number: 6,
+                  type: "camera matrimoniale/doppia",
+                },
+                {
+                  id: "6",
+                  number: 7,
+                  type: "camera matrimoniale/doppia",
+                },
+                {
+                  id: "7",
+                  number: 8,
+                  type: "camera singola",
+                },
+                {
+                  id: "8",
+                  number: 9,
+                  type: "camera matrimoniale/doppia",
+                },
+                {
+                  id: "9",
+                  number: 10,
+                  type: "camera matrimoniale/doppia economy",
+                },
+                {
+                  id: "10",
+                  number: 11,
+                  type: "camera tripla",
+                },
+                {
+                  id: "11",
+                  number: 12,
+                  type: "camera matrimoniale/doppia",
+                },
+              ],
+            },
+          ]);
+        }, 500);
+      });
+
+      devServer.app.post("/api/v1/hotel/floors", (_, response) => {
+        setTimeout(() => {
+          response.json({ id: `${Math.floor(Math.random() * 10000)}` });
+        }, 500);
+      });
+
+      devServer.app.put("/api/v1/hotel/floors/*", (_, response) => {
+        setTimeout(() => {
+          response.send("ok");
+        }, 500);
+      });
+
+      devServer.app.delete("/api/v1/hotel/floors/*", (_, response) => {
+        setTimeout(() => {
+          response.send("ok");
+        }, 500);
+      });
+
+      devServer.app.post("/api/v1/hotel/floors/*/rooms", (_, response) => {
+        setTimeout(() => {
+          response.json({ id: `${Math.floor(Math.random() * 10000)}` });
+        }, 500);
+      });
+
+      devServer.app.put("/api/v1/hotel/floors/*/rooms/*", (_, response) => {
+        setTimeout(() => {
+          response.send("ok");
+        }, 500);
+      });
+
+      devServer.app.delete("/api/v1/hotel/floors/*/rooms/*", (_, response) => {
+        setTimeout(() => {
+          response.send("ok");
         }, 500);
       });
 
