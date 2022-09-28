@@ -1,7 +1,7 @@
 import { combineReducers } from "@reduxjs/toolkit";
 
 import table from "./tableSlice";
-import hotel from "./hotelSlice";
+import floors from "./floorsSlice";
 import scroll from "./scrollSlice";
 import tiles from "./tilesSlice";
 import roomTypes from "./roomTypesSlice";
@@ -14,7 +14,7 @@ import bookingsForm from "./bookingsFormSlice";
 export default combineReducers(
   {
     table,
-    hotel,
+    hotel: floors,
     scroll,
     tiles,
     roomTypes,

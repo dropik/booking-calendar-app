@@ -51,32 +51,32 @@ export type RoomType = {
   maxOccupancy: number,
 };
 
-export function fetchHotelDataAsync(): Promise<{ data: Floor[] }> {
-  return fetchJsonDataAsync<Floor[]>("/api/v1/hotel/floors");
+export function fetchFloorsAsync(): Promise<{ data: Floor[] }> {
+  return fetchJsonDataAsync<Floor[]>("/api/v1/floors");
 }
 
 export function postFloorAsync(floor: { name: string }): Promise<{ id: string }> {
-  return postDataAsync("/api/v1/hotel/floors", floor);
+  return postDataAsync("/api/v1/floors", floor);
 }
 
 export function putFloorAsync(floor: { id: string, name: string }): Promise<void> {
-  return putDataAsync(`api/v1/hotel/floors/${floor.id}`, floor);
+  return putDataAsync(`api/v1/floors/${floor.id}`, floor);
 }
 
 export function deleteFloorAsync(floorId: string): Promise<void> {
-  return deleteDataAsync(`api/v1/hotel/floors/${floorId}`);
+  return deleteDataAsync(`api/v1/floors/${floorId}`);
 }
 
 export function postRoomAsync(room: { floorId: string, number: number, type: string }): Promise<{ id: string }> {
-  return postDataAsync(`api/v1/hotel/floors/${room.floorId}/rooms`, room);
+  return postDataAsync(`api/v1/floors/${room.floorId}/rooms`, room);
 }
 
 export function putRoomAsync(room: { id: string, floorId: string, number: number, type: string }): Promise<void> {
-  return putDataAsync(`api/v1/hotel/floors/${room.floorId}/rooms/${room.id}`, room);
+  return putDataAsync(`api/v1/floors/${room.floorId}/rooms/${room.id}`, room);
 }
 
 export function deleteRoomAsync(floorId: string, roomId: string): Promise<void> {
-  return deleteDataAsync(`api/v1/hotel/floors/${floorId}/rooms/${roomId}`);
+  return deleteDataAsync(`api/v1/floors/${floorId}/rooms/${roomId}`);
 }
 
 export function fetchRoomTypesAsync(): Promise<{ data: RoomType[] }> {

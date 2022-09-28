@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { fetchHotelDataAsync } from "../api";
+import { fetchFloorsAsync } from "../api";
 import { show as showMessage } from "./snackbarMessageSlice";
 
 export type Room = {
@@ -32,10 +32,10 @@ const initialState: State = {
 };
 
 export const fetchAsync = createAsyncThunk(
-  "hotel/fetch",
+  "floors/fetch",
   async (_, thunkApi) => {
     try {
-      const response = await fetchHotelDataAsync();
+      const response = await fetchFloorsAsync();
       return response.data;
     } catch (error) {
       thunkApi.dispatch(showMessage({ type: "error" }));
@@ -46,8 +46,8 @@ export const fetchAsync = createAsyncThunk(
 
 export type FetchAsyncAction = ReturnType<typeof fetchAsync>;
 
-export const hotelSlice = createSlice({
-  name: "hotel",
+export const floorsSlice = createSlice({
+  name: "floors",
   initialState: initialState,
   reducers: { },
   extraReducers: (builder) => {
@@ -73,4 +73,4 @@ export const hotelSlice = createSlice({
   }
 });
 
-export default hotelSlice.reducer;
+export default floorsSlice.reducer;

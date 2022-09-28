@@ -243,7 +243,7 @@ module.exports = {
         }, 500);
       });
 
-      devServer.app.get("/api/v1/hotel/floors", (_, response) => {
+      devServer.app.get("/api/v1/floors", (_, response) => {
         setTimeout(() => {
           response.json([
             {
@@ -322,37 +322,37 @@ module.exports = {
         }, 500);
       });
 
-      devServer.app.post("/api/v1/hotel/floors", (_, response) => {
+      devServer.app.post("/api/v1/floors", (_, response) => {
         setTimeout(() => {
           response.json({ id: `${Math.floor(Math.random() * 10000)}` });
         }, 500);
       });
 
-      devServer.app.put("/api/v1/hotel/floors/*", (_, response) => {
+      devServer.app.put("/api/v1/floors/*", (_, response) => {
         setTimeout(() => {
           response.send("ok");
         }, 500);
       });
 
-      devServer.app.delete("/api/v1/hotel/floors/*", (_, response) => {
+      devServer.app.delete("/api/v1/floors/*", (_, response) => {
         setTimeout(() => {
           response.send("ok");
         }, 500);
       });
 
-      devServer.app.post("/api/v1/hotel/floors/*/rooms", (_, response) => {
+      devServer.app.post("/api/v1/floors/*/rooms", (_, response) => {
         setTimeout(() => {
           response.json({ id: `${Math.floor(Math.random() * 10000)}` });
         }, 500);
       });
 
-      devServer.app.put("/api/v1/hotel/floors/*/rooms/*", (_, response) => {
+      devServer.app.put("/api/v1/floors/*/rooms/*", (_, response) => {
         setTimeout(() => {
           response.send("ok");
         }, 500);
       });
 
-      devServer.app.delete("/api/v1/hotel/floors/*/rooms/*", (_, response) => {
+      devServer.app.delete("/api/v1/floors/*/rooms/*", (_, response) => {
         setTimeout(() => {
           response.send("ok");
         }, 500);

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { fetchAsync } from "../../../redux/hotelSlice";
+import { fetchAsync } from "../../../redux/floorsSlice";
 
 import FetchDataBase from "./FetchDataBase";
 

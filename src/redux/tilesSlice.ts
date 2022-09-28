@@ -4,7 +4,7 @@ import { WritableDraft } from "immer/dist/internal";
 import * as Utils from "../utils";
 import { fetchTilesAsync } from "../api";
 import { show as showMessage } from "./snackbarMessageSlice";
-import { fetchAsync as fetchHotelAsync } from "./hotelSlice";
+import { fetchAsync as fetchFloorsAsync } from "./floorsSlice";
 import { FetchPeriod } from "./tableSlice";
 import { RootState } from "./store";
 
@@ -186,7 +186,7 @@ export const tilesSlice = createSlice({
       .addCase(fetchAsync.rejected, (state) => {
         state.status = "failed";
       })
-      .addCase(fetchHotelAsync.fulfilled, (state, action) => {
+      .addCase(fetchFloorsAsync.fulfilled, (state, action) => {
         action.payload.forEach((floor) => {
           floor.rooms.forEach((room) => {
             if (!state.assignedMap[room.number]) {

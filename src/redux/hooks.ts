@@ -1,14 +1,14 @@
 import { useDispatch, TypedUseSelectorHook, useSelector } from "react-redux";
 
-import * as Store from "./store";
 import * as Utils from "../utils";
-import * as HotelSlice from "./hotelSlice";
-import * as TilesSlice from "./tilesSlice";
+import { AppDispatch, RootState } from "./store";
+import { Floors } from "./floorsSlice";
+import { TileData } from "./tilesSlice";
 
-export const useAppDispatch = () => useDispatch<Store.AppDispatch>();
-export const useAppSelector: TypedUseSelectorHook<Store.RootState> = useSelector;
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-export function useTileData(id: string | undefined): TilesSlice.TileData | undefined {
+export function useTileData(id: string | undefined): TileData | undefined {
   return useAppSelector((state) => {
     return (id === undefined) ? undefined : state.tiles.data[id];
   });
@@ -90,5 +90,5 @@ export const useLeftmostDate:       () => string =
 export const useColumns:            () => number =
   () => useAppSelector(state => state.table.columns);
 
-export const useHotelData:          () => HotelSlice.Floors =
+export const useHotelData:          () => Floors =
   () => useAppSelector(state => state.hotel.data);

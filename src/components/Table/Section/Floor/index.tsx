@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Floor } from "../../../../redux/hotelSlice";
+import { Floor } from "../../../../redux/floorsSlice";
 
 import Section from "..";
 import Row from "../Row";
