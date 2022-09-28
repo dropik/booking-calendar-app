@@ -25,7 +25,7 @@ export default function Skeleton(): JSX.Element {
               boxSizing: "border-box",
               height: "8rem"
             }}>
-              <Typography variant="headlineLarge"><M3Skeleton width="6rem" /></Typography>
+              <Typography variant="headlineLarge"><M3Skeleton width="8rem" /></Typography>
               <SurfaceTint sx={{
                 backgroundColor: theme.palette.primary.light,
                 opacity: theme.opacities.surface1
@@ -40,8 +40,8 @@ export default function Skeleton(): JSX.Element {
                   boxSizing: "border-box"
                 }}>
                   <Stack direction="row" justifyContent="space-between">
-                    <Typography variant="titleLarge"><M3Skeleton width="5rem" /></Typography>
-                    <Typography variant="bodySmall"><M3Skeleton width="10rem" /></Typography>
+                    <Typography variant="headlineSmall"><M3Skeleton width="6rem" /></Typography>
+                    <Typography variant="labelLarge"><M3Skeleton width="10rem" /></Typography>
                   </Stack>
                 </Stack>
               ))}

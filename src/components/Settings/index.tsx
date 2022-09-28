@@ -71,13 +71,23 @@ export default function Settings(): JSX.Element {
                         }}>
                           <Stack direction="row" justifyContent="space-between">
                             <Stack direction="row" spacing={4} alignItems="center">
-                              <Typography variant="titleLarge">{`Camera ${room.number}`}</Typography>
+                              <Typography variant="headlineSmall">{`Camera ${room.number}`}</Typography>
                               <Stack direction="row">
                                 <M3IconButton><EditOutlinedIcon /></M3IconButton>
                                 <M3IconButton><DeleteOutlineOutlinedIcon /></M3IconButton>
                               </Stack>
                             </Stack>
-                            <Typography variant="bodySmall">{roomType}</Typography>
+                            <Stack direction="row" sx={{
+                              borderRadius: "0.5rem",
+                              border: `1px solid ${theme.palette.outline.light}`,
+                              height: "2rem",
+                              boxSizing: "border-box",
+                              alignItems: "center",
+                              pl: "1rem",
+                              pr: "1rem"
+                            }}>
+                              <Typography variant="labelLarge">{roomType}</Typography>
+                            </Stack>
                           </Stack>
                         </Stack>
                       );
