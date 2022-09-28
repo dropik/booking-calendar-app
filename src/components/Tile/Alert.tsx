@@ -63,8 +63,8 @@ function AlertWrappee({ children, data }: AlertWrappeeProps): JSX.Element {
 
 function useAssignedRoomType(roomNumber: number | undefined): string | undefined {
   return useAppSelector((state) => {
-    for (const floorId in state.hotel.data) {
-      const floor = state.hotel.data[floorId];
+    for (const floorId in state.floors.data) {
+      const floor = state.floors.data[floorId];
       for (const roomId in floor.rooms) {
         const room = floor.rooms[roomId];
         if (room.number === roomNumber) {

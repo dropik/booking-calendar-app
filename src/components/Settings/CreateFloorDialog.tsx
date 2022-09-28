@@ -9,7 +9,7 @@ import TextField from "@mui/material/TextField";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 
 import { postFloorAsync } from "../../api";
-import { useAppDispatch } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { createFloor } from "../../redux/floorsSlice";
 import { show as showMessage } from "../../redux/snackbarMessageSlice";
 
@@ -24,6 +24,7 @@ export default function CreateFloorDialog(): JSX.Element {
   const [creatingState, setCreatingState] = useState<"idle" | "creating" | "loading">("idle");
   const [name, setName] = useState("");
   const [validated, setValidated] = useState(true);
+  const floorsReady = useAppSelector((state) => state.floors.status === "idle");
 
   const openDialog = creatingState !== "idle";
 
@@ -53,7 +54,7 @@ export default function CreateFloorDialog(): JSX.Element {
 
   return (
     <>
-      <M3Fab onClick={() => setCreatingState("creating")} sx={{
+      {floorsReady ? (<M3Fab onClick={() => setCreatingState("creating")} sx={{
         position: "fixed",
         right: 0,
         bottom: 0,
@@ -68,7 +69,7 @@ export default function CreateFloorDialog(): JSX.Element {
           backgroundColor: theme.palette.primary.light,
           opacity: theme.opacities.surface3
         }} />
-      </M3Fab>
+      </M3Fab>) : null}
       <Dialog keepMounted open={openDialog} onClose={closeDialog} PaperProps={{
         elevation: 0,
         sx: {

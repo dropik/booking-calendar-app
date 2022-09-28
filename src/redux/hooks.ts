@@ -52,8 +52,8 @@ export function useErrorType(id: string): "none" | "warning" | "error" {
     const data = state.tiles.data[id];
     if (data && data.roomNumber) {
       let assignedRoomType = "";
-      for (const floorId in state.hotel.data) {
-        const floor = state.hotel.data[floorId];
+      for (const floorId in state.floors.data) {
+        const floor = state.floors.data[floorId];
         for (const roomId in floor.rooms) {
           const room = floor.rooms[roomId];
           if (room.number === data.roomNumber) {
@@ -91,4 +91,4 @@ export const useColumns:            () => number =
   () => useAppSelector(state => state.table.columns);
 
 export const useFloors:          () => Floors =
-  () => useAppSelector(state => state.hotel.data);
+  () => useAppSelector(state => state.floors.data);

@@ -14,7 +14,7 @@ import bookingsForm from "./bookingsFormSlice";
 export default combineReducers(
   {
     table,
-    hotel: floors,
+    floors,
     scroll,
     tiles,
     roomTypes,

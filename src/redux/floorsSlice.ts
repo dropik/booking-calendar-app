@@ -97,10 +97,10 @@ export const floorsSlice = createSlice({
     builder
       .addCase(fetchAsync.pending, (state) => {
         state.status = "loading";
+        state.data = { };
       })
       .addCase(fetchAsync.fulfilled, (state, action) => {
         state.status = "idle";
-        state.data = { };
         const data = action.payload;
         for (const floor of data) {
           const rooms: Rooms = { };
