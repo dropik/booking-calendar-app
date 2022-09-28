@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { fetchFloorsAsync } from "../api";
 import { show as showMessage } from "./snackbarMessageSlice";
@@ -49,7 +49,50 @@ export type FetchAsyncAction = ReturnType<typeof fetchAsync>;
 export const floorsSlice = createSlice({
   name: "floors",
   initialState: initialState,
-  reducers: { },
+  reducers: {
+    createFloor: (state, action: PayloadAction<{ id: string, name: string }>) => {
+      const floor = action.payload;
+      state.data[floor.id] = { name: floor.name, rooms: { }};
+    },
+    editFloor: (state, action: PayloadAction<{ id: string, name: string }>) => {
+      const floor = action.payload;
+      if (state.data[floor.id]) {
+        state.data[floor.id].name = floor.name;
+      }
+    },
+    deleteFloor: (state, action: PayloadAction<string>) => {
+      if (state.data[action.payload]) {
+        delete state.data[action.payload];
+      }
+    },
+    createRoom: (state, action: PayloadAction<{ id: string, floorId: string, number: number, type: string }>) => {
+      const room = action.payload;
+      const floor = state.data[room.floorId];
+      if (floor) {
+        floor.rooms[room.id] = { number: room.number, type: room.type };
+      }
+    },
+    editRoom: (state, action: PayloadAction<{ id: string, floorId: string, number: number, type: string }>) => {
+      const newRoom = action.payload;
+      const floor = state.data[newRoom.floorId];
+      if (floor) {
+        const room = floor.rooms[newRoom.id];
+        if (room) {
+          room.number = newRoom.number;
+          room.type = newRoom.type;
+        }
+      }
+    },
+    deleteRoom: (state, action: PayloadAction<{ id: string, floorId: string }>) => {
+      const room = action.payload;
+      const floor = state.data[room.floorId];
+      if (floor) {
+        if (floor.rooms[room.id]) {
+          delete floor.rooms[room.id];
+        }
+      }
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchAsync.pending, (state) => {
@@ -72,5 +115,7 @@ export const floorsSlice = createSlice({
       });
   }
 });
+
+export const { createFloor, editFloor, deleteFloor, createRoom, editRoom, deleteRoom } = floorsSlice.actions;
 
 export default floorsSlice.reducer;
