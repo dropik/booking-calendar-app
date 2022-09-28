@@ -38,7 +38,6 @@ export default function Settings(): JSX.Element {
             floorIds.map((floorId) => {
               const floor = floors[floorId];
               const floorName = `${floor.name[0].toLocaleUpperCase()}${floor.name.slice(1)}`;
-              const roomIds = Object.keys(floor.rooms);
 
               return (
                 <Stack key={floorId}>
@@ -61,7 +60,7 @@ export default function Settings(): JSX.Element {
                     }} />
                   </Paper>
                   <Stack>
-                    {roomIds.map((roomId) => <Room key={roomId} id={roomId} />)}
+                    {floor.roomIds.map((roomId) => <Room key={roomId} id={roomId} />)}
                   </Stack>
                 </Stack>
               );

@@ -20,7 +20,7 @@ export default function Sections(): JSX.Element {
       {floorIds.length > 0 ? floorIds.map((floorId) => {
         const floor = floors[floorId];
         return (
-          <Floor key={floor.name} data={floor} />
+          <Floor key={floor.name} floor={floor} />
         );
       }) : <Skeleton />}
       <NotAssigned />

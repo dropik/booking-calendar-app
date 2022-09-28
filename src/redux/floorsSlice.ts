@@ -3,18 +3,9 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { fetchFloorsAsync } from "../api";
 import { show as showMessage } from "./snackbarMessageSlice";
 
-export type Room = {
-  number: string,
-  type: string
-};
-
-export type Rooms = {
-  [key: string]: Room
-};
-
 export type Floor = {
   name: string,
-  rooms: Rooms
+  roomIds: string[]
 };
 
 export type Floors = {
@@ -52,7 +43,7 @@ export const floorsSlice = createSlice({
   reducers: {
     createFloor: (state, action: PayloadAction<{ id: string, name: string }>) => {
       const floor = action.payload;
-      state.data[floor.id] = { name: floor.name, rooms: { }};
+      state.data[floor.id] = { name: floor.name, roomIds: [ ]};
     },
     editFloor: (state, action: PayloadAction<{ id: string, name: string }>) => {
       const floor = action.payload;
@@ -65,30 +56,20 @@ export const floorsSlice = createSlice({
         delete state.data[action.payload];
       }
     },
-    createRoom: (state, action: PayloadAction<{ id: string, floorId: string, number: string, type: string }>) => {
+    createRoom: (state, action: PayloadAction<{ floorId: string, roomId: string }>) => {
       const room = action.payload;
       const floor = state.data[room.floorId];
       if (floor) {
-        floor.rooms[room.id] = { number: room.number, type: room.type };
+        floor.roomIds.push(room.roomId);
       }
     },
-    editRoom: (state, action: PayloadAction<{ id: string, floorId: string, number: string, type: string }>) => {
-      const newRoom = action.payload;
-      const floor = state.data[newRoom.floorId];
-      if (floor) {
-        const room = floor.rooms[newRoom.id];
-        if (room) {
-          room.number = newRoom.number;
-          room.type = newRoom.type;
-        }
-      }
-    },
-    deleteRoom: (state, action: PayloadAction<{ id: string, floorId: string }>) => {
+    deleteRoom: (state, action: PayloadAction<{ floorId: string, roomId: string }>) => {
       const room = action.payload;
       const floor = state.data[room.floorId];
       if (floor) {
-        if (floor.rooms[room.id]) {
-          delete floor.rooms[room.id];
+        const index = floor.roomIds.indexOf(room.roomId);
+        if (index > -1) {
+          floor.roomIds.splice(index, 1);
         }
       }
     }
@@ -103,11 +84,11 @@ export const floorsSlice = createSlice({
         state.status = "idle";
         const data = action.payload;
         for (const floor of data) {
-          const rooms: Rooms = { };
+          const rooms: string[] = [];
           for (const room of floor.rooms) {
-            rooms[room.id] = { number: room.number, type: room.type };
+            rooms.push(room.id);
           }
-          state.data[floor.id] = { name: floor.name, rooms };
+          state.data[floor.id] = { name: floor.name, roomIds: rooms };
         }
       })
       .addCase(fetchAsync.rejected, (state) => {
@@ -116,6 +97,6 @@ export const floorsSlice = createSlice({
   }
 });
 
-export const { createFloor, editFloor, deleteFloor, createRoom, editRoom, deleteRoom } = floorsSlice.actions;
+export const { createFloor, editFloor, deleteFloor, createRoom, deleteRoom } = floorsSlice.actions;
 
 export default floorsSlice.reducer;
