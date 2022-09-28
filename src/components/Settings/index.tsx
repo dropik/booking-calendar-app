@@ -10,6 +10,8 @@ import { useTheme } from "@mui/material/styles";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
+import M3Fab from "../m3/M3Fab";
 
 export default function Settings(): JSX.Element {
   const theme = useTheme();
@@ -20,7 +22,7 @@ export default function Settings(): JSX.Element {
   return (
     <DrawerAdjacent>
       <Stack spacing={2} sx={{ pr: "1rem", pb: "1rem" }}>
-        <Typography variant="displayMedium" sx={{ pt: "4rem", pl: "1rem" }}>Hotel</Typography>
+        <Typography variant="displayMedium" sx={{ pt: "4rem", pl: "1rem" }}>Piani</Typography>
         <Stack spacing={1}>
           {floorIds.map((floorId) => {
             const floor = floors[floorId];
@@ -83,6 +85,18 @@ export default function Settings(): JSX.Element {
           })}
         </Stack>
       </Stack>
+      <M3Fab sx={{
+        position: "fixed",
+        right: 0,
+        bottom: 0,
+        width: "auto",
+        minWidth: "5rem"
+      }}>
+        <Stack direction="row" spacing={1.5} alignItems="center" sx={{ p: "1rem" }}>
+          <AddOutlinedIcon />
+          <Typography variant="labelLarge">Crea</Typography>
+        </Stack>
+      </M3Fab>
     </DrawerAdjacent>
   );
 }
