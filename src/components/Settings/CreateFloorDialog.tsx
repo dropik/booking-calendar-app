@@ -8,18 +8,47 @@ import Collapse from "@mui/material/Collapse";
 import TextField from "@mui/material/TextField";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 
+import { postFloorAsync } from "../../api";
+import { useAppDispatch } from "../../redux/hooks";
+import { createFloor } from "../../redux/floorsSlice";
+import { show as showMessage } from "../../redux/snackbarMessageSlice";
+
 import M3TextButton from "../m3/M3TextButton";
 import M3Fab from "../m3/M3Fab";
 import { SurfaceTint } from "../m3/Tints";
+import { CircularProgress } from "@mui/material";
 
 export default function CreateFloorDialog(): JSX.Element {
   const theme = useTheme();
+  const dispatch = useAppDispatch();
   const [creatingState, setCreatingState] = useState<"idle" | "creating" | "loading">("idle");
+  const [name, setName] = useState("");
+  const [validated, setValidated] = useState(true);
 
   const openDialog = creatingState !== "idle";
 
   function closeDialog(): void {
     setCreatingState("idle");
+  }
+
+  function create(): void {
+    async function postAsync(): Promise<void> {
+      try {
+        const response = await postFloorAsync({ name });
+        dispatch(createFloor({ id: response.id, name }));
+      } catch (error) {
+        dispatch(showMessage({ type: "error" }));
+      } finally {
+        setCreatingState("idle");
+      }
+    }
+
+    if (name !== "" && validated) {
+      setCreatingState("loading");
+      postAsync();
+    } else {
+      setValidated(false);
+    }
   }
 
   return (
@@ -66,11 +95,28 @@ export default function CreateFloorDialog(): JSX.Element {
                 <Typography variant="bodyMedium" sx={{ display: "block", width: "100%", textAlign: "left" }}>
                   Crea un nuovo piano vuoto con seguente nome:
                 </Typography>
-                <TextField label="Nome" sx={{ minWidth: "20rem" }} />
+                <TextField
+                  label="Nome"
+                  onChange={(event) => {
+                    const newName = event.currentTarget.value;
+                    setName(newName);
+                    if (newName === "") {
+                      setValidated(false);
+                    } else {
+                      setValidated(true);
+                    }
+                  }}
+                  error={!validated}
+                  helperText={validated ? undefined : "Il nome non può essere vuoto."}
+                  sx={{ minWidth: "20rem" }} />
               </Stack>
               <Stack direction="row" spacing={1} justifyContent="flex-end">
-                <M3TextButton onClick={closeDialog}>Cancella</M3TextButton>
-                <M3TextButton>Crea</M3TextButton>
+                {creatingState === "loading" ?
+                  <CircularProgress /> :
+                  (<>
+                    <M3TextButton onClick={closeDialog}>Cancella</M3TextButton>
+                    <M3TextButton onClick={create}>Crea</M3TextButton>
+                  </>)}
               </Stack>
             </Stack>
           </Collapse>
