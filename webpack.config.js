@@ -509,7 +509,7 @@ module.exports = {
 
       devServer.app.post("/api/v1/changes", (_, response) => {
         setTimeout(() => {
-          response.send("ok");
+          response.json("ok");
         }, 500);
       });
 
