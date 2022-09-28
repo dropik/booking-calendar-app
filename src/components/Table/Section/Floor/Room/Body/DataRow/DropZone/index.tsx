@@ -8,15 +8,15 @@ import Size from "../../../../../../../Tile/Size";
 import DropAccepter from "./DropAccepter";
 
 type DropZoneProps = {
-  roomNumber: string,
+  roomId: string,
   data: TileData
 };
 
-export default function DropZone({ roomNumber, data }: DropZoneProps): JSX.Element {
+export default function DropZone({ roomId, data }: DropZoneProps): JSX.Element {
   return (
     <TileContext.Provider value={{ data: data, cropLeft: false, cropRight: false}}>
       <Size sx={{ pt: "calc(0.25rem - 1px)", pb: "calc(0.25rem - 1px)" }}>
-        <DropAccepter roomNumber={roomNumber}>
+        <DropAccepter roomId={roomId}>
           <Container dropZone={true} />
         </DropAccepter>
       </Size>

@@ -98,7 +98,7 @@ module.exports = {
                 entity: "camera matrimoniale",
                 persons: 2,
                 color: "booking1",
-                roomNumber: "3"
+                roomId: "2"
               },
               {
                 id: "2",
@@ -110,7 +110,7 @@ module.exports = {
                 entity: "camera matrimoniale",
                 persons: 2,
                 color: "booking1",
-                roomNumber: "5"
+                roomId: "4"
               }
             ]
           });
@@ -410,7 +410,7 @@ module.exports = {
                   entity: "camera doppia",
                   persons: 2,
                   color: "booking1",
-                  roomNumber: "3"
+                  roomId: "2"
                 },
                 {
                   id: "1",
@@ -422,7 +422,7 @@ module.exports = {
                   entity: "camera doppia",
                   persons: 2,
                   color: "booking2",
-                  roomNumber: "2"
+                  roomId: "1"
                 },
                 {
                   id: "2",
@@ -434,7 +434,7 @@ module.exports = {
                   entity: "camera doppia",
                   persons: 2,
                   color: "booking3",
-                  roomNumber: "6"
+                  roomId: "5"
                 },
                 {
                   id: "3",
@@ -479,7 +479,7 @@ module.exports = {
                   entity: "camera doppia",
                   persons: 2,
                   color: "booking2",
-                  roomNumber: "5"
+                  roomId: "4"
                 },
                 {
                   id: "7",
@@ -491,7 +491,7 @@ module.exports = {
                   entity: "camera doppia",
                   persons: 2,
                   color: "booking3",
-                  roomNumber: "5"
+                  roomId: "4"
                 }
               ],
               sessionId: Math.floor(Math.random() * 10000)

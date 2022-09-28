@@ -7,10 +7,10 @@ import DateCellSwitch from "./DateCellSwitch";
 
 type DataRowProps = {
   isFirst: boolean,
-  roomNumber: string
+  roomId: string
 }
 
-export default function DataRow({ isFirst, roomNumber }: DataRowProps): JSX.Element {
+export default function DataRow({ isFirst, roomId }: DataRowProps): JSX.Element {
   const columns = useColumns();
   const dates = useDates(true);
 
@@ -23,7 +23,7 @@ export default function DataRow({ isFirst, roomNumber }: DataRowProps): JSX.Elem
       })
     }}>
       {
-        dates.map((date) => <DateCellSwitch key={date} roomNumber={roomNumber} date={date} />)
+        dates.map((date) => <DateCellSwitch key={date} roomId={roomId} date={date} />)
       }
     </Grid>
   );

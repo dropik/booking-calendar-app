@@ -50,21 +50,8 @@ export function useRightmostDate(): string {
 export function useErrorType(id: string): "none" | "warning" | "error" {
   return useAppSelector((state) => {
     const data = state.tiles.data[id];
-    if (data && data.roomNumber) {
-      let assignedRoomType = "";
-      for (const floorId in state.floors.data) {
-        const floor = state.floors.data[floorId];
-        for (const roomId in floor.rooms) {
-          const room = floor.rooms[roomId];
-          if (room.number === data.roomNumber) {
-            assignedRoomType = room.type;
-            break;
-          }
-        }
-        if (assignedRoomType !== "") {
-          break;
-        }
-      }
+    if (data && data.roomId) {
+      const assignedRoomType = state.rooms.data[data.roomId].type;
       const occupancy = state.roomTypes.data[assignedRoomType];
       if (occupancy) {
         if ((data.persons < occupancy.minOccupancy) || (data.persons > occupancy.maxOccupancy)) {

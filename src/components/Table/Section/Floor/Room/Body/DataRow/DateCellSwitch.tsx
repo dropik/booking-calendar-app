@@ -8,12 +8,12 @@ import FreeSpace from "./FreeSpace";
 import DropZone from "./DropZone";
 
 type DateCellSwitchProps = {
-  roomNumber: string,
+  roomId: string,
   date: string
 };
 
-export default function DateCellSwitch({ roomNumber, date }: DateCellSwitchProps): JSX.Element | null {
-  const assignedValue = useAppSelector((state) => state.tiles.assignedMap[roomNumber][date]);
+export default function DateCellSwitch({ roomId, date }: DateCellSwitchProps): JSX.Element | null {
+  const assignedValue = useAppSelector((state) => state.tiles.assignedMap[roomId][date]);
   const grabbedTile = useAppSelector((state) => state.tiles.grabbedTile ? state.tiles.data[state.tiles.grabbedTile] : undefined);
   const assignedTile = useAppSelector((state) => assignedValue ? state.tiles.data[assignedValue] : undefined);
   const leftmostDate = useLeftmostDate();
@@ -23,7 +23,7 @@ export default function DateCellSwitch({ roomNumber, date }: DateCellSwitchProps
   if (assignedValue === "dropzone") {
     if (grabbedTile) {
       if ((date === grabbedTile.from) || (date === oneDayBefore)) {
-        return <DropZone roomNumber={roomNumber} data={grabbedTile} />;
+        return <DropZone roomId={roomId} data={grabbedTile} />;
       }
     }
   } else if (assignedValue !== undefined) {

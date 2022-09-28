@@ -28,7 +28,7 @@ type AlertWrappeeProps = {
 
 function AlertWrappee({ children, data }: AlertWrappeeProps): JSX.Element {
   const { cropRight } = useContext(TileContext);
-  const assignedRoomType = useAssignedRoomType(data.roomNumber);
+  const assignedRoomType = useAppSelector((state) => data.roomId ? state.rooms.data[data.roomId].type : undefined);
   const occupancy = useAppSelector((state) => assignedRoomType ? state.roomTypes.data[assignedRoomType] : undefined);
   const badgeColor = useBadgeColor(data, occupancy, assignedRoomType);
 
@@ -60,21 +60,6 @@ function AlertWrappee({ children, data }: AlertWrappeeProps): JSX.Element {
     </Badge>
   );
 }
-
-function useAssignedRoomType(roomNumber: string | undefined): string | undefined {
-  return useAppSelector((state) => {
-    for (const floorId in state.floors.data) {
-      const floor = state.floors.data[floorId];
-      for (const roomId in floor.rooms) {
-        const room = floor.rooms[roomId];
-        if (room.number === roomNumber) {
-          return room.type;
-        }
-      }
-    }
-  });
-}
-
 function useBadgeColor(data: TileData, occupancy: RoomType | undefined, assignedRoomType: string | undefined): string {
   const theme = useTheme();
 

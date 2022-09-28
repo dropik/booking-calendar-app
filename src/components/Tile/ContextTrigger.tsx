@@ -35,7 +35,7 @@ export default function ContextTrigger({ children }: ContextTriggerProps): JSX.E
           anchorReference="anchorPosition"
           anchorPosition={contextPos}
           onClose={closeContext}
-          unassigned={data.roomNumber === undefined}
+          unassigned={data.roomId === undefined}
         />
       ) : null}
     </>

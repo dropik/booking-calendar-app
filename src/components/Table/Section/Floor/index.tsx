@@ -21,12 +21,12 @@ export default function Floor({ data }: FloorProps): JSX.Element {
           const room = data.rooms[roomId];
 
           return (
-            <Row key={room.number}>
+            <Row key={roomId}>
               <Header room={room} />
               <Body
                 isFirst={index === 0}
                 isLast={index === roomIds.length - 1}
-                roomNumber={room.number}
+                roomId={roomId}
               />
             </Row>
           );

@@ -20,7 +20,7 @@ export type TileData = {
   entity: string,
   persons: number,
   color: TileColor,
-  roomNumber?: string
+  roomId?: string
 };
 
 export type ChangesMap = {
@@ -103,14 +103,14 @@ export const tilesSlice = createSlice({
       state.mouseYOnGrab = action.payload.mouseY;
 
       const tile = state.data[action.payload.tileId];
-      for (const roomNumber in state.assignedMap) {
+      for (const roomId in state.assignedMap) {
         let revert = false;
         const dateCounter = new Date(tile.from);
         for (let i = 0; i < tile.nights; i++) {
           const x = Utils.dateToString(dateCounter);
           dateCounter.setDate(dateCounter.getDate() + 1);
-          if (!state.assignedMap[roomNumber][x]) {
-            state.assignedMap[roomNumber][x] = "dropzone";
+          if (!state.assignedMap[roomId][x]) {
+            state.assignedMap[roomId][x] = "dropzone";
           } else {
             revert = true;
             dateCounter.setDate(dateCounter.getDate() - 2);
@@ -121,7 +121,7 @@ export const tilesSlice = createSlice({
         if (revert) {
           let x = Utils.dateToString(dateCounter);
           while (Utils.daysBetweenDates(tile.from, x) >= 0) {
-            state.assignedMap[roomNumber][x] = undefined;
+            state.assignedMap[roomId][x] = undefined;
             dateCounter.setDate(dateCounter.getDate() - 1);
             x = Utils.dateToString(dateCounter);
           }
@@ -134,13 +134,13 @@ export const tilesSlice = createSlice({
       state.mouseYOnGrab = 0;
 
       const tile = state.data[action.payload.tileId];
-      for (const roomNumber in state.assignedMap) {
-        if (state.assignedMap[roomNumber][tile.from] === "dropzone") {
+      for (const roomId in state.assignedMap) {
+        if (state.assignedMap[roomId][tile.from] === "dropzone") {
           const dateCounter = new Date(tile.from);
           for (let i = 0; i < tile.nights; i++) {
             const x = Utils.dateToString(dateCounter);
             dateCounter.setDate(dateCounter.getDate() + 1);
-            state.assignedMap[roomNumber][x] = undefined;
+            state.assignedMap[roomId][x] = undefined;
           }
         }
       }
@@ -180,20 +180,20 @@ export const tilesSlice = createSlice({
     },
     deleteRooms: (state, action: PayloadAction<string[]>) => {
       const rooms = action.payload;
-      for (const roomNumber of rooms) {
-        const room = state.assignedMap[roomNumber];
+      for (const roomId of rooms) {
+        const room = state.assignedMap[roomId];
         if (room) {
           for (const date in room) {
             const tileId = room[date];
             if (tileId) {
               const tile = state.data[tileId];
               if (tile) {
-                tile.roomNumber = undefined;
+                tile.roomId = undefined;
               }
               delete room[date];
             }
           }
-          delete state.assignedMap[roomNumber];
+          delete state.assignedMap[roomId];
         }
       }
     }
@@ -214,8 +214,8 @@ export const tilesSlice = createSlice({
       .addCase(fetchFloorsAsync.fulfilled, (state, action) => {
         action.payload.forEach((floor) => {
           floor.rooms.forEach((room) => {
-            if (!state.assignedMap[room.number]) {
-              state.assignedMap[room.number] = { };
+            if (!state.assignedMap[room.id]) {
+              state.assignedMap[room.id] = { };
             }
           });
         });
@@ -235,14 +235,14 @@ function addFetchedTiles(state: WritableDraft<State>, tiles: TileData[]): void {
       state.bookingsMap[tile.bookingId] = [];
     }
     state.bookingsMap[tile.bookingId].push(tile.id);
-    const roomNumber = tile.roomNumber;
-    if (roomNumber !== undefined) {
-      if (state.assignedMap[roomNumber] === undefined) {
-        state.assignedMap[roomNumber] = {};
+    const roomId = tile.roomId;
+    if (roomId !== undefined) {
+      if (state.assignedMap[roomId] === undefined) {
+        state.assignedMap[roomId] = {};
       }
       const dateCounter = new Date(tile.from);
       for (let i = 0; i < tile.nights; i++) {
-        state.assignedMap[roomNumber][Utils.dateToString(dateCounter)] = tile.id;
+        state.assignedMap[roomId][Utils.dateToString(dateCounter)] = tile.id;
         dateCounter.setDate(dateCounter.getDate() + 1);
       }
     } else {
@@ -268,7 +268,7 @@ function tryMoveTile(
   }
 
   const tileId = state.grabbedTile;
-  const prevY = state.data[tileId].roomNumber;
+  const prevY = state.data[tileId].roomId;
   const newY = action.payload.newY;
 
   if (newY !== prevY) {
@@ -284,12 +284,12 @@ function tryMoveTile(
 function tryRemoveAssignment(state: WritableDraft<State>, action: PayloadAction<{ tileId: string }>): void {
   const tileId = action.payload.tileId;
   const tileData = state.data[tileId];
-  const roomNumber = tileData.roomNumber;
-  if (roomNumber) {
+  const roomId = tileData.roomId;
+  if (roomId) {
     const dateCounter = new Date(tileData.from);
     for (let i = 0; i < tileData.nights; i++) {
       const x = Utils.dateToString(dateCounter);
-      state.assignedMap[roomNumber][x] = undefined;
+      state.assignedMap[roomId][x] = undefined;
       if (state.unassignedMap[x] === undefined) {
         state.unassignedMap[x] = { };
       }
@@ -297,8 +297,8 @@ function tryRemoveAssignment(state: WritableDraft<State>, action: PayloadAction<
       dateCounter.setDate(dateCounter.getDate() + 1);
     }
 
-    saveRoomChange(state, tileId, tileData.roomNumber, undefined);
-    tileData.roomNumber = undefined;
+    saveRoomChange(state, tileId, tileData.roomId, undefined);
+    tileData.roomId = undefined;
   }
 }
 
@@ -308,7 +308,7 @@ function unassignChangedTiles(state: WritableDraft<State>): void {
     const newRoom = state.changesMap[tileId].newRoom;
 
     if (newRoom !== undefined) {
-      state.data[tileId].roomNumber = undefined;
+      state.data[tileId].roomId = undefined;
       const dateCounter = new Date(tileData.from);
       for (let i = 0; i < tileData.nights; i++) {
         const x = Utils.dateToString(dateCounter);
@@ -329,7 +329,7 @@ function reassignTiles(state: WritableDraft<State>): void {
     const originalRoom = state.changesMap[tileId].originalRoom;
 
     if (originalRoom !== undefined) {
-      state.data[tileId].roomNumber = originalRoom;
+      state.data[tileId].roomId = originalRoom;
       const dateCounter = new Date(tileData.from);
       for (let i = 0; i < tileData.nights; i++) {
         const x = Utils.dateToString(dateCounter);
@@ -384,8 +384,8 @@ function moveTile(
     dateCounter.setDate(dateCounter.getDate() + 1);
   }
 
-  saveRoomChange(state, tileId, state.data[tileId].roomNumber, newY);
-  state.data[tileId].roomNumber = newY;
+  saveRoomChange(state, tileId, state.data[tileId].roomId, newY);
+  state.data[tileId].roomId = newY;
 }
 
 function checkHasCollision(
@@ -416,8 +416,8 @@ function assignTile(state: WritableDraft<State>, tileId: string, newY: string): 
     dateCounter.setDate(dateCounter.getDate() + 1);
   }
 
-  saveRoomChange(state, tileId, state.data[tileId].roomNumber, newY);
-  state.data[tileId].roomNumber = newY;
+  saveRoomChange(state, tileId, state.data[tileId].roomId, newY);
+  state.data[tileId].roomId = newY;
 }
 
 function saveRoomChange(state: WritableDraft<State>, tileId: string, prevY: string | undefined, newY: string | undefined): void {

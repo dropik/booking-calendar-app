@@ -6,10 +6,10 @@ import { move } from "../../../../../../../../redux/tilesSlice";
 
 type DropAccepterProps = {
   children: React.ReactNode,
-  roomNumber: string
+  roomId: string
 };
 
-export default function DropAccepter({ children, roomNumber }: DropAccepterProps): JSX.Element {
+export default function DropAccepter({ children, roomId }: DropAccepterProps): JSX.Element {
   const dispatch = useAppDispatch();
 
   function acceptDrop(event: React.DragEvent<HTMLDivElement>): void {
@@ -17,7 +17,7 @@ export default function DropAccepter({ children, roomNumber }: DropAccepterProps
   }
 
   function handleDrop(): void {
-    dispatch(move({ newY: roomNumber }));
+    dispatch(move({ newY: roomId }));
   }
 
   return (
