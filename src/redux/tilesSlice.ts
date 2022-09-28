@@ -171,6 +171,33 @@ export const tilesSlice = createSlice({
         state.data[tileId].color = action.payload.color;
         checkChangeReturnedToOriginal(state, tileId);
       });
+    },
+    createRooms: (state, action: PayloadAction<number[]>) => {
+      const newRooms = action.payload;
+      for (const room of newRooms) {
+        if (!state.assignedMap[room]) {
+          state.assignedMap[room] = { };
+        }
+      }
+    },
+    deleteRooms: (state, action: PayloadAction<number[]>) => {
+      const rooms = action.payload;
+      for (const roomNumber of rooms) {
+        const room = state.assignedMap[roomNumber];
+        if (room) {
+          for (const date in room) {
+            const tileId = room[date];
+            if (tileId) {
+              const tile = state.data[tileId];
+              if (tile) {
+                tile.roomNumber = undefined;
+              }
+              delete room[date];
+            }
+          }
+          delete state.assignedMap[roomNumber];
+        }
+      }
     }
   },
   extraReducers: (builder) => {
@@ -198,7 +225,7 @@ export const tilesSlice = createSlice({
   }
 });
 
-export const { move, grab, drop, unassign, saveChanges, undoChanges, setColor } = tilesSlice.actions;
+export const { move, grab, drop, unassign, saveChanges, undoChanges, setColor, createRooms, deleteRooms } = tilesSlice.actions;
 
 export default tilesSlice.reducer;
 
