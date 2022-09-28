@@ -90,5 +90,5 @@ export const useLeftmostDate:       () => string =
 export const useColumns:            () => number =
   () => useAppSelector(state => state.table.columns);
 
-export const useHotelData:          () => Floors =
+export const useFloors:          () => Floors =
   () => useAppSelector(state => state.hotel.data);

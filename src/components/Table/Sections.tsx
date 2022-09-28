@@ -2,7 +2,7 @@ import React from "react";
 import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 
-import { useHotelData } from "../../redux/hooks";
+import { useFloors } from "../../redux/hooks";
 
 import Floor from "./Section/Floor";
 import NotAssigned from "./Section/NotAssigned";
@@ -10,7 +10,7 @@ import Skeleton from "./Skeleton";
 
 export default function Sections(): JSX.Element {
   const theme = useTheme();
-  const floors = useHotelData();
+  const floors = useFloors();
   const floorIds = Object.keys(floors);
 
   return (
