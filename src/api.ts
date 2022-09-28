@@ -35,7 +35,7 @@ export type ClientData = {
 
 export type Room = {
   id: string,
-  number: number,
+  number: string,
   type: string
 };
 
@@ -67,11 +67,11 @@ export function deleteFloorAsync(floorId: string): Promise<void> {
   return deleteDataAsync(`api/v1/floors/${floorId}`);
 }
 
-export function postRoomAsync(room: { floorId: string, number: number, type: string }): Promise<{ id: string }> {
+export function postRoomAsync(room: { floorId: string, number: string, type: string }): Promise<{ id: string }> {
   return postDataAsync(`api/v1/floors/${room.floorId}/rooms`, room);
 }
 
-export function putRoomAsync(room: { id: string, floorId: string, number: number, type: string }): Promise<void> {
+export function putRoomAsync(room: { id: string, floorId: string, number: string, type: string }): Promise<void> {
   return putDataAsync(`api/v1/floors/${room.floorId}/rooms/${room.id}`, room);
 }
 

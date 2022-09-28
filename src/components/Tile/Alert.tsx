@@ -61,7 +61,7 @@ function AlertWrappee({ children, data }: AlertWrappeeProps): JSX.Element {
   );
 }
 
-function useAssignedRoomType(roomNumber: number | undefined): string | undefined {
+function useAssignedRoomType(roomNumber: string | undefined): string | undefined {
   return useAppSelector((state) => {
     for (const floorId in state.floors.data) {
       const floor = state.floors.data[floorId];

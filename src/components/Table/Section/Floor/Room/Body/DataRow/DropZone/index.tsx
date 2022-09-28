@@ -8,7 +8,7 @@ import Size from "../../../../../../../Tile/Size";
 import DropAccepter from "./DropAccepter";
 
 type DropZoneProps = {
-  roomNumber: number,
+  roomNumber: string,
   data: TileData
 };
 

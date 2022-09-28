@@ -4,7 +4,7 @@ import { fetchFloorsAsync } from "../api";
 import { show as showMessage } from "./snackbarMessageSlice";
 
 export type Room = {
-  number: number,
+  number: string,
   type: string
 };
 
@@ -65,14 +65,14 @@ export const floorsSlice = createSlice({
         delete state.data[action.payload];
       }
     },
-    createRoom: (state, action: PayloadAction<{ id: string, floorId: string, number: number, type: string }>) => {
+    createRoom: (state, action: PayloadAction<{ id: string, floorId: string, number: string, type: string }>) => {
       const room = action.payload;
       const floor = state.data[room.floorId];
       if (floor) {
         floor.rooms[room.id] = { number: room.number, type: room.type };
       }
     },
-    editRoom: (state, action: PayloadAction<{ id: string, floorId: string, number: number, type: string }>) => {
+    editRoom: (state, action: PayloadAction<{ id: string, floorId: string, number: string, type: string }>) => {
       const newRoom = action.payload;
       const floor = state.data[newRoom.floorId];
       if (floor) {

@@ -4,8 +4,6 @@ const ReactRefreshTypeScript = require("react-refresh-typescript");
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
-let lastServedSessionId = "";
-
 module.exports = {
   entry: "./src/index.tsx",
   mode: isDevelopment ? "development" : "production",
@@ -100,7 +98,7 @@ module.exports = {
                 entity: "camera matrimoniale",
                 persons: 2,
                 color: "booking1",
-                roomNumber: 3
+                roomNumber: "3"
               },
               {
                 id: "2",
@@ -112,7 +110,7 @@ module.exports = {
                 entity: "camera matrimoniale",
                 persons: 2,
                 color: "booking1",
-                roomNumber: 5
+                roomNumber: "5"
               }
             ]
           });
@@ -252,27 +250,27 @@ module.exports = {
               rooms: [
                 {
                   id: "0",
-                  number: 1,
+                  number: "1",
                   type: "camera tripla standard",
                 },
                 {
                   id: "1",
-                  number: 2,
+                  number: "2",
                   type: "appartamento",
                 },
                 {
                   id: "2",
-                  number: 3,
+                  number: "3",
                   type: "camera matrimoniale/doppia",
                 },
                 {
                   id: "3",
-                  number: 4,
+                  number: "4",
                   type: "camera tripla",
                 },
                 {
                   id: "4",
-                  number: 5,
+                  number: "5",
                   type: "camera matrimoniale/doppia",
                 },
               ],
@@ -283,37 +281,37 @@ module.exports = {
               rooms: [
                 {
                   id: "5",
-                  number: 6,
+                  number: "6",
                   type: "camera matrimoniale/doppia",
                 },
                 {
                   id: "6",
-                  number: 7,
+                  number: "7",
                   type: "camera matrimoniale/doppia",
                 },
                 {
                   id: "7",
-                  number: 8,
+                  number: "8",
                   type: "camera singola",
                 },
                 {
                   id: "8",
-                  number: 9,
+                  number: "9",
                   type: "camera matrimoniale/doppia",
                 },
                 {
                   id: "9",
-                  number: 10,
+                  number: "10",
                   type: "camera matrimoniale/doppia economy",
                 },
                 {
                   id: "10",
-                  number: 11,
+                  number: "11",
                   type: "camera tripla",
                 },
                 {
                   id: "11",
-                  number: 12,
+                  number: "12",
                   type: "camera matrimoniale/doppia",
                 },
               ],
@@ -412,7 +410,7 @@ module.exports = {
                   entity: "camera doppia",
                   persons: 2,
                   color: "booking1",
-                  roomNumber: 3
+                  roomNumber: "3"
                 },
                 {
                   id: "1",
@@ -424,7 +422,7 @@ module.exports = {
                   entity: "camera doppia",
                   persons: 2,
                   color: "booking2",
-                  roomNumber: 2
+                  roomNumber: "2"
                 },
                 {
                   id: "2",
@@ -436,7 +434,7 @@ module.exports = {
                   entity: "camera doppia",
                   persons: 2,
                   color: "booking3",
-                  roomNumber: 6
+                  roomNumber: "6"
                 },
                 {
                   id: "3",
@@ -481,7 +479,7 @@ module.exports = {
                   entity: "camera doppia",
                   persons: 2,
                   color: "booking2",
-                  roomNumber: 5
+                  roomNumber: "5"
                 },
                 {
                   id: "7",
@@ -493,7 +491,7 @@ module.exports = {
                   entity: "camera doppia",
                   persons: 2,
                   color: "booking3",
-                  roomNumber: 5
+                  roomNumber: "5"
                 }
               ],
               sessionId: Math.floor(Math.random() * 10000)

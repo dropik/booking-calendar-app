@@ -20,14 +20,14 @@ export type TileData = {
   entity: string,
   persons: number,
   color: TileColor,
-  roomNumber?: number
+  roomNumber?: string
 };
 
 export type ChangesMap = {
   [key: string]: {
     roomChanged: boolean,
-    originalRoom?: number,
-    newRoom?: number,
+    originalRoom?: string,
+    newRoom?: string,
     originalColor?: TileColor,
     newColor?: TileColor
   }
@@ -39,7 +39,7 @@ export type State = {
     [key: string]: TileData
   },
   assignedMap: {
-    [key: number]: {
+    [key: string]: {
       [key: string]: string | undefined
     }
   },
@@ -91,7 +91,7 @@ export const tilesSlice = createSlice({
   name: "tiles",
   initialState: initialState,
   reducers: {
-    move: (state, action: PayloadAction<{ newY: number }>) => {
+    move: (state, action: PayloadAction<{ newY: string }>) => {
       tryMoveTile(state, action);
       if (state.grabbedTile) {
         checkChangeReturnedToOriginal(state, state.grabbedTile);
@@ -172,15 +172,13 @@ export const tilesSlice = createSlice({
         checkChangeReturnedToOriginal(state, tileId);
       });
     },
-    createRooms: (state, action: PayloadAction<number[]>) => {
-      const newRooms = action.payload;
-      for (const room of newRooms) {
-        if (!state.assignedMap[room]) {
-          state.assignedMap[room] = { };
-        }
+    createRoom: (state, action: PayloadAction<string>) => {
+      const newRoom = action.payload;
+      if (!state.assignedMap[newRoom]) {
+        state.assignedMap[newRoom] = { };
       }
     },
-    deleteRooms: (state, action: PayloadAction<number[]>) => {
+    deleteRooms: (state, action: PayloadAction<string[]>) => {
       const rooms = action.payload;
       for (const roomNumber of rooms) {
         const room = state.assignedMap[roomNumber];
@@ -225,7 +223,7 @@ export const tilesSlice = createSlice({
   }
 });
 
-export const { move, grab, drop, unassign, saveChanges, undoChanges, setColor, createRooms, deleteRooms } = tilesSlice.actions;
+export const { move, grab, drop, unassign, saveChanges, undoChanges, setColor, createRoom, deleteRooms } = tilesSlice.actions;
 
 export default tilesSlice.reducer;
 
@@ -263,7 +261,7 @@ function addFetchedTiles(state: WritableDraft<State>, tiles: TileData[]): void {
 
 function tryMoveTile(
   state: WritableDraft<State>,
-  action: PayloadAction<{ newY: number }>
+  action: PayloadAction<{ newY: string }>
 ): void {
   if (!state.grabbedTile) {
     return;
@@ -363,7 +361,7 @@ function checkChangeReturnedToOriginal(state: WritableDraft<State>, tileId: stri
   }
 }
 
-function moveOrAssignTile(state: WritableDraft<State>, tileId: string, prevY: number | undefined, newY: number): void {
+function moveOrAssignTile(state: WritableDraft<State>, tileId: string, prevY: string | undefined, newY: string): void {
   if (prevY !== undefined) {
     moveTile(state, tileId, prevY, newY);
   } else {
@@ -374,8 +372,8 @@ function moveOrAssignTile(state: WritableDraft<State>, tileId: string, prevY: nu
 function moveTile(
   state: WritableDraft<State>,
   tileId: string,
-  prevY: number,
-  newY: number
+  prevY: string,
+  newY: string
 ): void {
   const tileData = state.data[tileId];
   const dateCounter = new Date(tileData.from);
@@ -393,7 +391,7 @@ function moveTile(
 function checkHasCollision(
   state: WritableDraft<State>,
   tileId: string,
-  newY: number
+  newY: string
 ): boolean {
   const tileData = state.data[tileId];
   const dateCounter = new Date(tileData.from);
@@ -408,7 +406,7 @@ function checkHasCollision(
   return false;
 }
 
-function assignTile(state: WritableDraft<State>, tileId: string, newY: number): void {
+function assignTile(state: WritableDraft<State>, tileId: string, newY: string): void {
   const tileData = state.data[tileId];
   const dateCounter = new Date(tileData.from);
   for (let i = 0; i < tileData.nights; i++) {
@@ -422,7 +420,7 @@ function assignTile(state: WritableDraft<State>, tileId: string, newY: number): 
   state.data[tileId].roomNumber = newY;
 }
 
-function saveRoomChange(state: WritableDraft<State>, tileId: string, prevY: number | undefined, newY: number | undefined): void {
+function saveRoomChange(state: WritableDraft<State>, tileId: string, prevY: string | undefined, newY: string | undefined): void {
   if (!state.changesMap[tileId]) {
     state.changesMap[tileId] = {
       roomChanged: true,
