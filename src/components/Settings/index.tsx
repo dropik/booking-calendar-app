@@ -65,29 +65,41 @@ export default function Settings(): JSX.Element {
                       const roomType = `${room.type[0].toLocaleUpperCase()}${room.type.slice(1)}`;
 
                       return (
-                        <Stack key={roomId} spacing={1} sx={{
+                        <Stack key={roomId} direction="row" sx={{
                           borderBottom: `1px solid ${theme.palette.outline.light}`,
-                          p: "1rem"
+                          p: "1rem",
+                          justifyContent: "space-between",
+                          alignItems: "center"
                         }}>
-                          <Stack direction="row" justifyContent="space-between">
-                            <Stack direction="row" spacing={4} alignItems="center">
-                              <Typography variant="headlineSmall">{`Camera ${room.number}`}</Typography>
-                              <Stack direction="row">
-                                <M3IconButton><EditOutlinedIcon /></M3IconButton>
-                                <M3IconButton><DeleteOutlineOutlinedIcon /></M3IconButton>
-                              </Stack>
+                          <Stack direction="row" alignItems="center">
+                            <Stack direction="row" sx={{ flexBasis: "10rem", flexShrink: 0 }}>
+                              <Typography variant="titleLarge">{`Camera ${room.number}`}</Typography>
                             </Stack>
-                            <Stack direction="row" sx={{
-                              borderRadius: "0.5rem",
-                              border: `1px solid ${theme.palette.outline.light}`,
-                              height: "2rem",
-                              boxSizing: "border-box",
-                              alignItems: "center",
-                              pl: "1rem",
-                              pr: "1rem"
-                            }}>
-                              <Typography variant="labelLarge">{roomType}</Typography>
+                            <Stack direction="row" spacing={1}>
+                              <M3IconButton sx={{
+                                borderRadius: "1.25rem",
+                                border: `1px solid ${theme.palette.outline.light}`
+                              }}>
+                                <EditOutlinedIcon />
+                              </M3IconButton>
+                              <M3IconButton sx={{
+                                borderRadius: "1.25rem",
+                                border: `1px solid ${theme.palette.outline.light}`
+                              }}>
+                                <DeleteOutlineOutlinedIcon />
+                              </M3IconButton>
                             </Stack>
+                          </Stack>
+                          <Stack direction="row" sx={{
+                            borderRadius: "0.5rem",
+                            border: `1px solid ${theme.palette.outline.light}`,
+                            height: "2rem",
+                            boxSizing: "border-box",
+                            alignItems: "center",
+                            pl: "1rem",
+                            pr: "1rem"
+                          }}>
+                            <Typography variant="labelLarge">{roomType}</Typography>
                           </Stack>
                         </Stack>
                       );

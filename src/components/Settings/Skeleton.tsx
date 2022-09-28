@@ -40,7 +40,7 @@ export default function Skeleton(): JSX.Element {
                   boxSizing: "border-box"
                 }}>
                   <Stack direction="row" justifyContent="space-between">
-                    <Typography variant="headlineSmall"><M3Skeleton width="6rem" /></Typography>
+                    <Typography variant="titleLarge"><M3Skeleton width="6rem" /></Typography>
                     <Typography variant="labelLarge"><M3Skeleton width="10rem" /></Typography>
                   </Stack>
                 </Stack>
