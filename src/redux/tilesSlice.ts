@@ -187,7 +187,7 @@ export const tilesSlice = createSlice({
         state.status = "failed";
       })
       .addCase(fetchHotelAsync.fulfilled, (state, action) => {
-        action.payload.floors.forEach((floor) => {
+        action.payload.forEach((floor) => {
           floor.rooms.forEach((room) => {
             if (!state.assignedMap[room.number]) {
               state.assignedMap[room.number] = { };

@@ -1,11 +1,11 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 
-import { RoomData } from "../../../../../redux/hotelSlice";
+import { Room } from "../../../../../redux/hotelSlice";
 import RowHeader from "../../Row/Header";
 
 type HeaderProps = {
-  room: RoomData
+  room: Room
 }
 
 export default function Header({ room }: HeaderProps): JSX.Element {

@@ -3,27 +3,31 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fetchHotelDataAsync } from "../api";
 import { show as showMessage } from "./snackbarMessageSlice";
 
-export type RoomData = {
+export type Room = {
   number: number,
   type: string
 };
 
-export type FloorData = {
-  name: string,
-  rooms: RoomData[]
+export type Rooms = {
+  [key: string]: Room
 };
 
-export type HotelData = {
-  floors: FloorData[]
+export type Floor = {
+  name: string,
+  rooms: Rooms
+};
+
+export type Floors = {
+  [key: string]: Floor
 };
 
 export type State = {
-  data: HotelData,
+  data: Floors,
   status: "idle" | "loading" | "failed"
 };
 
 const initialState: State = {
-  data: { floors: [] },
+  data: { },
   status: "idle"
 };
 
@@ -53,7 +57,15 @@ export const hotelSlice = createSlice({
       })
       .addCase(fetchAsync.fulfilled, (state, action) => {
         state.status = "idle";
-        state.data = action.payload;
+        state.data = { };
+        const data = action.payload;
+        for (const floor of data) {
+          const rooms: Rooms = { };
+          for (const room of floor.rooms) {
+            rooms[room.id] = { number: room.number, type: room.type };
+          }
+          state.data[floor.id] = { name: floor.name, rooms };
+        }
       })
       .addCase(fetchAsync.rejected, (state) => {
         state.status = "failed";

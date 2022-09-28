@@ -10,15 +10,19 @@ import Skeleton from "./Skeleton";
 
 export default function Sections(): JSX.Element {
   const theme = useTheme();
-  const data = useHotelData().floors;
+  const floors = useHotelData();
+  const floorIds = Object.keys(floors);
 
   return (
     <Stack spacing={0} sx={{
       color: theme.palette.onSurface.light
     }}>
-      {data.length > 0 ? data.map((floor) => (
-        <Floor key={floor.name} data={floor} />
-      )) : <Skeleton />}
+      {floorIds.length > 0 ? floorIds.map((floorId) => {
+        const floor = floors[floorId];
+        return (
+          <Floor key={floor.name} data={floor} />
+        );
+      }) : <Skeleton />}
       <NotAssigned />
     </Stack>
   );
