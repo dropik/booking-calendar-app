@@ -4,9 +4,9 @@ import { WritableDraft } from "immer/dist/internal";
 import * as Utils from "../utils";
 import { fetchTilesAsync } from "../api";
 import { show as showMessage } from "./snackbarMessageSlice";
-
-import * as TableSlice from "./tableSlice";
-import * as HotelSlice from "./hotelSlice";
+import { fetchAsync as fetchHotelAsync } from "./hotelSlice";
+import { FetchPeriod } from "./tableSlice";
+import { RootState } from "./store";
 
 export type TileColor = "booking1" | "booking2" | "booking3" | "booking4" | "booking5" | "booking6" | "booking7" | "booking8";
 
@@ -56,7 +56,8 @@ export type State = {
   },
   changesMap: ChangesMap,
   grabbedTile?: string,
-  mouseYOnGrab: number
+  mouseYOnGrab: number,
+  sessionId?: string
 };
 
 const initialState: State = {
@@ -72,9 +73,10 @@ const initialState: State = {
 
 export const fetchAsync = createAsyncThunk(
   "tiles/fetch",
-  async (arg: TableSlice.FetchPeriod, thunkApi) => {
+  async (arg: FetchPeriod, thunkApi) => {
     try {
-      const response = await fetchTilesAsync(arg.from, arg.to);
+      const state = thunkApi.getState() as RootState;
+      const response = await fetchTilesAsync(arg.from, arg.to, state.tiles.sessionId);
       return response.data;
     } catch(error) {
       thunkApi.dispatch(showMessage({ type: "error" }));
@@ -178,12 +180,13 @@ export const tilesSlice = createSlice({
       })
       .addCase(fetchAsync.fulfilled, (state, action) => {
         state.status = "idle";
-        addFetchedTiles(state, action.payload);
+        addFetchedTiles(state, action.payload.tiles);
+        state.sessionId = action.payload.sessionId;
       })
       .addCase(fetchAsync.rejected, (state) => {
         state.status = "failed";
       })
-      .addCase(HotelSlice.fetchAsync.fulfilled, (state, action) => {
+      .addCase(fetchHotelAsync.fulfilled, (state, action) => {
         action.payload.floors.forEach((floor) => {
           floor.rooms.forEach((room) => {
             if (!state.assignedMap[room.number]) {

@@ -48,8 +48,8 @@ export function fetchRoomTypesAsync(): Promise<{ data: RoomType[] }> {
   return fetchJsonDataAsync<RoomType[]>("/api/v1/room-types");
 }
 
-export function fetchTilesAsync(from: string, to: string): Promise<{ data: TileData[] }> {
-  return fetchJsonDataAsync<TileData[]>(`/api/v1/tiles?from=${from}&to=${to}`);
+export function fetchTilesAsync(from: string, to: string, sessionId?: string): Promise<{ data: { tiles: TileData[], sessionId: string } }> {
+  return fetchJsonDataAsync<{ tiles: TileData[], sessionId: string }>(`/api/v1/tiles?from=${from}&to=${to}${sessionId ? `&sessionId=${sessionId}` : ""}`);
 }
 
 export function postChangesAsync(changes: ChangesMap): Promise<void> {
