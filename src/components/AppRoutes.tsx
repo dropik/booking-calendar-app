@@ -6,6 +6,7 @@ import Bookings from "./Bookings";
 import BookingDetails from "./BookingDetails";
 import Tools from "./Tools";
 import Clients from "./Clients";
+import Settings from "./Settings";
 
 export default function AppRoutes(): JSX.Element {
   return (
@@ -16,6 +17,7 @@ export default function AppRoutes(): JSX.Element {
       </Route>
       <Route path="tools" element={<Tools />} />
       <Route path="clients" element={<Clients />} />
+      <Route path="settings" element={<Settings />} />
     </Routes>
   );
 }

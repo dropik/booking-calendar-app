@@ -19,8 +19,7 @@ type Props = {
       icon: ReactNode,
       text: string,
       link: string,
-      end: boolean,
-      onClick: () => void
+      end: boolean
     }[]
   }[]
 }
@@ -42,7 +41,7 @@ export default function DrawerLists({ open, lists }: Props): JSX.Element {
             {list.items.map((item) => (
               <M3NavLink key={item.link} end={item.end} to={item.link} style={{ textDecoration: "none" }}>
                 {({ isActive }) => (
-                  <M3ListItemButton onClick={item.onClick} selected={isActive} sx={{
+                  <M3ListItemButton selected={isActive} sx={{
                     overflow: "hidden",
                     transition: theme.transitions.create(["height", "margin-bottom"], {
                       easing: theme.transitions.easing.fastOutSlowIn,
