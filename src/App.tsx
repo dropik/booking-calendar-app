@@ -4,7 +4,6 @@ import Box from "@mui/material/Box";
 
 import M3GlobalStyles from "./components/m3/M3GlobalStyles";
 import ResizeHandler from "./components/ResizeHandler";
-import ScrollingHandler from "./components/ScrollingHandler";
 import AppDrawer from "./components/AppDrawer";
 import DrawerButton from "./components/DrawerButton";
 import AppRoutes from "./components/AppRoutes";
@@ -24,7 +23,6 @@ export default function App(): JSX.Element {
         <SaveAndResetWidget />
         <SnackbarMessage />
         <ResizeHandler />
-        <ScrollingHandler />
       </Box>
     </BrowserRouter>
   );
