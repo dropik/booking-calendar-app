@@ -19,7 +19,8 @@ export default function M3Dialog({ heightRem, children, open, ...props }: M3Dial
       sx: {
         height: "calc(100vh - 4rem)",
         backgroundColor: "transparent",
-        overflow: "visible"
+        overflow: "visible",
+        pointerEvents: "none"
       }
     }}>
       <Paper elevation={3} sx={{
@@ -27,7 +28,8 @@ export default function M3Dialog({ heightRem, children, open, ...props }: M3Dial
         minWidth: "17.5rem",
         maxWidth: "35rem",
         position: "relative",
-        mt: `calc(50vh - ${heightRem / 2 + 2}rem)`
+        mt: `calc(50vh - ${heightRem / 2 + 2}rem)`,
+        pointerEvents: "auto"
       }}>
         <Collapse
           in={open}

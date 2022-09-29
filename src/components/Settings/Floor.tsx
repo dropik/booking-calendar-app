@@ -21,6 +21,8 @@ import M3FilledButton from "../m3/M3FilledButton";
 import M3IconButton from "../m3/M3IconButton";
 import { SurfaceTint } from "../m3/Tints";
 import Room from "./Room";
+import M3Dialog from "../m3/M3Dialog";
+import M3TextButton from "../m3/M3TextButton";
 
 type FloorProps = {
   id: string,
@@ -30,17 +32,22 @@ type FloorProps = {
 export default function Floor({ id, floor }: FloorProps): JSX.Element {
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const [state, setState] = useState<"idle" | "edit">("idle");
+  const [state, setState] = useState<"idle" | "edit" | "remove">("idle");
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState(floor.name);
   const tilesHaveChanges = useAppSelector((state) => Object.keys(state.tiles.changesMap).length > 0);
 
   const floorName = `${floor.name[0].toLocaleUpperCase()}${floor.name.slice(1)}`;
   const validated = name !== "";
+  const openRemoveDialog = state === "remove";
 
   function startEdit(): void {
     setState("edit");
     setName(floor.name);
+  }
+
+  function closeRemoveDialog(): void {
+    setState("idle");
   }
 
   function edit(): void {
@@ -94,16 +101,14 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
         minHeight: "8rem",
         boxSizing: "border-box"
       }}>
-        {state === "idle" ? (
+        {state !== "edit" ? (
           <Stack spacing={2}>
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="headlineLarge">{floorName}</Typography>
-              {isLoading ? <CircularProgress /> : (
-                <Stack direction="row" justifyContent="space-between">
-                  <M3IconButton onClick={startEdit}><EditOutlinedIcon /></M3IconButton>
-                  <M3IconButton onClick={remove}><DeleteOutlineOutlinedIcon /></M3IconButton>
-                </Stack>
-              )}
+              <Stack direction="row" justifyContent="space-between">
+                <M3IconButton onClick={startEdit}><EditOutlinedIcon /></M3IconButton>
+                <M3IconButton onClick={() => setState("remove")}><DeleteOutlineOutlinedIcon /></M3IconButton>
+              </Stack>
             </Stack>
             <Stack direction="row">
               <M3FilledButton>Crea camera</M3FilledButton>
@@ -141,6 +146,26 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
       <Stack>
         {floor.roomIds.map((roomId) => <Room key={roomId} id={roomId} />)}
       </Stack>
+      <M3Dialog open={openRemoveDialog} onClose={closeRemoveDialog} heightRem={16.25}>
+        <Stack spacing={3} sx={{ p: "1.5rem" }}>
+          <Stack spacing={2} alignItems="center">
+            <DeleteOutlineOutlinedIcon />
+            <Typography variant="headlineSmall">Rimuovere il piano?</Typography>
+            <Typography variant="bodyMedium" sx={{ display: "block", width: "100%", textAlign: "left" }}>
+              Verranno rimosse anche tutte le stanze appartenenti a questo piano.
+              Tutte le prenotazioni assegnate a qualsiasi stanza di questo piano rimarranno non assegnati a nessuna stanza.
+            </Typography>
+          </Stack>
+          <Stack direction="row" spacing={1} justifyContent="flex-end">
+            {isLoading ?
+              <CircularProgress /> :
+              (<>
+                <M3TextButton onClick={closeRemoveDialog}>Cancella</M3TextButton>
+                <M3TextButton onClick={remove}>OK</M3TextButton>
+              </>)}
+          </Stack>
+        </Stack>
+      </M3Dialog>
     </Stack>
   );
 }
