@@ -86,6 +86,11 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
               label="Nome"
               value={name}
               onChange={(event) => setName(event.currentTarget.value)}
+              onKeyUp={(event) => {
+                if (event.key === "Enter") {
+                  edit();
+                }
+              }}
               sx={{ maxWidth: "30rem", flexGrow: 1 }}
               error={!validated}
               helperText={validated ? undefined : "Il nome non può essere vuoto."}
