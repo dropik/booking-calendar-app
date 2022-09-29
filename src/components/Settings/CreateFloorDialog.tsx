@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import Dialog from "@mui/material/Dialog";
-import Paper from "@mui/material/Paper";
-import Collapse from "@mui/material/Collapse";
 import TextField from "@mui/material/TextField";
+import CircularProgress from "@mui/material/CircularProgress";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 
 import { postFloorAsync } from "../../api";
@@ -16,7 +14,7 @@ import { show as showMessage } from "../../redux/snackbarMessageSlice";
 import M3TextButton from "../m3/M3TextButton";
 import M3Fab from "../m3/M3Fab";
 import { SurfaceTint } from "../m3/Tints";
-import { CircularProgress } from "@mui/material";
+import M3Dialog from "../m3/M3Dialog";
 
 export default function CreateFloorDialog(): JSX.Element {
   const theme = useTheme();
@@ -70,68 +68,44 @@ export default function CreateFloorDialog(): JSX.Element {
           opacity: theme.opacities.surface3
         }} />
       </M3Fab>) : null}
-      <Dialog keepMounted open={openDialog} onClose={closeDialog} PaperProps={{
-        elevation: 0,
-        sx: {
-          height: "calc(100vh - 4rem)",
-          backgroundColor: "transparent",
-          overflow: "visible"
-        }
-      }}>
-        <Paper elevation={3} sx={{
-          borderRadius: "1.75rem",
-          minWidth: "17.5rem",
-          maxWidth: "35rem",
-          position: "relative",
-          mt: "calc(50vh - 11.125rem)"
-        }}>
-          <Collapse
-            in={openDialog}
-            easing={theme.transitions.easing.fastOutSlowIn}
-          >
-            <Stack spacing={3} sx={{ p: "1.5rem" }}>
-              <Stack spacing={2} alignItems="center">
-                <AddOutlinedIcon />
-                <Typography variant="headlineSmall">Crea piano</Typography>
-                <Typography variant="bodyMedium" sx={{ display: "block", width: "100%", textAlign: "left" }}>
-                  Crea un nuovo piano vuoto con seguente nome:
-                </Typography>
-                <TextField
-                  label="Nome"
-                  onChange={(event) => {
-                    const newName = event.currentTarget.value;
-                    setName(newName);
-                    if (newName === "") {
-                      setValidated(false);
-                    } else {
-                      setValidated(true);
-                    }
-                  }}
-                  onKeyUp={(event) => {
-                    if (event.key === "Enter") {
-                      create();
-                    }
-                  }}
-                  error={!validated}
-                  helperText={validated ? undefined : "Il nome non può essere vuoto."}
-                  sx={{ minWidth: "20rem" }} />
-              </Stack>
-              <Stack direction="row" spacing={1} justifyContent="flex-end">
-                {creatingState === "loading" ?
-                  <CircularProgress /> :
-                  (<>
-                    <M3TextButton onClick={closeDialog}>Cancella</M3TextButton>
-                    <M3TextButton onClick={create}>Crea</M3TextButton>
-                  </>)}
-              </Stack>
-            </Stack>
-          </Collapse>
-          <SurfaceTint sx={{
-            backgroundColor: theme.palette.primary.light,
-            opacity: theme.opacities.surface3
-          }} />
-        </Paper>
-      </Dialog>
+      <M3Dialog open={openDialog} onClose={closeDialog} heightRem={18.25}>
+        <Stack spacing={3} sx={{ p: "1.5rem" }}>
+          <Stack spacing={2} alignItems="center">
+            <AddOutlinedIcon />
+            <Typography variant="headlineSmall">Crea piano</Typography>
+            <Typography variant="bodyMedium" sx={{ display: "block", width: "100%", textAlign: "left" }}>
+              Crea un nuovo piano vuoto con seguente nome:
+            </Typography>
+            <TextField
+              label="Nome"
+              onChange={(event) => {
+                const newName = event.currentTarget.value;
+                setName(newName);
+                if (newName === "") {
+                  setValidated(false);
+                } else {
+                  setValidated(true);
+                }
+              }}
+              onKeyUp={(event) => {
+                if (event.key === "Enter") {
+                  create();
+                }
+              }}
+              error={!validated}
+              helperText={validated ? undefined : "Il nome non può essere vuoto."}
+              sx={{ minWidth: "20rem" }} />
+          </Stack>
+          <Stack direction="row" spacing={1} justifyContent="flex-end">
+            {creatingState === "loading" ?
+              <CircularProgress /> :
+              (<>
+                <M3TextButton onClick={closeDialog}>Cancella</M3TextButton>
+                <M3TextButton onClick={create}>Crea</M3TextButton>
+              </>)}
+          </Stack>
+        </Stack>
+      </M3Dialog>
     </>
   );
 }
