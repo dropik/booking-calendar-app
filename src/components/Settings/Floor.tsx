@@ -11,7 +11,7 @@ import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 
 import { deleteFloorAsync, Floor as FloorDTO, putFloorAsync } from "../../api";
-import { useAppDispatch } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { editFloor, deleteFloor, Floor as FloorData } from "../../redux/floorsSlice";
 import { show as showMessage } from "../../redux/snackbarMessageSlice";
 import { deleteRooms as deleteRoomsForTiles } from "../../redux/tilesSlice";
@@ -33,6 +33,7 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
   const [state, setState] = useState<"idle" | "edit">("idle");
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState(floor.name);
+  const tilesHaveChanges = useAppSelector((state) => Object.keys(state.tiles.changesMap).length > 0);
 
   const floorName = `${floor.name[0].toLocaleUpperCase()}${floor.name.slice(1)}`;
   const validated = name !== "";
@@ -76,8 +77,12 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
       }
     }
 
-    setIsLoading(true);
-    deleteAsync();
+    if (!tilesHaveChanges) {
+      setIsLoading(true);
+      deleteAsync();
+    } else {
+      dispatch(showMessage({ type: "error", message: "Ci sono le modifiche nel calendario non salvate!" }));
+    }
   }
 
   return (
