@@ -10,10 +10,12 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 
-import { Floor as FloorDTO, putFloorAsync } from "../../api";
+import { deleteFloorAsync, Floor as FloorDTO, putFloorAsync } from "../../api";
 import { useAppDispatch } from "../../redux/hooks";
-import { editFloor, Floor as FloorData } from "../../redux/floorsSlice";
+import { editFloor, deleteFloor, Floor as FloorData } from "../../redux/floorsSlice";
 import { show as showMessage } from "../../redux/snackbarMessageSlice";
+import { deleteRooms as deleteRoomsForTiles } from "../../redux/tilesSlice";
+import { deleteRooms } from "../../redux/roomsSlice";
 
 import M3FilledButton from "../m3/M3FilledButton";
 import M3IconButton from "../m3/M3IconButton";
@@ -28,7 +30,8 @@ type FloorProps = {
 export default function Floor({ id, floor }: FloorProps): JSX.Element {
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const [state, setState] = useState<"idle" | "edit" | "loading">("idle");
+  const [state, setState] = useState<"idle" | "edit">("idle");
+  const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState(floor.name);
 
   const floorName = `${floor.name[0].toLocaleUpperCase()}${floor.name.slice(1)}`;
@@ -49,13 +52,32 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
         dispatch(showMessage({ type: "error" }));
       } finally {
         setState("idle");
+        setIsLoading(false);
       }
     }
 
     if (validated) {
-      setState("loading");
+      setIsLoading(true);
       putAsync();
     }
+  }
+
+  function remove(): void {
+    async function deleteAsync(): Promise<void> {
+      try {
+        await deleteFloorAsync(id);
+        dispatch(deleteRoomsForTiles(floor.roomIds));
+        dispatch(deleteRooms({ ids: floor.roomIds }));
+        dispatch(deleteFloor(id));
+      } catch (error) {
+        dispatch(showMessage({ type: "error" }));
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    setIsLoading(true);
+    deleteAsync();
   }
 
   return (
@@ -71,10 +93,12 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
           <Stack spacing={2}>
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="headlineLarge">{floorName}</Typography>
-              <Stack direction="row" justifyContent="space-between">
-                <M3IconButton onClick={startEdit}><EditOutlinedIcon /></M3IconButton>
-                <M3IconButton><DeleteOutlineOutlinedIcon /></M3IconButton>
-              </Stack>
+              {isLoading ? <CircularProgress /> : (
+                <Stack direction="row" justifyContent="space-between">
+                  <M3IconButton onClick={startEdit}><EditOutlinedIcon /></M3IconButton>
+                  <M3IconButton onClick={remove}><DeleteOutlineOutlinedIcon /></M3IconButton>
+                </Stack>
+              )}
             </Stack>
             <Stack direction="row">
               <M3FilledButton>Crea camera</M3FilledButton>
@@ -95,7 +119,7 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
               error={!validated}
               helperText={validated ? undefined : "Il nome non può essere vuoto."}
             />
-            {state === "loading" ?
+            {isLoading ?
               <CircularProgress /> : (
                 <Stack direction="row">
                   <M3IconButton onClick={edit}><CheckOutlinedIcon /></M3IconButton>

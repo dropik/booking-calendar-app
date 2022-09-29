@@ -189,6 +189,15 @@ export const tilesSlice = createSlice({
               const tile = state.data[tileId];
               if (tile) {
                 tile.roomId = undefined;
+                const dateCounter = new Date(tile.from);
+                for (let i = 0; i < tile.nights; i++) {
+                  const x = Utils.dateToString(dateCounter);
+                  if (!state.unassignedMap[x]) {
+                    state.unassignedMap[x] = { };
+                  }
+                  state.unassignedMap[x][tileId] = tileId;
+                  dateCounter.setDate(dateCounter.getDate() + 1);
+                }
               }
               delete room[date];
             }
