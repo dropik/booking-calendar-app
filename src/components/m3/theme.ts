@@ -1,6 +1,7 @@
 import React from "react";
 import { createTheme, PaletteColor, PaletteColorOptions, recomposeColor, rgbToHex } from "@mui/material/styles";
 import { lab2rgb } from "rgb-lab";
+import { Hct } from "@material/material-color-utilities";
 
 declare module "@mui/material/styles" {
   interface Palette {
@@ -304,12 +305,14 @@ const makeOnColorContainer: (keyColor: (luminance: number) => string) => Palette
   dark: keyColor(90)
 });
 
-const assembleColor: (luminance: number, a: number, b: number) => string = (luminance, a, b) =>
-  rgbToHex(recomposeColor({
-    type: "rgb",
-    values: lab2rgb([luminance, a, b]),
-    colorSpace: "srgb"
-  }));
+const assembleColor: (luminance: number, a: number, b: number) => string = (luminance, a, b) => {
+  const rgbArray = lab2rgb(luminance, a, b);
+  const argb = (1 << 24) + (rgbArray[0] << 16) + (rgbArray[1] << 8) + rgbArray[2];
+  const hct = Hct.fromInt(argb);
+  hct.tone = luminance;
+  const resultArgb = `${hct.toInt()}`;
+  return `#${resultArgb.slice(2)}`;
+};
 
 const primary: (luminance: number) => string = (luminance) =>
   assembleColor(luminance, -31, 36);
