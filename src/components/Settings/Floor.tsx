@@ -5,17 +5,22 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import FormHelperText from "@mui/material/FormHelperText";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 
-import { deleteFloorAsync, Floor as FloorDTO, putFloorAsync } from "../../api";
+import { deleteFloorAsync, Floor as FloorDTO, postRoomAsync, putFloorAsync } from "../../api";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { editFloor, deleteFloor, Floor as FloorData } from "../../redux/floorsSlice";
+import { editFloor, deleteFloor, createRoom, Floor as FloorData } from "../../redux/floorsSlice";
 import { show as showMessage } from "../../redux/snackbarMessageSlice";
-import { deleteRooms as deleteRoomsForTiles } from "../../redux/tilesSlice";
-import { deleteRooms } from "../../redux/roomsSlice";
+import { deleteRooms as deleteRoomsForTiles, createRoom as createRoomForTiles } from "../../redux/tilesSlice";
+import { setRoom, deleteRooms } from "../../redux/roomsSlice";
 
 import M3FilledButton from "../m3/M3FilledButton";
 import M3IconButton from "../m3/M3IconButton";
@@ -32,10 +37,15 @@ type FloorProps = {
 export default function Floor({ id, floor }: FloorProps): JSX.Element {
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const [state, setState] = useState<"idle" | "edit" | "remove">("idle");
+  const [state, setState] = useState<"idle" | "edit" | "remove" | "createRoom">("idle");
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState(floor.name);
   const tilesHaveChanges = useAppSelector((state) => Object.keys(state.tiles.changesMap).length > 0);
+  const roomTypes = useAppSelector((state) => Object.keys(state.roomTypes.data));
+  const [roomNumber, setRoomNumber] = useState("");
+  const [isRoomNumberValid, setIsRoomNumberValid] = useState(true);
+  const [roomType, setRoomType] = useState("");
+  const [isRoomTypeValid, setIsRoomTypeValid] = useState(true);
 
   const floorName = `${floor.name[0].toLocaleUpperCase()}${floor.name.slice(1)}`;
   const validated = name !== "";
@@ -77,6 +87,7 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
         dispatch(deleteRoomsForTiles(floor.roomIds));
         dispatch(deleteRooms({ ids: floor.roomIds }));
         dispatch(deleteFloor(id));
+        setState("idle");
       } catch (error) {
         dispatch(showMessage({ type: "error" }));
       } finally {
@@ -89,6 +100,37 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
       deleteAsync();
     } else {
       dispatch(showMessage({ type: "error", message: "Ci sono le modifiche nel calendario non salvate!" }));
+    }
+  }
+
+  function addRoom(): void {
+    async function addAsync(): Promise<void> {
+      try {
+        const response = await postRoomAsync({ floorId: id, number: roomNumber, type: roomType });
+        dispatch(setRoom({ id: response.id, room: { number: roomNumber, type: roomType } }));
+        dispatch(createRoom({ floorId: id, roomId: response.id }));
+        dispatch(createRoomForTiles(response.id));
+        setState("idle");
+      } catch(error) {
+        dispatch(showMessage({ type: "error" }));
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    let hasErrors = false;
+    if (roomNumber === "") {
+      setIsRoomNumberValid(false);
+      hasErrors = true;
+    }
+    if (roomType === "") {
+      setIsRoomTypeValid(false);
+      hasErrors = true;
+    }
+
+    if (!hasErrors) {
+      setIsLoading(true);
+      addAsync();
     }
   }
 
@@ -105,13 +147,80 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
           <Stack spacing={2}>
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="headlineLarge">{floorName}</Typography>
-              <Stack direction="row" justifyContent="space-between">
-                <M3IconButton onClick={startEdit}><EditOutlinedIcon /></M3IconButton>
-                <M3IconButton onClick={() => setState("remove")}><DeleteOutlineOutlinedIcon /></M3IconButton>
-              </Stack>
+              {state !== "createRoom" ? (
+                <Stack direction="row" justifyContent="space-between">
+                  <M3IconButton onClick={startEdit}><EditOutlinedIcon /></M3IconButton>
+                  <M3IconButton onClick={() => setState("remove")}><DeleteOutlineOutlinedIcon /></M3IconButton>
+                </Stack>
+              ) : null}
             </Stack>
-            <Stack direction="row">
-              <M3FilledButton>Crea camera</M3FilledButton>
+            <Stack direction="row" spacing={2} alignItems="top">
+              {state !== "createRoom" ?
+                <M3FilledButton onClick={() => setState("createRoom")}>Crea camera</M3FilledButton> :
+                (<>
+                  <TextField
+                    label="Numero"
+                    error={!isRoomNumberValid}
+                    helperText={isRoomNumberValid ? undefined : "Il numero deve essere non vuoto"}
+                    onChange={(event) => {
+                      const newValue = event.target.value;
+                      setRoomNumber(newValue);
+                      if (newValue === "") {
+                        setIsRoomNumberValid(false);
+                      } else {
+                        setIsRoomNumberValid(true);
+                      }
+                    }}
+                  />
+                  <FormControl fullWidth>
+                    <InputLabel error={!isRoomTypeValid} id="newRoomTypeLabel">Tipologia</InputLabel>
+                    <Select
+                      label="Tipologia"
+                      labelId="newRoomTypeLabel"
+                      value={roomType}
+                      onChange={(event) => {
+                        setRoomType(event.target.value);
+                        setIsRoomTypeValid(true);
+                      }}
+                      error={!isRoomTypeValid}
+                      MenuProps={{
+                        PaperProps: {
+                          elevation: 2,
+                          sx: {
+                            borderRadius: "0.25rem",
+                            "::after": {
+                              content: "' '",
+                              position: "absolute",
+                              top: 0,
+                              left: 0,
+                              right: 0,
+                              bottom: 0,
+                              zIndex: 999,
+                              pointerEvents: "none",
+                              backgroundColor: theme.palette.primary.light,
+                              opacity: theme.opacities.surface2
+                            }
+                          }
+                        }
+                      }}
+                    >
+                      {roomTypes.map((roomTypeId) => (
+                        <MenuItem key={roomTypeId} value={roomTypeId} sx={{ height: "3rem" }}>
+                          {`${roomTypeId[0].toLocaleUpperCase()}${roomTypeId.slice(1)}`}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {!isRoomTypeValid ? <FormHelperText error>Tipologia della stanza è obbligatoria</FormHelperText> : null}
+                  </FormControl>
+                  {isLoading ?
+                    <CircularProgress /> : (
+                      <Stack direction="row" spacing={1} sx={{ pt: "0.5rem" }}>
+                        <M3FilledButton iconOnly onClick={addRoom}><CheckOutlinedIcon sx={{ verticalAlign: "bottom" }} /></M3FilledButton>
+                        <M3IconButton onClick={() => setState("idle")}><CloseOutlinedIcon /></M3IconButton>
+                      </Stack>
+                    )
+                  }
+                </>)}
             </Stack>
           </Stack>
         ): (
@@ -131,11 +240,12 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
             />
             {isLoading ?
               <CircularProgress /> : (
-                <Stack direction="row">
-                  <M3IconButton onClick={edit}><CheckOutlinedIcon /></M3IconButton>
+                <Stack direction="row" spacing={1}>
+                  <M3FilledButton iconOnly onClick={edit}><CheckOutlinedIcon sx={{ verticalAlign: "bottom" }} /></M3FilledButton>
                   <M3IconButton onClick={() => setState("idle")}><CloseOutlinedIcon /></M3IconButton>
                 </Stack>
-              )}
+              )
+            }
           </Stack>
         )}
         <SurfaceTint sx={{
@@ -160,8 +270,8 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
             {isLoading ?
               <CircularProgress /> :
               (<>
-                <M3TextButton onClick={closeRemoveDialog}>Cancella</M3TextButton>
-                <M3TextButton onClick={remove}>OK</M3TextButton>
+                <M3TextButton onClick={closeRemoveDialog}>No</M3TextButton>
+                <M3TextButton onClick={remove}>Sì</M3TextButton>
               </>)}
           </Stack>
         </Stack>

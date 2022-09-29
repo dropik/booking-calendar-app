@@ -13,7 +13,7 @@ export default function M3DatePicker<TInputDate, TDate>({ ...props }: DatePicker
         sx: {
           backgroundColor: theme.palette.surface.main,
           color: theme.palette.onSurface.main,
-          borderRadius: "0.75rem",
+          borderRadius: "0.25rem",
           "::after": {
             content: "' '",
             pointerEvents: "none",
@@ -24,7 +24,7 @@ export default function M3DatePicker<TInputDate, TDate>({ ...props }: DatePicker
             right: 0,
             backgroundColor: theme.palette.primary.light,
             opacity: theme.opacities.surface2,
-            borderRadius: "0.75rem",
+            borderRadius: "0.25rem",
             zIndex: 9999
           },
           "& .MuiSvgIcon-root": {
