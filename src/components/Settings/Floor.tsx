@@ -8,6 +8,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 
 import { Floor as FloorDTO, putFloorAsync } from "../../api";
 import { useAppDispatch } from "../../redux/hooks";
@@ -90,8 +91,12 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
               helperText={validated ? undefined : "Il nome non può essere vuoto."}
             />
             {state === "loading" ?
-              <CircularProgress /> :
-              <M3IconButton onClick={edit}><CheckOutlinedIcon /></M3IconButton>}
+              <CircularProgress /> : (
+                <Stack direction="row">
+                  <M3IconButton onClick={edit}><CheckOutlinedIcon /></M3IconButton>
+                  <M3IconButton onClick={() => setState("idle")}><CloseOutlinedIcon /></M3IconButton>
+                </Stack>
+              )}
           </Stack>
         )}
         <SurfaceTint sx={{
