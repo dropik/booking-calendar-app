@@ -32,7 +32,7 @@ export default function Settings(): JSX.Element {
         <Typography variant="displayLarge" sx={{ pt: "4rem", pl: "1rem" }}>Piani</Typography>
         <Stack spacing={3}>
           {floorsReady ?
-            floorIds.map((floorId) => <Floor key={floorId} floor={floors[floorId]} />) :
+            floorIds.map((floorId) => <Floor key={floorId} id={floorId} floor={floors[floorId]} />) :
             <Skeleton />}
         </Stack>
       </Stack>
