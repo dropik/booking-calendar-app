@@ -107,6 +107,11 @@ export default function CreateFloorDialog(): JSX.Element {
                       setValidated(true);
                     }
                   }}
+                  onKeyUp={(event) => {
+                    if (event.key === "Enter") {
+                      create();
+                    }
+                  }}
                   error={!validated}
                   helperText={validated ? undefined : "Il nome non può essere vuoto."}
                   sx={{ minWidth: "20rem" }} />
