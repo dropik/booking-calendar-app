@@ -47,27 +47,6 @@ export function useRightmostDate(): string {
   return useAppSelector((state) => Utils.getDateShift(state.table.leftmostDate, state.table.columns - 1));
 }
 
-export function useErrorType(id: string): "none" | "warning" | "error" {
-  return useAppSelector((state) => {
-    const data = state.tiles.data[id];
-    if (data && data.roomId) {
-      const assignedRoomType = state.rooms.data[data.roomId].type;
-      const occupancy = state.roomTypes.data[assignedRoomType];
-      if (occupancy) {
-        if ((data.persons < occupancy.minOccupancy) || (data.persons > occupancy.maxOccupancy)) {
-          return "error";
-        }
-      }
-
-      if (assignedRoomType !== data.roomType) {
-        return "warning";
-      }
-    }
-
-    return "none";
-  });
-}
-
 export const useCurrentDate:        () => string =
   () => useAppSelector((state) => state.table.currentDate);
 
