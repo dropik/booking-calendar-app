@@ -140,11 +140,13 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
         p: "1rem",
         position: "relative",
         borderRadius: "0.75rem",
-        minHeight: "8rem",
-        boxSizing: "border-box"
+        minHeight: "9rem",
+        boxSizing: "border-box",
+        display: "flex",
+        flexDirection: "column"
       }}>
         {state !== "edit" ? (
-          <Stack spacing={2}>
+          <Stack justifyContent="space-between" sx={{ height: "100%", flexGrow: 1 }}>
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="headlineLarge">{floorName}</Typography>
               {state !== "createRoom" ? (
