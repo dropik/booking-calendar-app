@@ -267,7 +267,7 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
             <Typography variant="headlineSmall">Rimuovere il piano?</Typography>
             <Typography variant="bodyMedium" sx={{ display: "block", width: "100%", textAlign: "left" }}>
               Verranno rimosse anche tutte le stanze appartenenti a questo piano.
-              Tutte le prenotazioni assegnate a qualsiasi stanza di questo piano rimarranno non assegnati a nessuna stanza.
+              Tutte le prenotazioni assegnate a qualsiasi stanza di questo piano diventeranno non assegnati a nessuna stanza.
             </Typography>
           </Stack>
           <Stack direction="row" spacing={1} justifyContent="flex-end">

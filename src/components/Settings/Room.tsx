@@ -7,19 +7,23 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import CircularProgress from "@mui/material/CircularProgress";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 
+import { deleteRoomAsync, putRoomAsync } from "../../api";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { setRoom } from "../../redux/roomsSlice";
+import { setRoom, deleteRooms } from "../../redux/roomsSlice";
+import { deleteRoom } from "../../redux/floorsSlice";
+import { deleteRooms as deleteRoomsForTiles } from "../../redux/tilesSlice";
 import { show as showMessage } from "../../redux/snackbarMessageSlice";
 
 import M3IconButton from "../m3/M3IconButton";
-import CircularProgress from "@mui/material/CircularProgress";
 import M3FilledButton from "../m3/M3FilledButton";
-import { putRoomAsync } from "../../api";
+import M3Dialog from "../m3/M3Dialog";
+import M3TextButton from "../m3/M3TextButton";
 
 type RoomProps = {
   id: string,
@@ -30,7 +34,7 @@ export default function Room({ id, floorId }: RoomProps): JSX.Element {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const room = useAppSelector((state) => state.rooms.data[id]);
-  const [state, setState] = useState<"idle" | "edit">("idle");
+  const [state, setState] = useState<"idle" | "edit" | "remove">("idle");
   const [isLoading, setIsLoading] = useState(false);
   const [numberField, setNumberField] = useState(room.number);
   const [roomTypeField, setRoomTypeField] = useState(room.type);
@@ -38,6 +42,11 @@ export default function Room({ id, floorId }: RoomProps): JSX.Element {
 
   const roomType = `${room.type[0].toLocaleUpperCase()}${room.type.slice(1)}`;
   const isValid = numberField !== "";
+  const openRemoveDialog = state === "remove";
+
+  function closeRemoveDialog(): void {
+    setState("idle");
+  }
 
   function edit(): void {
     async function putAsync(): Promise<void> {
@@ -48,7 +57,7 @@ export default function Room({ id, floorId }: RoomProps): JSX.Element {
       } catch (error) {
         dispatch(showMessage({ type: "error" }));
       } finally {
-        setIsLoading(true);
+        setIsLoading(false);
       }
     }
 
@@ -56,6 +65,25 @@ export default function Room({ id, floorId }: RoomProps): JSX.Element {
       setIsLoading(true);
       putAsync();
     }
+  }
+
+  function remove(): void {
+    async function deleteAsync(): Promise<void> {
+      try {
+        await deleteRoomAsync(id);
+        dispatch(deleteRoomsForTiles([id]));
+        dispatch(deleteRoom({ floorId, roomId: id }));
+        dispatch(deleteRooms({ ids: [id] }));
+        setState("idle");
+      } catch (error) {
+        dispatch(showMessage({ type: "error" }));
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    setIsLoading(true);
+    deleteAsync();
   }
 
   return (
@@ -66,7 +94,7 @@ export default function Room({ id, floorId }: RoomProps): JSX.Element {
       minHeight: "calc(5.5rem + 1px)",
       boxSizing: "border-box"
     }}>
-      {state === "idle" ? (
+      {state === "idle" || state === "remove" ? (
         <>
           <Stack direction="row" alignItems="center">
             <Stack direction="row" sx={{ flexBasis: "10rem", flexShrink: 0 }}>
@@ -82,9 +110,28 @@ export default function Room({ id, floorId }: RoomProps): JSX.Element {
               <M3IconButton sx={{
                 borderRadius: "1.25rem",
                 border: `1px solid ${theme.palette.outline.light}`
-              }}>
+              }} onClick={() => setState("remove")}>
                 <DeleteOutlineOutlinedIcon />
               </M3IconButton>
+              <M3Dialog open={openRemoveDialog} onClose={closeRemoveDialog} heightRem={16.25}>
+                <Stack spacing={3} sx={{ p: "1.5rem" }}>
+                  <Stack spacing={2} alignItems="center">
+                    <DeleteOutlineOutlinedIcon />
+                    <Typography variant="headlineSmall">Rimuovere la camera?</Typography>
+                    <Typography variant="bodyMedium" sx={{ display: "block", width: "100%", textAlign: "left" }}>
+                      Tutte le prenotazioni assegnate a questa camera diventeranno non assegnati a nessuna camera.
+                    </Typography>
+                  </Stack>
+                  <Stack direction="row" spacing={1} justifyContent="flex-end">
+                    {isLoading ?
+                      <CircularProgress /> :
+                      (<>
+                        <M3TextButton onClick={closeRemoveDialog}>No</M3TextButton>
+                        <M3TextButton onClick={remove}>Sì</M3TextButton>
+                      </>)}
+                  </Stack>
+                </Stack>
+              </M3Dialog>
             </Stack>
           </Stack>
           <Stack direction="row" sx={{
