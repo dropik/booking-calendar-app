@@ -158,60 +158,62 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
               {state !== "createRoom" ?
                 <M3FilledButton onClick={() => setState("createRoom")}>Crea camera</M3FilledButton> :
                 (<>
-                  <TextField
-                    label="Numero"
-                    error={!isRoomNumberValid}
-                    helperText={isRoomNumberValid ? undefined : "Il numero deve essere non vuoto"}
-                    onChange={(event) => {
-                      const newValue = event.target.value;
-                      setRoomNumber(newValue);
-                      if (newValue === "") {
-                        setIsRoomNumberValid(false);
-                      } else {
-                        setIsRoomNumberValid(true);
-                      }
-                    }}
-                  />
-                  <FormControl fullWidth>
-                    <InputLabel error={!isRoomTypeValid} id="newRoomTypeLabel">Tipologia</InputLabel>
-                    <Select
-                      label="Tipologia"
-                      labelId="newRoomTypeLabel"
-                      value={roomType}
+                  <Stack direction="row" spacing={1} sx={{ flexGrow: 1 }}>
+                    <TextField
+                      label="Numero"
+                      error={!isRoomNumberValid}
+                      helperText={isRoomNumberValid ? undefined : "Il numero deve essere non vuoto"}
                       onChange={(event) => {
-                        setRoomType(event.target.value);
-                        setIsRoomTypeValid(true);
-                      }}
-                      error={!isRoomTypeValid}
-                      MenuProps={{
-                        PaperProps: {
-                          elevation: 2,
-                          sx: {
-                            borderRadius: "0.25rem",
-                            "::after": {
-                              content: "' '",
-                              position: "absolute",
-                              top: 0,
-                              left: 0,
-                              right: 0,
-                              bottom: 0,
-                              zIndex: 999,
-                              pointerEvents: "none",
-                              backgroundColor: theme.palette.primary.light,
-                              opacity: theme.opacities.surface2
-                            }
-                          }
+                        const newValue = event.target.value;
+                        setRoomNumber(newValue);
+                        if (newValue === "") {
+                          setIsRoomNumberValid(false);
+                        } else {
+                          setIsRoomNumberValid(true);
                         }
                       }}
-                    >
-                      {roomTypes.map((roomTypeId) => (
-                        <MenuItem key={roomTypeId} value={roomTypeId} sx={{ height: "3rem" }}>
-                          {`${roomTypeId[0].toLocaleUpperCase()}${roomTypeId.slice(1)}`}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    {!isRoomTypeValid ? <FormHelperText error>Tipologia della stanza è obbligatoria</FormHelperText> : null}
-                  </FormControl>
+                    />
+                    <FormControl fullWidth>
+                      <InputLabel error={!isRoomTypeValid} id="newRoomTypeLabel">Tipologia</InputLabel>
+                      <Select
+                        label="Tipologia"
+                        labelId="newRoomTypeLabel"
+                        value={roomType}
+                        onChange={(event) => {
+                          setRoomType(event.target.value);
+                          setIsRoomTypeValid(true);
+                        }}
+                        error={!isRoomTypeValid}
+                        MenuProps={{
+                          PaperProps: {
+                            elevation: 2,
+                            sx: {
+                              borderRadius: "0.25rem",
+                              "::after": {
+                                content: "' '",
+                                position: "absolute",
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                bottom: 0,
+                                zIndex: 999,
+                                pointerEvents: "none",
+                                backgroundColor: theme.palette.primary.light,
+                                opacity: theme.opacities.surface2
+                              }
+                            }
+                          }
+                        }}
+                      >
+                        {roomTypes.map((roomTypeId) => (
+                          <MenuItem key={roomTypeId} value={roomTypeId} sx={{ height: "3rem" }}>
+                            {`${roomTypeId[0].toLocaleUpperCase()}${roomTypeId.slice(1)}`}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      {!isRoomTypeValid ? <FormHelperText error>Tipologia della stanza è obbligatoria</FormHelperText> : null}
+                    </FormControl>
+                  </Stack>
                   {isLoading ?
                     <CircularProgress /> : (
                       <Stack direction="row" spacing={1} sx={{ pt: "0.5rem" }}>
@@ -254,7 +256,7 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
         }} />
       </Paper>
       <Stack>
-        {floor.roomIds.map((roomId) => <Room key={roomId} id={roomId} />)}
+        {floor.roomIds.map((roomId) => <Room key={roomId} id={roomId} floorId={id} />)}
       </Stack>
       <M3Dialog open={openRemoveDialog} onClose={closeRemoveDialog} heightRem={16.25}>
         <Stack spacing={3} sx={{ p: "1.5rem" }}>
