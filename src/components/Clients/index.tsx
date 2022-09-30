@@ -63,7 +63,7 @@ export default function Clients(): JSX.Element {
           alignItems="flex-end"
           sx={{ pb: "1rem" }}
         >
-          <Typography variant="displaySmall" sx={{ pt: "5rem" }}>Clienti</Typography>
+          <Typography variant="displayLarge" sx={{ pt: "4rem", pl: "1rem" }}>Clienti</Typography>
           <Stack spacing={1} direction="row">
             <TextField
               value={query}

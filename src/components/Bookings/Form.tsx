@@ -48,7 +48,7 @@ export default function Form({ children }: FormProps): JSX.Element {
         backgroundColor: theme.palette.surface.light,
         borderRadius: "0.75rem"
       }}>
-        <Typography variant="displaySmall" sx={{ pt: "5rem", pb: "2rem", textAlign: "center" }}>Prenotazioni</Typography>
+        <Typography variant="displayLarge" sx={{ pt: "4rem", pb: "2rem", textAlign: "center" }}>Prenotazioni</Typography>
         <Stack spacing={1} direction="row">
           <FromDateInput from={from} to={to} setFrom={setFrom} setIsFromValid={setIsFromValid} />
           <ToDateInput from={from} to={to} setTo={setTo} setIsToValid={setIsToValid} />

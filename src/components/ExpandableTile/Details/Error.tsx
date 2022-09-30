@@ -4,8 +4,9 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import ErrorOutlineOutlined from "@mui/icons-material/ErrorOutlineOutlined";
 
-import { useErrorType } from "../../../redux/hooks";
+import { useAppSelector } from "../../../redux/hooks";
 import { TileContext } from "../../Tile/context";
+import { TileData } from "../../../redux/tilesSlice";
 
 export default function Error(): JSX.Element | null {
   const { data } = useContext(TileContext);
@@ -14,15 +15,38 @@ export default function Error(): JSX.Element | null {
     return null;
   }
 
-  return <ErrorWrappee tileId={data.id} />;
+  return <ErrorWrappee tile={data} />;
 }
 
 type ErrorWrappeeProps = {
-  tileId: string
+  tile: TileData
 };
 
-function ErrorWrappee({ tileId }: ErrorWrappeeProps): JSX.Element | null {
-  const errorType = useErrorType(tileId);
+function ErrorWrappee({ tile }: ErrorWrappeeProps): JSX.Element | null {
+  const errorType: "none" | "warning" | "error" = useAppSelector((state) => {
+    if (!tile.roomId) {
+      return "none";
+    }
+
+    const roomTypeName = state.rooms.data[tile.roomId]?.type;
+    if (!roomTypeName) {
+      return "none";
+    }
+
+    const roomType = state.roomTypes.data[roomTypeName];
+    if (!roomType) {
+      return "none";
+    }
+
+    if ((tile.persons < roomType.minOccupancy) || (tile.persons > roomType.maxOccupancy)) {
+      return "error";
+    }
+    if (roomTypeName !== tile.roomType) {
+      return "warning";
+    }
+    return "none";
+  });
+
   const { errorColor, errorMsg } = useErrorParams(errorType);
 
   if (errorType === "none") {

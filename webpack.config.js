@@ -4,8 +4,6 @@ const ReactRefreshTypeScript = require("react-refresh-typescript");
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
-let lastServedSessionId = "";
-
 module.exports = {
   entry: "./src/index.tsx",
   mode: isDevelopment ? "development" : "production",
@@ -30,10 +28,16 @@ module.exports = {
         test: /\.css$/,
         use: ["style-loader", "css-loader"],
       },
+      {
+        test: /\.m?js$/,
+        resolve: {
+          fullySpecified: false,
+        },
+      },
     ],
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".js"]
+    extensions: [".tsx", ".ts", ".js"],
   },
   output: {
     path: path.resolve(__dirname, "dist/"),
@@ -100,7 +104,7 @@ module.exports = {
                 entity: "camera matrimoniale",
                 persons: 2,
                 color: "booking1",
-                roomNumber: 3
+                roomId: "2"
               },
               {
                 id: "2",
@@ -112,7 +116,7 @@ module.exports = {
                 entity: "camera matrimoniale",
                 persons: 2,
                 color: "booking1",
-                roomNumber: 5
+                roomId: "4"
               }
             ]
           });
@@ -243,70 +247,133 @@ module.exports = {
         }, 500);
       });
 
-      devServer.app.get("/api/v1/hotel", (_, response) => {
+      devServer.app.get("/api/v1/floors", (_, response) => {
         setTimeout(() => {
-          response.json({
-            floors: [
-              {
-                name: "piano 1",
-                rooms: [
-                  {
-                    number: 1,
-                    type: "camera tripla standard",
-                  },
-                  {
-                    number: 2,
-                    type: "appartamento",
-                  },
-                  {
-                    number: 3,
-                    type: "camera matrimoniale/doppia",
-                  },
-                  {
-                    number: 4,
-                    type: "camera tripla",
-                  },
-                  {
-                    number: 5,
-                    type: "camera matrimoniale/doppia",
-                  },
-                ],
-              },
-              {
-                name: "piano 2",
-                rooms: [
-                  {
-                    number: 6,
-                    type: "camera matrimoniale/doppia",
-                  },
-                  {
-                    number: 7,
-                    type: "camera matrimoniale/doppia",
-                  },
-                  {
-                    number: 8,
-                    type: "camera singola",
-                  },
-                  {
-                    number: 9,
-                    type: "camera matrimoniale/doppia",
-                  },
-                  {
-                    number: 10,
-                    type: "camera matrimoniale/doppia economy",
-                  },
-                  {
-                    number: 11,
-                    type: "camera tripla",
-                  },
-                  {
-                    number: 12,
-                    type: "camera matrimoniale/doppia",
-                  },
-                ],
-              },
-            ]
-          });
+          response.json([
+            {
+              id: "0",
+              name: "Piano 1"
+            },
+            {
+              id: "1",
+              name: "Piano 2"
+            },
+          ]);
+        }, 500);
+      });
+
+      devServer.app.post("/api/v1/floors", (_, response) => {
+        setTimeout(() => {
+          response.json({ id: `${Math.floor(Math.random() * 10000)}` });
+        }, 500);
+      });
+
+      devServer.app.put("/api/v1/floors/*", (_, response) => {
+        setTimeout(() => {
+          response.send("ok");
+        }, 500);
+      });
+
+      devServer.app.delete("/api/v1/floors/*", (_, response) => {
+        setTimeout(() => {
+          response.send("ok");
+        }, 500);
+      });
+
+      devServer.app.get("/api/v1/rooms", (_, response) => {
+        setTimeout(() => {
+          response.json([
+            {
+              id: "0",
+              floorId: "0",
+              number: "1",
+              type: "camera tripla standard",
+            },
+            {
+              id: "1",
+              floorId: "0",
+              number: "2",
+              type: "appartamento",
+            },
+            {
+              id: "2",
+              floorId: "0",
+              number: "3",
+              type: "camera matrimoniale/doppia",
+            },
+            {
+              id: "3",
+              floorId: "0",
+              number: "4",
+              type: "camera tripla",
+            },
+            {
+              id: "4",
+              floorId: "0",
+              number: "5",
+              type: "camera matrimoniale/doppia",
+            },
+            {
+              id: "5",
+              floorId: "1",
+              number: "6",
+              type: "camera matrimoniale/doppia",
+            },
+            {
+              id: "6",
+              floorId: "1",
+              number: "7",
+              type: "camera matrimoniale/doppia",
+            },
+            {
+              id: "7",
+              floorId: "1",
+              number: "8",
+              type: "camera singola",
+            },
+            {
+              id: "8",
+              floorId: "1",
+              number: "9",
+              type: "camera matrimoniale/doppia",
+            },
+            {
+              id: "9",
+              floorId: "1",
+              number: "10",
+              type: "camera matrimoniale/doppia economy",
+            },
+            {
+              id: "10",
+              floorId: "1",
+              number: "11",
+              type: "camera tripla",
+            },
+            {
+              id: "11",
+              floorId: "1",
+              number: "12",
+              type: "camera matrimoniale/doppia",
+            },
+          ]);
+        }, 500);
+      });
+
+      devServer.app.post("/api/v1/rooms", (_, response) => {
+        setTimeout(() => {
+          response.json({ id: `${Math.floor(Math.random() * 10000)}` });
+        }, 500);
+      });
+
+      devServer.app.put("/api/v1/rooms/*", (_, response) => {
+        setTimeout(() => {
+          response.send("ok");
+        }, 500);
+      });
+
+      devServer.app.delete("/api/v1/rooms/*", (_, response) => {
+        setTimeout(() => {
+          response.send("ok");
         }, 500);
       });
 
@@ -364,7 +431,7 @@ module.exports = {
                   entity: "camera doppia",
                   persons: 2,
                   color: "booking1",
-                  roomNumber: 3
+                  roomId: "2"
                 },
                 {
                   id: "1",
@@ -376,7 +443,7 @@ module.exports = {
                   entity: "camera doppia",
                   persons: 2,
                   color: "booking2",
-                  roomNumber: 2
+                  roomId: "1"
                 },
                 {
                   id: "2",
@@ -388,7 +455,7 @@ module.exports = {
                   entity: "camera doppia",
                   persons: 2,
                   color: "booking3",
-                  roomNumber: 6
+                  roomId: "5"
                 },
                 {
                   id: "3",
@@ -433,7 +500,7 @@ module.exports = {
                   entity: "camera doppia",
                   persons: 2,
                   color: "booking2",
-                  roomNumber: 5
+                  roomId: "4"
                 },
                 {
                   id: "7",
@@ -445,7 +512,7 @@ module.exports = {
                   entity: "camera doppia",
                   persons: 2,
                   color: "booking3",
-                  roomNumber: 5
+                  roomId: "4"
                 }
               ],
               sessionId: Math.floor(Math.random() * 10000)
@@ -461,7 +528,7 @@ module.exports = {
 
       devServer.app.post("/api/v1/changes", (_, response) => {
         setTimeout(() => {
-          response.send("ok");
+          response.json("ok");
         }, 500);
       });
 

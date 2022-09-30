@@ -38,7 +38,7 @@ export default function MoreButton(): JSX.Element | null {
           vertical: "top"
         }}
         onClose={close}
-        unassigned={data.roomNumber === undefined}
+        unassigned={data.roomId === undefined}
       />
     </>
   );

@@ -85,7 +85,7 @@ export default function Tools(): JSX.Element {
   return (
     <DrawerAdjacent>
       <Stack spacing={2} sx={{ pr: "1rem" }}>
-        <Typography variant="displaySmall" sx={{ pt: "4rem" }}>Strumenti</Typography>
+        <Typography variant="displayLarge" sx={{ pt: "4rem", pl: "1rem" }}>Strumenti</Typography>
         <Stack direction="row" spacing={2}>
           <Stack spacing={2} sx={{
             position: "relative",

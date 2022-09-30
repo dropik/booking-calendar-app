@@ -1,6 +1,90 @@
 import React from "react";
-import { createTheme, PaletteColor, PaletteColorOptions, recomposeColor, rgbToHex } from "@mui/material/styles";
-import { lab2rgb } from "rgb-lab";
+import { createTheme, PaletteColor, PaletteColorOptions } from "@mui/material/styles";
+import { argbFromHex, ColorGroup, hexFromArgb, Scheme, themeFromSourceColor } from "@material/material-color-utilities";
+
+const INFO = 0;
+const WARNING = 1;
+const BOOKING1 = 2;
+const BOOKING2 = 3;
+const BOOKING3 = 4;
+const BOOKING4 = 5;
+const BOOKING5 = 6;
+const BOOKING6 = 7;
+const BOOKING7 = 8;
+const BOOKING8 = 9;
+
+const themeObj = themeFromSourceColor(argbFromHex("#35692A"), [
+  {
+    name: "info",
+    value: argbFromHex("#02677D"),
+    blend: true
+  },
+  {
+    name: "warning",
+    value: argbFromHex("#FF8344"),
+    blend: true
+  },
+  {
+    name: "booking1",
+    value: argbFromHex("#CD3232"),
+    blend: true
+  },
+  {
+    name: "booking2",
+    value: argbFromHex("#BF9740"),
+    blend: true
+  },
+  {
+    name: "booking3",
+    value: argbFromHex("#B7BF40"),
+    blend: true
+  },
+  {
+    name: "booking4",
+    value: argbFromHex("#68BF40"),
+    blend: true
+  },
+  {
+    name: "booking5",
+    value: argbFromHex("#40BDBF"),
+    blend: true
+  },
+  {
+    name: "booking6",
+    value: argbFromHex("#4086BF"),
+    blend: true
+  },
+  {
+    name: "booking7",
+    value: argbFromHex("#4044BF"),
+    blend: true
+  },
+  {
+    name: "booking8",
+    value: argbFromHex("#A640BF"),
+    blend: true
+  },
+]);
+const light = themeObj.schemes.light;
+const dark = themeObj.schemes.dark;
+type SchemeColors = keyof ReturnType<Scheme["toJSON"]>;
+type CustomColors = keyof ColorGroup;
+
+function makePalette(color: SchemeColors): PaletteColorOptions {
+  return {
+    main: hexFromArgb(light[color]),
+    light: hexFromArgb(light[color]),
+    dark: hexFromArgb(dark[color])
+  };
+}
+
+function makeCustomPalette(id: number, color: CustomColors): PaletteColorOptions {
+  return {
+    main: hexFromArgb(themeObj.customColors[id].light[color]),
+    light: hexFromArgb(themeObj.customColors[id].light[color]),
+    dark: hexFromArgb(themeObj.customColors[id].dark[color])
+  };
+}
 
 declare module "@mui/material/styles" {
   interface Palette {
@@ -280,229 +364,98 @@ declare module "@mui/material/Typography" {
   }
 }
 
-const makeColor: (keyColor: (luminance: number) => string) => PaletteColorOptions = (keyColor) => ({
-  main: keyColor(40),
-  light: keyColor(40),
-  dark: keyColor(80)
-});
-
-const makeOnColor: (keyColor: (luminance: number) => string) => PaletteColorOptions = (keyColor) => ({
-  main: keyColor(100),
-  light: keyColor(100),
-  dark: keyColor(20)
-});
-
-const makeColorContainer: (keyColor: (luminance: number) => string) => PaletteColorOptions = (keyColor) => ({
-  main: keyColor(90),
-  light: keyColor(90),
-  dark: keyColor(30)
-});
-
-const makeOnColorContainer: (keyColor: (luminance: number) => string) => PaletteColorOptions = (keyColor) => ({
-  main: keyColor(10),
-  light: keyColor(10),
-  dark: keyColor(90)
-});
-
-const assembleColor: (luminance: number, a: number, b: number) => string = (luminance, a, b) =>
-  rgbToHex(recomposeColor({
-    type: "rgb",
-    values: lab2rgb([luminance, a, b]),
-    colorSpace: "srgb"
-  }));
-
-const primary: (luminance: number) => string = (luminance) =>
-  assembleColor(luminance, -31, 36);
-
-const secondary: (luminance: number) => string = (luminance) =>
-  assembleColor(luminance, -10, 11);
-
-const tertiary: (luminance: number) => string = (luminance) =>
-  assembleColor(luminance, -15, -5);
-
-const success = primary;
-
-const info: (luminance: number) => string = (luminance) =>
-  assembleColor(luminance, -17, -19);
-
-const error: (luminance: number) => string = (luminance) =>
-  assembleColor(luminance, 60, 43);
-
-const warning: (luminance: number) => string = (luminance) =>
-  assembleColor(luminance, 56, 61);
-
-const neutral: (luminance: number) => string = (luminance) =>
-  assembleColor(luminance, -2, 3);
-
-const neutralVariant: (luminance: number) => string = (luminance) =>
-  assembleColor(luminance, -4, 6);
-
-const booking1: (luminance: number) => string = (luminance) =>
-  assembleColor(luminance, 31, 13);
-
-const booking2: (luminance: number) => string = (luminance) =>
-  assembleColor(luminance, -3, 33);
-
-const booking3: (luminance: number) => string = (luminance) =>
-  assembleColor(luminance, -17, 29);
-
-const booking4: (luminance: number) => string = (luminance) =>
-  assembleColor(luminance, -29, 26);
-
-const booking5: (luminance: number) => string = (luminance) =>
-  assembleColor(luminance, -18, -6);
-
-const booking6: (luminance: number) => string = (luminance) =>
-  assembleColor(luminance, -5, -25);
-
-const booking7: (luminance: number) => string = (luminance) =>
-  assembleColor(luminance, 20, -39);
-
-const booking8: (luminance: number) => string = (luminance) =>
-  assembleColor(luminance, 34, -28);
-
 const theme = createTheme({
   palette: {
-    primary:            makeColor(primary),
-    onPrimary:          makeOnColor(primary),
-    primaryContainer:   makeColorContainer(primary),
-    onPrimaryContainer: makeOnColorContainer(primary),
+    primary:              makePalette("primary"),
+    onPrimary:            makePalette("onPrimary"),
+    primaryContainer:     makePalette("primaryContainer"),
+    onPrimaryContainer:   makePalette("onPrimaryContainer"),
 
-    secondary:            makeColor(secondary),
-    onSecondary:          makeOnColor(secondary),
-    secondaryContainer:   makeColorContainer(secondary),
-    onSecondaryContainer: makeOnColorContainer(secondary),
+    secondary:            makePalette("secondary"),
+    onSecondary:          makePalette("onSecondary"),
+    secondaryContainer:   makePalette("secondaryContainer"),
+    onSecondaryContainer: makePalette("onSecondaryContainer"),
 
-    tertiary:             makeColor(tertiary),
-    onTertiary:           makeOnColor(tertiary),
-    tertiaryContainer:    makeColorContainer(tertiary),
-    onTertiaryContainer:  makeOnColorContainer(tertiary),
+    tertiary:             makePalette("tertiary"),
+    onTertiary:           makePalette("onTertiary"),
+    tertiaryContainer:    makePalette("tertiaryContainer"),
+    onTertiaryContainer:  makePalette("onTertiaryContainer"),
 
-    success:             makeColor(success),
-    onSuccess:           makeOnColor(success),
-    successContainer:    makeColorContainer(success),
-    onSuccessContainer:  makeOnColorContainer(success),
+    success:              makePalette("primary"),
+    onSuccess:            makePalette("onPrimary"),
+    successContainer:     makePalette("primaryContainer"),
+    onSuccessContainer:   makePalette("onPrimaryContainer"),
 
-    info:             makeColor(info),
-    onInfo:           makeOnColor(info),
-    infoContainer:    makeColorContainer(info),
-    onInfoContainer:  makeOnColorContainer(info),
+    info:                 makeCustomPalette(INFO, "color"),
+    onInfo:               makeCustomPalette(INFO, "onColor"),
+    infoContainer:        makeCustomPalette(INFO, "colorContainer"),
+    onInfoContainer:      makeCustomPalette(INFO, "onColorContainer"),
 
-    error:            makeColor(error),
-    onError:          makeOnColor(error),
-    errorContainer:   makeColorContainer(error),
-    onErrorContainer: makeOnColorContainer(error),
+    error:                makePalette("error"),
+    onError:              makePalette("onError"),
+    errorContainer:       makePalette("errorContainer"),
+    onErrorContainer:     makePalette("onErrorContainer"),
 
-    warning:             makeColor(warning),
-    onWarning:           makeOnColor(warning),
-    warningContainer:    makeColorContainer(warning),
-    onWarningContainer:  makeOnColorContainer(warning),
+    warning:              makeCustomPalette(WARNING, "color"),
+    onWarning:            makeCustomPalette(WARNING, "onColor"),
+    warningContainer:     makeCustomPalette(WARNING, "colorContainer"),
+    onWarningContainer:   makeCustomPalette(WARNING, "onColorContainer"),
 
-    booking1: makeColor(booking1),
-    onBooking1: makeOnColor(booking1),
-    booking1Container: makeColorContainer(booking1),
-    onBooking1Container: makeOnColorContainer(booking1),
+    booking1:             makeCustomPalette(BOOKING1, "color"),
+    onBooking1:           makeCustomPalette(BOOKING1, "onColor"),
+    booking1Container:    makeCustomPalette(BOOKING1, "colorContainer"),
+    onBooking1Container:  makeCustomPalette(BOOKING1, "onColorContainer"),
 
-    booking2: makeColor(booking2),
-    onBooking2: makeOnColor(booking2),
-    booking2Container: makeColorContainer(booking2),
-    onBooking2Container: makeOnColorContainer(booking2),
+    booking2:             makeCustomPalette(BOOKING2, "color"),
+    onBooking2:           makeCustomPalette(BOOKING2, "onColor"),
+    booking2Container:    makeCustomPalette(BOOKING2, "colorContainer"),
+    onBooking2Container:  makeCustomPalette(BOOKING2, "onColorContainer"),
 
-    booking3: makeColor(booking3),
-    onBooking3: makeOnColor(booking3),
-    booking3Container: makeColorContainer(booking3),
-    onBooking3Container: makeOnColorContainer(booking3),
+    booking3:             makeCustomPalette(BOOKING3, "color"),
+    onBooking3:           makeCustomPalette(BOOKING3, "onColor"),
+    booking3Container:    makeCustomPalette(BOOKING3, "colorContainer"),
+    onBooking3Container:  makeCustomPalette(BOOKING3, "onColorContainer"),
 
-    booking4: makeColor(booking4),
-    onBooking4: makeOnColor(booking4),
-    booking4Container: makeColorContainer(booking4),
-    onBooking4Container: makeOnColorContainer(booking4),
+    booking4:             makeCustomPalette(BOOKING4, "color"),
+    onBooking4:           makeCustomPalette(BOOKING4, "onColor"),
+    booking4Container:    makeCustomPalette(BOOKING4, "colorContainer"),
+    onBooking4Container:  makeCustomPalette(BOOKING4, "onColorContainer"),
 
-    booking5: makeColor(booking5),
-    onBooking5: makeOnColor(booking5),
-    booking5Container: makeColorContainer(booking5),
-    onBooking5Container: makeOnColorContainer(booking5),
+    booking5:             makeCustomPalette(BOOKING5, "color"),
+    onBooking5:           makeCustomPalette(BOOKING5, "onColor"),
+    booking5Container:    makeCustomPalette(BOOKING5, "colorContainer"),
+    onBooking5Container:  makeCustomPalette(BOOKING5, "onColorContainer"),
 
-    booking6: makeColor(booking6),
-    onBooking6: makeOnColor(booking6),
-    booking6Container: makeColorContainer(booking6),
-    onBooking6Container: makeOnColorContainer(booking6),
+    booking6:             makeCustomPalette(BOOKING6, "color"),
+    onBooking6:           makeCustomPalette(BOOKING6, "onColor"),
+    booking6Container:    makeCustomPalette(BOOKING6, "colorContainer"),
+    onBooking6Container:  makeCustomPalette(BOOKING6, "onColorContainer"),
 
-    booking7: makeColor(booking7),
-    onBooking7: makeOnColor(booking7),
-    booking7Container: makeColorContainer(booking7),
-    onBooking7Container: makeOnColorContainer(booking7),
+    booking7:             makeCustomPalette(BOOKING7, "color"),
+    onBooking7:           makeCustomPalette(BOOKING7, "onColor"),
+    booking7Container:    makeCustomPalette(BOOKING7, "colorContainer"),
+    onBooking7Container:  makeCustomPalette(BOOKING7, "onColorContainer"),
 
-    booking8: makeColor(booking8),
-    onBooking8: makeOnColor(booking8),
-    booking8Container: makeColorContainer(booking8),
-    onBooking8Container: makeOnColorContainer(booking8),
+    booking8:             makeCustomPalette(BOOKING8, "color"),
+    onBooking8:           makeCustomPalette(BOOKING8, "onColor"),
+    booking8Container:    makeCustomPalette(BOOKING8, "colorContainer"),
+    onBooking8Container:  makeCustomPalette(BOOKING8, "onColorContainer"),
 
-    colorBackground: {
-      main: neutral(99),
-      light: neutral(99),
-      dark: neutral(10)
-    },
-    onBackground: {
-      main: neutral(10),
-      light: neutral(10),
-      dark: neutral(90)
-    },
-    surface: {
-      main: neutral(99),
-      light: neutral(99),
-      dark: neutral(10)
-    },
-    onSurface: {
-      main: neutral(10),
-      light: neutral(10),
-      dark: neutral(90)
-    },
-
-    surfaceVariant: {
-      main: neutralVariant(90),
-      light: neutralVariant(90),
-      dark: neutralVariant(30)
-    },
-    onSurfaceVariant: {
-      main: neutralVariant(30),
-      light: neutralVariant(30),
-      dark: neutralVariant(80)
-    },
-    outline: {
-      main: neutralVariant(50),
-      light: neutralVariant(50),
-      dark: neutralVariant(60)
-    },
-
-    shadow: {
-      main: neutral(0),
-      light: neutral(0),
-      dark: neutral(0)
-    },
-    surfaceTint: {
-      main: primary(40),
-      light: primary(40),
-      dark: primary(80)
-    },
-    inverseSurface: {
-      main: neutral(20),
-      light: neutral(20),
-      dark: neutral(90)
-    },
-    inverseOnSurface: {
-      main: neutral(95),
-      light: neutral(95),
-      dark: neutral(20)
-    },
-    inversePrimary: {
-      main: primary(80),
-      light: primary(80),
-      dark: primary(40)
-    },
+    colorBackground: makePalette("background"),
+    onBackground: makePalette("onBackground"),
+    surface: makePalette("surface"),
+    onSurface: makePalette("onSurface"),
+    surfaceVariant: makePalette("surfaceVariant"),
+    onSurfaceVariant: makePalette("onSurfaceVariant"),
+    outline: makePalette("outline"),
+    shadow: makePalette("shadow"),
+    surfaceTint: makePalette("primary"),
+    inverseSurface: makePalette("inverseSurface"),
+    inverseOnSurface: makePalette("inverseOnSurface"),
+    inversePrimary: makePalette("inversePrimary"),
     background: {
-      default: neutral(99),
-      paper: neutral(99)
+      default: hexFromArgb(themeObj.palettes.neutral.tone(99)),
+      paper: hexFromArgb(themeObj.palettes.neutral.tone(99))
     }
   },
 

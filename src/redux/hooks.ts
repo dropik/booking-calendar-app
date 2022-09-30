@@ -1,14 +1,14 @@
 import { useDispatch, TypedUseSelectorHook, useSelector } from "react-redux";
 
-import * as Store from "./store";
 import * as Utils from "../utils";
-import * as HotelSlice from "./hotelSlice";
-import * as TilesSlice from "./tilesSlice";
+import { AppDispatch, RootState } from "./store";
+import { Floors } from "./floorsSlice";
+import { TileData } from "./tilesSlice";
 
-export const useAppDispatch = () => useDispatch<Store.AppDispatch>();
-export const useAppSelector: TypedUseSelectorHook<Store.RootState> = useSelector;
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-export function useTileData(id: string | undefined): TilesSlice.TileData | undefined {
+export function useTileData(id: string | undefined): TileData | undefined {
   return useAppSelector((state) => {
     return (id === undefined) ? undefined : state.tiles.data[id];
   });
@@ -47,38 +47,6 @@ export function useRightmostDate(): string {
   return useAppSelector((state) => Utils.getDateShift(state.table.leftmostDate, state.table.columns - 1));
 }
 
-export function useErrorType(id: string): "none" | "warning" | "error" {
-  return useAppSelector((state) => {
-    const data = state.tiles.data[id];
-    if (data && data.roomNumber) {
-      let assignedRoomType = "";
-      for (const floor of state.hotel.data.floors) {
-        for (const room of floor.rooms) {
-          if (room.number === data.roomNumber) {
-            assignedRoomType = room.type;
-            break;
-          }
-        }
-        if (assignedRoomType !== "") {
-          break;
-        }
-      }
-      const occupancy = state.roomTypes.data[assignedRoomType];
-      if (occupancy) {
-        if ((data.persons < occupancy.minOccupancy) || (data.persons > occupancy.maxOccupancy)) {
-          return "error";
-        }
-      }
-
-      if (assignedRoomType !== data.roomType) {
-        return "warning";
-      }
-    }
-
-    return "none";
-  });
-}
-
 export const useCurrentDate:        () => string =
   () => useAppSelector((state) => state.table.currentDate);
 
@@ -88,5 +56,5 @@ export const useLeftmostDate:       () => string =
 export const useColumns:            () => number =
   () => useAppSelector(state => state.table.columns);
 
-export const useHotelData:          () => HotelSlice.HotelData =
-  () => useAppSelector(state => state.hotel.data);
+export const useFloors:          () => Floors =
+  () => useAppSelector(state => state.floors.data);

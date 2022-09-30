@@ -7,14 +7,14 @@ import RowBody from "../../../Row/Body";
 type BodyProps = {
   isFirst: boolean,
   isLast: boolean,
-  roomNumber: number
+  roomId: string
 }
 
-export default function Body({ isFirst, isLast, roomNumber }: BodyProps): JSX.Element {
+export default function Body({ isFirst, isLast, roomId }: BodyProps): JSX.Element {
   return (
     <RowBody>
       <GridRow isFirst={isFirst} isLast={isLast} />
-      <DataRow isFirst={isFirst} roomNumber={roomNumber} />
+      <DataRow isFirst={isFirst} roomId={roomId} />
     </RowBody>
   );
 }

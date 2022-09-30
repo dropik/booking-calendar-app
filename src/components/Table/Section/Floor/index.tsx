@@ -1,31 +1,20 @@
 import React from "react";
 
-import { FloorData } from "../../../../redux/hotelSlice";
+import { Floor } from "../../../../redux/floorsSlice";
 
 import Section from "..";
-import Row from "../Row";
-import Header from "./Room/Header";
-import Body from "./Room/Body";
+import Room from "./Room";
 
 type FloorProps = {
-  data: FloorData
+  floor: Floor
 }
 
-export default function Floor({ data }: FloorProps): JSX.Element {
+export default function Floor({ floor }: FloorProps): JSX.Element {
   return (
-    <Section header={data.name}>
-      {
-        data.rooms.map((room, index) => (
-          <Row key={room.number}>
-            <Header room={room} />
-            <Body
-              isFirst={index === 0}
-              isLast={index === data.rooms.length - 1}
-              roomNumber={room.number}
-            />
-          </Row>
-        ))
-      }
+    <Section header={floor.name}>
+      {floor.roomIds.map((roomId, index) => (
+        <Room key={roomId} id={roomId} isFirst={index === 0} isLast={index === floor.roomIds.length - 1} />)
+      )}
     </Section>
   );
 }

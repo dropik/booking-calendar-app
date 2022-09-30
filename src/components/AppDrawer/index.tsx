@@ -6,6 +6,7 @@ import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
 import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 import { useAppSelector } from "../../redux/hooks";
 
@@ -53,29 +54,31 @@ export default function AppDrawer(): JSX.Element {
                 text: "Calendario",
                 link: "/",
                 end: true,
-                icon: <CalendarMonthOutlinedIcon />,
-                onClick: () => void 0
+                icon: <CalendarMonthOutlinedIcon />
               },
               {
                 text: "Trova prenotazione",
                 link: "/bookings",
                 end: false,
-                icon: <BookmarkBorderOutlinedIcon />,
-                onClick: () => void 0
+                icon: <BookmarkBorderOutlinedIcon />
               },
               {
                 text: "Strumenti",
                 link: "/tools",
                 end: true,
-                icon: <CreateOutlinedIcon />,
-                onClick: () => void 0
+                icon: <CreateOutlinedIcon />
               },
               {
                 text: "Trova cliente",
                 link: "/clients",
                 end: true,
-                icon: <PersonOutlineOutlinedIcon />,
-                onClick: () => void 0
+                icon: <PersonOutlineOutlinedIcon />
+              },
+              {
+                text: "Impostazioni",
+                link: "/settings",
+                end: true,
+                icon: <SettingsIcon />
               }
             ]
           }

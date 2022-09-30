@@ -1,6 +1,6 @@
 {
   "name": "booking-calendar",
-  "version": "0.0.0",
+  "version": "1.1.0",
   "description": "Calendar view of reservations",
   "main": "dist/bundle.js",
   "scripts": {
@@ -50,6 +50,7 @@
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@fontsource/roboto": "^4.5.5",
+    "@material/material-color-utilities": "^0.2.0",
     "@mui/icons-material": "^5.6.1",
     "@mui/material": "^5.6.1",
     "@mui/x-date-pickers": "^5.0.0-alpha.1",
@@ -58,7 +59,6 @@
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-redux": "^8.0.0",
-    "react-router-dom": "^6.4.0",
-    "rgb-lab": "^1.0.0"
+    "react-router-dom": "^6.4.0"
   }
 }
