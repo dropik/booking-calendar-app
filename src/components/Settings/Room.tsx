@@ -87,7 +87,17 @@ export default function Room({ id, floorId }: RoomProps): JSX.Element {
               </M3IconButton>
             </Stack>
           </Stack>
-          <Typography variant="bodyMedium">{roomType}</Typography>
+          <Stack direction="row" sx={{
+            borderRadius: "0.5rem",
+            border: `1px solid ${theme.palette.outline.light}`,
+            height: "2rem",
+            boxSizing: "border-box",
+            alignItems: "center",
+            pl: "1rem",
+            pr: "1rem"
+          }}>
+            <Typography variant="bodySmall">{roomType}</Typography>
+          </Stack>
         </>
       ) : (
         <Stack direction="row" spacing={2} sx={{ flexGrow: 1 }}>
