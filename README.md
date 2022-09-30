@@ -26,11 +26,11 @@ A client side part of a web app for managing hotel bookings by organazing them i
 - **React Router**: single page app routing.
 
 ## Changes
-### v1.0.1
-- Better API endpoints.
 ### v1.1.0
 - Added hotel edit page.
 - Splitted hotel API endpoint into two: floors and rooms.
 - Using material color utilities for colors generation.
 - Fixed booking details show alerts when it should not show them.
 - Room id is referenced from tile data, instead of just room number.
+### v1.0.1
+- Better API endpoints.
