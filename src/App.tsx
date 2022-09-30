@@ -7,7 +7,6 @@ import ResizeHandler from "./components/ResizeHandler";
 import AppDrawer from "./components/AppDrawer";
 import DrawerButton from "./components/DrawerButton";
 import AppRoutes from "./components/AppRoutes";
-import SaveAndResetWidget from "./components/SaveAndResetWidget";
 import SnackbarMessage from "./components/SnackbarMessage";
 
 export default function App(): JSX.Element {
@@ -20,7 +19,6 @@ export default function App(): JSX.Element {
         <AppRoutes />
         <AppDrawer />
         <DrawerButton />
-        <SaveAndResetWidget />
         <SnackbarMessage />
         <ResizeHandler />
       </Box>
