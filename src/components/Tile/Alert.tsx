@@ -28,7 +28,7 @@ type AlertWrappeeProps = {
 
 function AlertWrappee({ children, data }: AlertWrappeeProps): JSX.Element {
   const { cropRight } = useContext(TileContext);
-  const assignedRoomType = useAppSelector((state) => data.roomId ? state.rooms.data[data.roomId].type : undefined);
+  const assignedRoomType = useAppSelector((state) => data.roomId !== undefined ? state.rooms.data[data.roomId].type : undefined);
   const occupancy = useAppSelector((state) => assignedRoomType ? state.roomTypes.data[assignedRoomType] : undefined);
   const badgeColor = useBadgeColor(data, occupancy, assignedRoomType);
 

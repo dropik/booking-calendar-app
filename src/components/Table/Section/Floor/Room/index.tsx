@@ -5,7 +5,7 @@ import Body from "./Body";
 import Header from "./Header";
 
 type RoomProps = {
-  id: string,
+  id: number,
   isFirst: boolean,
   isLast: boolean
 };

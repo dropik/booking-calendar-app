@@ -6,7 +6,7 @@ import { useAppSelector } from "../../../redux/hooks";
 
 export default function RoomNumber(): JSX.Element | null {
   const { data } = useContext(TileContext);
-  const roomNumber = useAppSelector((state) => data && data.roomId ? state.rooms.data[data.roomId].number : undefined);
+  const roomNumber = useAppSelector((state) => data && data.roomId !== undefined ? state.rooms.data[data.roomId].number : undefined);
 
   if (data && roomNumber) {
     return (

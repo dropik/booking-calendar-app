@@ -4,7 +4,7 @@ import { WritableDraft } from "immer/dist/internal";
 import * as Utils from "../utils";
 import { fetchTilesAsync } from "../api";
 import { show as showMessage } from "./snackbarMessageSlice";
-import { fetchAsync as fetchRoomsAsync } from "./roomsSlice";
+import { fetchAsync as fetchFloorsAsync } from "./floorsSlice";
 import { FetchPeriod } from "./tableSlice";
 import { RootState } from "./store";
 
@@ -20,14 +20,14 @@ export type TileData = {
   entity: string,
   persons: number,
   color: TileColor,
-  roomId?: string
+  roomId?: number
 };
 
 export type ChangesMap = {
   [key: string]: {
     roomChanged: boolean,
-    originalRoom?: string,
-    newRoom?: string,
+    originalRoom?: number,
+    newRoom?: number,
     originalColor?: TileColor,
     newColor?: TileColor
   }
@@ -39,7 +39,7 @@ export type State = {
     [key: string]: TileData
   },
   assignedMap: {
-    [key: string]: {
+    [key: number]: {
       [key: string]: string | undefined
     }
   },
@@ -91,7 +91,7 @@ export const tilesSlice = createSlice({
   name: "tiles",
   initialState: initialState,
   reducers: {
-    move: (state, action: PayloadAction<{ newY: string }>) => {
+    move: (state, action: PayloadAction<{ newY: number }>) => {
       tryMoveTile(state, action);
       if (state.grabbedTile) {
         checkChangeReturnedToOriginal(state, state.grabbedTile);
@@ -172,13 +172,13 @@ export const tilesSlice = createSlice({
         checkChangeReturnedToOriginal(state, tileId);
       });
     },
-    createRoom: (state, action: PayloadAction<string>) => {
+    createRoom: (state, action: PayloadAction<number>) => {
       const newRoom = action.payload;
       if (!state.assignedMap[newRoom]) {
         state.assignedMap[newRoom] = { };
       }
     },
-    deleteRooms: (state, action: PayloadAction<string[]>) => {
+    deleteRooms: (state, action: PayloadAction<number[]>) => {
       const rooms = action.payload;
       for (const roomId of rooms) {
         const room = state.assignedMap[roomId];
@@ -220,11 +220,13 @@ export const tilesSlice = createSlice({
       .addCase(fetchAsync.rejected, (state) => {
         state.status = "failed";
       })
-      .addCase(fetchRoomsAsync.fulfilled, (state, action) => {
-        action.payload.forEach((room) => {
-          if (!state.assignedMap[room.id]) {
-            state.assignedMap[room.id] = { };
-          }
+      .addCase(fetchFloorsAsync.fulfilled, (state, action) => {
+        action.payload.forEach((floor) => {
+          floor.rooms.forEach((room) => {
+            if (!state.assignedMap[room.id]) {
+              state.assignedMap[room.id] = { };
+            }
+          });
         });
       });
   }
@@ -268,7 +270,7 @@ function addFetchedTiles(state: WritableDraft<State>, tiles: TileData[]): void {
 
 function tryMoveTile(
   state: WritableDraft<State>,
-  action: PayloadAction<{ newY: string }>
+  action: PayloadAction<{ newY: number }>
 ): void {
   if (!state.grabbedTile) {
     return;
@@ -292,7 +294,7 @@ function tryRemoveAssignment(state: WritableDraft<State>, action: PayloadAction<
   const tileId = action.payload.tileId;
   const tileData = state.data[tileId];
   const roomId = tileData.roomId;
-  if (roomId) {
+  if (roomId !== undefined) {
     const dateCounter = new Date(tileData.from);
     for (let i = 0; i < tileData.nights; i++) {
       const x = Utils.dateToString(dateCounter);
@@ -368,7 +370,7 @@ function checkChangeReturnedToOriginal(state: WritableDraft<State>, tileId: stri
   }
 }
 
-function moveOrAssignTile(state: WritableDraft<State>, tileId: string, prevY: string | undefined, newY: string): void {
+function moveOrAssignTile(state: WritableDraft<State>, tileId: string, prevY: number | undefined, newY: number): void {
   if (prevY !== undefined) {
     moveTile(state, tileId, prevY, newY);
   } else {
@@ -379,8 +381,8 @@ function moveOrAssignTile(state: WritableDraft<State>, tileId: string, prevY: st
 function moveTile(
   state: WritableDraft<State>,
   tileId: string,
-  prevY: string,
-  newY: string
+  prevY: number,
+  newY: number
 ): void {
   const tileData = state.data[tileId];
   const dateCounter = new Date(tileData.from);
@@ -398,7 +400,7 @@ function moveTile(
 function checkHasCollision(
   state: WritableDraft<State>,
   tileId: string,
-  newY: string
+  newY: number
 ): boolean {
   const tileData = state.data[tileId];
   const dateCounter = new Date(tileData.from);
@@ -413,7 +415,7 @@ function checkHasCollision(
   return false;
 }
 
-function assignTile(state: WritableDraft<State>, tileId: string, newY: string): void {
+function assignTile(state: WritableDraft<State>, tileId: string, newY: number): void {
   const tileData = state.data[tileId];
   const dateCounter = new Date(tileData.from);
   for (let i = 0; i < tileData.nights; i++) {
@@ -427,7 +429,7 @@ function assignTile(state: WritableDraft<State>, tileId: string, newY: string): 
   state.data[tileId].roomId = newY;
 }
 
-function saveRoomChange(state: WritableDraft<State>, tileId: string, prevY: string | undefined, newY: string | undefined): void {
+function saveRoomChange(state: WritableDraft<State>, tileId: string, prevY: number | undefined, newY: number | undefined): void {
   if (!state.changesMap[tileId]) {
     state.changesMap[tileId] = {
       roomChanged: true,

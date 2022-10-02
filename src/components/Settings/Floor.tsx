@@ -30,7 +30,7 @@ import M3Dialog from "../m3/M3Dialog";
 import M3TextButton from "../m3/M3TextButton";
 
 type FloorProps = {
-  id: string,
+  id: number,
   floor: FloorData
 };
 
@@ -63,7 +63,7 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
   function edit(): void {
     async function putAsync(): Promise<void> {
       try {
-        const newFloor: FloorDTO = { id, name };
+        const newFloor: FloorDTO = { id, name, rooms: [] };
         await putFloorAsync(newFloor);
         dispatch(editFloor(newFloor));
       } catch (error) {

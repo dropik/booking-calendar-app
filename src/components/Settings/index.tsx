@@ -4,7 +4,6 @@ import Typography from "@mui/material/Typography";
 
 import { useAppDispatch, useAppSelector, useFloors } from "../../redux/hooks";
 import { fetchAsync as fetchFloorsAsync } from "../../redux/floorsSlice";
-import { fetchAsync as fetchRoomsAsync } from "../../redux/roomsSlice";
 
 import DrawerAdjacent from "../m3/DrawerAdjacent";
 import CreateFloorDialog from "./CreateFloorDialog";
@@ -16,14 +15,10 @@ export default function Settings(): JSX.Element {
   const floors = useFloors();
   const floorsReady = useAppSelector((state) => state.floors.status === "idle");
 
-  const floorIds = Object.keys(floors);
+  const floorIds = Object.keys(floors).map(Number);
 
   useEffect(() => {
     dispatch(fetchFloorsAsync());
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(fetchRoomsAsync());
   }, [dispatch]);
 
   return (

@@ -8,7 +8,7 @@ import FreeSpace from "./FreeSpace";
 import DropZone from "./DropZone";
 
 type DateCellSwitchProps = {
-  roomId: string,
+  roomId: number,
   date: string
 };
 
