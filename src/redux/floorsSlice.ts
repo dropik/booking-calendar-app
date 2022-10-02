@@ -5,7 +5,7 @@ import { show as showMessage } from "./snackbarMessageSlice";
 
 export type Floor = {
   name: string,
-  roomIds: string[]
+  roomIds: number[]
 };
 
 export type Floors = {
@@ -56,14 +56,14 @@ export const floorsSlice = createSlice({
         delete state.data[action.payload];
       }
     },
-    createRoom: (state, action: PayloadAction<{ floorId: string, roomId: string }>) => {
+    createRoom: (state, action: PayloadAction<{ floorId: string, roomId: number }>) => {
       const room = action.payload;
       const floor = state.data[room.floorId];
       if (floor) {
         floor.roomIds.push(room.roomId);
       }
     },
-    deleteRoom: (state, action: PayloadAction<{ floorId: string, roomId: string }>) => {
+    deleteRoom: (state, action: PayloadAction<{ floorId: string, roomId: number }>) => {
       const room = action.payload;
       const floor = state.data[room.floorId];
       if (floor) {

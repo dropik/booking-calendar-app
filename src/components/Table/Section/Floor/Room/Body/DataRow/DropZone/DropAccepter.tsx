@@ -6,7 +6,7 @@ import { move } from "../../../../../../../../redux/tilesSlice";
 
 type DropAccepterProps = {
   children: React.ReactNode,
-  roomId: string
+  roomId: number
 };
 
 export default function DropAccepter({ children, roomId }: DropAccepterProps): JSX.Element {

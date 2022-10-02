@@ -7,7 +7,7 @@ import RowBody from "../../../Row/Body";
 type BodyProps = {
   isFirst: boolean,
   isLast: boolean,
-  roomId: string
+  roomId: number
 }
 
 export default function Body({ isFirst, isLast, roomId }: BodyProps): JSX.Element {

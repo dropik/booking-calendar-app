@@ -26,7 +26,7 @@ import M3Dialog from "../m3/M3Dialog";
 import M3TextButton from "../m3/M3TextButton";
 
 type RoomProps = {
-  id: string,
+  id: number,
   floorId: string
 };
 

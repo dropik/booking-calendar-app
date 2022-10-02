@@ -7,7 +7,7 @@ export type Room = {
 };
 
 export type Rooms = {
-  [key: string]: Room
+  [key: number]: Room
 };
 
 export type State = {
@@ -22,10 +22,10 @@ export const roomsSlice = createSlice({
   name: "rooms",
   initialState: initialState,
   reducers: {
-    setRoom: (state, action: PayloadAction<{ id: string, room: Room}>) => {
+    setRoom: (state, action: PayloadAction<{ id: number, room: Room}>) => {
       state.data[action.payload.id] = action.payload.room;
     },
-    deleteRooms: (state, action: PayloadAction<{ ids: string[] }>) => {
+    deleteRooms: (state, action: PayloadAction<{ ids: number[] }>) => {
       const rooms = action.payload.ids;
       for (const roomId of rooms) {
         if (state.data[roomId]) {

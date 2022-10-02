@@ -7,7 +7,7 @@ import DateCellSwitch from "./DateCellSwitch";
 
 type DataRowProps = {
   isFirst: boolean,
-  roomId: string
+  roomId: number
 }
 
 export default function DataRow({ isFirst, roomId }: DataRowProps): JSX.Element {
