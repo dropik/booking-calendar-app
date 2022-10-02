@@ -12,12 +12,10 @@ export type Rooms = {
 
 export type State = {
   data: Rooms,
-  status: "idle" | "loading" | "failed"
 };
 
 const initialState: State = {
   data: { },
-  status: "idle"
 };
 
 export const roomsSlice = createSlice({
@@ -39,20 +37,15 @@ export const roomsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchFloorsAsync.pending, (state) => {
-        state.status = "loading";
         state.data = { };
       })
       .addCase(fetchFloorsAsync.fulfilled, (state, action) => {
-        state.status = "idle";
         const floors = action.payload;
         for (const floor of floors) {
           for (const room of floor.rooms) {
             state.data[room.id] = { number: room.number, type: room.type };
           }
         }
-      })
-      .addCase(fetchFloorsAsync.rejected, (state) => {
-        state.status = "failed";
       });
   }
 });
