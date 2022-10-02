@@ -15,7 +15,7 @@ export default function Settings(): JSX.Element {
   const floors = useFloors();
   const floorsReady = useAppSelector((state) => state.floors.status === "idle");
 
-  const floorIds = Object.keys(floors);
+  const floorIds = Object.keys(floors).map(Number);
 
   useEffect(() => {
     dispatch(fetchFloorsAsync());

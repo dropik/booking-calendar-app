@@ -11,7 +11,7 @@ import Skeleton from "./Skeleton";
 export default function Sections(): JSX.Element {
   const theme = useTheme();
   const floors = useFloors();
-  const floorIds = Object.keys(floors);
+  const floorIds = Object.keys(floors).map(Number);
 
   return (
     <Stack spacing={0} sx={{

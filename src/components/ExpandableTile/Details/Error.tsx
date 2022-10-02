@@ -24,7 +24,7 @@ type ErrorWrappeeProps = {
 
 function ErrorWrappee({ tile }: ErrorWrappeeProps): JSX.Element | null {
   const errorType: "none" | "warning" | "error" = useAppSelector((state) => {
-    if (!tile.roomId) {
+    if (tile.roomId === undefined) {
       return "none";
     }
 

@@ -27,7 +27,7 @@ import M3TextButton from "../m3/M3TextButton";
 
 type RoomProps = {
   id: number,
-  floorId: string
+  floorId: number
 };
 
 export default function Room({ id, floorId }: RoomProps): JSX.Element {

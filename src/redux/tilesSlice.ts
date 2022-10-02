@@ -294,7 +294,7 @@ function tryRemoveAssignment(state: WritableDraft<State>, action: PayloadAction<
   const tileId = action.payload.tileId;
   const tileData = state.data[tileId];
   const roomId = tileData.roomId;
-  if (roomId) {
+  if (roomId !== undefined) {
     const dateCounter = new Date(tileData.from);
     for (let i = 0; i < tileData.nights; i++) {
       const x = Utils.dateToString(dateCounter);

@@ -9,7 +9,7 @@ export type Floor = {
 };
 
 export type Floors = {
-  [key: string]: Floor
+  [key: number]: Floor
 };
 
 export type State = {
@@ -41,29 +41,29 @@ export const floorsSlice = createSlice({
   name: "floors",
   initialState: initialState,
   reducers: {
-    createFloor: (state, action: PayloadAction<{ id: string, name: string }>) => {
+    createFloor: (state, action: PayloadAction<{ id: number, name: string }>) => {
       const floor = action.payload;
       state.data[floor.id] = { name: floor.name, roomIds: [ ]};
     },
-    editFloor: (state, action: PayloadAction<{ id: string, name: string }>) => {
+    editFloor: (state, action: PayloadAction<{ id: number, name: string }>) => {
       const floor = action.payload;
       if (state.data[floor.id]) {
         state.data[floor.id].name = floor.name;
       }
     },
-    deleteFloor: (state, action: PayloadAction<string>) => {
+    deleteFloor: (state, action: PayloadAction<number>) => {
       if (state.data[action.payload]) {
         delete state.data[action.payload];
       }
     },
-    createRoom: (state, action: PayloadAction<{ floorId: string, roomId: number }>) => {
+    createRoom: (state, action: PayloadAction<{ floorId: number, roomId: number }>) => {
       const room = action.payload;
       const floor = state.data[room.floorId];
       if (floor) {
         floor.roomIds.push(room.roomId);
       }
     },
-    deleteRoom: (state, action: PayloadAction<{ floorId: string, roomId: number }>) => {
+    deleteRoom: (state, action: PayloadAction<{ floorId: number, roomId: number }>) => {
       const room = action.payload;
       const floor = state.data[room.floorId];
       if (floor) {

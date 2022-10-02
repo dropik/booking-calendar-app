@@ -251,36 +251,36 @@ module.exports = {
         setTimeout(() => {
           response.json([
             {
-              id: "0",
+              id: 0,
               name: "Piano 1",
               rooms: [
                 {
                   id: 0,
-                  floorId: "0",
+                  floorId: 0,
                   number: "1",
                   type: "camera tripla standard",
                 },
                 {
                   id: 1,
-                  floorId: "0",
+                  floorId: 0,
                   number: "2",
                   type: "appartamento",
                 },
                 {
                   id: 2,
-                  floorId: "0",
+                  floorId: 0,
                   number: "3",
                   type: "camera matrimoniale/doppia",
                 },
                 {
                   id: 3,
-                  floorId: "0",
+                  floorId: 0,
                   number: "4",
                   type: "camera tripla",
                 },
                 {
                   id: 4,
-                  floorId: "0",
+                  floorId: 0,
                   number: "5",
                   type: "camera matrimoniale/doppia",
                 }
@@ -292,43 +292,43 @@ module.exports = {
               rooms: [
                 {
                   id: 5,
-                  floorId: "1",
+                  floorId: 1,
                   number: "6",
                   type: "camera matrimoniale/doppia",
                 },
                 {
                   id: 6,
-                  floorId: "1",
+                  floorId: 1,
                   number: "7",
                   type: "camera matrimoniale/doppia",
                 },
                 {
                   id: 7,
-                  floorId: "1",
+                  floorId: 1,
                   number: "8",
                   type: "camera singola",
                 },
                 {
                   id: 8,
-                  floorId: "1",
+                  floorId: 1,
                   number: "9",
                   type: "camera matrimoniale/doppia",
                 },
                 {
                   id: 9,
-                  floorId: "1",
+                  floorId: 1,
                   number: "10",
                   type: "camera matrimoniale/doppia economy",
                 },
                 {
                   id: 10,
-                  floorId: "1",
+                  floorId: 1,
                   number: "11",
                   type: "camera tripla",
                 },
                 {
                   id: 11,
-                  floorId: "1",
+                  floorId: 1,
                   number: "12",
                   type: "camera matrimoniale/doppia",
                 }
