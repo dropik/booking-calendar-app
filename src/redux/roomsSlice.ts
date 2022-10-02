@@ -1,6 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { fetchRoomsAsync } from "../api";
-import { show as showMessage } from "./snackbarMessageSlice";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { fetchAsync as fetchFloorsAsync } from "./floorsSlice";
 
 export type Room = {
   number: string,
@@ -21,19 +20,6 @@ const initialState: State = {
   status: "idle"
 };
 
-export const fetchAsync = createAsyncThunk(
-  "rooms/fetch",
-  async (_, thunkApi) => {
-    try {
-      const response = await fetchRoomsAsync();
-      return response.data;
-    } catch (error) {
-      thunkApi.dispatch(showMessage({ type: "error" }));
-      throw thunkApi.rejectWithValue([]);
-    }
-  }
-);
-
 export const roomsSlice = createSlice({
   name: "rooms",
   initialState: initialState,
@@ -52,18 +38,20 @@ export const roomsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAsync.pending, (state) => {
+      .addCase(fetchFloorsAsync.pending, (state) => {
         state.status = "loading";
         state.data = { };
       })
-      .addCase(fetchAsync.fulfilled, (state, action) => {
+      .addCase(fetchFloorsAsync.fulfilled, (state, action) => {
         state.status = "idle";
-        const rooms = action.payload;
-        for (const room of rooms) {
-          state.data[room.id] = { number: room.number, type: room.type };
+        const floors = action.payload;
+        for (const floor of floors) {
+          for (const room of floor.rooms) {
+            state.data[room.id] = { number: room.number, type: room.type };
+          }
         }
       })
-      .addCase(fetchAsync.rejected, (state) => {
+      .addCase(fetchFloorsAsync.rejected, (state) => {
         state.status = "failed";
       });
   }

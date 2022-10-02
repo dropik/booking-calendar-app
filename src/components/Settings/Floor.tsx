@@ -63,7 +63,7 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
   function edit(): void {
     async function putAsync(): Promise<void> {
       try {
-        const newFloor: FloorDTO = { id, name };
+        const newFloor: FloorDTO = { id, name, rooms: [] };
         await putFloorAsync(newFloor);
         dispatch(editFloor(newFloor));
       } catch (error) {
