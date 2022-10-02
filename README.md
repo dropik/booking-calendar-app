@@ -26,6 +26,8 @@ A client side part of a web app for managing hotel bookings by organazing them i
 - **React Router**: single page app routing.
 
 ## Changes
+### v1.1.2
+- Allow only booking name in bookings fetch request.
 ### v1.1.1
 - Merged floors and rooms GET API method endpoints.
 ### v1.1.0

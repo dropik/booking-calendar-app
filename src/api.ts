@@ -116,8 +116,8 @@ export async function fetchCityTaxAsync(from: string, to: string): Promise<{ dat
   return fetchJsonDataAsync<CityTaxData>(`/api/v1/stats/city-tax?from=${from}&to=${to}`);
 }
 
-export async function fetchBookings(nameOrId: string, from: string, to: string): Promise<{ data: BookingShortData[] }> {
-  return fetchJsonDataAsync<BookingShortData[]>(`/api/v1/bookings?nameOrId=${nameOrId}&from=${from}&to=${to}`);
+export async function fetchBookings(name: string, from: string, to: string): Promise<{ data: BookingShortData[] }> {
+  return fetchJsonDataAsync<BookingShortData[]>(`/api/v1/bookings?name=${name}&from=${from}&to=${to}`);
 }
 
 export async function fetchClients(query: string): Promise<{ data: ClientData[] }> {
