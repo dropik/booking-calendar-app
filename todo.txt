@@ -1,2 +1,4 @@
+- Handle html entities in back-end response.
+- Handle live modified tiles.
 - Handle touchscreen.
 - Police data sending directly to police web portal??
