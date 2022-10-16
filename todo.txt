@@ -1,5 +1,6 @@
 - Consider that we have to explicitly save sessions stuff and first loaded tiles via a specific API call.
 - Tile color got from API can be null.
+- Reload all tiles that were associated with fetched booking on fetching tiles.
 - Split saving colors and room assignments. Colors should be associated with bookings.
 - Handle html entities in back-end response.
 - Handle live modified tiles.
