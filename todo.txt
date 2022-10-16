@@ -1,4 +1,5 @@
 - Consider that we have to explicitly save sessions stuff and first loaded tiles via a specific API call.
+- Tile color got from API can be null.
 - Handle html entities in back-end response.
 - Handle live modified tiles.
 - Add tile from date to changes map.
