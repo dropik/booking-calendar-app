@@ -5,6 +5,6 @@
 - Split saving colors and room assignments. Colors should be associated with bookings.
 - Handle html entities in back-end response.
 - Handle live modified tiles.
-- Add tile from date to changes map.
+- Merge booking by id, booking short by id and bokings into one API endpoint.
 - Handle touchscreen.
 - Police data sending directly to police web portal??
