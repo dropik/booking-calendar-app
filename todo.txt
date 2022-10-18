@@ -3,6 +3,7 @@
 - Reload all tiles that were associated with fetched booking on fetching tiles.
 - Fetching whole bookings instead of tiles. Should be flattened in front-end.
 - Split saving colors and room assignments. Colors should be associated with bookings.
+- Add from dates to booking and booking short by id fetch.
 - Handle html entities in back-end response.
 - Handle live modified tiles.
 - Handle touchscreen.
