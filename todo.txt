@@ -9,5 +9,6 @@
 - Handle html entities in back-end response.
 - Handle live modified tiles.
 - Use POST for police data export. Don't download it, just wait for ok status.
+- Remove entity property from tile data.
 - Handle touchscreen.
 - Police data sending directly to police web portal??
