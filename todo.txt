@@ -12,5 +12,6 @@
 - Add download police ricevuta button.
 - Remove entity property from tile data.
 - Do not force ISTAT to download file, live this to back-end.
+- Add province of birth to client data.
 - Handle touchscreen.
 - Police data sending directly to police web portal??
