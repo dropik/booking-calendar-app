@@ -1,8 +1,8 @@
-- Consider that we have to explicitly save sessions stuff and first loaded tiles via a specific API call.
 - Tile color got from API can be null.
+- Split saving colors and room assignments. Colors should be associated with bookings.
+- Consider that we have to explicitly save sessions stuff and first loaded tiles via a specific API call.
 - Reload all tiles that were associated with fetched booking on fetching tiles.
 - Fetching whole bookings instead of tiles. Should be flattened in front-end.
-- Split saving colors and room assignments. Colors should be associated with bookings.
 - Add from dates to booking and booking short by id fetch.
 - Add booking id to clients by tile request.
 - Add date interval to clients by query request. Load asynchronously clients spliting the whole period from 01/01/2021 to nowdays into more smaller periods for more responsiveness.
@@ -14,4 +14,3 @@
 - Use POST method for istat data export. Same as police, don't download, just verify ok status.
 - Add province of birth to client data.
 - Handle touchscreen.
-- Police data sending directly to police web portal??
