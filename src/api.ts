@@ -74,6 +74,14 @@ export type RoomAssignments = {
   [key: string]: number | null
 }
 
+export type AckBookingsRequest = {
+  bookings: {
+    bookingId: string,
+    lastModified: string
+  }[],
+  sessionId: string
+}
+
 export function fetchFloorsAsync(): Promise<{ data: Floor[] }> {
   return fetchJsonDataAsync<Floor[]>("/api/v1/floors");
 }
@@ -108,6 +116,10 @@ export function fetchRoomTypesAsync(): Promise<{ data: RoomType[] }> {
 
 export function fetchTilesAsync(from: string, to: string, sessionId?: string): Promise<{ data: { tiles: TileData[], sessionId: string } }> {
   return fetchJsonDataAsync<{ tiles: TileData[], sessionId: string }>(`/api/v1/tiles?from=${from}&to=${to}${sessionId ? `&sessionId=${sessionId}` : ""}`);
+}
+
+export function ackBookingsAsync(request: AckBookingsRequest): Promise<void> {
+  return postDataAsync("/api/v1/ack-bookings", request);
 }
 
 export function postColorAssignments(assignments: ColorAssignments): Promise<void> {

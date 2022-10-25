@@ -542,6 +542,12 @@ module.exports = {
         }, 500);
       });
 
+      devServer.app.post("/api/v1/ack-bookings", (_, response) => {
+        setTimeout(() => {
+          response.json("ok");
+        }, 500);
+      });
+
       return middlewares;
     }
   },

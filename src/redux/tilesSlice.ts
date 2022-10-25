@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { WritableDraft } from "immer/dist/internal";
 
 import * as Utils from "../utils";
-import { ColorAssignments, fetchTilesAsync, postColorAssignments } from "../api";
+import { ackBookingsAsync, AckBookingsRequest, ColorAssignments, fetchTilesAsync, postColorAssignments } from "../api";
 import { show as showMessage } from "./snackbarMessageSlice";
 import { fetchAsync as fetchFloorsAsync } from "./floorsSlice";
 import { FetchPeriod } from "./tableSlice";
@@ -87,6 +87,10 @@ export const fetchAsync = createAsyncThunk(
       const assignments: ColorAssignments = { };
       const tileResponses = response.data.tiles;
       const tiles: TileData[] = [];
+      const ackRequest: AckBookingsRequest = {
+        bookings: [],
+        sessionId: response.data.sessionId
+      };
 
       for (const tile of tileResponses) {
         if (!tile.color && !assignments[tile.bookingId]) {
@@ -107,10 +111,21 @@ export const fetchAsync = createAsyncThunk(
           roomId: tile.roomId,
           color: tile.color ?? assignments[tile.bookingId]
         });
+
+        if (!ackRequest.bookings.find((booking) => booking.bookingId === tile.bookingId)) {
+          ackRequest.bookings.push({
+            bookingId: tile.bookingId,
+            lastModified: tile.lastModified
+          });
+        }
       }
 
       if (Object.keys(assignments).length > 0) {
         await postColorAssignments(assignments);
+      }
+
+      if (ackRequest.bookings.length > 0) {
+        await ackBookingsAsync(ackRequest);
       }
 
       return { tiles, sessionId: response.data.sessionId };
