@@ -7,8 +7,8 @@ import ExpandableTile from "../ExpandableTile";
 import { TileContext } from "../Tile/context";
 
 export type StayDetailsProps = {
-  booking: Booking,
-  tile: Tile,
+  booking: Booking<number>,
+  tile: Tile<number>,
   isFirst: boolean
 }
 

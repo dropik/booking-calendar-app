@@ -18,7 +18,7 @@ export default function BookingDetails(): JSX.Element {
   const theme = useTheme();
   const { from, bookingId } = useParams();
   const dispatch = useAppDispatch();
-  const [booking, setBooking] = useState<Booking | undefined>(undefined);
+  const [booking, setBooking] = useState<Booking<number> | undefined>(undefined);
   const skeletonRooms = [0, 1];
 
   const periodStr = booking ?

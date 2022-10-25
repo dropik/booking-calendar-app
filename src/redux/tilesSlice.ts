@@ -37,7 +37,7 @@ export type ColorChanges = {
   }
 };
 
-type ColoredBooking = Required<Booking>;
+type ColoredBooking = Required<Booking<number>>;
 
 export type State = {
   status: "idle" | "loading" | "failed",

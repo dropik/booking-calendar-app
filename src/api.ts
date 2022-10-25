@@ -6,7 +6,7 @@ export type CityTaxData = {
   over10Days: number
 };
 
-export type Booking = {
+export type Booking<TPerson> = {
   id: string,
   status: "new" | "modified" | "cancelled",
   name: string,
@@ -14,16 +14,16 @@ export type Booking = {
   from: string,
   to: string,
   color?: TileColor,
-  tiles: Tile[]
+  tiles: Tile<TPerson>[]
 };
 
-export type Tile = {
+export type Tile<TPerson> = {
   id: string,
   from: string,
   nights: number,
   roomType: string,
   entity: string,
-  persons: number,
+  persons: TPerson,
   roomId?: number
 };
 
@@ -115,8 +115,8 @@ export function fetchRoomTypesAsync(): Promise<{ data: RoomType[] }> {
   return fetchJsonDataAsync<RoomType[]>("/api/v1/room-types");
 }
 
-export function fetchBookingsBySessionAsync(from: string, to: string, sessionId?: string): Promise<{ data: { bookings: Booking[], sessionId: string } }> {
-  return fetchJsonDataAsync<{ bookings: Booking[], sessionId: string }>(`/api/v1/bookings-by-session?from=${from}&to=${to}${sessionId ? `&sessionId=${sessionId}` : ""}`);
+export function fetchBookingsBySessionAsync(from: string, to: string, sessionId?: string): Promise<{ data: { bookings: Booking<number>[], sessionId: string } }> {
+  return fetchJsonDataAsync<{ bookings: Booking<number>[], sessionId: string }>(`/api/v1/bookings-by-session?from=${from}&to=${to}${sessionId ? `&sessionId=${sessionId}` : ""}`);
 }
 
 export function ackBookingsAsync(request: AckBookingsRequest): Promise<void> {
@@ -131,8 +131,8 @@ export function postRoomAssignmentsAsync(assignments: RoomAssignments): Promise<
   return postDataAsync("/api/v1/room-assignments", assignments);
 }
 
-export async function fetchBookingById(bookingId: string, from: string): Promise<{ data: Booking }> {
-  return fetchJsonDataAsync<Booking>(`/api/v1/booking?id=${bookingId}&from=${from}`);
+export async function fetchBookingById(bookingId: string, from: string): Promise<{ data: Booking<number> }> {
+  return fetchJsonDataAsync<Booking<number>>(`/api/v1/booking?id=${bookingId}&from=${from}`);
 }
 
 export async function fetchBookingShortById(bookingId: string): Promise<{ data: BookingShort}> {
