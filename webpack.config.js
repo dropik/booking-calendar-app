@@ -135,7 +135,7 @@ module.exports = {
         }, 500);
       });
 
-      devServer.app.get("/api/v1/bookings", (_, response) => {
+      devServer.app.get("/api/v1/bookings-by-name", (_, response) => {
         setTimeout(() => {
           response.json([
             {

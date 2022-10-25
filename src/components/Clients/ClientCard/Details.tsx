@@ -5,7 +5,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
-import { BookingShortData, fetchBookingShortById } from "../../../api";
+import { BookingShort, fetchBookingShortById } from "../../../api";
 import { setBookingsFormFrom, setBookingsFormName, setBookingsFormTo } from "../../../redux/bookingsFormSlice";
 import { useAppDispatch } from "../../../redux/hooks";
 import { show as showMessage } from "../../../redux/snackbarMessageSlice";
@@ -20,7 +20,7 @@ type DetailsProps = {
 export default function Details({ bookingId }: DetailsProps): JSX.Element {
   const dispatch = useAppDispatch();
   const theme = useTheme();
-  const [booking, setBooking] = useState<BookingShortData | undefined>(undefined);
+  const [booking, setBooking] = useState<BookingShort | undefined>(undefined);
 
   const periodStr = booking ?
     `${(new Date(booking.from)).toLocaleDateString()} - ${(new Date(booking.to)).toLocaleDateString()}` :

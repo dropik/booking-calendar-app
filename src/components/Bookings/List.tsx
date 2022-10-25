@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 
-import { BookingShortData, fetchBookings } from "../../api";
+import { BookingShort, fetchBookings } from "../../api";
 import { useAppDispatch } from "../../redux/hooks";
 import { show as showMessage } from "../../redux/snackbarMessageSlice";
 
@@ -18,7 +18,7 @@ type ListProps = {
 
 export default function List({ name, from, to, isValid }: ListProps): JSX.Element {
   const dispatch = useAppDispatch();
-  const [bookings, setBookings] = useState<BookingShortData[]>([]);
+  const [bookings, setBookings] = useState<BookingShort[]>([]);
 
   useEffect(() => {
     let subscribed = true;

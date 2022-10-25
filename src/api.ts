@@ -25,13 +25,15 @@ export type Booking = {
   }[]
 };
 
-export type BookingShortData = {
+export type BookingShort = {
   id: string,
+  status: "new" | "modified" | "cancelle",
   name: string,
+  lastModified: string,
   from: string,
   to: string,
-  occupations: number,
   color: TileColor
+  occupations: number,
 };
 
 export type ClientData = {
@@ -131,8 +133,8 @@ export async function fetchBookingById(bookingId: string): Promise<{ data: Booki
   return fetchJsonDataAsync<Booking>(`/api/v1/booking?id=${bookingId}`);
 }
 
-export async function fetchBookingShortById(bookingId: string): Promise<{ data: BookingShortData}> {
-  return fetchJsonDataAsync<BookingShortData>(`/api/v1/booking-short?id=${bookingId}`);
+export async function fetchBookingShortById(bookingId: string): Promise<{ data: BookingShort}> {
+  return fetchJsonDataAsync<BookingShort>(`/api/v1/booking-short?id=${bookingId}`);
 }
 
 export async function fetchClientsByTile(tileId: string): Promise<{ data: ClientData[] }> {
@@ -151,8 +153,8 @@ export async function fetchCityTaxAsync(from: string, to: string): Promise<{ dat
   return fetchJsonDataAsync<CityTaxData>(`/api/v1/stats/city-tax?from=${from}&to=${to}`);
 }
 
-export async function fetchBookings(name: string, from: string, to: string): Promise<{ data: BookingShortData[] }> {
-  return fetchJsonDataAsync<BookingShortData[]>(`/api/v1/bookings?name=${name}&from=${from}&to=${to}`);
+export async function fetchBookings(name: string, from: string, to: string): Promise<{ data: BookingShort[] }> {
+  return fetchJsonDataAsync<BookingShort[]>(`/api/v1/bookings-by-name?name=${name}&from=${from}&to=${to}`);
 }
 
 export async function fetchClients(query: string): Promise<{ data: ClientData[] }> {
