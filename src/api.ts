@@ -25,14 +25,6 @@ export type Booking = {
   }[]
 };
 
-export type BookingData = {
-  id: string,
-  name: string,
-  from: string,
-  to: string,
-  rooms: Booking[]
-};
-
 export type BookingShortData = {
   id: string,
   name: string,
@@ -135,8 +127,8 @@ export function postRoomAssignmentsAsync(assignments: RoomAssignments): Promise<
   return postDataAsync("/api/v1/room-assignments", assignments);
 }
 
-export async function fetchBookingById(bookingId: string): Promise<{ data: BookingData }> {
-  return fetchJsonDataAsync<BookingData>(`/api/v1/booking?id=${bookingId}`);
+export async function fetchBookingById(bookingId: string): Promise<{ data: Booking }> {
+  return fetchJsonDataAsync<Booking>(`/api/v1/booking?id=${bookingId}`);
 }
 
 export async function fetchBookingShortById(bookingId: string): Promise<{ data: BookingShortData}> {

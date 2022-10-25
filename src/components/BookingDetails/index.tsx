@@ -5,19 +5,20 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import { BookingData, fetchBookingById } from "../../api";
+import { Booking, fetchBookingById } from "../../api";
 import { useAppDispatch } from "../../redux/hooks";
 import { show as showMessage } from "../../redux/snackbarMessageSlice";
 
 import { TileContext } from "../Tile/context";
 import ExpandableTile from "../ExpandableTile";
 import M3Skeleton from "../m3/M3Skeleton";
+import { TileColor, TileData } from "../../redux/tilesSlice";
 
 export default function BookingDetails(): JSX.Element {
   const theme = useTheme();
   const { bookingId } = useParams();
   const dispatch = useAppDispatch();
-  const [booking, setBooking] = useState<BookingData | undefined>(undefined);
+  const [booking, setBooking] = useState<Booking | undefined>(undefined);
   const skeletonRooms = [0, 1];
 
   const periodStr = booking ?
@@ -86,11 +87,26 @@ export default function BookingDetails(): JSX.Element {
         boxSizing: "border-box",
         pb: "1rem"
       }}>
-        {booking ? booking.rooms.map((room, index) => (
-          <TileContext.Provider key={room.id} value={{ data: room, cropRight: false, cropLeft: false }}>
-            <ExpandableTile variant="in-content" isFirst={index === 0} />
-          </TileContext.Provider>
-        )) : skeletonRooms.map((room) => (
+        {booking ? booking.tiles.map((tile, index) => {
+          const tileData: TileData = {
+            id: tile.id,
+            bookingId: booking.id,
+            name: booking.name,
+            from: tile.from,
+            nights: tile.nights,
+            roomType: tile.roomType,
+            entity: tile.entity,
+            persons: tile.persons,
+            color: booking.color ?? `booking${Math.floor(Math.random() * 7) + 1}` as TileColor,
+            roomId: tile.roomId
+          };
+
+          return (
+            <TileContext.Provider key={tile.id} value={{ data: tileData, cropRight: false, cropLeft: false }}>
+              <ExpandableTile variant="in-content" isFirst={index === 0} />
+            </TileContext.Provider>
+          );
+        }) : skeletonRooms.map((room) => (
           <TileContext.Provider key={room} value={{ cropRight: false, cropLeft: false }}>
             <ExpandableTile variant="in-content" isFirst={room === 0} />
           </TileContext.Provider>
