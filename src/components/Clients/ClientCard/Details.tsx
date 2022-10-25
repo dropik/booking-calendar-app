@@ -51,7 +51,7 @@ export default function Details({ bookingId }: DetailsProps): JSX.Element {
       </Stack>
       <Stack alignItems="flex-end">
         {booking ? (
-          <Link to={`/bookings/${booking.id}`} style={{ textDecoration: "none" }}>
+          <Link to={`/bookings/${booking.from}/${booking.id}`} style={{ textDecoration: "none" }}>
             <M3TextButton onClick={() => {
               dispatch(setBookingsFormFrom(booking.from));
               dispatch(setBookingsFormTo(booking.to));
