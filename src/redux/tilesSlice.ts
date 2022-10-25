@@ -283,7 +283,7 @@ export const { move, grab, drop, unassign, saveChanges, undoChanges, setColor, c
 export default tilesSlice.reducer;
 
 function addFetchedBookings(state: WritableDraft<State>, bookings: ColoredBooking[]): void {
-  bookings.forEach(booking => {
+  for (const booking of bookings) {
     // remove all previous tiles and changes if booking was already fetched
     if (state.bookingsMap[booking.id]) {
       const previousTiles = state.bookingsMap[booking.id];
@@ -316,6 +316,10 @@ function addFetchedBookings(state: WritableDraft<State>, bookings: ColoredBookin
     }
 
     // assign new tiles
+    if (booking.status === "cancelled") {
+      continue;
+    }
+
     state.bookingsMap[booking.id] = [];
     for (const tile of booking.tiles) {
       const newTile: TileData = {
@@ -355,7 +359,7 @@ function addFetchedBookings(state: WritableDraft<State>, bookings: ColoredBookin
         }
       }
     }
-  });
+  }
 }
 
 function tryMoveTile(

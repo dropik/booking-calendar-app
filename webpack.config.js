@@ -554,7 +554,7 @@ module.exports = {
                 },
                 {
                   id: "7",
-                  status: "new",
+                  status: "cancelled",
                   name: "Sasha Smirnov",
                   lastModified: "2022-02-02",
                   from: "2022-10-23",
