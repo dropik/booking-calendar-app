@@ -1,6 +1,7 @@
+- Add last modified field to loaded tiles.
 - Consider that we have to explicitly save sessions stuff and first loaded tiles via a specific API call.
-- Reload all tiles that were associated with fetched booking on fetching tiles.
 - Fetching whole bookings instead of tiles. Should be flattened in front-end.
+- Reload all tiles that were associated with fetched booking on fetching tiles.
 - Add from dates to booking and booking short by id fetch.
 - Add booking id to clients by tile request.
 - Add date interval to clients by query request. Load asynchronously clients spliting the whole period from 01/01/2021 to nowdays into more smaller periods for more responsiveness.
