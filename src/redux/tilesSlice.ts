@@ -13,6 +13,7 @@ export type TileColor = "booking1" | "booking2" | "booking3" | "booking4" | "boo
 export type TileData = {
   id: string,
   bookingId: string,
+  lastModified: string,
   name: string,
   from: string,
   nights: number,
@@ -96,6 +97,7 @@ export const fetchAsync = createAsyncThunk(
         tiles.push({
           id: tile.id,
           bookingId: tile.bookingId,
+          lastModified: tile.lastModified,
           name: tile.name,
           from: tile.from,
           nights: tile.nights,

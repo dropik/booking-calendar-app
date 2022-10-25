@@ -9,6 +9,7 @@ export type CityTaxData = {
 export type TileData = {
   id: string,
   bookingId: string,
+  lastModified: string,
   name: string,
   from: string,
   nights: number,

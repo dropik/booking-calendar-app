@@ -421,6 +421,7 @@ module.exports = {
                 {
                   id: "0",
                   bookingId: "0",
+                  lastModified: "2022-02-02",
                   name: "Petr Ivanov",
                   from: "2022-09-15",
                   nights: 40,
@@ -433,6 +434,7 @@ module.exports = {
                 {
                   id: "1",
                   bookingId: "1",
+                  lastModified: "2022-02-02",
                   name: "Ivan Petrov",
                   from: "2022-10-25",
                   nights: 2,
@@ -445,6 +447,7 @@ module.exports = {
                 {
                   id: "2",
                   bookingId: "2",
+                  lastModified: "2022-02-02",
                   name: "Vasya Pupkin",
                   from: "2022-10-20",
                   nights: 3,
@@ -457,6 +460,7 @@ module.exports = {
                 {
                   id: "3",
                   bookingId: "3",
+                  lastModified: "2022-02-02",
                   name: "Petr Petrov",
                   from: "2022-10-01",
                   nights: 4,
@@ -468,6 +472,7 @@ module.exports = {
                 {
                   id: "4",
                   bookingId: "4",
+                  lastModified: "2022-02-02",
                   name: "Ivan Vasiliev",
                   from: "2022-10-28",
                   nights: 4,
@@ -478,6 +483,7 @@ module.exports = {
                 {
                   id: "5",
                   bookingId: "5",
+                  lastModified: "2022-02-02",
                   name: "Vasya Ivanov",
                   from: "2022-09-01",
                   nights: 60,
@@ -489,6 +495,7 @@ module.exports = {
                 {
                   id: "6",
                   bookingId: "1",
+                  lastModified: "2022-02-02",
                   name: "Sasha Smirnov",
                   from: "2022-10-25",
                   nights: 2,
@@ -501,6 +508,7 @@ module.exports = {
                 {
                   id: "7",
                   bookingId: "7",
+                  lastModified: "2022-02-02",
                   name: "Sasha Smirnov",
                   from: "2022-10-23",
                   nights: 2,
