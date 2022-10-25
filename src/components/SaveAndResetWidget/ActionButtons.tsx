@@ -33,7 +33,7 @@ export default function ActionButtons(): JSX.Element {
           const roomChangesKeys = Object.keys(roomChanges);
           for (const changeKey of roomChangesKeys) {
             const change = roomChanges[changeKey];
-            roomAssignments[changeKey] = change.newRoom ?? null;
+            roomAssignments[changeKey] = change.newRoom !== undefined ? change.newRoom : null;
           }
           await postRoomAssignmentsAsync(roomAssignments);
         }

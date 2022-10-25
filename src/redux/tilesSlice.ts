@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { WritableDraft } from "immer/dist/internal";
 
 import * as Utils from "../utils";
-import { ackBookingsAsync, AckBookingsRequest, ColorAssignments, fetchTilesAsync, postColorAssignments } from "../api";
+import { ackBookingsAsync, AckBookingsRequest, Booking, ColorAssignments, fetchBookingsBySessionAsync, postColorAssignments } from "../api";
 import { show as showMessage } from "./snackbarMessageSlice";
 import { fetchAsync as fetchFloorsAsync } from "./floorsSlice";
 import { FetchPeriod } from "./tableSlice";
@@ -13,7 +13,6 @@ export type TileColor = "booking1" | "booking2" | "booking3" | "booking4" | "boo
 export type TileData = {
   id: string,
   bookingId: string,
-  lastModified: string,
   name: string,
   from: string,
   nights: number,
@@ -37,6 +36,8 @@ export type ColorChanges = {
     newColor: TileColor
   }
 };
+
+type ColoredBooking = Required<Booking>;
 
 export type State = {
   status: "idle" | "loading" | "failed",
@@ -78,46 +79,34 @@ const initialState: State = {
   mouseYOnGrab: 0
 };
 
-export const fetchAsync = createAsyncThunk(
-  "tiles/fetch",
+export const fetchAsync = createAsyncThunk<{ bookings: ColoredBooking[], sessionId: string }, FetchPeriod>(
+  "bookings-by-session/fetch",
   async (arg: FetchPeriod, thunkApi) => {
     try {
       const state = thunkApi.getState() as RootState;
-      const response = await fetchTilesAsync(arg.from, arg.to, state.tiles.sessionId);
-      const assignments: ColorAssignments = { };
-      const tileResponses = response.data.tiles;
-      const tiles: TileData[] = [];
+      const response = await fetchBookingsBySessionAsync(arg.from, arg.to, state.tiles.sessionId);
+      const bookings = response.data.bookings;
+      const coloredBookings: ColoredBooking[] = [];
+
       const ackRequest: AckBookingsRequest = {
         bookings: [],
         sessionId: response.data.sessionId
       };
+      const assignments: ColorAssignments = { };
 
-      for (const tile of tileResponses) {
-        if (!tile.color && !assignments[tile.bookingId]) {
+      for (const booking of bookings) {
+        if (!booking.color) {
           const newColor = `booking${Math.floor((Math.random() * 7)) + 1}` as TileColor;
-          assignments[tile.bookingId] = newColor;
+          assignments[booking.id] = newColor;
+          coloredBookings.push({ color: newColor, ...booking });
+        } else {
+          coloredBookings.push({ color: booking.color, ...booking });
         }
 
-        tiles.push({
-          id: tile.id,
-          bookingId: tile.bookingId,
-          lastModified: tile.lastModified,
-          name: tile.name,
-          from: tile.from,
-          nights: tile.nights,
-          roomType: tile.roomType,
-          entity: tile.entity,
-          persons: tile.persons,
-          roomId: tile.roomId,
-          color: tile.color ?? assignments[tile.bookingId]
+        ackRequest.bookings.push({
+          bookingId: booking.id,
+          lastModified: booking.lastModified
         });
-
-        if (!ackRequest.bookings.find((booking) => booking.bookingId === tile.bookingId)) {
-          ackRequest.bookings.push({
-            bookingId: tile.bookingId,
-            lastModified: tile.lastModified
-          });
-        }
       }
 
       if (Object.keys(assignments).length > 0) {
@@ -128,7 +117,7 @@ export const fetchAsync = createAsyncThunk(
         await ackBookingsAsync(ackRequest);
       }
 
-      return { tiles, sessionId: response.data.sessionId };
+      return { bookings: coloredBookings, sessionId: response.data.sessionId };
     } catch(error) {
       thunkApi.dispatch(showMessage({ type: "error" }));
       throw thunkApi.rejectWithValue([]);
@@ -271,7 +260,7 @@ export const tilesSlice = createSlice({
       })
       .addCase(fetchAsync.fulfilled, (state, action) => {
         state.status = "idle";
-        addFetchedTiles(state, action.payload.tiles);
+        addFetchedBookings(state, action.payload.bookings);
         state.sessionId = action.payload.sessionId;
       })
       .addCase(fetchAsync.rejected, (state) => {
@@ -293,33 +282,77 @@ export const { move, grab, drop, unassign, saveChanges, undoChanges, setColor, c
 
 export default tilesSlice.reducer;
 
-function addFetchedTiles(state: WritableDraft<State>, tiles: TileData[]): void {
-  tiles.forEach(tile => {
-    state.data[tile.id] = tile;
-    state.grabbedMap[tile.id] = false;
-    if (state.bookingsMap[tile.bookingId] === undefined) {
-      state.bookingsMap[tile.bookingId] = [];
-    }
-    state.bookingsMap[tile.bookingId].push(tile.id);
-    const roomId = tile.roomId;
-    if (roomId !== undefined) {
-      if (state.assignedMap[roomId] === undefined) {
-        state.assignedMap[roomId] = {};
-      }
-      const dateCounter = new Date(tile.from);
-      for (let i = 0; i < tile.nights; i++) {
-        state.assignedMap[roomId][Utils.dateToString(dateCounter)] = tile.id;
-        dateCounter.setDate(dateCounter.getDate() + 1);
-      }
-    } else {
-      const dateCounter = new Date(tile.from);
-      for (let i = 0; i < tile.nights; i++) {
-        const x = Utils.dateToString(dateCounter);
-        if (state.unassignedMap[x] === undefined) {
-          state.unassignedMap[x] = { };
+function addFetchedBookings(state: WritableDraft<State>, bookings: ColoredBooking[]): void {
+  bookings.forEach(booking => {
+    // remove all previous tiles and changes if booking was already fetched
+    if (state.bookingsMap[booking.id]) {
+      const previousTiles = state.bookingsMap[booking.id];
+      for (const tileId of previousTiles) {
+        const tile = state.data[tileId];
+        const roomId = tile.roomId;
+        const dateCounter = new Date(tile.from);
+        if (roomId !== undefined) {
+          for (let i = 0; i < tile.nights; i++) {
+            const x = Utils.dateToString(dateCounter);
+            state.assignedMap[roomId][x] = undefined;
+            dateCounter.setDate(dateCounter.getDate() + 1);
+          }
+        } else {
+          for (let i = 0; i < tile.nights; i++) {
+            const x = Utils.dateToString(dateCounter);
+            delete state.unassignedMap[x][tileId];
+            dateCounter.setDate(dateCounter.getDate() + 1);
+          }
         }
-        state.unassignedMap[x][tile.id] = tile.id;
-        dateCounter.setDate(dateCounter.getDate() + 1);
+        if (state.roomChanges[tileId]) {
+          delete state.roomChanges[tileId];
+        }
+        delete state.data[tileId];
+      }
+      delete state.bookingsMap[booking.id];
+      if (state.colorChanges[booking.id]) {
+        delete state.colorChanges[booking.id];
+      }
+    }
+
+    // assign new tiles
+    state.bookingsMap[booking.id] = [];
+    for (const tile of booking.tiles) {
+      const newTile: TileData = {
+        id: tile.id,
+        bookingId: booking.id,
+        name: booking.name,
+        from: tile.from,
+        nights: tile.nights,
+        roomType: tile.roomType,
+        entity: tile.entity,
+        persons: tile.persons,
+        color: booking.color,
+        roomId: tile.roomId
+      };
+
+      state.data[newTile.id] = newTile;
+      state.grabbedMap[newTile.id] = false;
+      state.bookingsMap[booking.id].push(newTile.id);
+      const roomId = newTile.roomId;
+      const dateCounter = new Date(newTile.from);
+      if (roomId !== undefined) {
+        if (state.assignedMap[roomId] === undefined) {
+          state.assignedMap[roomId] = {};
+        }
+        for (let i = 0; i < newTile.nights; i++) {
+          state.assignedMap[roomId][Utils.dateToString(dateCounter)] = newTile.id;
+          dateCounter.setDate(dateCounter.getDate() + 1);
+        }
+      } else {
+        for (let i = 0; i < newTile.nights; i++) {
+          const x = Utils.dateToString(dateCounter);
+          if (state.unassignedMap[x] === undefined) {
+            state.unassignedMap[x] = { };
+          }
+          state.unassignedMap[x][newTile.id] = newTile.id;
+          dateCounter.setDate(dateCounter.getDate() + 1);
+        }
       }
     }
   });

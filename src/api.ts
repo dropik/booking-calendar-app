@@ -6,18 +6,23 @@ export type CityTaxData = {
   over10Days: number
 };
 
-export type TileData = {
+export type Booking = {
   id: string,
-  bookingId: string,
-  lastModified: string,
+  status: "new" | "modified" | "cancelled",
   name: string,
+  lastModified: string,
   from: string,
-  nights: number,
-  roomType: string,
-  entity: string,
-  persons: number,
+  to: string,
   color?: TileColor,
-  roomId?: number
+  tiles: {
+    id: string,
+    from: string,
+    nights: number,
+    roomType: string,
+    entity: string,
+    persons: number,
+    roomId?: number
+  }[]
 };
 
 export type BookingData = {
@@ -25,7 +30,7 @@ export type BookingData = {
   name: string,
   from: string,
   to: string,
-  rooms: TileData[]
+  rooms: Booking[]
 };
 
 export type BookingShortData = {
@@ -114,8 +119,8 @@ export function fetchRoomTypesAsync(): Promise<{ data: RoomType[] }> {
   return fetchJsonDataAsync<RoomType[]>("/api/v1/room-types");
 }
 
-export function fetchTilesAsync(from: string, to: string, sessionId?: string): Promise<{ data: { tiles: TileData[], sessionId: string } }> {
-  return fetchJsonDataAsync<{ tiles: TileData[], sessionId: string }>(`/api/v1/tiles?from=${from}&to=${to}${sessionId ? `&sessionId=${sessionId}` : ""}`);
+export function fetchBookingsBySessionAsync(from: string, to: string, sessionId?: string): Promise<{ data: { bookings: Booking[], sessionId: string } }> {
+  return fetchJsonDataAsync<{ bookings: Booking[], sessionId: string }>(`/api/v1/bookings-by-session?from=${from}&to=${to}${sessionId ? `&sessionId=${sessionId}` : ""}`);
 }
 
 export function ackBookingsAsync(request: AckBookingsRequest): Promise<void> {
