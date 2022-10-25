@@ -1,4 +1,3 @@
-- Tile color got from API can be null.
 - Split saving colors and room assignments. Colors should be associated with bookings.
 - Consider that we have to explicitly save sessions stuff and first loaded tiles via a specific API call.
 - Reload all tiles that were associated with fetched booking on fetching tiles.

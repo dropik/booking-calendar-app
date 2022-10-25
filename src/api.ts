@@ -1,9 +1,22 @@
-import { ChangesMap, TileColor, TileData } from "./redux/tilesSlice";
+import { ChangesMap, TileColor } from "./redux/tilesSlice";
 
 export type CityTaxData = {
   standard: number,
   children: number,
   over10Days: number
+};
+
+export type TileData = {
+  id: string,
+  bookingId: string,
+  name: string,
+  from: string,
+  nights: number,
+  roomType: string,
+  entity: string,
+  persons: number,
+  color?: TileColor,
+  roomId?: number
 };
 
 export type BookingData = {
@@ -52,6 +65,10 @@ export type RoomType = {
   maxOccupancy: number,
 };
 
+export type ColorAssignments = {
+  [key: string]: TileColor
+};
+
 export function fetchFloorsAsync(): Promise<{ data: Floor[] }> {
   return fetchJsonDataAsync<Floor[]>("/api/v1/floors");
 }
@@ -86,6 +103,10 @@ export function fetchRoomTypesAsync(): Promise<{ data: RoomType[] }> {
 
 export function fetchTilesAsync(from: string, to: string, sessionId?: string): Promise<{ data: { tiles: TileData[], sessionId: string } }> {
   return fetchJsonDataAsync<{ tiles: TileData[], sessionId: string }>(`/api/v1/tiles?from=${from}&to=${to}${sessionId ? `&sessionId=${sessionId}` : ""}`);
+}
+
+export function postColorAssignments(assignments: ColorAssignments): Promise<void> {
+  return postDataAsync("/api/v1/color-assignments", assignments);
 }
 
 export function postChangesAsync(changes: ChangesMap): Promise<void> {

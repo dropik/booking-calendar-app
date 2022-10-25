@@ -473,8 +473,7 @@ module.exports = {
                   nights: 4,
                   roomType: "camera singola",
                   entity: "camera singola",
-                  persons: 1,
-                  color: "booking5"
+                  persons: 1
                 },
                 {
                   id: "5",
@@ -524,6 +523,12 @@ module.exports = {
       });
 
       devServer.app.post("/api/v1/changes", (_, response) => {
+        setTimeout(() => {
+          response.json("ok");
+        }, 500);
+      });
+
+      devServer.app.post("/api/v1/color-assignments", (_, response) => {
         setTimeout(() => {
           response.json("ok");
         }, 500);

@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { WritableDraft } from "immer/dist/internal";
 
 import * as Utils from "../utils";
-import { fetchTilesAsync } from "../api";
+import { ColorAssignments, fetchTilesAsync, postColorAssignments } from "../api";
 import { show as showMessage } from "./snackbarMessageSlice";
 import { fetchAsync as fetchFloorsAsync } from "./floorsSlice";
 import { FetchPeriod } from "./tableSlice";
@@ -77,7 +77,33 @@ export const fetchAsync = createAsyncThunk(
     try {
       const state = thunkApi.getState() as RootState;
       const response = await fetchTilesAsync(arg.from, arg.to, state.tiles.sessionId);
-      return response.data;
+      const assignments: ColorAssignments = { };
+      const tileResponses = response.data.tiles;
+      const tiles: TileData[] = [];
+
+      for (const tile of tileResponses) {
+        if (!tile.color && !assignments[tile.bookingId]) {
+          const newColor = `booking${Math.floor((Math.random() * 7)) + 1}` as TileColor;
+          assignments[tile.bookingId] = newColor;
+        }
+
+        tiles.push({
+          id: tile.id,
+          bookingId: tile.bookingId,
+          name: tile.name,
+          from: tile.from,
+          nights: tile.nights,
+          roomType: tile.roomType,
+          entity: tile.entity,
+          persons: tile.persons,
+          roomId: tile.roomId,
+          color: tile.color ?? assignments[tile.bookingId]
+        });
+      }
+
+      await postColorAssignments(assignments);
+
+      return { tiles, sessionId: response.data.sessionId };
     } catch(error) {
       thunkApi.dispatch(showMessage({ type: "error" }));
       throw thunkApi.rejectWithValue([]);
