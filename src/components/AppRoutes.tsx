@@ -13,7 +13,7 @@ export default function AppRoutes(): JSX.Element {
     <Routes>
       <Route path="/" element={<Table />} />
       <Route path="bookings" element={<Bookings />}>
-        <Route path=":bookingId" element={<BookingDetails />} />
+        <Route path=":from/:bookingId" element={<BookingDetails />} />
       </Route>
       <Route path="tools" element={<Tools />} />
       <Route path="clients" element={<Clients />} />

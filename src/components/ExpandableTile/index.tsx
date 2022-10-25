@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { memo, useRef, useState } from "react";
 
 import ExpandableTileContext from "./context";
 
@@ -15,7 +15,7 @@ type ExpandableProps = {
   isFirst?: boolean
 };
 
-export default function ExpandableTile({ variant, anchorEl, onClose, isFirst }: ExpandableProps): JSX.Element {
+export default memo(function ExpandableTile({ variant, anchorEl, onClose, isFirst }: ExpandableProps): JSX.Element {
   const [openDetails, setOpenDetails] = useState(variant === "in-content");
   const headerRef = useRef<HTMLDivElement>(null);
 
@@ -39,4 +39,4 @@ export default function ExpandableTile({ variant, anchorEl, onClose, isFirst }: 
       </PopupVariation>
     </ExpandableTileContext.Provider>
   );
-}
+});

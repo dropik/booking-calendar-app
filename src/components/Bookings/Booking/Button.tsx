@@ -12,7 +12,7 @@ export default function Button({ children }: ButtonProps): JSX.Element {
   const booking = useContext(BookingContext);
 
   return (
-    <M3NavLink to={`/bookings/${booking.id}`}>
+    <M3NavLink to={`/bookings/${booking.from}/${booking.id}`}>
       {({ isActive }) => (
         <M3ListItemButton selected={isActive} sx={{
           height: "4.75rem",

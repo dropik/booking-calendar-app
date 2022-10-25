@@ -14,15 +14,17 @@ export type Booking = {
   from: string,
   to: string,
   color?: TileColor,
-  tiles: {
-    id: string,
-    from: string,
-    nights: number,
-    roomType: string,
-    entity: string,
-    persons: number,
-    roomId?: number
-  }[]
+  tiles: Tile[]
+};
+
+export type Tile = {
+  id: string,
+  from: string,
+  nights: number,
+  roomType: string,
+  entity: string,
+  persons: number,
+  roomId?: number
 };
 
 export type BookingShort = {
@@ -129,8 +131,8 @@ export function postRoomAssignmentsAsync(assignments: RoomAssignments): Promise<
   return postDataAsync("/api/v1/room-assignments", assignments);
 }
 
-export async function fetchBookingById(bookingId: string): Promise<{ data: Booking }> {
-  return fetchJsonDataAsync<Booking>(`/api/v1/booking?id=${bookingId}`);
+export async function fetchBookingById(bookingId: string, from: string): Promise<{ data: Booking }> {
+  return fetchJsonDataAsync<Booking>(`/api/v1/booking?id=${bookingId}&from=${from}`);
 }
 
 export async function fetchBookingShortById(bookingId: string): Promise<{ data: BookingShort}> {
