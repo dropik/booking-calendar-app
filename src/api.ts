@@ -1,4 +1,4 @@
-import { ChangesMap, TileColor } from "./redux/tilesSlice";
+import { TileColor } from "./redux/tilesSlice";
 
 export type CityTaxData = {
   standard: number,
@@ -69,6 +69,10 @@ export type ColorAssignments = {
   [key: string]: TileColor
 };
 
+export type RoomAssignments = {
+  [key: string]: number | null
+}
+
 export function fetchFloorsAsync(): Promise<{ data: Floor[] }> {
   return fetchJsonDataAsync<Floor[]>("/api/v1/floors");
 }
@@ -109,8 +113,8 @@ export function postColorAssignments(assignments: ColorAssignments): Promise<voi
   return postDataAsync("/api/v1/color-assignments", assignments);
 }
 
-export function postChangesAsync(changes: ChangesMap): Promise<void> {
-  return postDataAsync("/api/v1/changes", changes);
+export function postRoomAssignmentsAsync(assignments: RoomAssignments): Promise<void> {
+  return postDataAsync("/api/v1/room-assignments", assignments);
 }
 
 export async function fetchBookingById(bookingId: string): Promise<{ data: BookingData }> {

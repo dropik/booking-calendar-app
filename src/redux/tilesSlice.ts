@@ -23,13 +23,10 @@ export type TileData = {
   roomId?: number
 };
 
-export type ChangesMap = {
+export type RoomChanges = {
   [key: string]: {
-    roomChanged: boolean,
     originalRoom?: number,
-    newRoom?: number,
-    originalColor?: TileColor,
-    newColor?: TileColor
+    newRoom?: number
   }
 };
 
@@ -61,11 +58,11 @@ export type State = {
   bookingsMap: {
     [key: string]: string[]
   },
-  changesMap: ChangesMap,
+  roomChanges: RoomChanges,
+  colorChanges: ColorChanges,
   grabbedTile?: string,
   mouseYOnGrab: number,
-  sessionId?: string,
-  colorChanges: ColorChanges
+  sessionId?: string
 };
 
 const initialState: State = {
@@ -75,9 +72,9 @@ const initialState: State = {
   unassignedMap: { },
   grabbedMap: { },
   bookingsMap: { },
-  changesMap: { },
-  mouseYOnGrab: 0,
-  colorChanges: { }
+  roomChanges: { },
+  colorChanges: { },
+  mouseYOnGrab: 0
 };
 
 export const fetchAsync = createAsyncThunk(
@@ -131,7 +128,7 @@ export const tilesSlice = createSlice({
     move: (state, action: PayloadAction<{ newY: number }>) => {
       tryMoveTile(state, action);
       if (state.grabbedTile) {
-        checkChangeReturnedToOriginal(state, state.grabbedTile);
+        checkRoomReturnedToOriginal(state, state.grabbedTile);
       }
     },
     grab: (state, action: PayloadAction<{ tileId: string, mouseY: number }>) => {
@@ -184,10 +181,10 @@ export const tilesSlice = createSlice({
     },
     unassign: (state, action: PayloadAction<{ tileId: string }>) => {
       tryRemoveAssignment(state, action);
-      checkChangeReturnedToOriginal(state, action.payload.tileId);
+      checkRoomReturnedToOriginal(state, action.payload.tileId);
     },
     saveChanges: (state) => {
-      state.changesMap = { };
+      state.roomChanges = { };
       state.colorChanges = { };
     },
     undoChanges: (state) => {
@@ -197,25 +194,20 @@ export const tilesSlice = createSlice({
     },
     setColor: (state, action: PayloadAction<{ tileId: string, color: TileColor }>) => {
       const bookingId = state.data[action.payload.tileId].bookingId;
+
       if (!state.colorChanges[bookingId]) {
         state.colorChanges[bookingId] = {
           originalColor: state.data[action.payload.tileId].color,
           newColor: action.payload.color
         };
+      } else {
+        state.colorChanges[bookingId].newColor = action.payload.color;
       }
+
       state.bookingsMap[bookingId].forEach((tileId) => {
-        if (state.changesMap[tileId] === undefined) {
-          state.changesMap[tileId] = {
-            roomChanged: false,
-            originalColor: state.data[tileId].color
-          };
-        } else if (state.changesMap[tileId].originalColor === undefined) {
-          state.changesMap[tileId].originalColor = state.data[tileId].color;
-        }
-        state.changesMap[tileId].newColor = action.payload.color;
         state.data[tileId].color = action.payload.color;
-        checkChangeReturnedToOriginal(state, tileId);
       });
+
       if (state.colorChanges[bookingId].originalColor === state.colorChanges[bookingId].newColor) {
         delete state.colorChanges[bookingId];
       }
@@ -360,9 +352,9 @@ function tryRemoveAssignment(state: WritableDraft<State>, action: PayloadAction<
 }
 
 function unassignChangedTiles(state: WritableDraft<State>): void {
-  for (const tileId of Object.keys(state.changesMap)) {
+  for (const tileId of Object.keys(state.roomChanges)) {
     const tileData = state.data[tileId];
-    const newRoom = state.changesMap[tileId].newRoom;
+    const newRoom = state.roomChanges[tileId].newRoom;
 
     if (newRoom !== undefined) {
       state.data[tileId].roomId = undefined;
@@ -381,9 +373,9 @@ function unassignChangedTiles(state: WritableDraft<State>): void {
 }
 
 function reassignTiles(state: WritableDraft<State>): void {
-  for (const tileId of Object.keys(state.changesMap)) {
+  for (const tileId of Object.keys(state.roomChanges)) {
     const tileData = state.data[tileId];
-    const originalRoom = state.changesMap[tileId].originalRoom;
+    const originalRoom = state.roomChanges[tileId].originalRoom;
 
     if (originalRoom !== undefined) {
       state.data[tileId].roomId = originalRoom;
@@ -398,14 +390,8 @@ function reassignTiles(state: WritableDraft<State>): void {
         dateCounter.setDate(dateCounter.getDate() + 1);
       }
     }
-
-    const originalColor = state.changesMap[tileId].originalColor;
-    if (originalColor) {
-      state.data[tileId].color = originalColor;
-    }
-
-    delete state.changesMap[tileId];
   }
+  state.roomChanges = { };
 }
 
 function reassignColors(state: WritableDraft<State>): void {
@@ -419,13 +405,9 @@ function reassignColors(state: WritableDraft<State>): void {
   state.colorChanges = { };
 }
 
-function checkChangeReturnedToOriginal(state: WritableDraft<State>, tileId: string): void {
-  if (
-    state.changesMap[tileId] &&
-    (state.changesMap[tileId].originalRoom === state.changesMap[tileId].newRoom) &&
-    (state.changesMap[tileId].originalColor === state.changesMap[tileId].newColor)
-  ) {
-    delete state.changesMap[tileId];
+function checkRoomReturnedToOriginal(state: WritableDraft<State>, tileId: string): void {
+  if (state.roomChanges[tileId] && (state.roomChanges[tileId].originalRoom === state.roomChanges[tileId].newRoom)) {
+    delete state.roomChanges[tileId];
   }
 }
 
@@ -489,14 +471,10 @@ function assignTile(state: WritableDraft<State>, tileId: string, newY: number): 
 }
 
 function saveRoomChange(state: WritableDraft<State>, tileId: string, prevY: number | undefined, newY: number | undefined): void {
-  if (!state.changesMap[tileId]) {
-    state.changesMap[tileId] = {
-      roomChanged: true,
+  if (!state.roomChanges[tileId]) {
+    state.roomChanges[tileId] = {
       originalRoom: prevY
     };
-  } else if (!state.changesMap[tileId].roomChanged) {
-    state.changesMap[tileId].roomChanged = true;
-    state.changesMap[tileId].originalRoom = prevY;
   }
-  state.changesMap[tileId].newRoom = newY;
+  state.roomChanges[tileId].newRoom = newY;
 }

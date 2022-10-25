@@ -40,7 +40,7 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
   const [state, setState] = useState<"idle" | "edit" | "remove" | "createRoom">("idle");
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState(floor.name);
-  const tilesHaveChanges = useAppSelector((state) => Object.keys(state.tiles.changesMap).length > 0);
+  const tilesHaveChanges = useAppSelector((state) => Object.keys(state.tiles.roomChanges).length > 0);
   const roomTypes = useAppSelector((state) => Object.keys(state.roomTypes.data));
   const [roomNumber, setRoomNumber] = useState("");
   const [isRoomNumberValid, setIsRoomNumberValid] = useState(true);

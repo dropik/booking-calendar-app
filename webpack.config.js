@@ -522,7 +522,7 @@ module.exports = {
         }, 500);
       });
 
-      devServer.app.post("/api/v1/changes", (_, response) => {
+      devServer.app.post("/api/v1/room-assignments", (_, response) => {
         setTimeout(() => {
           response.json("ok");
         }, 500);
