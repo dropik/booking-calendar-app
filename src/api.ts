@@ -161,8 +161,8 @@ export async function fetchBookings(name: string, from: string, to: string): Pro
   return fetchJsonDataAsync<BookingShort[]>(`/api/v1/bookings-by-name?name=${name}&from=${from}&to=${to}`);
 }
 
-export async function fetchClientsByQuery(query: string): Promise<{ data: ClientWithBooking[] }> {
-  return fetchJsonDataAsync<ClientWithBooking[]>(`/api/v1/clients-by-query?query=${query}`);
+export async function fetchClientsByQuery(query: string, from: string, to: string): Promise<{ data: ClientWithBooking[] }> {
+  return fetchJsonDataAsync<ClientWithBooking[]>(`/api/v1/clients-by-query?query=${query}&from=${from}&to=${to}`);
 }
 
 async function fetchBlobDataAsync(query: string): Promise<{ data: Blob }> {

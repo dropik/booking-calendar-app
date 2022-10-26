@@ -7,6 +7,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import SearchOutlined from "@mui/icons-material/SearchOutlined";
 import Cancel from "@mui/icons-material/Cancel";
 
+import * as Utils from "../../utils";
 import { ClientWithBooking, fetchClientsByQuery } from "../../api";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { show as showMessage } from "../../redux/snackbarMessageSlice";
@@ -32,23 +33,39 @@ export default function Clients(): JSX.Element {
   useEffect(() => {
     let isSubscribed = true;
 
-    async function fetchData() {
+    async function fetchData(from: string, to: string) {
       try {
-        const response = await fetchClientsByQuery(query);
+        const response = await fetchClientsByQuery(query, from, to);
         if (isSubscribed) {
-          setClients(response.data);
+          setClients((prevClients) => [...prevClients, ...response.data]);
         }
       } catch(error) {
         dispatch(showMessage({ type: "error" }));
-      } finally {
-        setIsLoading(false);
       }
     }
 
-    if (query !== "") {
-      setIsLoading(true);
-      fetchData();
+    async function executeFetchSequence(): Promise<void> {
+      if (query !== "") {
+        setIsLoading(true);
+        setClients([]);
+        const dateCounter = new Date("2021-01-01");
+        const now = Utils.dateToString(new Date());
+        while (Utils.daysBetweenDates(Utils.dateToString(dateCounter), now) > 0) {
+          if (!isSubscribed) {
+            break;
+          }
+          const from = Utils.dateToString(dateCounter);
+          dateCounter.setMonth(dateCounter.getMonth() + 6);
+          const to = Utils.dateToString(dateCounter);
+          await fetchData(from, to);
+        }
+        if (isSubscribed) {
+          setIsLoading(false);
+        }
+      }
     }
+
+    executeFetchSequence();
 
     return () => { isSubscribed = false; };
   }, [dispatch, query]);
@@ -89,9 +106,8 @@ export default function Clients(): JSX.Element {
           display: "grid",
           gridTemplateColumns: `repeat(${drawerOpened ? 3 : 4}, 1fr)`
         }}>
-          {(isLoading && clients.length === 0) ?
-            skeletonClients.map((client) => <ClientCard key={client} />) :
-            clients.map((client) => <ClientCard key={client.id} client={client} />)}
+          {clients.map((client) => <ClientCard key={client.id} client={client} />)}
+          {isLoading ? skeletonClients.map((client) => <ClientCard key={client} />) : null}
         </Box>
       </Stack>
     </DrawerAdjacent>
