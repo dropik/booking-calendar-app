@@ -1,12 +1,12 @@
 const path = require("path");
+const { merge } = require("webpack-merge");
+const common = require("./webpack.common.js");
 const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
 const ReactRefreshTypeScript = require("react-refresh-typescript");
 
-const isDevelopment = process.env.NODE_ENV !== "production";
-
-module.exports = {
-  entry: "./src/index.tsx",
-  mode: isDevelopment ? "development" : "production",
+module.exports = merge(common, {
+  mode: "development",
+  plugins: [new ReactRefreshWebpackPlugin()],
   module: {
     rules: [
       {
@@ -17,34 +17,15 @@ module.exports = {
             loader: require.resolve("ts-loader"),
             options: {
               getCustomTransformers: () => ({
-                before: [isDevelopment && ReactRefreshTypeScript()].filter(Boolean)
+                before: [ReactRefreshTypeScript()]
               }),
-              transpileOnly: isDevelopment
+              transpileOnly: true
             }
           }
         ]
       },
-      {
-        test: /\.css$/,
-        use: ["style-loader", "css-loader"],
-      },
-      {
-        test: /\.m?js$/,
-        resolve: {
-          fullySpecified: false,
-        },
-      },
-    ],
+    ]
   },
-  resolve: {
-    extensions: [".tsx", ".ts", ".js"],
-  },
-  output: {
-    path: path.resolve(__dirname, "dist/"),
-    publicPath: "/dist/",
-    filename: "bundle.js",
-  },
-  plugins: [isDevelopment && new ReactRefreshWebpackPlugin()].filter(Boolean),
   devServer: {
     static: {
       directory: path.join(__dirname, "public"),
@@ -94,7 +75,7 @@ module.exports = {
             id: "1",
             status: "new",
             name: "Vasya Pupkin",
-            lastModified: "2022-02-01",
+            lastModified: "",
             from: "2022-02-02",
             to: "2022-02-05",
             color: "booking1",
@@ -103,7 +84,7 @@ module.exports = {
                 id: "1",
                 from: "2022-02-02",
                 nights: 3,
-                roomType: "camera matrimoniale/doppia",
+                roomType: "camera mat\"rimoniale/doppia",
                 entity: "camera matrimoniale",
                 persons: [
                   {
@@ -478,7 +459,7 @@ module.exports = {
                   id: "0",
                   status: "new",
                   name: "Petr D&#39;Ivanov",
-                  lastModified: "2022-02-02",
+                  lastModified: "",
                   from: "2022-09-15",
                   to: "2022-10-25",
                   color: "booking1",
@@ -487,7 +468,7 @@ module.exports = {
                       id: "0",
                       from: "2022-09-15",
                       nights: 40,
-                      roomType: "camera matrimoniale/doppia",
+                      roomType: "camera matrimo\"niale/doppia",
                       entity: "camera doppia",
                       persons: 2,
                       roomId: 2
@@ -645,11 +626,11 @@ module.exports = {
 
       devServer.app.post("/api/v1/ack-bookings", (_, response) => {
         setTimeout(() => {
-          response.json("ok");
+          response.send("");
         }, 500);
       });
 
       return middlewares;
     }
   },
-};
+});
