@@ -57,19 +57,28 @@ module.exports = {
         throw new Error("webpack-dev-server is not defined");
       }
 
-      devServer.app.post("/api/v1/stats/police", (_, response) => {
+      devServer.app.post("/api/v1/police", (_, response) => {
         setTimeout(() => {
           response.json("ok");
         }, 500);
       });
 
-      devServer.app.post("/api/v1/stats/istat", (_, response) => {
+      devServer.app.post("/api/v1/istat", (_, response) => {
         setTimeout(() => {
           response.json("ok");
         }, 500);
       });
 
-      devServer.app.get("/api/v1/stats/city-tax", (_, response) => {
+      devServer.app.get("/api/v1/police/ricevuta", (request, response) => {
+        setTimeout(() => {
+          response.set("Content-Type", "application/pdf");
+          response.set("Content-Transfer-Encoding", "binary");
+          response.set("Content-Disposition", `attachment; filename="polizia-ricevuta-${request.query["date"]}.pdf"`);
+          response.send("Exported!");
+        }, 500);
+      });
+
+      devServer.app.get("/api/v1/city-tax", (_, response) => {
         setTimeout(() => {
           response.json({
             standard: 100,

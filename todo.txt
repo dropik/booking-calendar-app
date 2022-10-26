@@ -1,4 +1,3 @@
-- Add download police ricevuta button.
 - Remove entity property from tile data.
 - Add province of birth to client data.
 - Handle touchscreen.
