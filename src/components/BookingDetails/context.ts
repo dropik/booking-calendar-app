@@ -1,9 +1,9 @@
 import { createContext } from "react";
 
-import { ClientData } from "../../api";
+import { Client } from "../../api";
 
 export const BookingDetailsContext = createContext<{
-  clients: ClientData[]
+  clients: Client[]
 }>({
   clients: []
 });

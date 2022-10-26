@@ -38,7 +38,7 @@ export type BookingShort = {
   occupations: number,
 };
 
-export type ClientData = {
+export type Client = {
   id: string,
   bookingId: string,
   name: string,
@@ -47,6 +47,12 @@ export type ClientData = {
   placeOfBirth?: string,
   stateOfBirth?: string
 };
+
+export type ClientWithBooking = {
+  bookingName: string,
+  bookingFrom: string,
+  bookingTo: string
+} & Client;
 
 export type Room = {
   id: number,
@@ -131,16 +137,12 @@ export function postRoomAssignmentsAsync(assignments: RoomAssignments): Promise<
   return postDataAsync("/api/v1/room-assignments", assignments);
 }
 
-export async function fetchBookingById(bookingId: string, from: string): Promise<{ data: Booking<ClientData[]> }> {
-  return fetchJsonDataAsync<Booking<ClientData[]>>(`/api/v1/booking?id=${bookingId}&from=${from}`);
+export async function fetchBookingById(bookingId: string, from: string): Promise<{ data: Booking<Client[]> }> {
+  return fetchJsonDataAsync<Booking<Client[]>>(`/api/v1/booking?id=${bookingId}&from=${from}`);
 }
 
-export async function fetchBookingShortById(bookingId: string): Promise<{ data: BookingShort}> {
-  return fetchJsonDataAsync<BookingShort>(`/api/v1/booking-short?id=${bookingId}`);
-}
-
-export async function fetchClientsByTile(tileId: string): Promise<{ data: ClientData[] }> {
-  return fetchJsonDataAsync<ClientData[]>(`/api/v1/clients?tileId=${tileId}`);
+export async function fetchClientsByTile(tileId: string): Promise<{ data: Client[] }> {
+  return fetchJsonDataAsync<Client[]>(`/api/v1/clients-by-tile?tileId=${tileId}`);
 }
 
 export async function fetchPoliceDataAsync(date: string): Promise<{ data: Blob }> {
@@ -159,8 +161,8 @@ export async function fetchBookings(name: string, from: string, to: string): Pro
   return fetchJsonDataAsync<BookingShort[]>(`/api/v1/bookings-by-name?name=${name}&from=${from}&to=${to}`);
 }
 
-export async function fetchClients(query: string): Promise<{ data: ClientData[] }> {
-  return fetchJsonDataAsync<ClientData[]>(`/api/v1/clients?query=${query}`);
+export async function fetchClientsByQuery(query: string): Promise<{ data: ClientWithBooking[] }> {
+  return fetchJsonDataAsync<ClientWithBooking[]>(`/api/v1/clients-by-query?query=${query}`);
 }
 
 async function fetchBlobDataAsync(query: string): Promise<{ data: Blob }> {

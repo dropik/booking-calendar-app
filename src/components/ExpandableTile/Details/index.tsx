@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import Stack from "@mui/material/Stack";
 
-import { ClientData } from "../../../api";
+import { Client } from "../../../api";
 import { TileContext } from "../../Tile/context";
 import { BookingDetailsContext } from "../../BookingDetails/context";
 import ExpandableTileContext from "../context";
@@ -20,7 +20,7 @@ export default function Details({ open }: DetailsProps): JSX.Element {
   const { data } = useContext(TileContext);
   const { clients: loadedClients } = useContext(BookingDetailsContext);
   const { variant } = useContext(ExpandableTileContext);
-  const [clients, setClients] = useState<ClientData[]>(loadedClients);
+  const [clients, setClients] = useState<Client[]>(loadedClients);
 
   return (
     <DetailsCollapse open={open}>

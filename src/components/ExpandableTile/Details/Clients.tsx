@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import { ClientData, fetchClientsByTile } from "../../../api";
+import { Client as ClientData, fetchClientsByTile } from "../../../api";
 import { show as showMessage } from "../../../redux/snackbarMessageSlice";
 import { useAppDispatch } from "../../../redux/hooks";
 import { TileContext } from "../../Tile/context";

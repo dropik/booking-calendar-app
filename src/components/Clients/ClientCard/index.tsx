@@ -6,14 +6,14 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreOutlined from "@mui/icons-material/ExpandMoreOutlined";
 import ExpandLessOutlined from "@mui/icons-material/ExpandLessOutlined";
 
-import { ClientData } from "../../../api";
+import { ClientWithBooking } from "../../../api";
 
 import M3IconButton from "../../m3/M3IconButton";
 import Details from "./Details";
 import M3Skeleton from "../../m3/M3Skeleton";
 
 type ClientCardProps = {
-  client?: ClientData
+  client?: ClientWithBooking
 };
 
 export default function ClientCard({ client }: ClientCardProps): JSX.Element {
@@ -44,7 +44,7 @@ export default function ClientCard({ client }: ClientCardProps): JSX.Element {
       </Stack>
       {client ? (
         <Collapse mountOnEnter unmountOnExit in={open} easing={theme.transitions.easing.fastOutSlowIn}>
-          <Details bookingId={client.bookingId} />
+          <Details client={client} />
         </Collapse>
       ) : null}
     </Stack>

@@ -230,67 +230,81 @@ module.exports = {
         }, 500);
       });
 
-      devServer.app.get("/api/v1/clients", (request, response) => {
+      devServer.app.get("/api/v1/clients-by-tile", (_, response) => {
         setTimeout(() => {
-          if (request.query["tileId"]) {
-            response.json([
-              {
-                id: "0",
-                bookingId: "0",
-                name: "Ivan",
-                surname: "Petrov",
-                dateOfBirth: "1986-05-04",
-                placeOfBirth: "Canazei (TN)",
-                stateOfBirth: "Italia"
-              },
-              {
-                id: "1",
-                bookingId: "1",
-                name: "Vasya",
-                surname: "Pupkin",
-                dateOfBirth: "1985-05-06",
-                placeOfBirth: "Canazei (TN)",
-                stateOfBirth: "Italia"
-              }
-            ]);
-          } else {
-            response.json([
-              {
-                id: "0",
-                bookingId: "0",
-                name: "Ivan",
-                surname: "Petrov",
-                dateOfBirth: "1986-05-04",
-                placeOfBirth: "Canazei (TN)",
-                stateOfBirth: "Italia"
-              },
-              {
-                id: "1",
-                name: "Vasya",
-                bookingId: "1",
-                surname: "Pupkin",
-                dateOfBirth: "1985-05-06",
-                placeOfBirth: "Canazei (TN)",
-                stateOfBirth: "Italia"
-              },
-              {
-                id: "2",
-                bookingId: "2",
-                name: "Ilja",
-                surname: "Maksimov",
-                dateOfBirth: "1985-05-06",
-                stateOfBirth: "Russia"
-              },
-              {
-                id: "3",
-                bookingId: "2",
-                name: "Stepan",
-                surname: "Ogurzov",
-                dateOfBirth: "1985-05-06",
-                stateOfBirth: "Russia"
-              }
-            ]);
-          }
+          response.json([
+            {
+              id: "0",
+              bookingId: "0",
+              name: "Ivan",
+              surname: "Petrov",
+              dateOfBirth: "1986-05-04",
+              placeOfBirth: "Canazei (TN)",
+              stateOfBirth: "Italia"
+            },
+            {
+              id: "1",
+              bookingId: "1",
+              name: "Vasya",
+              surname: "Pupkin",
+              dateOfBirth: "1985-05-06",
+              placeOfBirth: "Canazei (TN)",
+              stateOfBirth: "Italia"
+            }
+          ]);
+        }, 500);
+      });
+
+      devServer.app.get("/api/v1/clients-by-query", (_, response) => {
+        setTimeout(() => {
+          response.json([
+            {
+              id: "0",
+              bookingId: "0",
+              name: "Ivan",
+              surname: "Petrov",
+              dateOfBirth: "1986-05-04",
+              placeOfBirth: "Canazei (TN)",
+              stateOfBirth: "Italia",
+              bookingName: "Vasya Pupkin",
+              bookingFrom: "2022-02-02",
+              bookingTo: "2022-02-05",
+            },
+            {
+              id: "1",
+              name: "Vasya",
+              bookingId: "1",
+              surname: "Pupkin",
+              dateOfBirth: "1985-05-06",
+              placeOfBirth: "Canazei (TN)",
+              stateOfBirth: "Italia",
+              bookingName: "Vasya Pupkin",
+              bookingFrom: "2022-02-02",
+              bookingTo: "2022-02-05",
+            },
+            {
+              id: "2",
+              bookingId: "2",
+              name: "Ilja",
+              surname: "Maksimov",
+              dateOfBirth: "1985-05-06",
+              stateOfBirth: "Russia",
+              bookingName: "Vasya Pupkin",
+              bookingFrom: "2022-02-02",
+              bookingTo: "2022-02-05",
+            },
+            {
+              id: "3",
+              bookingId: "2",
+              name: "Stepan",
+              surname: "Ogurzov",
+              dateOfBirth: "1985-05-06",
+              stateOfBirth: "Russia",
+              bookingName: "Vasya Pupkin",
+              bookingFrom: "2022-02-02",
+              bookingTo: "2022-02-05",
+            }
+          ]);
         }, 500);
       });
 

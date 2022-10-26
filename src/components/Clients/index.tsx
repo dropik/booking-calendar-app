@@ -7,7 +7,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import SearchOutlined from "@mui/icons-material/SearchOutlined";
 import Cancel from "@mui/icons-material/Cancel";
 
-import { ClientData, fetchClients } from "../../api";
+import { ClientWithBooking, fetchClientsByQuery } from "../../api";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { show as showMessage } from "../../redux/snackbarMessageSlice";
 
@@ -18,7 +18,7 @@ import ClientCard from "./ClientCard";
 export default function Clients(): JSX.Element {
   const dispatch = useAppDispatch();
   const [query, setQuery] = useState("");
-  const [clients, setClients] = useState<ClientData[]>([]);
+  const [clients, setClients] = useState<ClientWithBooking[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const drawerOpened = useAppSelector((state) => state.drawer.open);
   const skeletonClients = [0, 1];
@@ -34,7 +34,7 @@ export default function Clients(): JSX.Element {
 
     async function fetchData() {
       try {
-        const response = await fetchClients(query);
+        const response = await fetchClientsByQuery(query);
         if (isSubscribed) {
           setClients(response.data);
         }

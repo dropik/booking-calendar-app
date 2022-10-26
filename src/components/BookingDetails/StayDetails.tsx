@@ -1,6 +1,6 @@
 import React, { memo, useMemo } from "react";
 
-import { Booking, ClientData, Tile } from "../../api";
+import { Booking, Client, Tile } from "../../api";
 import { TileColor, TileData } from "../../redux/tilesSlice";
 
 import ExpandableTile from "../ExpandableTile";
@@ -8,8 +8,8 @@ import { TileContext } from "../Tile/context";
 import { BookingDetailsContext } from "./context";
 
 export type StayDetailsProps = {
-  booking: Booking<ClientData[]>,
-  tile: Tile<ClientData[]>,
+  booking: Booking<Client[]>,
+  tile: Tile<Client[]>,
   isFirst: boolean
 }
 
