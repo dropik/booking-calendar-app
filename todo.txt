@@ -1,2 +1,1 @@
-- Add province of birth to client data.
 - Handle touchscreen.

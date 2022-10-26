@@ -35,7 +35,7 @@ export default function ClientCard({ client }: ClientCardProps): JSX.Element {
           <Typography variant="titleMedium">{client ? (new Date(client.dateOfBirth).toLocaleDateString()) : <M3Skeleton width="6rem" />}</Typography>
         </Stack>
         <Typography variant="bodySmall">
-          {client ? `${client.placeOfBirth ? `${client.placeOfBirth} - ` : ""}${client.stateOfBirth}` : <M3Skeleton width="9rem" />}
+          {client ? evaluateEntitiesInString(`${client.placeOfBirth ? `${client.placeOfBirth}${client.provinceOfBirth ? ` (${client.provinceOfBirth})` : ""} - ` : ""}${client.stateOfBirth}`) : <M3Skeleton width="9rem" />}
         </Typography>
         {client ? (
           <M3IconButton sx={{ position: "absolute", right: "1rem", bottom: "0.5rem" }} onClick={() => setOpen(!open)}>

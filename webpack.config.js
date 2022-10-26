@@ -112,7 +112,8 @@ module.exports = {
                     name: "Ivan",
                     surname: "Petrov",
                     dateOfBirth: "1986-05-04",
-                    placeOfBirth: "Canazei (TN)",
+                    placeOfBirth: "Canazei",
+                    provinceOfBirth: "TN",
                     stateOfBirth: "Italia"
                   },
                   {
@@ -121,7 +122,8 @@ module.exports = {
                     name: "Vasya",
                     surname: "Pupkin",
                     dateOfBirth: "1985-05-06",
-                    placeOfBirth: "Canazei (TN)",
+                    placeOfBirth: "Canazei",
+                    provinceOfBirth: "TN",
                     stateOfBirth: "Italia"
                   }
                 ],
@@ -140,7 +142,8 @@ module.exports = {
                     name: "Ivan",
                     surname: "Petrov",
                     dateOfBirth: "1986-05-04",
-                    placeOfBirth: "Canazei (TN)",
+                    placeOfBirth: "Canazei",
+                    provinceOfBirth: "TN",
                     stateOfBirth: "Italia"
                   },
                   {
@@ -149,7 +152,8 @@ module.exports = {
                     name: "Vasya",
                     surname: "Pupkin",
                     dateOfBirth: "1985-05-06",
-                    placeOfBirth: "Canazei (TN)",
+                    placeOfBirth: "Canazei",
+                    provinceOfBirth: "TN",
                     stateOfBirth: "Italia"
                   }
                 ],
@@ -226,7 +230,8 @@ module.exports = {
               name: "Ivan",
               surname: "Petrov",
               dateOfBirth: "1986-05-04",
-              placeOfBirth: "Canazei (TN)",
+              placeOfBirth: "Canazei",
+              provinceOfBirth: "TN",
               stateOfBirth: "Italia"
             },
             {
@@ -235,7 +240,8 @@ module.exports = {
               name: "Vasya",
               surname: "Pupkin",
               dateOfBirth: "1985-05-06",
-              placeOfBirth: "Canazei (TN)",
+              placeOfBirth: "Canazei",
+              provinceOfBirth: "TN",
               stateOfBirth: "Italia"
             }
           ]);
@@ -251,7 +257,8 @@ module.exports = {
               name: "Ivan",
               surname: "Petrov",
               dateOfBirth: "1986-05-04",
-              placeOfBirth: "Canazei (TN)",
+              placeOfBirth: "Canazei",
+              provinceOfBirth: "TN",
               stateOfBirth: "Italia",
               bookingName: "Vasya Pupkin",
               bookingFrom: "2022-02-02",
@@ -263,7 +270,8 @@ module.exports = {
               bookingId: "1",
               surname: "Pupkin",
               dateOfBirth: "1985-05-06",
-              placeOfBirth: "Canazei (TN)",
+              placeOfBirth: "Canazei",
+              provinceOfBirth: "TN",
               stateOfBirth: "Italia",
               bookingName: "Vasya Pupkin",
               bookingFrom: "2022-02-02",

@@ -44,6 +44,7 @@ export type Client = {
   surname: string,
   dateOfBirth: string,
   placeOfBirth?: string,
+  provinceOfBirth?: string,
   stateOfBirth?: string
 };
 
