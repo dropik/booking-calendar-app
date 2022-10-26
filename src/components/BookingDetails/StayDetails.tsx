@@ -25,7 +25,6 @@ export default memo(function StayDetails(props: StayDetailsProps): JSX.Element {
       from: tile.from,
       nights: tile.nights,
       roomType: tile.roomType,
-      entity: tile.entity,
       persons: tile.persons.length,
       color: booking.color ?? `booking${Math.floor(Math.random() * 7) + 1}` as TileColor,
       roomId: tile.roomId

@@ -22,7 +22,6 @@ export type Tile<TPerson> = {
   from: string,
   nights: number,
   roomType: string,
-  entity: string,
   persons: TPerson,
   roomId?: number
 };

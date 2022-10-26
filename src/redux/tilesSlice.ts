@@ -17,7 +17,6 @@ export type TileData = {
   from: string,
   nights: number,
   roomType: string,
-  entity: string,
   persons: number,
   color: TileColor,
   roomId?: number
@@ -329,7 +328,6 @@ function addFetchedBookings(state: WritableDraft<State>, bookings: ColoredBookin
         from: tile.from,
         nights: tile.nights,
         roomType: tile.roomType,
-        entity: tile.entity,
         persons: tile.persons,
         color: booking.color,
         roomId: tile.roomId

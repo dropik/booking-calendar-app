@@ -5,11 +5,12 @@ import { useAppSelector, useLeftmostDate } from "../../redux/hooks";
 import { getCanvasFontSize, getTextWidth } from "./utils";
 import { TableContext } from "../Table/TextWidthCanvas";
 import { TileContext } from "./context";
+import { evaluateEntitiesInString } from "../../utils";
 
 export default function Body(): JSX.Element {
   const data = useContext(TileContext).data;
   const canvasRef = useContext(TableContext).canvasRef;
-  const significantEntity = data ? data.entity.replace("Camera ", "").replace("camera ", "") : "";
+  const significantEntity = data ? data.roomType.replace("Camera ", "").replace("camera ", "") : "";
   const leftmostDate = useLeftmostDate();
   const adjustLayoutRequestId = useAppSelector((state) => state.layout.adjustLayoutRequestId);
   const bodyRef = useRef<HTMLSpanElement>(null);
@@ -46,6 +47,6 @@ export default function Body(): JSX.Element {
   }, [canvasRef, adjustLayoutRequestId, leftmostDate, significantEntity]);
 
   return (
-    <Typography ref={bodyRef} variant="bodySmall">{body}</Typography>
+    <Typography ref={bodyRef} variant="bodySmall">{evaluateEntitiesInString(body)}</Typography>
   );
 }
