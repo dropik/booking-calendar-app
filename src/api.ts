@@ -1,4 +1,4 @@
-import { ChangesMap, TileColor, TileData } from "./redux/tilesSlice";
+import { TileColor } from "./redux/tilesSlice";
 
 export type CityTaxData = {
   standard: number,
@@ -6,32 +6,53 @@ export type CityTaxData = {
   over10Days: number
 };
 
-export type BookingData = {
+export type Booking<TPerson> = {
   id: string,
+  status: "new" | "modified" | "cancelled",
   name: string,
+  lastModified: string,
   from: string,
   to: string,
-  rooms: TileData[]
+  color?: TileColor,
+  tiles: Tile<TPerson>[]
 };
 
-export type BookingShortData = {
+export type Tile<TPerson> = {
   id: string,
+  from: string,
+  nights: number,
+  roomType: string,
+  persons: TPerson,
+  roomId?: number
+};
+
+export type BookingShort = {
+  id: string,
+  status: "new" | "modified" | "cancelle",
   name: string,
+  lastModified: string,
   from: string,
   to: string,
-  occupations: number,
   color: TileColor
+  occupations: number,
 };
 
-export type ClientData = {
+export type Client = {
   id: string,
   bookingId: string,
   name: string,
   surname: string,
   dateOfBirth: string,
   placeOfBirth?: string,
+  provinceOfBirth?: string,
   stateOfBirth?: string
 };
+
+export type ClientWithBooking = {
+  bookingName: string,
+  bookingFrom: string,
+  bookingTo: string
+} & Client;
 
 export type Room = {
   id: number,
@@ -51,6 +72,22 @@ export type RoomType = {
   minOccupancy: number,
   maxOccupancy: number,
 };
+
+export type ColorAssignments = {
+  [key: string]: TileColor
+};
+
+export type RoomAssignments = {
+  [key: string]: number | null
+}
+
+export type AckBookingsRequest = {
+  bookings: {
+    bookingId: string,
+    lastModified: string
+  }[],
+  sessionId: string
+}
 
 export function fetchFloorsAsync(): Promise<{ data: Floor[] }> {
   return fetchJsonDataAsync<Floor[]>("/api/v1/floors");
@@ -84,53 +121,52 @@ export function fetchRoomTypesAsync(): Promise<{ data: RoomType[] }> {
   return fetchJsonDataAsync<RoomType[]>("/api/v1/room-types");
 }
 
-export function fetchTilesAsync(from: string, to: string, sessionId?: string): Promise<{ data: { tiles: TileData[], sessionId: string } }> {
-  return fetchJsonDataAsync<{ tiles: TileData[], sessionId: string }>(`/api/v1/tiles?from=${from}&to=${to}${sessionId ? `&sessionId=${sessionId}` : ""}`);
+export function fetchBookingsBySessionAsync(from: string, to: string, sessionId?: string): Promise<{ data: { bookings: Booking<number>[], sessionId: string } }> {
+  return fetchJsonDataAsync<{ bookings: Booking<number>[], sessionId: string }>(`/api/v1/bookings-by-session?from=${from}&to=${to}${sessionId ? `&sessionId=${sessionId}` : ""}`);
 }
 
-export function postChangesAsync(changes: ChangesMap): Promise<void> {
-  return postDataAsync("/api/v1/changes", changes);
+export function ackBookingsAsync(request: AckBookingsRequest): Promise<void> {
+  return postDataAsync("/api/v1/ack-bookings", request);
 }
 
-export async function fetchBookingById(bookingId: string): Promise<{ data: BookingData }> {
-  return fetchJsonDataAsync<BookingData>(`/api/v1/booking?id=${bookingId}`);
+export function postColorAssignments(assignments: ColorAssignments): Promise<void> {
+  return postDataAsync("/api/v1/color-assignments", assignments);
 }
 
-export async function fetchBookingShortById(bookingId: string): Promise<{ data: BookingShortData}> {
-  return fetchJsonDataAsync<BookingShortData>(`/api/v1/booking-short?id=${bookingId}`);
+export function postRoomAssignmentsAsync(assignments: RoomAssignments): Promise<void> {
+  return postDataAsync("/api/v1/room-assignments", assignments);
 }
 
-export async function fetchClientsByTile(tileId: string): Promise<{ data: ClientData[] }> {
-  return fetchJsonDataAsync<ClientData[]>(`/api/v1/clients?tileId=${tileId}`);
+export async function fetchBookingById(bookingId: string, from: string): Promise<{ data: Booking<Client[]> }> {
+  return fetchJsonDataAsync<Booking<Client[]>>(`/api/v1/booking?id=${bookingId}&from=${from}`);
 }
 
-export async function fetchPoliceDataAsync(date: string): Promise<{ data: Blob }> {
-  return fetchBlobDataAsync(`/api/v1/stats/police?date=${date}`);
+export async function fetchClientsByTile(bookingId: string, tileId: string): Promise<{ data: Client[] }> {
+  return fetchJsonDataAsync<Client[]>(`/api/v1/clients-by-tile?bookingId=${bookingId}&tileId=${tileId}`);
 }
 
-export async function fetchIstatDataAsync(date: string): Promise<{ data: Blob }> {
-  return fetchBlobDataAsync(`/api/v1/stats/istat?date=${date}`);
+export async function postPoliceExportRequestAsync(date: string): Promise<void> {
+  return postDataAsync("/api/v1/police", { date });
+}
+
+export async function postIstatExportRequestAsync(date: string): Promise<void> {
+  return postDataAsync("/api/v1/istat", { date });
+}
+
+export async function fetchPoliceRicevutaAsync(date: string): Promise<{ data: Blob }> {
+  return fetchBlobDataAsync(`/api/v1/police/ricevuta?date=${date}`);
 }
 
 export async function fetchCityTaxAsync(from: string, to: string): Promise<{ data: CityTaxData }> {
-  return fetchJsonDataAsync<CityTaxData>(`/api/v1/stats/city-tax?from=${from}&to=${to}`);
+  return fetchJsonDataAsync<CityTaxData>(`/api/v1/city-tax?from=${from}&to=${to}`);
 }
 
-export async function fetchBookings(name: string, from: string, to: string): Promise<{ data: BookingShortData[] }> {
-  return fetchJsonDataAsync<BookingShortData[]>(`/api/v1/bookings?name=${name}&from=${from}&to=${to}`);
+export async function fetchBookings(name: string, from: string, to: string): Promise<{ data: BookingShort[] }> {
+  return fetchJsonDataAsync<BookingShort[]>(`/api/v1/bookings-by-name?name=${name}&from=${from}&to=${to}`);
 }
 
-export async function fetchClients(query: string): Promise<{ data: ClientData[] }> {
-  return fetchJsonDataAsync<ClientData[]>(`/api/v1/clients?query=${query}`);
-}
-
-async function fetchBlobDataAsync(query: string): Promise<{ data: Blob }> {
-  const response = await fetch(query);
-  if (!response.ok) {
-    throw new Error("Resopnse error");
-  }
-  const data = await response.blob();
-  return { data };
+export async function fetchClientsByQuery(query: string, from: string, to: string): Promise<{ data: ClientWithBooking[] }> {
+  return fetchJsonDataAsync<ClientWithBooking[]>(`/api/v1/clients-by-query?query=${query}&from=${from}&to=${to}`);
 }
 
 async function fetchJsonDataAsync<T>(query: string): Promise<{ data: T }> {
@@ -142,6 +178,15 @@ async function fetchJsonDataAsync<T>(query: string): Promise<{ data: T }> {
   if (!data) {
     throw new Error("Response error");
   }
+  return { data };
+}
+
+async function fetchBlobDataAsync(query: string): Promise<{ data: Blob }> {
+  const response = await fetch(query);
+  if (!response.ok) {
+    throw new Error("Resopnse error");
+  }
+  const data = await response.blob();
   return { data };
 }
 

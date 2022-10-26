@@ -5,6 +5,7 @@ import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 
 import M3IconButton from "../../m3/M3IconButton";
+import { evaluateEntitiesInString } from "../../../utils";
 
 type HeaderProps = {
   name: string,
@@ -25,7 +26,7 @@ export default function Header({ name, collapseCallback }: HeaderProps): JSX.Ele
       pt: "1rem",
       pb: "1rem"
     }}>
-      <Typography variant="headlineMedium">{capitalizedFloor}</Typography>
+      <Typography variant="headlineMedium">{evaluateEntitiesInString(capitalizedFloor)}</Typography>
       <M3IconButton onClick={() => {
         collapseCallback();
         setIconState(!iconState);

@@ -1,8 +1,8 @@
 import { createContext } from "react";
 
-import { ClientData } from "../../../../api";
+import { Client } from "../../../../api";
 
-const ClientContext = createContext<ClientData>({
+const ClientContext = createContext<Client>({
   id: "",
   bookingId: "",
   name: "",

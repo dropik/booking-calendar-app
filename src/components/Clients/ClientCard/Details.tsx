@@ -1,43 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
 
-import { BookingShortData, fetchBookingShortById } from "../../../api";
+import { ClientWithBooking } from "../../../api";
 import { setBookingsFormFrom, setBookingsFormName, setBookingsFormTo } from "../../../redux/bookingsFormSlice";
 import { useAppDispatch } from "../../../redux/hooks";
-import { show as showMessage } from "../../../redux/snackbarMessageSlice";
 
 import M3TextButton from "../../m3/M3TextButton";
-import M3Skeleton from "../../m3/M3Skeleton";
+import { evaluateEntitiesInString } from "../../../utils";
 
 type DetailsProps = {
-  bookingId: string
+  client: ClientWithBooking
 };
 
-export default function Details({ bookingId }: DetailsProps): JSX.Element {
+export default function Details({ client }: DetailsProps): JSX.Element {
   const dispatch = useAppDispatch();
   const theme = useTheme();
-  const [booking, setBooking] = useState<BookingShortData | undefined>(undefined);
 
-  const periodStr = booking ?
-    `${(new Date(booking.from)).toLocaleDateString()} - ${(new Date(booking.to)).toLocaleDateString()}` :
-    undefined;
-
-  useEffect(() => {
-    async function fetchData(): Promise<void> {
-      try {
-        const response = await fetchBookingShortById(bookingId);
-        setBooking(response.data);
-      } catch(error) {
-        dispatch(showMessage({ type: "error" }));
-      }
-    }
-
-    fetchData();
-  }, [bookingId, dispatch]);
+  const periodStr = `${(new Date(client.bookingFrom)).toLocaleDateString()} - ${(new Date(client.bookingTo)).toLocaleDateString()}`;
 
   return (
     <Stack spacing={2} sx={{
@@ -46,21 +28,19 @@ export default function Details({ bookingId }: DetailsProps): JSX.Element {
     }}>
       <Typography variant="titleLarge">Prenotazione</Typography>
       <Stack sx={{ pl: "1rem" }}>
-        <Typography variant="titleMedium">{booking ? booking.name : <M3Skeleton width="6rem" />}</Typography>
-        <Typography variant="bodySmall">{periodStr ? periodStr : <M3Skeleton width="8rem" />}</Typography>
+        <Typography variant="titleMedium">{evaluateEntitiesInString(client.bookingName)}</Typography>
+        <Typography variant="bodySmall">{periodStr}</Typography>
       </Stack>
       <Stack alignItems="flex-end">
-        {booking ? (
-          <Link to={`/bookings/${booking.id}`} style={{ textDecoration: "none" }}>
-            <M3TextButton onClick={() => {
-              dispatch(setBookingsFormFrom(booking.from));
-              dispatch(setBookingsFormTo(booking.to));
-              dispatch(setBookingsFormName(booking.name));
-            }}>
-              Mostra prenotazione
-            </M3TextButton>
-          </Link>
-        ) : <Box sx={{ height: "2.5rem" }}></Box>}
+        <Link to={`/bookings/${client.bookingFrom}/${client.bookingId}`} style={{ textDecoration: "none" }}>
+          <M3TextButton onClick={() => {
+            dispatch(setBookingsFormFrom(client.bookingFrom));
+            dispatch(setBookingsFormTo(client.bookingTo));
+            dispatch(setBookingsFormName(client.bookingName));
+          }}>
+            Mostra prenotazione
+          </M3TextButton>
+        </Link>
       </Stack>
     </Stack>
   );

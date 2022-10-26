@@ -1,6 +1,6 @@
 import React from "react";
 
-import { BookingShortData } from "../../../api";
+import { BookingShort } from "../../../api";
 
 import BookingContext from "./context";
 import Button from "./Button";
@@ -9,7 +9,7 @@ import ShortInfo from "./ShortInfo";
 import RoomsCount from "./RoomsCount";
 
 type BookingProps = {
-  booking: BookingShortData
+  booking: BookingShort
 };
 
 export default function Booking({ booking }: BookingProps): JSX.Element {

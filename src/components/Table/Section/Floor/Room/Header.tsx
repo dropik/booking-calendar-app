@@ -1,7 +1,9 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 
+import { evaluateEntitiesInString } from "../../../../../utils";
 import { Room } from "../../../../../redux/roomsSlice";
+
 import RowHeader from "../../Row/Header";
 
 type HeaderProps = {
@@ -21,7 +23,7 @@ export default function Header({ room }: HeaderProps): JSX.Element {
         }}
         variant="bodySmall"
       >
-        {significantRoomType}
+        {evaluateEntitiesInString(significantRoomType)}
       </Typography>
     </RowHeader>
   );

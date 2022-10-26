@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import { ClientData, fetchClientsByTile } from "../../../api";
+import { Client as ClientData, fetchClientsByTile } from "../../../api";
 import { show as showMessage } from "../../../redux/snackbarMessageSlice";
 import { useAppDispatch } from "../../../redux/hooks";
 import { TileContext } from "../../Tile/context";
@@ -23,17 +23,18 @@ export default function Clients({ clients, setClients }: ClientsProps): JSX.Elem
     async function fetchData() {
       try {
         if (data) {
-          const response = await fetchClientsByTile(data.id);
+          const response = await fetchClientsByTile(data.bookingId, data.id);
           setClients(response.data);
         }
       } catch(error) {
         dispatch(showMessage({ type: "error" }));
       }
     }
-    fetchData();
 
-    return () => setClients([]);
-  }, [data, dispatch, setClients]);
+    if (clients.length === 0) {
+      fetchData();
+    }
+  }, [data, dispatch, setClients, clients.length]);
 
   return (
     <>

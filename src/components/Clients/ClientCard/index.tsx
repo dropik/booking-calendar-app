@@ -6,14 +6,15 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreOutlined from "@mui/icons-material/ExpandMoreOutlined";
 import ExpandLessOutlined from "@mui/icons-material/ExpandLessOutlined";
 
-import { ClientData } from "../../../api";
+import { ClientWithBooking } from "../../../api";
 
 import M3IconButton from "../../m3/M3IconButton";
 import Details from "./Details";
 import M3Skeleton from "../../m3/M3Skeleton";
+import { evaluateEntitiesInString } from "../../../utils";
 
 type ClientCardProps = {
-  client?: ClientData
+  client?: ClientWithBooking
 };
 
 export default function ClientCard({ client }: ClientCardProps): JSX.Element {
@@ -30,11 +31,11 @@ export default function ClientCard({ client }: ClientCardProps): JSX.Element {
     }}>
       <Stack spacing={2} sx={{ position: "relative", p: "1rem", flexGrow: 1 }}>
         <Stack>
-          <Typography variant="headlineMedium">{client ? `${client.name} ${client.surname}` : <M3Skeleton width="10rem" />}</Typography>
+          <Typography variant="headlineMedium">{client ? `${evaluateEntitiesInString(client.name)} ${evaluateEntitiesInString(client.surname)}` : <M3Skeleton width="10rem" />}</Typography>
           <Typography variant="titleMedium">{client ? (new Date(client.dateOfBirth).toLocaleDateString()) : <M3Skeleton width="6rem" />}</Typography>
         </Stack>
         <Typography variant="bodySmall">
-          {client ? `${client.placeOfBirth ? `${client.placeOfBirth} - ` : ""}${client.stateOfBirth}` : <M3Skeleton width="9rem" />}
+          {client ? evaluateEntitiesInString(`${client.placeOfBirth ? `${client.placeOfBirth}${client.provinceOfBirth ? ` (${client.provinceOfBirth})` : ""} - ` : ""}${client.stateOfBirth}`) : <M3Skeleton width="9rem" />}
         </Typography>
         {client ? (
           <M3IconButton sx={{ position: "absolute", right: "1rem", bottom: "0.5rem" }} onClick={() => setOpen(!open)}>
@@ -44,7 +45,7 @@ export default function ClientCard({ client }: ClientCardProps): JSX.Element {
       </Stack>
       {client ? (
         <Collapse mountOnEnter unmountOnExit in={open} easing={theme.transitions.easing.fastOutSlowIn}>
-          <Details bookingId={client.bookingId} />
+          <Details client={client} />
         </Collapse>
       ) : null}
     </Stack>

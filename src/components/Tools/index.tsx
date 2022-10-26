@@ -7,7 +7,7 @@ import Collapse from "@mui/material/Collapse";
 import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
 
-import { CityTaxData, fetchCityTaxAsync, fetchIstatDataAsync, fetchPoliceDataAsync } from "../../api";
+import { CityTaxData, fetchCityTaxAsync, fetchPoliceRicevutaAsync, postIstatExportRequestAsync, postPoliceExportRequestAsync } from "../../api";
 import * as Utils from "../../utils";
 import { useAppDispatch, useAppSelector, useCurrentDate } from "../../redux/hooks";
 import { show as showMessage } from "../../redux/snackbarMessageSlice";
@@ -30,8 +30,8 @@ export default function Tools(): JSX.Element {
   const drawerOpened = useAppSelector((state) => state.drawer.open);
   const [cityTaxData, setCityTaxData] = useState<CityTaxData | undefined>(undefined);
   const [isCityTaxLoading, setIsCityTaxLoading] = useState(false);
-  const anchorRef = useRef<HTMLAnchorElement>(null);
   const [isDownloadDataLoading, setIsDownloadDataLoading] = useState(false);
+  const anchorRef = useRef<HTMLAnchorElement>(null);
 
   const isValid = isFromValid && isToValid;
   const openDetails = cityTaxData !== undefined;
@@ -54,18 +54,31 @@ export default function Tools(): JSX.Element {
     }
   }
 
-  function download(
-    onFetchAsync: (date: string) => Promise<{ data: Blob }>,
-    setFilename: (value: string) => string
-  ): void {
+  function requestExport(onPostAsync: (date: string) => Promise<void>): void {
+    async function postDataAsync() {
+      try {
+        await onPostAsync(downloadDate);
+        dispatch(showMessage({ type: "success", message: "I dati sono stati mandati correttamente!" }));
+      } catch (error) {
+        dispatch(showMessage({ type: "error" }));
+      } finally {
+        setIsDownloadDataLoading(false);
+      }
+    }
+
+    setIsDownloadDataLoading(true);
+    postDataAsync();
+  }
+
+  function downloadRicevuta(): void {
     async function fetchDataAsync() {
       try {
-        const response = await onFetchAsync(downloadDate);
+        const response = await fetchPoliceRicevutaAsync(downloadDate);
         const data = response.data;
         if (anchorRef.current) {
           if (data.size > 0) {
             anchorRef.current.href = URL.createObjectURL(data);
-            anchorRef.current.download = setFilename(downloadDate);
+            anchorRef.current.download = `polizia-ricevuta-${downloadDate}.pdf`;
             anchorRef.current.click();
           } else {
             dispatch(showMessage({ type: "info", message: "Niente data da scaricare!" }));
@@ -96,7 +109,7 @@ export default function Tools(): JSX.Element {
             color: theme.palette.onSurfaceVariant.light
           }}>
             <Stack spacing={2}>
-              <Typography variant="headlineMedium">Scarica dati</Typography>
+              <Typography variant="headlineMedium">Esporta dati</Typography>
               <M3DatePicker
                 value={new Date(downloadDate)}
                 onChange={(date: Date | null) => {
@@ -106,13 +119,14 @@ export default function Tools(): JSX.Element {
                 }}
                 renderInput={(props) => <TextField {...props} />}
               />
-              <a ref={anchorRef}></a>
             </Stack>
+            <a ref={anchorRef}></a>
             <Stack spacing={1} direction="row" justifyContent="flex-end">
               {isDownloadDataLoading ? <CircularProgress color="primary" /> : (
                 <>
-                  <M3TextButton onClick={() => download(fetchPoliceDataAsync, (date) => `polizia-${date}.txt`)}>Polizia</M3TextButton>
-                  <M3TextButton onClick={() => download(fetchIstatDataAsync, (date) => `istat-${date}.pdf`)}>ISTAT</M3TextButton>
+                  <M3TextButton onClick={downloadRicevuta}>Scarica ricevuta</M3TextButton>
+                  <M3TextButton onClick={() => requestExport(postPoliceExportRequestAsync)}>Polizia</M3TextButton>
+                  <M3TextButton onClick={() => requestExport(postIstatExportRequestAsync)}>ISTAT</M3TextButton>
                 </>
               )}
             </Stack>
