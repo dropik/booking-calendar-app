@@ -1,6 +1,4 @@
-- Use POST for police data export. Don't download it, just wait for ok status.
 - Add download police ricevuta button.
 - Remove entity property from tile data.
-- Use POST method for istat data export. Same as police, don't download, just verify ok status.
 - Add province of birth to client data.
 - Handle touchscreen.

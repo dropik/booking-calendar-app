@@ -145,12 +145,12 @@ export async function fetchClientsByTile(bookingId: string, tileId: string): Pro
   return fetchJsonDataAsync<Client[]>(`/api/v1/clients-by-tile?bookingId=${bookingId}&tileId=${tileId}`);
 }
 
-export async function fetchPoliceDataAsync(date: string): Promise<{ data: Blob }> {
-  return fetchBlobDataAsync(`/api/v1/stats/police?date=${date}`);
+export async function postPoliceExportRequestAsync(date: string): Promise<void> {
+  return postDataAsync("/api/v1/stats/police", { date });
 }
 
-export async function fetchIstatDataAsync(date: string): Promise<{ data: Blob }> {
-  return fetchBlobDataAsync(`/api/v1/stats/istat?date=${date}`);
+export async function postIstatExportRequestAsync(date: string): Promise<void> {
+  return postDataAsync("/api/v1/stats/istat", { date });
 }
 
 export async function fetchCityTaxAsync(from: string, to: string): Promise<{ data: CityTaxData }> {
@@ -163,15 +163,6 @@ export async function fetchBookings(name: string, from: string, to: string): Pro
 
 export async function fetchClientsByQuery(query: string, from: string, to: string): Promise<{ data: ClientWithBooking[] }> {
   return fetchJsonDataAsync<ClientWithBooking[]>(`/api/v1/clients-by-query?query=${query}&from=${from}&to=${to}`);
-}
-
-async function fetchBlobDataAsync(query: string): Promise<{ data: Blob }> {
-  const response = await fetch(query);
-  if (!response.ok) {
-    throw new Error("Resopnse error");
-  }
-  const data = await response.blob();
-  return { data };
 }
 
 async function fetchJsonDataAsync<T>(query: string): Promise<{ data: T }> {
