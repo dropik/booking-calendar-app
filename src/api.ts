@@ -131,8 +131,8 @@ export function postRoomAssignmentsAsync(assignments: RoomAssignments): Promise<
   return postDataAsync("/api/v1/room-assignments", assignments);
 }
 
-export async function fetchBookingById(bookingId: string, from: string): Promise<{ data: Booking<number> }> {
-  return fetchJsonDataAsync<Booking<number>>(`/api/v1/booking?id=${bookingId}&from=${from}`);
+export async function fetchBookingById(bookingId: string, from: string): Promise<{ data: Booking<ClientData[]> }> {
+  return fetchJsonDataAsync<Booking<ClientData[]>>(`/api/v1/booking?id=${bookingId}&from=${from}`);
 }
 
 export async function fetchBookingShortById(bookingId: string): Promise<{ data: BookingShort}> {

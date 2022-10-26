@@ -30,10 +30,11 @@ export default function Clients({ clients, setClients }: ClientsProps): JSX.Elem
         dispatch(showMessage({ type: "error" }));
       }
     }
-    fetchData();
 
-    return () => setClients([]);
-  }, [data, dispatch, setClients]);
+    if (clients.length === 0) {
+      fetchData();
+    }
+  }, [data, dispatch, setClients, clients.length]);
 
   return (
     <>

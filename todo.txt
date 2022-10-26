@@ -1,4 +1,3 @@
-- Loading booking by id with guests included.
 - Loading client cards with short booking data included.
 - Add from dates to booking and booking short by id fetch.
 - Add booking id to clients by tile request.

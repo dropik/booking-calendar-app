@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import { Booking, fetchBookingById } from "../../api";
+import { Booking, ClientData, fetchBookingById } from "../../api";
 import { useAppDispatch } from "../../redux/hooks";
 import { show as showMessage } from "../../redux/snackbarMessageSlice";
 
@@ -18,7 +18,7 @@ export default function BookingDetails(): JSX.Element {
   const theme = useTheme();
   const { from, bookingId } = useParams();
   const dispatch = useAppDispatch();
-  const [booking, setBooking] = useState<Booking<number> | undefined>(undefined);
+  const [booking, setBooking] = useState<Booking<ClientData[]> | undefined>(undefined);
   const skeletonRooms = [0, 1];
 
   const periodStr = booking ?

@@ -103,7 +103,26 @@ module.exports = {
                 nights: 3,
                 roomType: "camera matrimoniale/doppia",
                 entity: "camera matrimoniale",
-                persons: 2,
+                persons: [
+                  {
+                    id: "0",
+                    bookingId: "0",
+                    name: "Ivan",
+                    surname: "Petrov",
+                    dateOfBirth: "1986-05-04",
+                    placeOfBirth: "Canazei (TN)",
+                    stateOfBirth: "Italia"
+                  },
+                  {
+                    id: "1",
+                    bookingId: "1",
+                    name: "Vasya",
+                    surname: "Pupkin",
+                    dateOfBirth: "1985-05-06",
+                    placeOfBirth: "Canazei (TN)",
+                    stateOfBirth: "Italia"
+                  }
+                ],
                 roomId: 2
               },
               {
@@ -112,7 +131,26 @@ module.exports = {
                 nights: 3,
                 roomType: "camera matrimoniale/doppia",
                 entity: "camera matrimoniale",
-                persons: 2,
+                persons: [
+                  {
+                    id: "0",
+                    bookingId: "0",
+                    name: "Ivan",
+                    surname: "Petrov",
+                    dateOfBirth: "1986-05-04",
+                    placeOfBirth: "Canazei (TN)",
+                    stateOfBirth: "Italia"
+                  },
+                  {
+                    id: "1",
+                    bookingId: "1",
+                    name: "Vasya",
+                    surname: "Pupkin",
+                    dateOfBirth: "1985-05-06",
+                    placeOfBirth: "Canazei (TN)",
+                    stateOfBirth: "Italia"
+                  }
+                ],
                 roomId: 4
               }
             ]
