@@ -26,6 +26,9 @@ A client side part of a web app for managing hotel bookings by organazing them i
 - **React Router**: single page app routing.
 
 ## Changes
+### v1.2.1
+- Prepared configs for production.
+- Fixed bug when trying to parse json from POST requests which do not have response body.
 ### v1.2.0
 - Getting along with web service API. Slightly changed endpoints, data structures etc.
 - Handling html entities which may occur in fields from back-end response.
