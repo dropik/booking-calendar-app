@@ -141,8 +141,8 @@ export async function fetchBookingById(bookingId: string, from: string): Promise
   return fetchJsonDataAsync<Booking<Client[]>>(`/api/v1/booking?id=${bookingId}&from=${from}`);
 }
 
-export async function fetchClientsByTile(tileId: string): Promise<{ data: Client[] }> {
-  return fetchJsonDataAsync<Client[]>(`/api/v1/clients-by-tile?tileId=${tileId}`);
+export async function fetchClientsByTile(bookingId: string, tileId: string): Promise<{ data: Client[] }> {
+  return fetchJsonDataAsync<Client[]>(`/api/v1/clients-by-tile?bookingId=${bookingId}&tileId=${tileId}`);
 }
 
 export async function fetchPoliceDataAsync(date: string): Promise<{ data: Blob }> {

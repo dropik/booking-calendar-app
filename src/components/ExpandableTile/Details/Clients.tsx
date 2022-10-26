@@ -23,7 +23,7 @@ export default function Clients({ clients, setClients }: ClientsProps): JSX.Elem
     async function fetchData() {
       try {
         if (data) {
-          const response = await fetchClientsByTile(data.id);
+          const response = await fetchClientsByTile(data.bookingId, data.id);
           setClients(response.data);
         }
       } catch(error) {
