@@ -26,6 +26,12 @@ A client side part of a web app for managing hotel bookings by organazing them i
 - **React Router**: single page app routing.
 
 ## Changes
+### v1.2.0
+- Getting along with web service API. Slightly changed endpoints, data structures etc.
+- Handling html entities which may occur in fields from back-end response.
+- Splitting clients query by periods of time to improve responsiveness of the search.
+- Considering police and istat data publications directly to their web services, without downloading intermediate files.
+- Download police ricevuta directly from their web service.
 ### v1.1.2
 - Allow only booking name in bookings fetch request.
 ### v1.1.1
