@@ -11,6 +11,7 @@ import { ClientWithBooking } from "../../../api";
 import M3IconButton from "../../m3/M3IconButton";
 import Details from "./Details";
 import M3Skeleton from "../../m3/M3Skeleton";
+import { evaluateEntitiesInString } from "../../../utils";
 
 type ClientCardProps = {
   client?: ClientWithBooking
@@ -30,7 +31,7 @@ export default function ClientCard({ client }: ClientCardProps): JSX.Element {
     }}>
       <Stack spacing={2} sx={{ position: "relative", p: "1rem", flexGrow: 1 }}>
         <Stack>
-          <Typography variant="headlineMedium">{client ? `${client.name} ${client.surname}` : <M3Skeleton width="10rem" />}</Typography>
+          <Typography variant="headlineMedium">{client ? `${evaluateEntitiesInString(client.name)} ${evaluateEntitiesInString(client.surname)}` : <M3Skeleton width="10rem" />}</Typography>
           <Typography variant="titleMedium">{client ? (new Date(client.dateOfBirth).toLocaleDateString()) : <M3Skeleton width="6rem" />}</Typography>
         </Stack>
         <Typography variant="bodySmall">

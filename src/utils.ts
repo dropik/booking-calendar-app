@@ -31,3 +31,17 @@ export function getFirstLetterUppercase(str: string): string {
 export function getFullRoomType(entity: string, roomType: string): string {
   return `${getFirstLetterUppercase(entity)} (${getFirstLetterUppercase(roomType)})`;
 }
+
+export function evaluateEntitiesInString(source: string): string {
+  const split = source.split("&#");
+  if (split.length <= 1) {
+    return source;
+  }
+  let result = split[0];
+  for (let i = 1; i < split.length; i++) {
+    const charCodeSplit = split[i].split(";");
+    const charCode = Number.parseInt(charCodeSplit[0]);
+    result += `${String.fromCharCode(charCode)}${charCodeSplit[1]}`;
+  }
+  return result;
+}

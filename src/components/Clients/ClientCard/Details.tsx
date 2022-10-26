@@ -9,6 +9,7 @@ import { setBookingsFormFrom, setBookingsFormName, setBookingsFormTo } from "../
 import { useAppDispatch } from "../../../redux/hooks";
 
 import M3TextButton from "../../m3/M3TextButton";
+import { evaluateEntitiesInString } from "../../../utils";
 
 type DetailsProps = {
   client: ClientWithBooking
@@ -27,7 +28,7 @@ export default function Details({ client }: DetailsProps): JSX.Element {
     }}>
       <Typography variant="titleLarge">Prenotazione</Typography>
       <Stack sx={{ pl: "1rem" }}>
-        <Typography variant="titleMedium">{client.bookingName}</Typography>
+        <Typography variant="titleMedium">{evaluateEntitiesInString(client.bookingName)}</Typography>
         <Typography variant="bodySmall">{periodStr}</Typography>
       </Stack>
       <Stack alignItems="flex-end">

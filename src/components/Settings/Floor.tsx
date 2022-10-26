@@ -28,6 +28,7 @@ import { SurfaceTint } from "../m3/Tints";
 import Room from "./Room";
 import M3Dialog from "../m3/M3Dialog";
 import M3TextButton from "../m3/M3TextButton";
+import { evaluateEntitiesInString } from "../../utils";
 
 type FloorProps = {
   id: number,
@@ -148,7 +149,7 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
         {state !== "edit" ? (
           <Stack justifyContent="space-between" sx={{ height: "100%", flexGrow: 1 }}>
             <Stack direction="row" justifyContent="space-between">
-              <Typography variant="headlineLarge">{floorName}</Typography>
+              <Typography variant="headlineLarge">{evaluateEntitiesInString(floorName)}</Typography>
               {state !== "createRoom" ? (
                 <Stack direction="row" justifyContent="space-between">
                   <M3IconButton onClick={startEdit}><EditOutlinedIcon /></M3IconButton>
@@ -209,7 +210,7 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
                       >
                         {roomTypes.map((roomTypeId) => (
                           <MenuItem key={roomTypeId} value={roomTypeId} sx={{ height: "3rem" }}>
-                            {`${roomTypeId[0].toLocaleUpperCase()}${roomTypeId.slice(1)}`}
+                            {evaluateEntitiesInString(`${roomTypeId[0].toLocaleUpperCase()}${roomTypeId.slice(1)}`)}
                           </MenuItem>
                         ))}
                       </Select>

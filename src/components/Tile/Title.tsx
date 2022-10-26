@@ -6,6 +6,7 @@ import { getCanvasFontSize, getTextWidth } from "./utils";
 import { TableContext } from "../Table/TextWidthCanvas";
 import { TileContext } from "./context";
 import { TileData } from "../../redux/tilesSlice";
+import { evaluateEntitiesInString } from "../../utils";
 
 export default function Title(): JSX.Element | null {
   const { data } = useContext(TileContext);
@@ -119,6 +120,6 @@ function TitleWrappee({ data }: TitleWrappeeProps): JSX.Element {
   }, [canvasRef, adjustLayoutRequestId, leftmostDate, data.name, data.persons]);
 
   return (
-    <Typography ref={titleRef} variant="titleMedium">{title}</Typography>
+    <Typography ref={titleRef} variant="titleMedium">{evaluateEntitiesInString(title)}</Typography>
   );
 }
