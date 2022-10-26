@@ -1,4 +1,3 @@
-- Handle live modified tiles.
 - Use POST for police data export. Don't download it, just wait for ok status.
 - Add download police ricevuta button.
 - Remove entity property from tile data.
