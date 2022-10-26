@@ -158,21 +158,6 @@ module.exports = {
         }, 500);
       });
 
-      devServer.app.get("/api/v1/booking-short", (_, response) => {
-        setTimeout(() => {
-          response.json({
-            id: "1",
-            status: "new",
-            name: "Vasya Pupkin",
-            lastModified: "2022-02-01",
-            from: "2022-02-02",
-            to: "2022-02-05",
-            occupations: 2,
-            color: "booking1"
-          });
-        }, 500);
-      });
-
       devServer.app.get("/api/v1/bookings-by-name", (_, response) => {
         setTimeout(() => {
           response.json([
