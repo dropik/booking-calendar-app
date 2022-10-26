@@ -126,15 +126,15 @@ export function fetchBookingsBySessionAsync(from: string, to: string, sessionId?
 }
 
 export function ackBookingsAsync(request: AckBookingsRequest): Promise<void> {
-  return postDataAsync("/api/v1/ack-bookings", request);
+  return postDataWithoutResponseAsync("/api/v1/ack-bookings", request);
 }
 
 export function postColorAssignments(assignments: ColorAssignments): Promise<void> {
-  return postDataAsync("/api/v1/color-assignments", assignments);
+  return postDataWithoutResponseAsync("/api/v1/color-assignments", assignments);
 }
 
 export function postRoomAssignmentsAsync(assignments: RoomAssignments): Promise<void> {
-  return postDataAsync("/api/v1/room-assignments", assignments);
+  return postDataWithoutResponseAsync("/api/v1/room-assignments", assignments);
 }
 
 export async function fetchBookingById(bookingId: string, from: string): Promise<{ data: Booking<Client[]> }> {
@@ -146,11 +146,11 @@ export async function fetchClientsByTile(bookingId: string, tileId: string): Pro
 }
 
 export async function postPoliceExportRequestAsync(date: string): Promise<void> {
-  return postDataAsync("/api/v1/police", { date });
+  return postDataWithoutResponseAsync("/api/v1/police", { date });
 }
 
 export async function postIstatExportRequestAsync(date: string): Promise<void> {
-  return postDataAsync("/api/v1/istat", { date });
+  return postDataWithoutResponseAsync("/api/v1/istat", { date });
 }
 
 export async function fetchPoliceRicevutaAsync(date: string): Promise<{ data: Blob }> {
@@ -190,6 +190,24 @@ async function fetchBlobDataAsync(query: string): Promise<{ data: Blob }> {
   return { data };
 }
 
+async function postDataWithoutResponseAsync<TData>(url: string, data: TData): Promise<void> {
+  const response = await fetch(url, {
+    method: "POST",
+    mode: "cors",
+    cache: "no-cache",
+    credentials: "same-origin",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    redirect: "follow",
+    referrerPolicy: "no-referrer",
+    body: JSON.stringify(data)
+  });
+  if (!response.ok) {
+    throw new Error("Response error");
+  }
+}
+
 async function postDataAsync<TData, TResponse>(url: string, data: TData): Promise<TResponse> {
   const response = await fetch(url, {
     method: "POST",
@@ -208,7 +226,7 @@ async function postDataAsync<TData, TResponse>(url: string, data: TData): Promis
   }
   const responseData = await response.json() as TResponse;
   if (!responseData) {
-    throw new Error("Response erorr");
+    throw new Error("Response error");
   }
   return responseData;
 }

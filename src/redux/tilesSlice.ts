@@ -115,7 +115,6 @@ export const fetchAsync = createAsyncThunk<{ bookings: ColoredBooking[], session
       if (ackRequest.bookings.length > 0) {
         await ackBookingsAsync(ackRequest);
       }
-
       return { bookings: coloredBookings, sessionId: response.data.sessionId };
     } catch(error) {
       thunkApi.dispatch(showMessage({ type: "error" }));

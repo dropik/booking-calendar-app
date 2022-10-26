@@ -17,7 +17,7 @@ module.exports = merge(common, {
             loader: require.resolve("ts-loader"),
             options: {
               getCustomTransformers: () => ({
-                before: [ReactRefreshTypeScript()]
+                before: [new ReactRefreshTypeScript()]
               }),
               transpileOnly: true
             }
@@ -40,13 +40,13 @@ module.exports = merge(common, {
 
       devServer.app.post("/api/v1/police", (_, response) => {
         setTimeout(() => {
-          response.json("ok");
+          response.send();
         }, 500);
       });
 
       devServer.app.post("/api/v1/istat", (_, response) => {
         setTimeout(() => {
-          response.json("ok");
+          response.send();
         }, 500);
       });
 
@@ -383,13 +383,13 @@ module.exports = merge(common, {
 
       devServer.app.put("/api/v1/floors/*", (_, response) => {
         setTimeout(() => {
-          response.send("ok");
+          response.send();
         }, 500);
       });
 
       devServer.app.delete("/api/v1/floors/*", (_, response) => {
         setTimeout(() => {
-          response.send("ok");
+          response.send();
         }, 500);
       });
 
@@ -401,13 +401,13 @@ module.exports = merge(common, {
 
       devServer.app.put("/api/v1/rooms/*", (_, response) => {
         setTimeout(() => {
-          response.send("ok");
+          response.send();
         }, 500);
       });
 
       devServer.app.delete("/api/v1/rooms/*", (_, response) => {
         setTimeout(() => {
-          response.send("ok");
+          response.send();
         }, 500);
       });
 
@@ -614,19 +614,19 @@ module.exports = merge(common, {
 
       devServer.app.post("/api/v1/room-assignments", (_, response) => {
         setTimeout(() => {
-          response.json("ok");
+          response.send();
         }, 500);
       });
 
       devServer.app.post("/api/v1/color-assignments", (_, response) => {
         setTimeout(() => {
-          response.json("ok");
+          response.send();
         }, 500);
       });
 
       devServer.app.post("/api/v1/ack-bookings", (_, response) => {
         setTimeout(() => {
-          response.send("");
+          response.send();
         }, 500);
       });
 
