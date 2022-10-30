@@ -1,3 +1,4 @@
 - Assign booking colors from booking search page.
 - Check errors in clients search.
+- Add calculate import for period tool.
 - Handle touchscreen.
