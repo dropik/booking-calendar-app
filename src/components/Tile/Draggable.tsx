@@ -50,7 +50,7 @@ function DraggableWrappee({ children, data }: DraggableWrappeeProps): JSX.Elemen
     if (event.button === 0) {
       event.preventDefault();
       if (ref.current) {
-        ref.current.style.translate = "";
+        ref.current.style.translate = `0px ${-window.scrollY}px`;
       }
       dispatch(drop({ tileId: data.id }));
       setIsGrabbing(false);
@@ -95,9 +95,6 @@ function DraggableWrappee({ children, data }: DraggableWrappeeProps): JSX.Elemen
   function onTransitionEnd(): void {
     if (!isGrabbing) {
       setIsGoingBack(false);
-      if (ref.current) {
-        ref.current.style.translate = "";
-      }
     }
   }
 
@@ -105,22 +102,22 @@ function DraggableWrappee({ children, data }: DraggableWrappeeProps): JSX.Elemen
     <Box ref={ref} onMouseDown={startGrab} onMouseMove={checkFirstMove} onMouseUp={release} onTransitionEnd={onTransitionEnd} sx={{
       borderRadius: "0.75rem",
       position: "relative",
-      translate: "0px 0px",
-      transition: theme.transitions.create(["box-shadow", "translate"], {
+      translate: "0px 0px !important",
+      transition: theme.transitions.create(["box-shadow"], {
         duration: theme.transitions.duration.short
       }),
-      ...(isGrabbing && {
+      ...((isGrabbing || isGoingBack) && {
         position: "fixed",
+        translate: undefined,
         zIndex: theme.zIndex.tooltip,
         width: width,
         pointerEvents: "none",
-        transition: theme.transitions.create(["box-shadow"], {
-          duration: theme.transitions.duration.short
-        }),
         boxShadow: theme.shadows[3]
       }),
       ...(isGoingBack && {
-        zIndex: theme.zIndex.tooltip
+        transition: theme.transitions.create(["box-shadow", "translate"], {
+          duration: theme.transitions.duration.short
+        })
       })
     }}>
       { children }
@@ -130,7 +127,7 @@ function DraggableWrappee({ children, data }: DraggableWrappeeProps): JSX.Elemen
         transition: theme.transitions.create(["opacity"], {
           duration: theme.transitions.duration.short
         }),
-        ...(isGrabbing && {
+        ...((isGrabbing || isGoingBack) && {
           opacity: theme.opacities.surface3
         })
       }} />
