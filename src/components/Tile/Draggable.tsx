@@ -1,4 +1,5 @@
-import React, { useContext, useEffect } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
+import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 
 import { useAppDispatch } from "../../redux/hooks";
@@ -25,24 +26,70 @@ type DraggableWrappeeProps = {
 };
 
 function DraggableWrappee({ children, data }: DraggableWrappeeProps): JSX.Element {
+  const theme = useTheme();
   const dispatch = useAppDispatch();
+  const [startedGrabbing, setStartedGrabbing] = useState(false);
+  const [isGrabbing, setIsGrabbing] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [width, setWidth] = useState(0);
+
+  const move = useCallback((event: MouseEvent) => {
+    event.preventDefault();
+    if (startedGrabbing) {
+      setIsGrabbing(true);
+    }
+    setPosition((prevPosition) => ({ x: prevPosition.x, y: prevPosition.y + event.movementY }));
+  }, [startedGrabbing]);
+
+  const endGrab = useCallback((event: MouseEvent) => {
+    event.preventDefault();
+    dispatch(drop({ tileId: data.id }));
+    setIsGrabbing(false);
+    setStartedGrabbing(false);
+    window.removeEventListener("mousemove", move);
+    window.removeEventListener("mouseup", endGrab);
+  }, [dispatch, data.id, move]);
 
   useEffect(() => {
     return () => {
       dispatch(drop({ tileId: data.id }));
     };
-  }, [dispatch, data.id]);
+  }, [dispatch, data.id, endGrab]);
+
+  function startGrab(): void {
+    setStartedGrabbing(true);
+  }
+
+  function checkFirstMove(event: React.MouseEvent<HTMLDivElement>): void {
+    if (startedGrabbing) {
+      dispatch(grab({ tileId: data.id, mouseY: 0 }));
+      const el = event.currentTarget;
+      const boundingBox = el.getBoundingClientRect();
+      setPosition({ x: boundingBox.left, y: boundingBox.top });
+      setWidth(boundingBox.width);
+      window.addEventListener("mousemove", move);
+      window.addEventListener("mouseup", endGrab);
+    }
+  }
+
+  function release(): void {
+    setStartedGrabbing(false);
+  }
 
   return (
-    <Box
-      draggable
-      onDragStart={() => {
-        dispatch(grab({ tileId: data.id, mouseY: 0 }));
-      }}
-      onDragEnd={() => {
-        dispatch(drop({ tileId: data.id }));
-      }}
-    >
+    <Box onMouseDown={startGrab} onMouseMove={checkFirstMove} onMouseUp={release} sx={{
+      borderRadius: "0.75rem",
+      ...(isGrabbing && {
+        position: "fixed",
+        zIndex: theme.zIndex.tooltip,
+        left: 0,
+        top: 0,
+        width: width,
+        pointerEvents: "none",
+        transform: `translate(${position.x}px, ${position.y}px)`,
+        boxShadow: theme.shadows[3]
+      })
+    }}>
       { children }
     </Box>
   );

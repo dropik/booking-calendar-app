@@ -20,8 +20,8 @@ export default function Tile({ data }: Props): JSX.Element {
   return (
     <TileContext.Provider value={{ data: data, cropLeft: false, cropRight: false }}>
       <Size>
-        <Expandable>
-          <Draggable>
+        <Draggable>
+          <Expandable>
             <ContextTrigger>
               <Alert>
                 <Container>
@@ -30,8 +30,8 @@ export default function Tile({ data }: Props): JSX.Element {
                 </Container>
               </Alert>
             </ContextTrigger>
-          </Draggable>
-        </Expandable>
+          </Expandable>
+        </Draggable>
       </Size>
     </TileContext.Provider>
   );
