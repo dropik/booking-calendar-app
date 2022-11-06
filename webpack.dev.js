@@ -38,6 +38,7 @@ module.exports = merge(common, {
         target: "http://localhost:5077",
         secure: false
       }
-    }
+    },
+    historyApiFallback: true
   },
 });
