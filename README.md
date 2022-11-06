@@ -26,6 +26,9 @@ A client side part of a web app for managing hotel bookings by organazing them i
 - **React Router**: single page app routing.
 
 ## Changes
+### v1.3.0
+- Fixed bookings page issue on trying to use booking color directly from back end, which might be unsigned.
+- Better DnD. Using mouse events instead of HTML5 DnD API. Can drag and scroll.
 ### v1.2.1
 - Prepared configs for production.
 - Fixed bug when trying to parse json from POST requests which do not have response body.
