@@ -1,10 +1,11 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 
 import { useAppDispatch } from "../../redux/hooks";
 import { grab, drop, TileData } from "../../redux/tilesSlice";
 import { TileContext } from "./context";
+import { SurfaceTint } from "../m3/Tints";
 
 type DraggableProps = {
   children: React.ReactNode
@@ -30,23 +31,31 @@ function DraggableWrappee({ children, data }: DraggableWrappeeProps): JSX.Elemen
   const dispatch = useAppDispatch();
   const [startedGrabbing, setStartedGrabbing] = useState(false);
   const [isGrabbing, setIsGrabbing] = useState(false);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
   const [width, setWidth] = useState(0);
+  const [isGoingBack, setIsGoingBack] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
 
   const move = useCallback((event: MouseEvent) => {
     event.preventDefault();
-    if (startedGrabbing) {
-      setIsGrabbing(true);
+    if (ref.current) {
+      const currentTranslate = ref.current.style.translate;
+      const [xStr, yStr] = currentTranslate.split(" ");
+      const x = xStr ? Number.parseInt(xStr.replace("px", "")) : 0;
+      const y = yStr ? Number.parseInt(yStr.replace("px", "")) : 0;
+      ref.current.style.translate = `${x + event.movementX}px ${y + event.movementY}px`;
     }
-    setPosition((prevPosition) => ({ x: prevPosition.x, y: prevPosition.y + event.movementY }));
-  }, [startedGrabbing]);
+  }, []);
 
   const endGrab = useCallback((event: MouseEvent) => {
     if (event.button === 0) {
       event.preventDefault();
+      if (ref.current) {
+        ref.current.style.translate = "";
+      }
       dispatch(drop({ tileId: data.id }));
       setIsGrabbing(false);
       setStartedGrabbing(false);
+      setIsGoingBack(true);
       window.removeEventListener("mousemove", move);
       window.removeEventListener("mouseup", endGrab);
     }
@@ -69,7 +78,8 @@ function DraggableWrappee({ children, data }: DraggableWrappeeProps): JSX.Elemen
       dispatch(grab({ tileId: data.id, mouseY: 0 }));
       const el = event.currentTarget;
       const boundingBox = el.getBoundingClientRect();
-      setPosition({ x: boundingBox.left, y: boundingBox.top });
+      el.style.translate = `0px ${-window.scrollY}px`;
+      setIsGrabbing(true);
       setWidth(boundingBox.width);
       window.addEventListener("mousemove", move);
       window.addEventListener("mouseup", endGrab);
@@ -82,21 +92,48 @@ function DraggableWrappee({ children, data }: DraggableWrappeeProps): JSX.Elemen
     }
   }
 
+  function onTransitionEnd(): void {
+    if (!isGrabbing) {
+      setIsGoingBack(false);
+      if (ref.current) {
+        ref.current.style.translate = "";
+      }
+    }
+  }
+
   return (
-    <Box onMouseDown={startGrab} onMouseMove={checkFirstMove} onMouseUp={release} sx={{
+    <Box ref={ref} onMouseDown={startGrab} onMouseMove={checkFirstMove} onMouseUp={release} onTransitionEnd={onTransitionEnd} sx={{
       borderRadius: "0.75rem",
+      position: "relative",
+      translate: "0px 0px",
+      transition: theme.transitions.create(["box-shadow", "translate"], {
+        duration: theme.transitions.duration.short
+      }),
       ...(isGrabbing && {
         position: "fixed",
         zIndex: theme.zIndex.tooltip,
-        left: 0,
-        top: 0,
         width: width,
         pointerEvents: "none",
-        transform: `translate(${position.x}px, ${position.y}px)`,
+        transition: theme.transitions.create(["box-shadow"], {
+          duration: theme.transitions.duration.short
+        }),
         boxShadow: theme.shadows[3]
+      }),
+      ...(isGoingBack && {
+        zIndex: theme.zIndex.tooltip
       })
     }}>
       { children }
+      <SurfaceTint sx={{
+        backgroundColor: theme.palette.primary.light,
+        opacity: 0,
+        transition: theme.transitions.create(["opacity"], {
+          duration: theme.transitions.duration.short
+        }),
+        ...(isGrabbing && {
+          opacity: theme.opacities.surface3
+        })
+      }} />
     </Box>
   );
 }
