@@ -1,4 +1,3 @@
-- Assign booking colors from booking search page.
 - Better dnd. Unlock wheel for scrolling during drag.
 - Implement horizontal scrolling. May be fixed amount preloading. Or may be something like load more button.
 - Check errors in clients search.

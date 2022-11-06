@@ -33,7 +33,7 @@ export type BookingShort = {
   lastModified: string,
   from: string,
   to: string,
-  color: TileColor
+  color?: TileColor
   occupations: number,
 };
 
