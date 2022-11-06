@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-import { BookingShort } from "../../../api";
+import { BookingShort } from "../List";
 
 const BookingContext = createContext<BookingShort>({
   id: "",

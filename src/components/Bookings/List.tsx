@@ -21,7 +21,7 @@ type ListProps = {
 
 export default function List({ name, from, to, isValid }: ListProps): JSX.Element {
   const dispatch = useAppDispatch();
-  const [bookings, setBookings] = useState<BookingShortResponse[]>([]);
+  const [bookings, setBookings] = useState<BookingShort[]>([]);
 
   useEffect(() => {
     let subscribed = true;

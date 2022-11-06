@@ -1,6 +1,6 @@
 import React from "react";
 
-import { BookingShort } from "../../../api";
+import { BookingShort } from "../List";
 
 import BookingContext from "./context";
 import Button from "./Button";
