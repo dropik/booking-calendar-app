@@ -2,6 +2,7 @@
 - Better dnd. Unlock wheel for scrolling during drag.
 - Implement horizontal scrolling. May be fixed amount preloading. Or may be something like load more button.
 - Check errors in clients search.
+- Show no bookings found on bookings search page if nothing found. Same for clients search.
 - Add breakfast information to bookings.
 - Add calculate import for period tool.
 - Handle touchscreen.
