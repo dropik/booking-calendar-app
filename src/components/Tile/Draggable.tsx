@@ -109,7 +109,7 @@ function DraggableWrappee({ children, data }: DraggableWrappeeProps): JSX.Elemen
       ...((isGrabbing || isGoingBack) && {
         position: "fixed",
         translate: undefined,
-        zIndex: theme.zIndex.tooltip,
+        zIndex: theme.zIndex.modal,
         width: width,
         pointerEvents: "none",
         boxShadow: theme.shadows[3]
