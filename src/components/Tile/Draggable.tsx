@@ -42,12 +42,14 @@ function DraggableWrappee({ children, data }: DraggableWrappeeProps): JSX.Elemen
   }, [startedGrabbing]);
 
   const endGrab = useCallback((event: MouseEvent) => {
-    event.preventDefault();
-    dispatch(drop({ tileId: data.id }));
-    setIsGrabbing(false);
-    setStartedGrabbing(false);
-    window.removeEventListener("mousemove", move);
-    window.removeEventListener("mouseup", endGrab);
+    if (event.button === 0) {
+      event.preventDefault();
+      dispatch(drop({ tileId: data.id }));
+      setIsGrabbing(false);
+      setStartedGrabbing(false);
+      window.removeEventListener("mousemove", move);
+      window.removeEventListener("mouseup", endGrab);
+    }
   }, [dispatch, data.id, move]);
 
   useEffect(() => {
@@ -56,8 +58,10 @@ function DraggableWrappee({ children, data }: DraggableWrappeeProps): JSX.Elemen
     };
   }, [dispatch, data.id, endGrab]);
 
-  function startGrab(): void {
-    setStartedGrabbing(true);
+  function startGrab(event: React.MouseEvent<HTMLDivElement>): void {
+    if (event.button === 0) {
+      setStartedGrabbing(true);
+    }
   }
 
   function checkFirstMove(event: React.MouseEvent<HTMLDivElement>): void {
@@ -72,8 +76,10 @@ function DraggableWrappee({ children, data }: DraggableWrappeeProps): JSX.Elemen
     }
   }
 
-  function release(): void {
-    setStartedGrabbing(false);
+  function release(event: React.MouseEvent<HTMLDivElement>): void {
+    if (event.button === 0) {
+      setStartedGrabbing(false);
+    }
   }
 
   return (
