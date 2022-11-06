@@ -2,8 +2,8 @@ import React from "react";
 import Grid from "@mui/material/Grid";
 
 import * as Utils from "../../../../utils";
-import { useAppDispatch, useAppSelector, useColumns, useLeftmostDate } from "../../../../redux/hooks";
-import { TileData, unassign } from "../../../../redux/tilesSlice";
+import { useColumns, useLeftmostDate } from "../../../../redux/hooks";
+import { TileData } from "../../../../redux/tilesSlice";
 
 import FreeSpace from "../Floor/Room/Body/DataRow/FreeSpace";
 import Tile from "../../../Tile";
@@ -15,31 +15,15 @@ type BodyProps = {
 };
 
 export default function Body({ tile }: BodyProps): JSX.Element {
-  const dispatch = useAppDispatch();
   const leftmostDate = useLeftmostDate();
   const columns = useColumns();
-  const grabbedTile = useAppSelector((state) => state.tiles.grabbedTile);
 
   const freeSpace = (Utils.daysBetweenDates(leftmostDate, tile.from) >= 0) ?
     (<FreeSpace from={Utils.getDateShift(leftmostDate, -1)} to={tile.from} cropLeft={true} cropRight={false} />) :
     <></>;
 
-  function decideDropZone(event: React.DragEvent<HTMLDivElement>): void {
-    if (grabbedTile) {
-      event.preventDefault();
-    }
-  }
-
   return (
-    <RowBody
-      onDragEnter={decideDropZone}
-      onDragOver={decideDropZone}
-      onDrop={() => {
-        if (grabbedTile) {
-          dispatch(unassign({tileId: grabbedTile }));
-        }
-      }}
-    >
+    <RowBody>
       <GridRow isFirst={false} isLast={false} />
       <Grid container columns={columns} sx={{
         position: "absolute",

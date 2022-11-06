@@ -12,20 +12,14 @@ type DropAccepterProps = {
 export default function DropAccepter({ children, roomId }: DropAccepterProps): JSX.Element {
   const dispatch = useAppDispatch();
 
-  function acceptDrop(event: React.DragEvent<HTMLDivElement>): void {
-    event.preventDefault();
-  }
-
-  function handleDrop(): void {
-    dispatch(move({ newY: roomId }));
+  function handleDrop(event: React.MouseEvent<HTMLDivElement>): void {
+    if (event.button === 0) {
+      dispatch(move({ newY: roomId }));
+    }
   }
 
   return (
-    <Box
-      onDragEnter={acceptDrop}
-      onDragOver={acceptDrop}
-      onDrop={handleDrop}
-    >
+    <Box onMouseUp={handleDrop}>
       {children}
     </Box>
   );

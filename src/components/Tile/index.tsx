@@ -21,16 +21,16 @@ export default function Tile({ data }: Props): JSX.Element {
     <TileContext.Provider value={{ data: data, cropLeft: false, cropRight: false }}>
       <Size>
         <Expandable>
-          <Draggable>
-            <ContextTrigger>
+          <ContextTrigger>
+            <Draggable>
               <Alert>
                 <Container>
                   <Title />
                   <Body />
                 </Container>
               </Alert>
-            </ContextTrigger>
-          </Draggable>
+            </Draggable>
+          </ContextTrigger>
         </Expandable>
       </Size>
     </TileContext.Provider>

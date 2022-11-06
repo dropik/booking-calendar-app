@@ -1,8 +1,8 @@
 import React from "react";
 
 import * as Utils from "../../../../utils";
-import { useAppSelector } from "../../../../redux/hooks";
-import { TileData } from "../../../../redux/tilesSlice";
+import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
+import { TileData, unassign } from "../../../../redux/tilesSlice";
 
 import Section from "..";
 import Body from "./Body";
@@ -11,9 +11,17 @@ import RowHeader from "../Row/Header";
 
 export default function NotAssigned(): JSX.Element {
   const tiles = useUnassignedTilesForCurrentPeriod();
+  const dispatch = useAppDispatch();
+  const grabbedTile = useAppSelector((state) => state.tiles.grabbedTile);
+
+  function drop(event: React.MouseEvent<HTMLDivElement>): void {
+    if (grabbedTile && (event.button === 0)) {
+      dispatch(unassign({ tileId: grabbedTile }));
+    }
+  }
 
   return (
-    <Section header="Non Assegnati">
+    <Section onMouseUp={drop} header="Non Assegnati">
       {tiles.map((tile) => (
         <Row key={tile.id}>
           <RowHeader></RowHeader>
