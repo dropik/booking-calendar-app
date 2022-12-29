@@ -14,10 +14,17 @@ export default function Dates(): JSX.Element {
   return (
     <Box sx={{
       height: "100%",
-      ml: "7.5rem"
+      ml: "7.5rem",
+      overflow: "hidden",
+      width: "calc(100% - 7.5rem + 1px)",
+      position: "relative",
     }}>
       <Grid container spacing={0} columns={columns} sx={{
-        height: "100%"
+        height: "100%",
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: `calc((8rem + 1px) * ${columns})`,
       }}>
         {dayCells}
       </Grid>
