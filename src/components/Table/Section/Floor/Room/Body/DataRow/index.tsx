@@ -17,6 +17,7 @@ export default function DataRow({ isFirst, roomId }: DataRowProps): JSX.Element 
   return (
     <Grid container spacing={0} columns={columns} sx={{
       position: "absolute",
+      width: `calc((8rem + 1px) * ${columns})`,
       top: -1,
       ...(isFirst && {
         top: "calc(0.25rem - 1px)"

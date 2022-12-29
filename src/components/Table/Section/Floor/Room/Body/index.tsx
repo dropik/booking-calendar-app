@@ -12,7 +12,11 @@ type BodyProps = {
 
 export default function Body({ isFirst, isLast, roomId }: BodyProps): JSX.Element {
   return (
-    <RowBody>
+    <RowBody sx={{
+      ...((isFirst || isLast) && {
+        height: "calc(5.75rem - 1px)",
+      })
+    }}>
       <GridRow isFirst={isFirst} isLast={isLast} />
       <DataRow isFirst={isFirst} roomId={roomId} />
     </RowBody>

@@ -27,7 +27,8 @@ export default function Body({ tile }: BodyProps): JSX.Element {
       <GridRow isFirst={false} isLast={false} />
       <Grid container columns={columns} sx={{
         position: "absolute",
-        top: -1
+        top: -1,
+        width: `calc((8rem + 1px) * ${columns})`,
       }}>
         {freeSpace}
         <Tile data={tile} />
