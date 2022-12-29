@@ -14,7 +14,8 @@ export type State = {
   columns: number,
   offsetHeight: number,
   clientHeight: number,
-  lastFetchPeriod: FetchPeriod
+  lastFetchPeriod: FetchPeriod,
+  scrollLeft: number,
 };
 
 function getInitialState(): State {
@@ -33,7 +34,8 @@ function getInitialState(): State {
     lastFetchPeriod: {
       from: leftmostDate,
       to: Utils.getDateShift(leftmostDate, columns - 1)
-    }
+    },
+    scrollLeft: 0,
   };
 }
 
@@ -53,11 +55,17 @@ export const tableSlice = createSlice({
     },
     goPrev: (state) => {
       updateStateByNewDate(state, Utils.getDateShift(state.currentDate, -state.columns));
+    },
+    scrollX: (state, action: PayloadAction<number>) => {
+      state.scrollLeft += action.payload;
+      if (state.scrollLeft < 0) {
+        state.scrollLeft = 0;
+      }
     }
   }
 });
 
-export const { updateHeights, changeDate, goNext, goPrev } = tableSlice.actions;
+export const { updateHeights, changeDate, goNext, goPrev, scrollX } = tableSlice.actions;
 
 export default tableSlice.reducer;
 

@@ -17,11 +17,10 @@ export default function GridRow({ isFirst, isLast }: Props): JSX.Element {
   return (
     <>
       {isFirst ? (
-        <Grid container spacing={0} gap={16} columns={columns} sx={{
+        <Grid container spacing={0} columns={columns} sx={{
           borderBottom: `1px solid ${theme.palette.surfaceVariant.light}`,
           height: "0.25rem",
-          flexWrap: "nowrap",
-          pl: "8rem",
+          width: `calc((8rem + 1px) * ${columns})`,
         }}>
           {dates.map((date, dateIndex) => (
             <Grid key={date} item xs={1} sx={{
@@ -33,11 +32,10 @@ export default function GridRow({ isFirst, isLast }: Props): JSX.Element {
           ))}
         </Grid>
       ) : null}
-      <Grid container spacing={0} gap={16} columns={columns} sx={{
+      <Grid container spacing={0} columns={columns} sx={{
         borderBottom: `1px solid ${theme.palette.surfaceVariant.light}`,
         height: "calc(5.5rem - 1px)",
-        flexWrap: "nowrap",
-        pl: "8rem",
+        width: `calc((8rem + 1px) * ${columns})`,
         ...(isFirst && {
           top: "0.25rem"
         }),
@@ -52,10 +50,9 @@ export default function GridRow({ isFirst, isLast }: Props): JSX.Element {
         ))}
       </Grid>
       {isLast ? (
-        <Grid container spacing={0} gap={16} columns={columns} sx={{
+        <Grid container spacing={0} columns={columns} sx={{
           height: "0.25rem",
-          flexWrap: "nowrap",
-          pl: "8rem",
+          width: `calc((8rem + 1px) * ${columns})`,
           top: "calc(5.5rem - 1px)",
         }}>
           {dates.map((date, dateIndex) => (

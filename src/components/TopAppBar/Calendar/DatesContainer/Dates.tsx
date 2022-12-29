@@ -5,6 +5,7 @@ import Grid from "@mui/material/Grid";
 import { useAppSelector, useDates } from "../../../../redux/hooks";
 
 import Day from "./Day";
+import HorizontalScrollWrapper from "../../../Table/HorizontalScrollWrapper";
 
 export default function Dates(): JSX.Element {
   const columns = useAppSelector((state) => state.table.columns);
@@ -19,15 +20,17 @@ export default function Dates(): JSX.Element {
       width: "calc(100% - 7.5rem + 1px)",
       position: "relative",
     }}>
-      <Grid container spacing={0} columns={columns} sx={{
-        height: "100%",
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: `calc((8rem + 1px) * ${columns})`,
-      }}>
-        {dayCells}
-      </Grid>
+      <HorizontalScrollWrapper>
+        <Grid container spacing={0} columns={columns} sx={{
+          height: "100%",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: `calc((8rem + 1px) * ${columns})`,
+        }}>
+          {dayCells}
+        </Grid>
+      </HorizontalScrollWrapper>
     </Box>
   );
 }
