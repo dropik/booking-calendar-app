@@ -6,6 +6,7 @@ const ReactRefreshTypeScript = require("react-refresh-typescript");
 
 module.exports = merge(common, {
   mode: "development",
+  devtool: "source-map",
   plugins: [new ReactRefreshWebpackPlugin()],
   module: {
     rules: [
