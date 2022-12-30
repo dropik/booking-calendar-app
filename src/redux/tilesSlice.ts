@@ -53,16 +53,12 @@ export type State = {
       [key: string]: string
     }
   },
-  grabbedMap: {
-    [key: string]: boolean
-  },
   bookingsMap: {
     [key: string]: string[]
   },
   roomChanges: RoomChanges,
   colorChanges: ColorChanges,
   grabbedTile?: string,
-  mouseYOnGrab: number,
   sessionId?: string
 };
 
@@ -71,11 +67,9 @@ const initialState: State = {
   data: { },
   assignedMap: { },
   unassignedMap: { },
-  grabbedMap: { },
   bookingsMap: { },
   roomChanges: { },
   colorChanges: { },
-  mouseYOnGrab: 0
 };
 
 export const fetchAsync = createAsyncThunk<{ bookings: ColoredBooking[], sessionId: string }, FetchPeriod>(
@@ -137,8 +131,6 @@ export const tilesSlice = createSlice({
     },
     grab: (state, action: PayloadAction<{ tileId: string, mouseY: number }>) => {
       state.grabbedTile = action.payload.tileId;
-      state.grabbedMap[action.payload.tileId] = true;
-      state.mouseYOnGrab = action.payload.mouseY;
 
       const tile = state.data[action.payload.tileId];
       for (const roomId in state.assignedMap) {
@@ -168,8 +160,6 @@ export const tilesSlice = createSlice({
     },
     drop: (state, action: PayloadAction<{ tileId: string }>) => {
       state.grabbedTile = undefined;
-      state.grabbedMap[action.payload.tileId] = false;
-      state.mouseYOnGrab = 0;
 
       const tile = state.data[action.payload.tileId];
       for (const roomId in state.assignedMap) {
@@ -184,8 +174,14 @@ export const tilesSlice = createSlice({
       }
     },
     unassign: (state, action: PayloadAction<{ tileId: string }>) => {
-      tryRemoveAssignment(state, action);
+      tryRemoveAssignment(state, action.payload.tileId);
       checkRoomReturnedToOriginal(state, action.payload.tileId);
+    },
+    tryUnassignGrabbed: (state) => {
+      if (state.grabbedTile) {
+        tryRemoveAssignment(state, state.grabbedTile);
+        checkRoomReturnedToOriginal(state, state.grabbedTile);
+      }
     },
     saveChanges: (state) => {
       state.roomChanges = { };
@@ -276,7 +272,18 @@ export const tilesSlice = createSlice({
   }
 });
 
-export const { move, grab, drop, unassign, saveChanges, undoChanges, setColor, createRoom, deleteRooms } = tilesSlice.actions;
+export const {
+  move,
+  grab,
+  drop,
+  unassign,
+  tryUnassignGrabbed,
+  saveChanges,
+  undoChanges,
+  setColor,
+  createRoom,
+  deleteRooms
+} = tilesSlice.actions;
 
 export default tilesSlice.reducer;
 
@@ -333,7 +340,6 @@ function addFetchedBookings(state: WritableDraft<State>, bookings: ColoredBookin
       };
 
       state.data[newTile.id] = newTile;
-      state.grabbedMap[newTile.id] = false;
       state.bookingsMap[booking.id].push(newTile.id);
       const roomId = newTile.roomId;
       const dateCounter = new Date(newTile.from);
@@ -381,8 +387,7 @@ function tryMoveTile(
   }
 }
 
-function tryRemoveAssignment(state: WritableDraft<State>, action: PayloadAction<{ tileId: string }>): void {
-  const tileId = action.payload.tileId;
+function tryRemoveAssignment(state: WritableDraft<State>, tileId: string): void {
   const tileData = state.data[tileId];
   const roomId = tileData.roomId;
   if (roomId !== undefined) {
