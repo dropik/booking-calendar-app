@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import Typography from "@mui/material/Typography";
 
 import { useAppSelector, useLeftmostDate } from "../../redux/hooks";
-import { getCanvasFontSize, getTextWidth } from "./utils";
 import { TableContext } from "../Table/TextWidthCanvas";
 import { TileContext } from "./context";
 import { Utils } from "../../utils";
@@ -18,9 +17,9 @@ export default function Body(): JSX.Element {
 
   useEffect(() => {
     if (bodyRef.current && canvasRef.current) {
-      const bodyFontSize = getCanvasFontSize(bodyRef.current);
+      const bodyFontSize = Utils.getCanvasFontSize(bodyRef.current);
 
-      const width = getTextWidth(canvasRef.current, significantEntity, bodyFontSize);
+      const width = Utils.getTextWidth(canvasRef.current, significantEntity, bodyFontSize);
       if (width <= bodyRef.current.clientWidth) {
         setBody(significantEntity);
         return;
