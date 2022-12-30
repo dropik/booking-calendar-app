@@ -11,6 +11,8 @@ export default function SectionBody({ children }: SectionBodyProps): JSX.Element
 
   return (
     <Stack direction="row" spacing={0} sx={{
+      position: "relative",
+      overflow: "hidden",
       ...((Children.count(children) > 0) && {
         borderTop: `1px solid ${theme.palette.outline.light}`
       })
