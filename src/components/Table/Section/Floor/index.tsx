@@ -3,7 +3,8 @@ import React from "react";
 import { Floor } from "../../../../redux/floorsSlice";
 
 import Section from "..";
-import Room from "./Room";
+import RoomHeaders from "./RoomHeaders";
+import RoomsTable from "./RoomsTable";
 
 type FloorProps = {
   floor: Floor
@@ -12,9 +13,8 @@ type FloorProps = {
 export default function Floor({ floor }: FloorProps): JSX.Element {
   return (
     <Section header={floor.name}>
-      {floor.roomIds.map((roomId, index) => (
-        <Room key={roomId} id={roomId} isFirst={index === 0} isLast={index === floor.roomIds.length - 1} />)
-      )}
+      <RoomHeaders floor={floor} />
+      <RoomsTable floor={floor} />
     </Section>
   );
 }

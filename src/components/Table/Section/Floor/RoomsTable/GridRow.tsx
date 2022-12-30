@@ -2,7 +2,7 @@ import React from "react";
 import { useTheme } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 
-import { useColumns, useDates } from "../../../../../../redux/hooks";
+import { useColumns, useDates } from "../../../../../redux/hooks";
 
 type Props = {
   isFirst: boolean,

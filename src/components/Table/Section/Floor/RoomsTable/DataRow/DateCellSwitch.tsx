@@ -1,9 +1,9 @@
 import React from "react";
 
-import * as Utils from "../../../../../../../utils";
-import { useAppSelector, useLeftmostDate, useRightmostDate } from "../../../../../../../redux/hooks";
+import * as Utils from "../../../../../../utils";
+import { useAppSelector, useLeftmostDate, useRightmostDate } from "../../../../../../redux/hooks";
 
-import Tile from "../../../../../../Tile";
+import Tile from "../../../../../Tile";
 import FreeSpace from "./FreeSpace";
 import DropZone from "./DropZone";
 

@@ -1,7 +1,7 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
 
-import { useColumns, useDates } from "../../../../../../../redux/hooks";
+import { useColumns, useDates } from "../../../../../../redux/hooks";
 
 import DateCellSwitch from "./DateCellSwitch";
 

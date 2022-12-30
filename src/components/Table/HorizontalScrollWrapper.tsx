@@ -22,10 +22,6 @@ export default function HorizontalScrollWrapper({ children }: HorizontalScrollWr
       position: "relative",
       left: 0,
       height: "100%",
-      "& > *": {
-        position: "absolute",
-        left: 0,
-      }
     }}>
       {children}
     </Box>

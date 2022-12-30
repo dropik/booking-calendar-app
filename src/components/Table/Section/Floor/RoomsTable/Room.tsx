@@ -1,24 +1,26 @@
 import React from "react";
+import Box from "@mui/material/Box";
 
 import DataRow from "./DataRow";
 import GridRow from "./GridRow";
-import RowBody from "../../../Row/Body";
 
-type BodyProps = {
+type RoomProps = {
   isFirst: boolean,
   isLast: boolean,
   roomId: number
 }
 
-export default function Body({ isFirst, isLast, roomId }: BodyProps): JSX.Element {
+export default function Room({ isFirst, isLast, roomId }: RoomProps): JSX.Element {
   return (
-    <RowBody sx={{
+    <Box sx={{
+      position: "relative",
+      height: "calc(5.5rem - 1px)",
       ...((isFirst || isLast) && {
         height: "calc(5.75rem - 1px)",
       })
     }}>
       <GridRow isFirst={isFirst} isLast={isLast} />
       <DataRow isFirst={isFirst} roomId={roomId} />
-    </RowBody>
+    </Box>
   );
 }

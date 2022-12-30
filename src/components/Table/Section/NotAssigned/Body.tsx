@@ -5,9 +5,9 @@ import * as Utils from "../../../../utils";
 import { useColumns, useLeftmostDate } from "../../../../redux/hooks";
 import { TileData } from "../../../../redux/tilesSlice";
 
-import FreeSpace from "../Floor/Room/Body/DataRow/FreeSpace";
+import FreeSpace from "../Floor/RoomsTable/DataRow/FreeSpace";
 import Tile from "../../../Tile";
-import GridRow from "../Floor/Room/Body/GridRow";
+import GridRow from "../Floor/RoomsTable/GridRow";
 import RowBody from "../Row/Body";
 
 type BodyProps = {

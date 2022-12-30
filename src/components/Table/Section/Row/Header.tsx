@@ -1,17 +1,15 @@
-import React, { ReactNode } from "react";
-import { useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
+import React from "react";
+import Box, { BoxProps } from "@mui/material/Box";
 
 type HeaderProps = {
-  children?: ReactNode
-}
+  isFirst: boolean,
+  isLast: boolean,
+} & BoxProps
 
-export default function Header({ children }: HeaderProps): JSX.Element {
-  const theme = useTheme();
-
+export default function Header({ children, sx, isFirst, isLast }: HeaderProps): JSX.Element {
   return (
     <Box sx={{
-      position: "absolute",
+      ...sx,
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
@@ -20,9 +18,12 @@ export default function Header({ children }: HeaderProps): JSX.Element {
       top: 0,
       bottom: 0,
       width: "5.5rem",
+      height: "calc(5.5rem - 1px)",
       pr: "1rem",
       pl: "1rem",
-      borderRight: `1px solid ${theme.palette.outline.light}`
+      ...((isFirst || isLast) && {
+        height: "calc(5.75rem - 1px)",
+      }),
     }}>
       {children}
     </Box>

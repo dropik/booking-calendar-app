@@ -1,8 +1,8 @@
 import React from "react";
 import Box from "@mui/material/Box";
 
-import { useAppDispatch } from "../../../../../../../../redux/hooks";
-import { move } from "../../../../../../../../redux/tilesSlice";
+import { useAppDispatch } from "../../../../../../../redux/hooks";
+import { move } from "../../../../../../../redux/tilesSlice";
 
 type DropAccepterProps = {
   children: React.ReactNode,
