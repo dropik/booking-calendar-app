@@ -3,16 +3,9 @@ import { useDispatch, TypedUseSelectorHook, useSelector } from "react-redux";
 import * as Utils from "../utils";
 import { AppDispatch, RootState } from "./store";
 import { Floors } from "./floorsSlice";
-import { TileData } from "./tilesSlice";
 
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
-
-export function useTileData(id: string | undefined): TileData | undefined {
-  return useAppSelector((state) => {
-    return (id === undefined) ? undefined : state.tiles.data[id];
-  });
-}
 
 export function useDates(useOneDayBefore = false): string[] {
   const dateCounter = new Date(useAppSelector(state => state.table.leftmostDate));
@@ -28,19 +21,6 @@ export function useDates(useOneDayBefore = false): string[] {
   }
 
   return dates;
-}
-
-export function useLeftShift(fromDate: string | undefined, drawerWidth: string): number {
-  return useAppSelector((state) => {
-    if (fromDate) {
-      const daysShift = Utils.daysBetweenDates(state.table.leftmostDate, fromDate);
-      const cellWidth = Utils.remToPx(4) + 2;
-      const hotelBarShift = Utils.remToPx(6.5) + 4;
-      const drawerWidthPx = Utils.remToPx(Number.parseFloat(drawerWidth.replace("rem", "")));
-      const drawerShift = state.drawer.open ? drawerWidthPx : 0;
-      return drawerShift + hotelBarShift + daysShift * cellWidth;
-    } else return 0;
-  });
 }
 
 export function useRightmostDate(): string {

@@ -23,30 +23,7 @@ type ErrorWrappeeProps = {
 };
 
 function ErrorWrappee({ tile }: ErrorWrappeeProps): JSX.Element | null {
-  const errorType: "none" | "warning" | "error" = useAppSelector((state) => {
-    if (tile.roomId === undefined) {
-      return "none";
-    }
-
-    const roomTypeName = state.rooms.data[tile.roomId]?.type;
-    if (!roomTypeName) {
-      return "none";
-    }
-
-    const roomType = state.roomTypes.data[roomTypeName];
-    if (!roomType) {
-      return "none";
-    }
-
-    if ((tile.persons < roomType.minOccupancy) || (tile.persons > roomType.maxOccupancy)) {
-      return "error";
-    }
-    if (roomTypeName !== tile.roomType) {
-      return "warning";
-    }
-    return "none";
-  });
-
+  const errorType: "none" | "warning" | "error" = useErrorType(tile);
   const { errorColor, errorMsg } = useErrorParams(errorType);
 
   if (errorType === "none") {
@@ -76,4 +53,32 @@ function useErrorParams(errorType: "none" | "warning" | "error"): { errorColor: 
       errorColor: theme.palette.warning.dark,
       errorMsg: "La tipologia della stanza assegnata non coincide con quella richiesta dall'occupazione."
     };
+}
+
+function useErrorType(tile: TileData): "none" | "warning" | "error" {
+  const roomTypeName: string = useAppSelector(state =>
+    tile.roomId === undefined
+      ? ""
+      : state.rooms.data[tile.roomId]?.type ?? "");
+  const roomType = useAppSelector(state => state.roomTypes.data[roomTypeName]);
+
+  if (tile.roomId === undefined) {
+    return "none";
+  }
+
+  if (roomTypeName === "") {
+    return "none";
+  }
+
+  if (!roomType) {
+    return "none";
+  }
+
+  if ((tile.persons < roomType.minOccupancy) || (tile.persons > roomType.maxOccupancy)) {
+    return "error";
+  }
+  if (roomTypeName !== tile.roomType) {
+    return "warning";
+  }
+  return "none";
 }
