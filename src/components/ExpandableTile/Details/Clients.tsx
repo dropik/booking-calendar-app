@@ -41,7 +41,13 @@ export default function Clients({ clients, setClients }: ClientsProps): JSX.Elem
       <Typography variant="titleLarge">Ospiti</Typography>
       <Stack spacing={1} sx={{ pr: "1rem", pl: "1rem" }}>
         {clients.length > 0 ?
-          clients.map((client) => <Client key={client.id} client={client} />) :
+          clients.map((client, index) => (
+            <Client key={
+              client.id && client.id.length > 0
+                ? client.id
+                : index
+            } client={client} />
+          )) :
           <Skeleton />}
       </Stack>
     </>
