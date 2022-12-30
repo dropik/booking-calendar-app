@@ -8,13 +8,13 @@ import { TileData } from "../../../../redux/tilesSlice";
 import FreeSpace from "../Floor/RoomsTable/DataRow/FreeSpace";
 import Tile from "../../../Tile";
 import GridRow from "../Floor/RoomsTable/GridRow";
-import RowBody from "../Row/Body";
+import RowBody from "../RowBody";
 
-type BodyProps = {
+type RowProps = {
   tile: TileData
 };
 
-export default function Body({ tile }: BodyProps): JSX.Element {
+export default function Row({ tile }: RowProps): JSX.Element {
   const leftmostDate = useLeftmostDate();
   const columns = useColumns();
 

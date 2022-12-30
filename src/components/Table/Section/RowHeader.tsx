@@ -6,7 +6,7 @@ type HeaderProps = {
   isLast: boolean,
 } & BoxProps
 
-export default function Header({ children, sx, isFirst, isLast }: HeaderProps): JSX.Element {
+export default function RowHeader({ children, sx, isFirst, isLast }: HeaderProps): JSX.Element {
   return (
     <Box sx={{
       ...sx,

@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import { evaluateEntitiesInString } from "../../../../../utils";
 import { useAppSelector } from "../../../../../redux/hooks";
 
-import RowHeader from "../../Row/Header";
+import RowHeader from "../../RowHeader";
 
 type HeaderProps = {
   roomId: number,

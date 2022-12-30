@@ -3,8 +3,8 @@ import { useTheme } from "@mui/material/styles";
 import Box, { BoxProps } from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 
-import Header from "./Header";
-import Body from "./Body";
+import SectionHeader from "./SectionHeader";
+import SectionBody from "./SectionBody";
 
 type Props = {
   children: ReactNode,
@@ -19,11 +19,11 @@ export default function Section({ children, header, ...props }: Props): JSX.Elem
     <Box {...props} sx={{
       borderBottom: `1px solid ${theme.palette.outline.light}`
     }}>
-      <Header name={header} collapseCallback={() => setOpen(!open)} />
+      <SectionHeader name={header} collapseCallback={() => setOpen(!open)} />
       <Collapse in={open} easing={theme.transitions.easing.fastOutSlowIn} timeout={theme.transitions.duration.long}>
-        <Body>
+        <SectionBody>
           {children}
-        </Body>
+        </SectionBody>
       </Collapse>
     </Box>
   );
