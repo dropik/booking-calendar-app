@@ -7,7 +7,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import SearchOutlined from "@mui/icons-material/SearchOutlined";
 import Cancel from "@mui/icons-material/Cancel";
 
-import * as Utils from "../../utils";
+import { Utils } from "../../utils";
 import { ClientWithBooking, fetchClientsByQuery } from "../../api";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { show as showMessage } from "../../redux/snackbarMessageSlice";

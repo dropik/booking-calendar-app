@@ -24,7 +24,7 @@ import M3IconButton from "../m3/M3IconButton";
 import M3FilledButton from "../m3/M3FilledButton";
 import M3Dialog from "../m3/M3Dialog";
 import M3TextButton from "../m3/M3TextButton";
-import { evaluateEntitiesInString } from "../../utils";
+import { Utils } from "../../utils";
 
 type RoomProps = {
   id: number,
@@ -187,7 +187,7 @@ export default function Room({ id, floorId }: RoomProps): JSX.Element {
               >
                 {roomTypes.map((roomTypeId) => (
                   <MenuItem key={roomTypeId} value={roomTypeId} sx={{ height: "3rem" }}>
-                    {evaluateEntitiesInString(`${roomTypeId[0].toLocaleUpperCase()}${roomTypeId.slice(1)}`)}
+                    {Utils.evaluateEntitiesInString(`${roomTypeId[0].toLocaleUpperCase()}${roomTypeId.slice(1)}`)}
                   </MenuItem>
                 ))}
               </Select>

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import Typography from "@mui/material/Typography";
 
-import * as Utils from "../../../utils";
+import { Utils } from "../../../utils";
 import { TileContext } from "../../Tile/context";
 
 import M3Skeleton from "../../m3/M3Skeleton";

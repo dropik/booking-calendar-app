@@ -1,7 +1,7 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
 
-import * as Utils from "../../../../../../utils";
+import { Utils } from "../../../../../../utils";
 
 export type FreeSpaceProps = {
   from: string,

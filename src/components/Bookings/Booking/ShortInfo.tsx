@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 
 import BookingContext from "./context";
 import ListItemText from "./ListItemText";
-import { evaluateEntitiesInString } from "../../../utils";
+import { Utils } from "../../../utils";
 
 export default function ShortInfo(): JSX.Element {
   const booking = useContext(BookingContext);
@@ -19,7 +19,7 @@ export default function ShortInfo(): JSX.Element {
       pb: "1rem"
     }}>
       <ListItemText>
-        <Typography variant="titleMedium">{evaluateEntitiesInString(booking.name)}</Typography>
+        <Typography variant="titleMedium">{Utils.evaluateEntitiesInString(booking.name)}</Typography>
       </ListItemText>
       <ListItemText>
         <Typography variant="bodySmall">{`${formattedFrom} - ${formattedTo}`}</Typography>

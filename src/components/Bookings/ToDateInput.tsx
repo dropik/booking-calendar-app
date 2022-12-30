@@ -1,7 +1,7 @@
 import React from "react";
 import TextField from "@mui/material/TextField";
 
-import * as Utils from "../../utils";
+import { Utils } from "../../utils";
 
 import M3DatePicker from "../m3/M3DatePicker";
 

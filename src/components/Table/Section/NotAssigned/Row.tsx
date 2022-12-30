@@ -1,7 +1,7 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
 
-import * as Utils from "../../../../utils";
+import { Utils } from "../../../../utils";
 import { useColumns, useLeftmostDate } from "../../../../redux/hooks";
 import { TileData } from "../../../../redux/tilesSlice";
 

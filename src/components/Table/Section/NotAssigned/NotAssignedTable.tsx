@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 
-import * as Utils from "../../../../utils";
+import { Utils } from "../../../../utils";
 import { useAppSelector } from "../../../../redux/hooks";
 import { TileData } from "../../../../redux/tilesSlice";
 

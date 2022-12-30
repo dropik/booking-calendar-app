@@ -5,7 +5,7 @@ import { useAppSelector, useLeftmostDate } from "../../redux/hooks";
 import { getCanvasFontSize, getTextWidth } from "./utils";
 import { TableContext } from "../Table/TextWidthCanvas";
 import { TileContext } from "./context";
-import { evaluateEntitiesInString } from "../../utils";
+import { Utils } from "../../utils";
 
 export default function Body(): JSX.Element {
   const data = useContext(TileContext).data;
@@ -47,6 +47,6 @@ export default function Body(): JSX.Element {
   }, [canvasRef, adjustLayoutRequestId, leftmostDate, significantEntity]);
 
   return (
-    <Typography ref={bodyRef} variant="bodySmall">{evaluateEntitiesInString(body)}</Typography>
+    <Typography ref={bodyRef} variant="bodySmall">{Utils.evaluateEntitiesInString(body)}</Typography>
   );
 }

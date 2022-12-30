@@ -1,6 +1,6 @@
 import { useDispatch, TypedUseSelectorHook, useSelector } from "react-redux";
 
-import * as Utils from "../utils";
+import { Utils } from "../utils";
 import { AppDispatch, RootState } from "./store";
 import { Floors } from "./floorsSlice";
 

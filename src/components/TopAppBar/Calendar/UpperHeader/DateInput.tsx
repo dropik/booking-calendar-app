@@ -9,7 +9,7 @@ import M3TextButton from "../../../m3/M3TextButton";
 import M3IconButton from "../../../m3/M3IconButton";
 import M3DatePicker from "../../../m3/M3DatePicker";
 
-import * as Utils from "../../../../utils";
+import { Utils } from "../../../../utils";
 import { useAppDispatch, useColumns, useCurrentDate, useLeftmostDate } from "../../../../redux/hooks";
 import * as TableSlice from "../../../../redux/tableSlice";
 

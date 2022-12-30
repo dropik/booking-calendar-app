@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import * as Utils from "../utils";
+import { Utils } from "../utils";
 
 export type State = {
   from: string,

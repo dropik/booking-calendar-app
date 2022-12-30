@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { WritableDraft } from "immer/dist/internal";
 
-import * as Utils from "../utils";
+import { Utils } from "../utils";
 import { ackBookingsAsync, AckBookingsRequest, Booking, ColorAssignments, fetchBookingsBySessionAsync, postColorAssignments } from "../api";
 import { show as showMessage } from "./snackbarMessageSlice";
 import { fetchAsync as fetchFloorsAsync } from "./floorsSlice";

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 
-import * as Utils from "../../../utils";
+import { Utils } from "../../../utils";
 import { useAppDispatch } from "../../../redux/hooks";
 import { setBookingsFormFrom, setBookingsFormName, setBookingsFormTo } from "../../../redux/bookingsFormSlice";
 

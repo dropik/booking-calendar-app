@@ -7,7 +7,7 @@ import ExpandableTileContext from "../context";
 
 import MoreButton from "./MoreButton";
 import M3Skeleton from "../../m3/M3Skeleton";
-import { evaluateEntitiesInString } from "../../../utils";
+import { Utils } from "../../../utils";
 
 export default function HeadlineRow(): JSX.Element {
   const { data } = useContext(TileContext);
@@ -15,7 +15,7 @@ export default function HeadlineRow(): JSX.Element {
 
   return (
     <Stack direction="row" justifyContent="space-between">
-      <Typography variant="headlineMedium">{data ? evaluateEntitiesInString(data.name) : <M3Skeleton width="10rem" />}</Typography>
+      <Typography variant="headlineMedium">{data ? Utils.evaluateEntitiesInString(data.name) : <M3Skeleton width="10rem" />}</Typography>
       {variant === "popup" ? <MoreButton /> : null}
     </Stack>
   );

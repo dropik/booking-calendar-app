@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import Popover from "@mui/material/Popover";
 
-import * as Utils from "../../utils";
+import { Utils } from "../../utils";
 import ExpandableTileContext from "./context";
 
 type TilePopoverProps = {

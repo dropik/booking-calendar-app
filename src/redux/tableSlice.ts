@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { WritableDraft } from "immer/dist/internal";
 
-import * as Utils from "../utils";
+import { Utils } from "../utils";
 
 export type FetchPeriod = {
   from: string,

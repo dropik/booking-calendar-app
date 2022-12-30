@@ -13,7 +13,7 @@ import { TileContext } from "../Tile/context";
 import ExpandableTile from "../ExpandableTile";
 import M3Skeleton from "../m3/M3Skeleton";
 import StayDetails from "./StayDetails";
-import { evaluateEntitiesInString } from "../../utils";
+import { Utils } from "../../utils";
 
 export default function BookingDetails(): JSX.Element {
   const theme = useTheme();
@@ -78,7 +78,7 @@ export default function BookingDetails(): JSX.Element {
           pr: "1rem",
           pl: "1rem"
         }}>
-          <Typography variant="titleMedium">{booking ? evaluateEntitiesInString(booking.name) : <M3Skeleton width="6rem" />}</Typography>
+          <Typography variant="titleMedium">{booking ? Utils.evaluateEntitiesInString(booking.name) : <M3Skeleton width="6rem" />}</Typography>
           <Typography variant="bodySmall">{periodStr ? periodStr : <M3Skeleton width="10rem" />}</Typography>
         </Stack>
       </Box>

@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import Typography from "@mui/material/Typography";
 
 import ClientContext from "./context";
-import { evaluateEntitiesInString } from "../../../../utils";
+import { Utils } from "../../../../utils";
 
 export default function BirthInfo(): JSX.Element {
   const client = useContext(ClientContext);
@@ -11,7 +11,7 @@ export default function BirthInfo(): JSX.Element {
     <Typography variant="bodySmall">
       {
         `${(new Date(client.dateOfBirth)).toLocaleDateString()} -
-        ${client.placeOfBirth ? evaluateEntitiesInString(`${client.placeOfBirth}${client.provinceOfBirth ? ` (${client.provinceOfBirth})` : ""} - `) : ""}
+        ${client.placeOfBirth ? Utils.evaluateEntitiesInString(`${client.placeOfBirth}${client.provinceOfBirth ? ` (${client.provinceOfBirth})` : ""} - `) : ""}
         ${client.stateOfBirth}`
       }
     </Typography>

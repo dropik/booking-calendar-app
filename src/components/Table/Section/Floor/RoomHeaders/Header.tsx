@@ -1,7 +1,7 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 
-import { evaluateEntitiesInString } from "../../../../../utils";
+import { Utils } from "../../../../../utils";
 import { useAppSelector } from "../../../../../redux/hooks";
 
 import RowHeader from "../../RowHeader";
@@ -26,7 +26,7 @@ export default function Header({ roomId, isFirst, isLast }: HeaderProps): JSX.El
         }}
         variant="bodySmall"
       >
-        {evaluateEntitiesInString(significantRoomType)}
+        {Utils.evaluateEntitiesInString(significantRoomType)}
       </Typography>
     </RowHeader>
   );

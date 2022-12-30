@@ -8,7 +8,7 @@ import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
 
 import { CityTaxData, fetchCityTaxAsync, fetchPoliceRicevutaAsync, postIstatExportRequestAsync, postPoliceExportRequestAsync } from "../../api";
-import * as Utils from "../../utils";
+import { Utils } from "../../utils";
 import { useAppDispatch, useAppSelector, useCurrentDate } from "../../redux/hooks";
 import { show as showMessage } from "../../redux/snackbarMessageSlice";
 

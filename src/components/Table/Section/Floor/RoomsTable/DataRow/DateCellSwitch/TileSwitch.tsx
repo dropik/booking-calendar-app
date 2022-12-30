@@ -1,6 +1,6 @@
 import React from "react";
 
-import * as Utils from "../../../../../../../utils";
+import { Utils } from "../../../../../../../utils";
 import { useAppSelector, useLeftmostDate } from "../../../../../../../redux/hooks";
 
 import Tile from "../../../../../../Tile";
