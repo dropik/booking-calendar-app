@@ -10,9 +10,30 @@ import Row from "../Row";
 import RowHeader from "../Row/Header";
 
 export default function NotAssigned(): JSX.Element {
-  const tiles = useUnassignedTilesForCurrentPeriod();
-  const dispatch = useAppDispatch();
   const grabbedTile = useAppSelector((state) => state.tiles.grabbedTile);
+  const dispatch = useAppDispatch();
+  const leftmostDate = useAppSelector(state => state.table.leftmostDate);
+  const columns = useAppSelector(state => state.table.columns);
+  const unassignedMap = useAppSelector(state => state.tiles.unassignedMap);
+  const allTiles = useAppSelector(state => state.tiles.data);
+
+  const tiles: TileData[] = [];
+  const dateObj = new Date(leftmostDate);
+  const visitedTiles: string[] = [];
+  for (let i = 0; i < columns; i++) {
+    const date = Utils.dateToString(dateObj);
+    const unassignedTiles = unassignedMap[date];
+
+    if (unassignedTiles) {
+      Object.entries(unassignedTiles).forEach(([tileId]) => {
+        if (!visitedTiles.includes(tileId)) {
+          tiles.push(allTiles[tileId]);
+          visitedTiles.push(tileId);
+        }
+      });
+    }
+    dateObj.setDate(dateObj.getDate() + 1);
+  }
 
   function drop(event: React.MouseEvent<HTMLDivElement>): void {
     if (grabbedTile && (event.button === 0)) {
@@ -30,40 +51,4 @@ export default function NotAssigned(): JSX.Element {
       ))}
     </Section>
   );
-}
-
-function useUnassignedTilesForCurrentPeriod(): TileData[] {
-  return useAppSelector((state) => {
-    const result: TileData[] = [];
-    const visitedTiles: string[] = [];
-    const leftmostDate = state.table.leftmostDate;
-    const columns = state.table.columns;
-    let unassignedTiles = state.tiles.unassignedMap[leftmostDate];
-
-    if (unassignedTiles) {
-      Object.entries(unassignedTiles).forEach(([tileId]) => {
-        result.push(state.tiles.data[tileId]);
-        visitedTiles.push(tileId);
-      });
-    }
-
-    const dateObj = new Date(leftmostDate);
-
-    for (let i = 1; i < columns; i++) {
-      dateObj.setDate(dateObj.getDate() + 1);
-      const date = Utils.dateToString(dateObj);
-      unassignedTiles = state.tiles.unassignedMap[date];
-
-      if (unassignedTiles) {
-        Object.entries(unassignedTiles).forEach(([tileId]) => {
-          if (!visitedTiles.includes(tileId)) {
-            result.push(state.tiles.data[tileId]);
-            visitedTiles.push(tileId);
-          }
-        });
-      }
-    }
-
-    return result;
-  });
 }
