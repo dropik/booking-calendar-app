@@ -11,10 +11,12 @@ import GridRow from "../Floor/RoomsTable/GridRow";
 import RowBody from "../RowBody";
 
 type RowProps = {
-  tile: TileData
+  tile: TileData,
+  isFirst: boolean,
+  isLast: boolean,
 };
 
-export default function Row({ tile }: RowProps): JSX.Element {
+export default function Row({ tile, isFirst, isLast }: RowProps): JSX.Element {
   const leftmostDate = useLeftmostDate();
   const columns = useColumns();
 
@@ -23,12 +25,15 @@ export default function Row({ tile }: RowProps): JSX.Element {
     <></>;
 
   return (
-    <RowBody>
-      <GridRow isFirst={false} isLast={false} />
+    <RowBody isFirst={isFirst} isLast={isLast}>
+      <GridRow isFirst={isFirst} isLast={isLast} />
       <Grid container columns={columns} sx={{
         position: "absolute",
         top: -1,
         width: `calc((8rem + 1px) * ${columns})`,
+        ...(isFirst && {
+          top: "calc(0.25rem - 1px)",
+        }),
       }}>
         {freeSpace}
         <Tile data={tile} />

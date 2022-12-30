@@ -32,8 +32,8 @@ export default function NotAssignedTable(): JSX.Element {
       dateObj.setDate(dateObj.getDate() + 1);
     }
 
-    return tiles.map((tile) => (
-      <Row key={tile.id} tile={tile} />
+    return tiles.map((tile, index) => (
+      <Row key={tile.id} tile={tile} isFirst={index === 0} isLast={index === tiles.length - 1} />
     ));
   }, [allTiles, columns, leftmostDate, unassignedMap]);
 

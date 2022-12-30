@@ -1,6 +1,6 @@
 import React from "react";
-import Box from "@mui/material/Box";
 
+import RowBody from "../../RowBody";
 import DataRow from "./DataRow";
 import GridRow from "./GridRow";
 
@@ -12,15 +12,9 @@ type RoomProps = {
 
 export default function Room({ isFirst, isLast, roomId }: RoomProps): JSX.Element {
   return (
-    <Box sx={{
-      position: "relative",
-      height: "calc(5.5rem - 1px)",
-      ...((isFirst || isLast) && {
-        height: "calc(5.75rem - 1px)",
-      })
-    }}>
+    <RowBody isFirst={isFirst} isLast={isLast}>
       <GridRow isFirst={isFirst} isLast={isLast} />
       <DataRow isFirst={isFirst} roomId={roomId} />
-    </Box>
+    </RowBody>
   );
 }
