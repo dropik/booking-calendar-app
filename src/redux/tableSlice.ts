@@ -57,7 +57,7 @@ export const tableSlice = createSlice({
       updateStateByNewDate(state, Utils.getDateShift(state.currentDate, -state.columns));
     },
     scrollX: (state, action: PayloadAction<number>) => {
-      state.scrollLeft += action.payload;
+      state.scrollLeft = action.payload;
       if (state.scrollLeft < 0) {
         state.scrollLeft = 0;
       }

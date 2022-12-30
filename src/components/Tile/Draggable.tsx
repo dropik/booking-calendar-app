@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useEffect, useRef, useState } from "rea
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 
-import { useAppDispatch } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { grab, drop, TileData } from "../../redux/tilesSlice";
 import { TileContext } from "./context";
 import { SurfaceTint } from "../m3/Tints";
@@ -34,6 +34,7 @@ function DraggableWrappee({ children, data }: DraggableWrappeeProps): JSX.Elemen
   const [width, setWidth] = useState(0);
   const [isGoingBack, setIsGoingBack] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const [scrollLeft, setScrollLeft] = useState(0);
 
   const move = useCallback((event: MouseEvent) => {
     event.preventDefault();
@@ -50,7 +51,7 @@ function DraggableWrappee({ children, data }: DraggableWrappeeProps): JSX.Elemen
     if (event.button === 0) {
       event.preventDefault();
       if (ref.current) {
-        ref.current.style.translate = `0px ${-window.scrollY}px`;
+        ref.current.style.translate = `-${scrollLeft}px ${-window.scrollY}px`;
       }
       dispatch(drop({ tileId: data.id }));
       setIsGrabbing(false);
@@ -59,7 +60,7 @@ function DraggableWrappee({ children, data }: DraggableWrappeeProps): JSX.Elemen
       window.removeEventListener("mousemove", move);
       window.removeEventListener("mouseup", endGrab);
     }
-  }, [dispatch, data.id, move]);
+  }, [dispatch, data.id, move, scrollLeft]);
 
   useEffect(() => {
     return () => {
@@ -78,7 +79,7 @@ function DraggableWrappee({ children, data }: DraggableWrappeeProps): JSX.Elemen
       dispatch(grab({ tileId: data.id, mouseY: 0 }));
       const el = event.currentTarget;
       const boundingBox = el.getBoundingClientRect();
-      el.style.translate = `0px ${-window.scrollY}px`;
+      el.style.translate = `-${scrollLeft}px ${-window.scrollY}px`;
       setIsGrabbing(true);
       setWidth(boundingBox.width);
       window.addEventListener("mousemove", move);
@@ -120,6 +121,7 @@ function DraggableWrappee({ children, data }: DraggableWrappeeProps): JSX.Elemen
         })
       })
     }}>
+      {startedGrabbing ? <ScrollLeftChangeListener onScrollLeftChange={setScrollLeft} /> : null}
       { children }
       <SurfaceTint sx={{
         backgroundColor: theme.palette.primary.light,
@@ -133,4 +135,18 @@ function DraggableWrappee({ children, data }: DraggableWrappeeProps): JSX.Elemen
       }} />
     </Box>
   );
+}
+
+type ScrollLeftChangeListenerProps = {
+  onScrollLeftChange: (value: number) => void,
+}
+
+function ScrollLeftChangeListener({ onScrollLeftChange }: ScrollLeftChangeListenerProps): null {
+  const scrollLeft = useAppSelector(state => state.table.scrollLeft);
+
+  useEffect(() => {
+    onScrollLeftChange(scrollLeft);
+  }, [scrollLeft, onScrollLeftChange]);
+
+  return null;
 }
