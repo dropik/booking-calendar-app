@@ -70,6 +70,7 @@ export default function BookingDetails(): JSX.Element {
           boxSizing: "border-box",
           flexGrow: 1,
           height: "4rem",
+          maxWidth: "40rem",
           backgroundColor: theme.palette.secondaryContainer.light,
           color: theme.palette.onSecondaryContainer.light,
           borderTopRightRadius: "0.75rem",
@@ -84,6 +85,7 @@ export default function BookingDetails(): JSX.Element {
       </Box>
       <Stack spacing={1} sx={{
         maxHeight: "calc(100vh - 5rem)",
+        maxWidth: "40rem",
         ...{ overflowY: "auto" },
         ...{ overflowY: "overlay" },
         boxSizing: "border-box",
