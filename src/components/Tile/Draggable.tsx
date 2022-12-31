@@ -35,6 +35,7 @@ function DraggableWrappee({ children, data }: DraggableWrappeeProps): JSX.Elemen
   const [isGoingBack, setIsGoingBack] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const [scrollLeft, setScrollLeft] = useState(0);
+  const { cropLeft, cropRight } = useContext(TileContext);
 
   const move = useCallback((event: MouseEvent) => {
     event.preventDefault();
@@ -106,6 +107,14 @@ function DraggableWrappee({ children, data }: DraggableWrappeeProps): JSX.Elemen
       translate: "0px 0px !important",
       transition: theme.transitions.create(["box-shadow"], {
         duration: theme.transitions.duration.short
+      }),
+      ...(cropLeft && {
+        borderTopLeftRadius: 0,
+        borderBottomLeftRadius: 0,
+      }),
+      ...(cropRight && {
+        borderTopRightRadius: 0,
+        borderBottomRightRadius: 0,
       }),
       ...((isGrabbing || isGoingBack) && {
         position: "fixed",
