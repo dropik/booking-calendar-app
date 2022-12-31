@@ -84,7 +84,8 @@ export default function BookingDetails(): JSX.Element {
       </Box>
       <Stack spacing={1} sx={{
         maxHeight: "calc(100vh - 5rem)",
-        overflowY: "auto",
+        ...{ overflowY: "auto" },
+        ...{ overflowY: "overlay" },
         boxSizing: "border-box",
         pb: "1rem"
       }}>
