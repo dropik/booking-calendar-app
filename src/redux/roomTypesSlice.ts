@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { fetchRoomTypesAsync } from "../api";
+import { fetchRoomRatesAsync } from "../api";
 import { show as showMessage } from "./snackbarMessageSlice";
 
 export type RoomType = {
@@ -23,10 +23,10 @@ const initialState: State = {
 };
 
 export const fetchAsync = createAsyncThunk(
-  "roomTypes/fetch",
+  "roomRates/fetch",
   async (_, thunkApi) => {
     try {
-      const response = await fetchRoomTypesAsync();
+      const response = await fetchRoomRatesAsync();
       return response.data;
     } catch(error) {
       thunkApi.dispatch(showMessage({ type: "error" }));
@@ -49,8 +49,8 @@ export const roomTypesSlice = createSlice({
       .addCase(fetchAsync.fulfilled, (state, action) => {
         state.status = "idle";
         state.data = {};
-        const roomTypes = action.payload;
-        for (const { name, minOccupancy, maxOccupancy } of roomTypes) {
+        const response = action.payload;
+        for (const { name, minOccupancy, maxOccupancy } of response.roomTypes) {
           state.data[name] = { minOccupancy, maxOccupancy };
         }
       })

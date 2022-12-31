@@ -23,7 +23,8 @@ export type Tile<TPerson> = {
   nights: number,
   roomType: string,
   persons: TPerson,
-  roomId?: number
+  roomId?: number,
+  rateId: string,
 };
 
 export type BookingShort = {
@@ -73,6 +74,18 @@ export type RoomType = {
   maxOccupancy: number,
 };
 
+export type RoomRate = {
+  rateId: string,
+  minOccupancy: number,
+  maxOccupancy: number,
+  baseBoard: string,
+};
+
+export type RoomRatesResponse = {
+  roomTypes: RoomType[],
+  roomRates: RoomRate[],
+};
+
 export type ColorAssignments = {
   [key: string]: TileColor
 };
@@ -117,8 +130,8 @@ export function deleteRoomAsync(id: number): Promise<void> {
   return deleteDataAsync(`api/v1/rooms/${id}`);
 }
 
-export function fetchRoomTypesAsync(): Promise<{ data: RoomType[] }> {
-  return fetchJsonDataAsync<RoomType[]>("/api/v1/room-types");
+export function fetchRoomRatesAsync(): Promise<{ data: RoomRatesResponse }> {
+  return fetchJsonDataAsync<RoomRatesResponse>("/api/v1/room-rates");
 }
 
 export function fetchBookingsBySessionAsync(from: string, to: string, sessionId?: string): Promise<{ data: { bookings: Booking<number>[], sessionId: string } }> {
