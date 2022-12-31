@@ -8,6 +8,8 @@ import AppDrawer from "./components/AppDrawer";
 import DrawerButton from "./components/DrawerButton";
 import AppRoutes from "./components/AppRoutes";
 import SnackbarMessage from "./components/SnackbarMessage";
+import FetchRoomTypes from "./components/Table/FetchData/FetchRoomTypes";
+import FetchFloorsData from "./components/Table/FetchData/FetchFloorsData";
 
 export default function App(): JSX.Element {
 
@@ -21,6 +23,8 @@ export default function App(): JSX.Element {
         <DrawerButton />
         <SnackbarMessage />
         <ResizeHandler />
+        <FetchRoomTypes />
+        <FetchFloorsData />
       </Box>
     </BrowserRouter>
   );
