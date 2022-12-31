@@ -18,8 +18,9 @@ export default function Body(): JSX.Element {
   useEffect(() => {
     if (bodyRef.current && canvasRef.current) {
       const bodyFontSize = Utils.getCanvasFontSize(bodyRef.current);
+      const bodyLetterSpacing = Utils.getCanvasLetterSpacing(bodyRef.current);
 
-      const width = Utils.getTextWidth(canvasRef.current, significantEntity, bodyFontSize);
+      const width = Utils.getTextWidth(canvasRef.current, significantEntity, bodyFontSize, bodyLetterSpacing);
       if (width <= bodyRef.current.clientWidth) {
         setBody(significantEntity);
         return;

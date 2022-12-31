@@ -1,4 +1,9 @@
 export class Utils {
+  static remToPx(rem: number): number {
+    const fontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    return rem * fontSize;
+  }
+
   static pxToRem(px: number): number {
     const fontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
     return px / fontSize;
@@ -42,16 +47,22 @@ export class Utils {
     return `${fontWeight} ${fontSize} ${fontFamily}`;
   }
 
+  static getCanvasLetterSpacing(el: HTMLElement = document.body): string {
+    const letterSpacing = Utils.getCssStyle(el, "letter-spacing") || "inherit";
+    return letterSpacing;
+  }
+
   private static getCssStyle(element: HTMLElement, prop: string): string {
     return window.getComputedStyle(element, null).getPropertyValue(prop);
   }
 
-  static getTextWidth(canvas: HTMLCanvasElement, text: string, font: string): number {
+  static getTextWidth(canvas: HTMLCanvasElement, text: string, font: string, letterSpacing: string): number {
     const context = canvas.getContext("2d");
     if (context) {
       context.font = font;
       const metrics = context.measureText(text);
-      return metrics.width;
+      const letterSpacingPx = parseFloat(letterSpacing);
+      return metrics.width + letterSpacingPx * text.length;
     }
 
     return 0;

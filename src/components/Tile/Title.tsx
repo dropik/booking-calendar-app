@@ -31,9 +31,10 @@ function TitleWrappee({ data }: TitleWrappeeProps): JSX.Element {
   useEffect(() => {
     if (titleRef.current && canvasRef.current) {
       const titleFontSize = Utils.getCanvasFontSize(titleRef.current);
+      const titleLetterSpacing = Utils.getCanvasLetterSpacing(titleRef.current);
 
       let text = `${data.name} - ${data.persons} person${data.persons > 1 ? "e" : "a"}`;
-      let width = Utils.getTextWidth(canvasRef.current, text, titleFontSize);
+      let width = Utils.getTextWidth(canvasRef.current, text, titleFontSize, titleLetterSpacing);
       if (width <= titleRef.current.clientWidth) {
         setTitle(text);
         return;
@@ -62,7 +63,7 @@ function TitleWrappee({ data }: TitleWrappeeProps): JSX.Element {
           }
           name.trimEnd();
           text = `${name} - ${data.persons} person${data.persons > 1 ? "e" : "a"}`;
-          width = Utils.getTextWidth(canvasRef.current, text, titleFontSize);
+          width = Utils.getTextWidth(canvasRef.current, text, titleFontSize, titleLetterSpacing);
 
           if (width <= titleRef.current.clientWidth) {
             setTitle(text);
@@ -77,7 +78,7 @@ function TitleWrappee({ data }: TitleWrappeeProps): JSX.Element {
       }
       name.trimEnd();
       text = `${name} - ${data.persons}`;
-      width = Utils.getTextWidth(canvasRef.current, text, titleFontSize);
+      width = Utils.getTextWidth(canvasRef.current, text, titleFontSize, titleLetterSpacing);
       if (width <= titleRef.current.clientWidth) {
         setTitle(text);
         return;
@@ -89,7 +90,7 @@ function TitleWrappee({ data }: TitleWrappeeProps): JSX.Element {
       }
       shortenedName.trimEnd();
       text = `${shortenedName} - ${data.persons}`;
-      width = Utils.getTextWidth(canvasRef.current, text, titleFontSize);
+      width = Utils.getTextWidth(canvasRef.current, text, titleFontSize, titleLetterSpacing);
       if (width <= titleRef.current.clientWidth) {
         setTitle(text);
         return;
@@ -108,7 +109,7 @@ function TitleWrappee({ data }: TitleWrappeeProps): JSX.Element {
         }
       }
       text = `${initials} - ${data.persons}`;
-      width = Utils.getTextWidth(canvasRef.current, text, titleFontSize);
+      width = Utils.getTextWidth(canvasRef.current, text, titleFontSize, titleLetterSpacing);
       if (width <= titleRef.current.clientWidth) {
         setTitle(text);
         return;
