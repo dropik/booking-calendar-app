@@ -17,8 +17,26 @@ export default function M3GlobalStyles(): JSX.Element {
         backgroundColor: theme.palette.surface.main
       },
       body: {
-        margin: 0
-      }
+        margin: 0,
+        ...{ overflow: "auto" },
+        ...{ overflow: "overlay" },
+      },
+      "*::-webkit-scrollbar": {
+        width: "1rem",
+        height: "1rem",
+      },
+      "*::-webkit-scrollbar-track": {
+        backgroundColor: "rgba(0, 0, 0, 0)",
+      },
+      "*::-webkit-scrollbar-thumb": {
+        backgroundColor: theme.palette.secondary.main,
+        borderRadius: "0.5rem",
+        border: "0.25rem solid transparent",
+        backgroundClip: "content-box",
+      },
+      "*::-webkit-scrollbar-thumb:hover": {
+        backgroundColor: theme.palette.outline.main,
+      },
     }} />
   );
 }

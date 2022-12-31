@@ -35,7 +35,8 @@ export default function TableWrapper({ children }: TableWrapperProps): JSX.Eleme
     <Stack ref={ref} onScroll={onScroll} sx={{
       flexGrow: 1,
       maxWidth: "calc(100% - 7.5rem - 1px)",
-      overflowX: "auto",
+      ...{ overflowX: "scroll" },
+      ...{ overflowX: "overlay" },
     }}>
       {childrenMemo}
       {loadingState === "loading" ? (
