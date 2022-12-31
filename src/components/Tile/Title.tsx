@@ -58,7 +58,7 @@ function TitleWrappee({ data }: TitleWrappeeProps): JSX.Element {
         if (allCapitalized || noneCapitalized) {
           nameParts.splice(2);
           let name = "";
-          for (const namePart in nameParts) {
+          for (const namePart of nameParts) {
             name += `${namePart} `;
           }
           name.trimEnd();
