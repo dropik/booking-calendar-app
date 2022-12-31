@@ -212,15 +212,15 @@ export default function Tools(): JSX.Element {
                 <Stack spacing={2} sx={{ p: "1rem" }}>
                   <Stack direction="row" spacing={2} justifyContent="space-between" sx={{ pt: "1rem", pb: "1rem" }}>
                     <Typography variant="titleMedium" sx={{ whiteSpace: "nowrap" }}>Regolari</Typography>
-                    <Typography variant="bodyMedium" sx={{ whiteSpace: "nowrap" }}>{!isCityTaxLoading ? "8 presenze" : <M3Skeleton width="4rem" />}</Typography>
+                    <Typography variant="bodyMedium" sx={{ whiteSpace: "nowrap" }}>{!isCityTaxLoading ? `${cityTaxData?.standard ?? 0} presenze` : <M3Skeleton width="4rem" />}</Typography>
                   </Stack>
                   <Stack direction="row" spacing={2} justifyContent="space-between" sx={{ pt: "1rem", pb: "1rem" }}>
                     <Typography variant="titleMedium" sx={{ whiteSpace: "nowrap" }}>{"Bambini <14"}</Typography>
-                    <Typography variant="bodyMedium" sx={{ whiteSpace: "nowrap" }}>{!isCityTaxLoading ? "2 presenze" : <M3Skeleton width="4rem" />}</Typography>
+                    <Typography variant="bodyMedium" sx={{ whiteSpace: "nowrap" }}>{!isCityTaxLoading ? `${cityTaxData?.children ?? 0} presenze` : <M3Skeleton width="4rem" />}</Typography>
                   </Stack>
                   <Stack direction="row" spacing={2} justifyContent="space-between" sx={{ pt: "1rem", pb: "1rem" }}>
                     <Typography variant="titleMedium" sx={{ whiteSpace: "nowrap" }}>{"Permanenze >10 giorni"}</Typography>
-                    <Typography variant="bodyMedium" sx={{ whiteSpace: "nowrap" }}>{!isCityTaxLoading ? "0 presenze" : <M3Skeleton width="4rem" />}</Typography>
+                    <Typography variant="bodyMedium" sx={{ whiteSpace: "nowrap" }}>{!isCityTaxLoading ? `${cityTaxData?.over10Days ?? 0} presenze` : <M3Skeleton width="4rem" />}</Typography>
                   </Stack>
                 </Stack>
               </Collapse>
