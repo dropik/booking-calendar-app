@@ -22,7 +22,7 @@ const initialState: State = {
   status: "idle"
 };
 
-export const fetchAsync = createAsyncThunk(
+export const fetchRoomRatesAction = createAsyncThunk(
   "roomRates/fetch",
   async (_, thunkApi) => {
     try {
@@ -35,7 +35,7 @@ export const fetchAsync = createAsyncThunk(
   }
 );
 
-export type FetchAsyncAction = ReturnType<typeof fetchAsync>;
+export type FetchRoomRatesAction = ReturnType<typeof fetchRoomRatesAction>;
 
 export const roomTypesSlice = createSlice({
   name: "roomTypes",
@@ -43,10 +43,10 @@ export const roomTypesSlice = createSlice({
   reducers: { },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAsync.pending, (state) => {
+      .addCase(fetchRoomRatesAction.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(fetchAsync.fulfilled, (state, action) => {
+      .addCase(fetchRoomRatesAction.fulfilled, (state, action) => {
         state.status = "idle";
         state.data = {};
         const response = action.payload;
@@ -54,7 +54,7 @@ export const roomTypesSlice = createSlice({
           state.data[name] = { minOccupancy, maxOccupancy };
         }
       })
-      .addCase(fetchAsync.rejected, (state) => {
+      .addCase(fetchRoomRatesAction.rejected, (state) => {
         state.status = "failed";
       });
   }

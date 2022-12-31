@@ -11,6 +11,7 @@ import dialog from "./dialogSlice";
 import snackbarMessage from "./snackbarMessageSlice";
 import layout from "./layoutSlice";
 import bookingsForm from "./bookingsFormSlice";
+import roomRates from "./roomRatesSlice";
 
 export default combineReducers(
   {
@@ -24,6 +25,7 @@ export default combineReducers(
     dialog,
     snackbarMessage,
     layout,
-    bookingsForm
+    bookingsForm,
+    roomRates,
   }
 );
