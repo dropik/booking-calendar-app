@@ -1,6 +1,7 @@
 import React, { ReactNode, useContext } from "react";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 
 import { TileColor } from "../../redux/tilesSlice";
 import { TileContext } from "./context";
@@ -45,25 +46,15 @@ export default function Container({ children, dropZone }: ContainerProps): JSX.E
         cursor: "pointer"
       }}
     >
-      <Box sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "start",
-        justifyContent: "center",
-        overflow: "hidden",
-        "& > span": {
-          width: "100%",
-          whiteSpace: "nowrap"
-        }
-      }}>
+      <Stack direction="row">
         {children}
-        {dropZone === true ? (
-          <SurfaceTint sx={{
-            backgroundColor: theme.palette.primary.light,
-            opacity: theme.opacities.surface1
-          }} />
-        ) : null}
-      </Box>
+      </Stack>
+      {dropZone === true ? (
+        <SurfaceTint sx={{
+          backgroundColor: theme.palette.primary.light,
+          opacity: theme.opacities.surface1
+        }} />
+      ) : null}
     </Box>
   );
 }

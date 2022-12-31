@@ -19,7 +19,8 @@ export type TileData = {
   roomType: string,
   persons: number,
   color: TileColor,
-  roomId?: number
+  roomId?: number,
+  rateId: string,
 };
 
 export type RoomChanges = {
@@ -336,7 +337,8 @@ function addFetchedBookings(state: WritableDraft<State>, bookings: ColoredBookin
         roomType: tile.roomType,
         persons: tile.persons,
         color: booking.color,
-        roomId: tile.roomId
+        roomId: tile.roomId,
+        rateId: tile.rateId,
       };
 
       state.data[newTile.id] = newTile;
