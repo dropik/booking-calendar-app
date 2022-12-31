@@ -32,28 +32,44 @@ export default function TableWrapper({ children }: TableWrapperProps): JSX.Eleme
   const childrenMemo = useMemo(() => children, [children]);
 
   return (
-    <Stack ref={ref} onScroll={onScroll} sx={{
-      flexGrow: 1,
-      maxWidth: "calc(100% - 7.5rem - 1px)",
-      ...{ overflowX: "scroll" },
-      ...{ overflowX: "overlay" },
-    }}>
-      {childrenMemo}
+    <>
+      <Stack ref={ref} onScroll={onScroll} sx={{
+        flexGrow: 1,
+        maxWidth: "calc(100% - 7.5rem - 1px)",
+        ...{ overflowX: "scroll" },
+        ...{ overflowX: "overlay" },
+        position: "relative",
+      }}>
+        {childrenMemo}
+        {loadingState === "loading" ? (
+          <>
+            <Box sx={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              bottom: 0,
+              width: ref.current?.scrollWidth ?? "100%",
+              backgroundColor: "rgba(0, 0, 0, 0.2)",
+            }}>
+            </Box>
+          </>
+        ): null}
+      </Stack>
       {loadingState === "loading" ? (
         <Box sx={{
           position: "absolute",
           top: 0,
+          bottom: 0,
           left: "calc(7.5rem + 1px)",
           right: 0,
-          bottom: 0,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          backgroundColor: "rgba(0, 0, 0, 0.2)",
+          pointerEvents: "none",
         }}>
           <CircularProgress size="5rem" />
         </Box>
-      ): null}
-    </Stack>
+      ) : null}
+    </>
   );
 }
