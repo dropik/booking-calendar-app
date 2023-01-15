@@ -188,7 +188,8 @@ async function fetchJsonDataAsync<T>(query: string): Promise<{ data: T }> {
     throw new Error("Errore di conessione!");
   }
   if (!response.ok) {
-    throw new Error("Server error!");
+    const json = await response.json();
+    throw new Error(`Server error! ${json.message}`);
   }
   const data = await response.json() as T;
   if (!data) {
@@ -203,7 +204,8 @@ async function fetchBlobDataAsync(query: string): Promise<{ data: Blob }> {
     throw new Error("Errore di conessione!");
   }
   if (!response.ok) {
-    throw new Error("Resopnse error");
+    const json = await response.json();
+    throw new Error(`Server error! ${json.message}`);
   }
   const data = await response.blob();
   return { data };
@@ -226,7 +228,8 @@ async function postDataWithoutResponseAsync<TData>(url: string, data: TData): Pr
     throw new Error("Errore di conessione!");
   }
   if (!response.ok) {
-    throw new Error("Server error!");
+    const json = await response.json();
+    throw new Error(`Server error! ${json.message}`);
   }
 }
 
@@ -247,7 +250,8 @@ async function postDataAsync<TData, TResponse>(url: string, data: TData): Promis
     throw new Error("Errore di conessione!");
   }
   if (!response.ok) {
-    throw new Error("Server error!");
+    const json = await response.json();
+    throw new Error(`Server error! ${json.message}`);
   }
   const responseData = await response.json() as TResponse;
   if (!responseData) {
@@ -273,7 +277,8 @@ async function putDataAsync<T>(url: string, data: T): Promise<void> {
     throw new Error("Errore di conessione!");
   }
   if (!response.ok) {
-    throw new Error("Server error!");
+    const json = await response.json();
+    throw new Error(`Server error! ${json.message}`);
   }
 }
 
@@ -290,6 +295,7 @@ async function deleteDataAsync(url: string): Promise<void> {
     throw new Error("Errore di conessione!");
   }
   if (!response.ok) {
-    throw new Error("Server error!");
+    const json = await response.json();
+    throw new Error(`Server error! ${json.message}`);
   }
 }
