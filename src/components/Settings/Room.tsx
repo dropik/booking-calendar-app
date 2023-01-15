@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
@@ -55,8 +56,8 @@ export default function Room({ id, floorId }: RoomProps): JSX.Element {
         await putRoomAsync({ id, floorId, number: numberField, type: roomTypeField });
         dispatch(setRoom({ id, room: { number: numberField, type: roomTypeField } }));
         setState("idle");
-      } catch (error) {
-        dispatch(showMessage({ type: "error" }));
+      } catch (error: any) {
+        dispatch(showMessage({ type: "error", message: error?.message }));
       } finally {
         setIsLoading(false);
       }
@@ -76,8 +77,8 @@ export default function Room({ id, floorId }: RoomProps): JSX.Element {
         dispatch(deleteRoom({ floorId, roomId: id }));
         dispatch(deleteRooms({ ids: [id] }));
         setState("idle");
-      } catch (error) {
-        dispatch(showMessage({ type: "error" }));
+      } catch (error: any) {
+        dispatch(showMessage({ type: "error", message: error?.message }));
       } finally {
         setIsLoading(false);
       }

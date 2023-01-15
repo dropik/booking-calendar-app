@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
@@ -35,8 +36,8 @@ export default function CreateFloorDialog(): JSX.Element {
       try {
         const response = await postFloorAsync({ name });
         dispatch(createFloor({ id: response.id, name }));
-      } catch (error) {
-        dispatch(showMessage({ type: "error" }));
+      } catch (error: any) {
+        dispatch(showMessage({ type: "error", message: error?.message }));
       } finally {
         setCreatingState("idle");
       }

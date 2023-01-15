@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
@@ -50,8 +51,8 @@ export default function List({ name, from, to, isValid }: ListProps): JSX.Elemen
           if (subscribed) {
             setBookings(newBookings);
           }
-        } catch(error) {
-          dispatch(showMessage({ type: "error" }));
+        } catch(error: any) {
+          dispatch(showMessage({ type: "error", message: error?.message }));
         }
       }
     }

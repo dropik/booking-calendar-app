@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { fetchFloorsAsync } from "../api";
@@ -28,8 +29,8 @@ export const fetchAsync = createAsyncThunk(
     try {
       const response = await fetchFloorsAsync();
       return response.data;
-    } catch (error) {
-      thunkApi.dispatch(showMessage({ type: "error" }));
+    } catch (error: any) {
+      thunkApi.dispatch(showMessage({ type: "error", message: error?.message }));
       throw thunkApi.rejectWithValue([]);
     }
   }
