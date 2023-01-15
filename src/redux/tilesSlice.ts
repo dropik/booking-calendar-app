@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { WritableDraft } from "immer/dist/internal";
 
@@ -111,8 +112,8 @@ export const fetchAsync = createAsyncThunk<{ bookings: ColoredBooking[], session
         await ackBookingsAsync(ackRequest);
       }
       return { bookings: coloredBookings, sessionId: response.data.sessionId };
-    } catch(error) {
-      thunkApi.dispatch(showMessage({ type: "error" }));
+    } catch(error: any) {
+      thunkApi.dispatch(showMessage({ type: "error", message: error?.message }));
       throw thunkApi.rejectWithValue([]);
     }
   }

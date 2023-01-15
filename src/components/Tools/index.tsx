@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useRef, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
@@ -41,8 +42,8 @@ export default function Tools(): JSX.Element {
       try {
         const response = await fetchCityTaxAsync(from, to);
         setCityTaxData(response.data);
-      } catch (error) {
-        dispatch(showMessage({ type: "error" }));
+      } catch (error: any) {
+        dispatch(showMessage({ type: "error", message: error?.message }));
       } finally {
         setIsCityTaxLoading(false);
       }
@@ -59,8 +60,8 @@ export default function Tools(): JSX.Element {
       try {
         await onPostAsync(downloadDate);
         dispatch(showMessage({ type: "success", message: "I dati sono stati mandati correttamente!" }));
-      } catch (error) {
-        dispatch(showMessage({ type: "error" }));
+      } catch (error: any) {
+        dispatch(showMessage({ type: "error", message: error?.message }));
       } finally {
         setIsDownloadDataLoading(false);
       }
@@ -84,8 +85,8 @@ export default function Tools(): JSX.Element {
             dispatch(showMessage({ type: "info", message: "Niente data da scaricare!" }));
           }
         }
-      } catch (error) {
-        dispatch(showMessage({ type: "error" }));
+      } catch (error: any) {
+        dispatch(showMessage({ type: "error", message: error?.message }));
       } finally {
         setIsDownloadDataLoading(false);
       }

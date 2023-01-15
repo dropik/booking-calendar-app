@@ -18,7 +18,7 @@ export default function SnackbarMessage(): JSX.Element {
   return (
     <>
       <M3Snackbar open={open} autoHideDuration={3000} onClose={close}>
-        <M3Alert severity={message.type}>{message.message ? message.message : "Errore di conessione!"}</M3Alert>
+        <M3Alert severity={message.type}>{message.message ? message.message : "Server error!"}</M3Alert>
       </M3Snackbar>
     </>
   );

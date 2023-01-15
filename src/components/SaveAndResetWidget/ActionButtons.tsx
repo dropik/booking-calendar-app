@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useContext } from "react";
 import Stack from "@mui/material/Stack";
 import RestoreIcon from "@mui/icons-material/Restore";
@@ -50,8 +51,8 @@ export default function ActionButtons(): JSX.Element {
 
         dispatch(TilesSlice.saveChanges());
         setStatus("fulfilled");
-      } catch (error) {
-        dispatch(showMessage({ type: "error" }));
+      } catch (error: any) {
+        dispatch(showMessage({ type: "error", message: error?.message }));
         setStatus("idle");
       }
     }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
@@ -67,8 +68,8 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
         const newFloor: FloorDTO = { id, name, rooms: [] };
         await putFloorAsync(newFloor);
         dispatch(editFloor(newFloor));
-      } catch (error) {
-        dispatch(showMessage({ type: "error" }));
+      } catch (error: any) {
+        dispatch(showMessage({ type: "error", message: error?.message }));
       } finally {
         setState("idle");
         setIsLoading(false);
@@ -89,8 +90,8 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
         dispatch(deleteRooms({ ids: floor.roomIds }));
         dispatch(deleteFloor(id));
         setState("idle");
-      } catch (error) {
-        dispatch(showMessage({ type: "error" }));
+      } catch (error: any) {
+        dispatch(showMessage({ type: "error", message: error?.message }));
       } finally {
         setIsLoading(false);
       }
@@ -112,8 +113,8 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
         dispatch(createRoom({ floorId: id, roomId: response.id }));
         dispatch(createRoomForTiles(response.id));
         setState("idle");
-      } catch(error) {
-        dispatch(showMessage({ type: "error" }));
+      } catch(error: any) {
+        dispatch(showMessage({ type: "error", message: error?.message }));
       } finally {
         setIsLoading(false);
       }

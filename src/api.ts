@@ -184,20 +184,28 @@ export async function fetchClientsByQuery(query: string, from: string, to: strin
 
 async function fetchJsonDataAsync<T>(query: string): Promise<{ data: T }> {
   const response = await fetch(query);
+  if (response.status === 408) {
+    throw new Error("Errore di conessione!");
+  }
   if (!response.ok) {
-    throw new Error("Response error");
+    const json = await response.json();
+    throw new Error(`Server error! ${json.message}`);
   }
   const data = await response.json() as T;
   if (!data) {
-    throw new Error("Response error");
+    throw new Error("Server error!");
   }
   return { data };
 }
 
 async function fetchBlobDataAsync(query: string): Promise<{ data: Blob }> {
   const response = await fetch(query);
+  if (response.status === 408) {
+    throw new Error("Errore di conessione!");
+  }
   if (!response.ok) {
-    throw new Error("Resopnse error");
+    const json = await response.json();
+    throw new Error(`Server error! ${json.message}`);
   }
   const data = await response.blob();
   return { data };
@@ -216,8 +224,12 @@ async function postDataWithoutResponseAsync<TData>(url: string, data: TData): Pr
     referrerPolicy: "no-referrer",
     body: JSON.stringify(data)
   });
+  if (response.status === 408) {
+    throw new Error("Errore di conessione!");
+  }
   if (!response.ok) {
-    throw new Error("Response error");
+    const json = await response.json();
+    throw new Error(`Server error! ${json.message}`);
   }
 }
 
@@ -234,12 +246,16 @@ async function postDataAsync<TData, TResponse>(url: string, data: TData): Promis
     referrerPolicy: "no-referrer",
     body: JSON.stringify(data)
   });
+  if (response.status === 408) {
+    throw new Error("Errore di conessione!");
+  }
   if (!response.ok) {
-    throw new Error("Response error");
+    const json = await response.json();
+    throw new Error(`Server error! ${json.message}`);
   }
   const responseData = await response.json() as TResponse;
   if (!responseData) {
-    throw new Error("Response error");
+    throw new Error("Server error!");
   }
   return responseData;
 }
@@ -257,8 +273,12 @@ async function putDataAsync<T>(url: string, data: T): Promise<void> {
     referrerPolicy: "no-referrer",
     body: JSON.stringify(data)
   });
+  if (response.status === 408) {
+    throw new Error("Errore di conessione!");
+  }
   if (!response.ok) {
-    throw new Error("Response error");
+    const json = await response.json();
+    throw new Error(`Server error! ${json.message}`);
   }
 }
 
@@ -271,7 +291,11 @@ async function deleteDataAsync(url: string): Promise<void> {
     redirect: "follow",
     referrerPolicy: "no-referrer"
   });
+  if (response.status === 408) {
+    throw new Error("Errore di conessione!");
+  }
   if (!response.ok) {
-    throw new Error("Response error");
+    const json = await response.json();
+    throw new Error(`Server error! ${json.message}`);
   }
 }

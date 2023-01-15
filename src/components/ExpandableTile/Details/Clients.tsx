@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useContext, useEffect } from "react";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
@@ -26,8 +27,8 @@ export default function Clients({ clients, setClients }: ClientsProps): JSX.Elem
           const response = await fetchClientsByTile(data.bookingId, data.id);
           setClients(response.data);
         }
-      } catch(error) {
-        dispatch(showMessage({ type: "error" }));
+      } catch(error: any) {
+        dispatch(showMessage({ type: "error", message: error?.message }));
       }
     }
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
@@ -37,8 +38,8 @@ export default function BookingDetails(): JSX.Element {
           if (isSubscribed) {
             setBooking(response.data);
           }
-        } catch(error) {
-          dispatch(showMessage({ type: "error" }));
+        } catch(error: any) {
+          dispatch(showMessage({ type: "error", message: error?.message }));
         }
       }
     }

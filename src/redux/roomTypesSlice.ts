@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { fetchRoomRatesAsync } from "../api";
@@ -28,8 +29,8 @@ export const fetchRoomRatesAction = createAsyncThunk(
     try {
       const response = await fetchRoomRatesAsync();
       return response.data;
-    } catch(error) {
-      thunkApi.dispatch(showMessage({ type: "error" }));
+    } catch(error: any) {
+      thunkApi.dispatch(showMessage({ type: "error", message: error?.message }));
       throw thunkApi.rejectWithValue({});
     }
   }
