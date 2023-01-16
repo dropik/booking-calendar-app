@@ -26,6 +26,8 @@ A client side part of a web app for managing hotel bookings by organazing them i
 - **React Router**: single page app routing.
 
 ## Changes
+### v1.4.1
+- Added error detailed description in snackbar.
 ### v1.4.0
 - Added circular progress while tiles are still loading.
 - Better optimization on tiles dragging.
