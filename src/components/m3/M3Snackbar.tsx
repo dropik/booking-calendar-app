@@ -8,6 +8,9 @@ const M3Snackbar = forwardRef<HTMLDivElement, SnackbarProps>(function M3Snackbar
       {...props}
       ref={ref}
       anchorOrigin={anchorOrigin ? anchorOrigin : { vertical: "bottom", horizontal: "center" }}
+      TransitionProps={{
+
+      }}
     />
   );
 });

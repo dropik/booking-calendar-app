@@ -20,7 +20,7 @@ export default function Section({ children, header, ...props }: Props): JSX.Elem
       borderBottom: `1px solid ${theme.palette.outline.light}`
     }}>
       <SectionHeader name={header} collapseCallback={() => setOpen(!open)} />
-      <Collapse in={open} easing={theme.transitions.easing.fastOutSlowIn} timeout={theme.transitions.duration.long}>
+      <Collapse in={open} easing={theme.transitions.easing.emphasized} timeout={theme.transitions.duration.long2}>
         <SectionBody>
           {children}
         </SectionBody>

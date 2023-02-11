@@ -22,9 +22,9 @@ export default function AppDrawer(): JSX.Element {
       anchor="left"
       open={open}
       SlideProps={{
-        easing: theme.transitions.easing.fastOutSlowIn
+        easing: theme.transitions.easing.emphasized
       }}
-      transitionDuration={theme.transitions.duration.long}
+      transitionDuration={theme.transitions.duration.long2}
       PaperProps={{
         sx: {
           top: "10.5rem",
@@ -37,8 +37,8 @@ export default function AppDrawer(): JSX.Element {
           paddingLeft: "0.75rem",
           paddingRight: "0.75rem",
           transition: theme.transitions.create(["width"], {
-            easing: theme.transitions.easing.fastOutSlowIn,
-            duration: theme.transitions.duration.long
+            easing: theme.transitions.easing.emphasized,
+            duration: theme.transitions.duration.medium4,
           }),
           ...(open && {
             width: theme.drawerWidth

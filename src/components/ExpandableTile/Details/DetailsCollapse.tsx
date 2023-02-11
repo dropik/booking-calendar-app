@@ -16,7 +16,7 @@ export default function DetailsCollapse({ children, open }: DetailsCollapseProps
   return (
     <Collapse mountOnEnter unmountOnExit in={open} easing={{
       enter: theme.transitions.easing.easeOut,
-      exit: theme.transitions.easing.fastOutSlowIn
+      exit: theme.transitions.easing.emphasized
     }} onExited={() => { onClose?.(); }}>
       {children}
     </Collapse>

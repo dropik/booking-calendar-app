@@ -33,7 +33,7 @@ export default function M3Dialog({ heightRem, children, open, ...props }: M3Dial
       }}>
         <Collapse
           in={open}
-          easing={theme.transitions.easing.fastOutSlowIn}
+          easing={theme.transitions.easing.emphasized}
         >
           {children}
         </Collapse>
