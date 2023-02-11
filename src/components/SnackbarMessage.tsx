@@ -37,6 +37,9 @@ export default function SnackbarMessage(): JSX.Element {
             padding: 0,
             display: "flex",
             alignItems: "center",
+            position: "relative",
+            bottom: 0,
+            height: "3rem",
           }
         }}>
           {message.message ? message.message : "Server error!"}
