@@ -44,7 +44,7 @@ export default function ClientCard({ client }: ClientCardProps): JSX.Element {
         ) : null}
       </Stack>
       {client ? (
-        <Collapse mountOnEnter unmountOnExit in={open} easing={theme.transitions.easing.fastOutSlowIn}>
+        <Collapse mountOnEnter unmountOnExit in={open} easing={theme.transitions.easing.emphasized}>
           <Details client={client} />
         </Collapse>
       ) : null}

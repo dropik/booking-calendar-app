@@ -300,11 +300,18 @@ declare module "@mui/material/styles" {
   }
 
   interface Easing {
-    fastOutSlowIn: string;
+    emphasized: string;
+    emphasizedAccelerate: string;
+    emphasizedDecelerate: string;
   }
 
   interface Duration {
-    long: number
+    medium3: number;
+    medium4: number;
+    long1: number;
+    long2: number;
+    long3: number;
+    long4: number;
   }
 
   interface Theme {
@@ -570,10 +577,17 @@ const theme = createTheme({
 
   transitions: {
     easing: {
-      fastOutSlowIn: "cubic-bezier(1, 0.1, 0, 1)"
+      emphasized: "cubic-bezier(0.3, 0, 0.1, 1)",
+      emphasizedAccelerate: "cubic-bezier(0.3, 0, 0.8, 0.15)",
+      emphasizedDecelerate: "cubic-bezier(0.05, 0.7, 0.1, 1)",
     },
     duration: {
-      long: 800
+      medium3: 350,
+      medium4: 400,
+      long1: 450,
+      long2: 500,
+      long3: 550,
+      long4: 600,
     }
   }
 });

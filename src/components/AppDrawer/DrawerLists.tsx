@@ -44,8 +44,8 @@ export default function DrawerLists({ open, lists }: Props): JSX.Element {
                   <M3ListItemButton selected={isActive} sx={{
                     overflow: "hidden",
                     transition: theme.transitions.create(["height", "margin-bottom"], {
-                      easing: theme.transitions.easing.fastOutSlowIn,
-                      duration: theme.transitions.duration.long
+                      easing: theme.transitions.easing.emphasized,
+                      duration: theme.transitions.duration.medium4,
                     }),
                     ...(!open && {
                       height: "2rem",
@@ -53,7 +53,7 @@ export default function DrawerLists({ open, lists }: Props): JSX.Element {
                     })
                   }}>
                     <M3ListItemIcon>{item.icon}</M3ListItemIcon>
-                    <Fade in={open} easing={theme.transitions.easing.fastOutSlowIn}>
+                    <Fade in={open} easing={theme.transitions.easing.emphasized}>
                       <Box>
                         <M3ListItemText>{item.text}</M3ListItemText>
                       </Box>
