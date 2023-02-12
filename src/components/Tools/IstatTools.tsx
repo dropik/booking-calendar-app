@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 import AddchartOutlinedIcon from "@mui/icons-material/AddchartOutlined";
 
 import M3Chip from "../m3/M3Chip";
@@ -11,9 +13,15 @@ import M3Skeleton from "../m3/M3Skeleton";
 import M3Divider from "../m3/M3Divider";
 import M3TextButton from "../m3/M3TextButton";
 
+import { fetchIstatMovementsAsync, MovementDTO } from "../../api";
+import { useAppDispatch } from "../../redux/hooks";
+import { show as showSnackbarMessage } from "../../redux/snackbarMessageSlice";
+
 export default function IstatTools(): JSX.Element {
   const theme = useTheme();
+  const dispatch = useAppDispatch();
   const [selected, setSelected] = useState(false);
+  const [movementsData, setMovementsData] = useState<MovementDTO | undefined>(undefined);
 
   function open(): void {
     setSelected(true);
@@ -21,7 +29,22 @@ export default function IstatTools(): JSX.Element {
 
   function close(): void {
     setSelected(false);
+    setMovementsData(undefined);
   }
+
+  useEffect(() => {
+    async function downloadData(): Promise<void> {
+      try {
+        const { data } = await fetchIstatMovementsAsync();
+        setMovementsData(data);
+      } catch (error: any) {
+        dispatch(showSnackbarMessage({ type: "error", message: error?.message }));
+      }
+    }
+    if (!movementsData) {
+      downloadData();
+    }
+  }, [dispatch, movementsData]);
 
   return (
     <>
@@ -34,11 +57,11 @@ export default function IstatTools(): JSX.Element {
             <Stack direction="column" spacing={0} sx={{ width: "100%" }}>
               <Stack direction="row" spacing={2} alignItems="flex-end">
                 <Typography variant="labelLarge" width="9rem">Data:</Typography>
-                <Typography variant="titleMedium"><M3Skeleton width="6rem" /></Typography>
+                <Typography variant="titleMedium">{movementsData ? (new Date(movementsData.date)).toLocaleDateString() : <M3Skeleton width="6rem" />}</Typography>
               </Stack>
               <Stack direction="row" spacing={2} alignItems="flex-end">
                 <Typography variant="labelLarge" width="9rem">Presenze precedenti:</Typography>
-                <Typography variant="titleMedium"><M3Skeleton width="6rem" /></Typography>
+                <Typography variant="titleMedium">{movementsData ? movementsData.prevTotal : <M3Skeleton width="3rem" />}</Typography>
               </Stack>
             </Stack>
             <Stack direction="column" spacing={0} sx={{ width: "100%" }}>
@@ -184,7 +207,7 @@ export default function IstatTools(): JSX.Element {
             </Stack>
             <Stack direction="row" spacing={1} sx={{ width: "100%" }} justifyContent="flex-end">
               <M3TextButton onClick={close}>Cancella</M3TextButton>
-              <M3TextButton>Esporta</M3TextButton>
+              {movementsData ? <M3TextButton>Esporta</M3TextButton> : <CircularProgress />}
             </Stack>
           </Stack>
         </Stack>
