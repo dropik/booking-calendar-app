@@ -7,10 +7,11 @@ import Paper from "@mui/material/Paper";
 import { SurfaceTint } from "./Tints";
 
 type M3DialogProps = {
-  heightRem: number
+  heightRem: number,
+  transitionDuration?: number,
 } & DialogProps;
 
-export default function M3Dialog({ heightRem, children, open, ...props }: M3DialogProps): JSX.Element {
+export default function M3Dialog({ heightRem, children, open, transitionDuration, ...props }: M3DialogProps): JSX.Element {
   const theme = useTheme();
 
   return (
@@ -20,13 +21,14 @@ export default function M3Dialog({ heightRem, children, open, ...props }: M3Dial
         height: "calc(100vh - 4rem)",
         backgroundColor: "transparent",
         overflow: "visible",
-        pointerEvents: "none"
+        pointerEvents: "none",
+        maxWidth: "50rem",
       }
     }}>
       <Paper elevation={3} sx={{
         borderRadius: "1.75rem",
         minWidth: "17.5rem",
-        maxWidth: "35rem",
+        maxWidth: "50rem",
         position: "relative",
         mt: `calc(50vh - ${heightRem / 2 + 2}rem)`,
         pointerEvents: "auto"
@@ -34,6 +36,7 @@ export default function M3Dialog({ heightRem, children, open, ...props }: M3Dial
         <Collapse
           in={open}
           easing={theme.transitions.easing.emphasized}
+          timeout={transitionDuration}
         >
           {children}
         </Collapse>
