@@ -26,7 +26,7 @@ export default function IstatTools(): JSX.Element {
   return (
     <>
       <M3Chip selected={selected} onClick={open} label="ISTAT" />
-      <M3Dialog open={selected} onClose={close} heightRem={24.875} transitionDuration={theme.transitions.duration.medium4}>
+      <M3Dialog open={selected} onClose={close} heightRem={35.125} transitionDuration={theme.transitions.duration.medium4}>
         <Stack spacing={3} sx={{ p: "1.5rem", minWidth: "45rem", }}>
           <Stack spacing={2} alignItems="center">
             <AddchartOutlinedIcon />
@@ -54,28 +54,128 @@ export default function IstatTools(): JSX.Element {
                   flexBasis: "50%",
                   borderRight: `1px solid ${theme.palette.outline.main}`
                 }}>
-                  <Stack direction="row" sx={{ width: "100%", py: "0.25rem" }}>
+                  <Stack direction="row" sx={{ width: "calc(100% - 2rem)", py: "0.25rem", mx: "1rem" }}>
                     <Typography variant="titleSmall" textAlign="center" sx={{ flexBasis: "50%"}}>Targa</Typography>
                     <Typography variant="titleSmall" textAlign="center" sx={{ flexBasis: "25%" }}>Arrivi</Typography>
                     <Typography variant="titleSmall" textAlign="center" sx={{ flexBasis: "25%" }}>Partenze</Typography>
                   </Stack>
-                  <Stack direction="column" spacing={0} sx={{ maxHeight: "10rem", overflowY: "overlay", px: "1rem" }}>
-                    <Typography variant="titleMedium" sx={{ width: "100%" }}><M3Skeleton /></Typography>
-                    <Typography variant="titleMedium" sx={{ width: "100%" }}><M3Skeleton /></Typography>
-                    <Typography variant="titleMedium" sx={{ width: "100%", mb: "0.25rem" }}><M3Skeleton /></Typography>
-                  </Stack>
+                  <Box sx={{ height: "15rem", overflowY: "overlay" }}>
+                    <Stack direction="row" spacing={0} sx={{
+                      width: "calc(100% - 2rem)",
+                      height: "2rem",
+                      py: "0.25rem",
+                      mx: "1rem",
+                      boxSizing: "border-box",
+                      alignItems: "center",
+                      borderBottom: `1px solid ${theme.palette.outline.main}`,
+                      ".MuiBox-root": {
+                        height: "max-content",
+                        px: "1rem",
+                        boxSizing: "border-box",
+                      },
+                    }}>
+                      <Box sx={{ flexBasis: "50%" }}><M3Skeleton variant="rounded" /></Box>
+                      <Box sx={{ flexBasis: "25%" }}><M3Skeleton variant="rounded" /></Box>
+                      <Box sx={{ flexBasis: "25%" }}><M3Skeleton variant="rounded" /></Box>
+                    </Stack>
+                    <Stack direction="row" spacing={0} sx={{
+                      width: "calc(100% - 2rem)",
+                      height: "2rem",
+                      py: "0.25rem",
+                      mx: "1rem",
+                      boxSizing: "border-box",
+                      alignItems: "center",
+                      borderBottom: `1px solid ${theme.palette.outline.main}`,
+                      ".MuiBox-root": {
+                        height: "max-content",
+                        px: "1rem",
+                        boxSizing: "border-box",
+                      },
+                    }}>
+                      <Box sx={{ flexBasis: "50%" }}><M3Skeleton variant="rounded" /></Box>
+                      <Box sx={{ flexBasis: "25%" }}><M3Skeleton variant="rounded" /></Box>
+                      <Box sx={{ flexBasis: "25%" }}><M3Skeleton variant="rounded" /></Box>
+                    </Stack>
+                    <Stack direction="row" spacing={0} sx={{
+                      width: "calc(100% - 2rem)",
+                      height: "2rem",
+                      py: "0.25rem",
+                      mx: "1rem",
+                      boxSizing: "border-box",
+                      alignItems: "center",
+                      ".MuiBox-root": {
+                        height: "max-content",
+                        px: "1rem",
+                        boxSizing: "border-box",
+                      },
+                    }}>
+                      <Box sx={{ flexBasis: "50%" }}><M3Skeleton variant="rounded" /></Box>
+                      <Box sx={{ flexBasis: "25%" }}><M3Skeleton variant="rounded" /></Box>
+                      <Box sx={{ flexBasis: "25%" }}><M3Skeleton variant="rounded" /></Box>
+                    </Stack>
+                  </Box>
                 </Stack>
                 <Stack direction="column" sx={{ flexBasis: "50%" }}>
-                  <Stack direction="row" sx={{ width: "100%", py: "0.25rem" }}>
+                  <Stack direction="row" sx={{ width: "calc(100% - 2rem)", py: "0.25rem", mx: "1rem" }}>
                     <Typography variant="titleSmall" textAlign="center" sx={{ flexBasis: "50%"}}>Targa</Typography>
                     <Typography variant="titleSmall" textAlign="center" sx={{ flexBasis: "25%" }}>Arrivi</Typography>
                     <Typography variant="titleSmall" textAlign="center" sx={{ flexBasis: "25%" }}>Partenze</Typography>
                   </Stack>
-                  <Stack direction="column" spacing={0} sx={{ maxHeight: "10rem", overflowY: "overlay", px: "1rem" }}>
-                    <Typography variant="titleMedium" sx={{ width: "100%" }}><M3Skeleton /></Typography>
-                    <Typography variant="titleMedium" sx={{ width: "100%" }}><M3Skeleton /></Typography>
-                    <Typography variant="titleMedium" sx={{ width: "100%", mb: "0.25rem" }}><M3Skeleton /></Typography>
-                  </Stack>
+                  <Box sx={{ height: "15rem", overflowY: "overlay" }}>
+                    <Stack direction="row" spacing={0} sx={{
+                      width: "calc(100% - 2rem)",
+                      height: "2rem",
+                      py: "0.25rem",
+                      mx: "1rem",
+                      boxSizing: "border-box",
+                      alignItems: "center",
+                      borderBottom: `1px solid ${theme.palette.outline.main}`,
+                      ".MuiBox-root": {
+                        height: "max-content",
+                        px: "1rem",
+                        boxSizing: "border-box",
+                      },
+                    }}>
+                      <Box sx={{ flexBasis: "50%" }}><M3Skeleton variant="rounded" /></Box>
+                      <Box sx={{ flexBasis: "25%" }}><M3Skeleton variant="rounded" /></Box>
+                      <Box sx={{ flexBasis: "25%" }}><M3Skeleton variant="rounded" /></Box>
+                    </Stack>
+                    <Stack direction="row" spacing={0} sx={{
+                      width: "calc(100% - 2rem)",
+                      height: "2rem",
+                      py: "0.25rem",
+                      mx: "1rem",
+                      boxSizing: "border-box",
+                      alignItems: "center",
+                      borderBottom: `1px solid ${theme.palette.outline.main}`,
+                      ".MuiBox-root": {
+                        height: "max-content",
+                        px: "1rem",
+                        boxSizing: "border-box",
+                      },
+                    }}>
+                      <Box sx={{ flexBasis: "50%" }}><M3Skeleton variant="rounded" /></Box>
+                      <Box sx={{ flexBasis: "25%" }}><M3Skeleton variant="rounded" /></Box>
+                      <Box sx={{ flexBasis: "25%" }}><M3Skeleton variant="rounded" /></Box>
+                    </Stack>
+                    <Stack direction="row" spacing={0} sx={{
+                      width: "calc(100% - 2rem)",
+                      height: "2rem",
+                      py: "0.25rem",
+                      mx: "1rem",
+                      boxSizing: "border-box",
+                      alignItems: "center",
+                      ".MuiBox-root": {
+                        height: "max-content",
+                        px: "1rem",
+                        boxSizing: "border-box",
+                      },
+                    }}>
+                      <Box sx={{ flexBasis: "50%" }}><M3Skeleton variant="rounded" /></Box>
+                      <Box sx={{ flexBasis: "25%" }}><M3Skeleton variant="rounded" /></Box>
+                      <Box sx={{ flexBasis: "25%" }}><M3Skeleton variant="rounded" /></Box>
+                    </Stack>
+                  </Box>
                 </Stack>
               </Stack>
               <Box sx={{ position: "relative", width: "100%", height: "1px" }}>
