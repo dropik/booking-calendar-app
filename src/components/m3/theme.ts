@@ -577,7 +577,7 @@ const theme = createTheme({
 
   transitions: {
     easing: {
-      emphasized: "cubic-bezier(0.3, 0, 0.1, 1)",
+      emphasized: "cubic-bezier(0.61, -0.02, 0.11, 0.94)",
       emphasizedAccelerate: "cubic-bezier(0.3, 0, 0.8, 0.15)",
       emphasizedDecelerate: "cubic-bezier(0.05, 0.7, 0.1, 1)",
     },

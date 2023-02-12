@@ -38,7 +38,7 @@ export default function AppDrawer(): JSX.Element {
           paddingRight: "0.75rem",
           transition: theme.transitions.create(["width"], {
             easing: theme.transitions.easing.emphasized,
-            duration: theme.transitions.duration.medium4,
+            duration: theme.transitions.duration.long2,
           }),
           ...(open && {
             width: theme.drawerWidth

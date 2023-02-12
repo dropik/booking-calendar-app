@@ -27,7 +27,7 @@ export default function DrawerAdjacent({ children, sx, ...props }: BoxProps): JS
         ml: "5rem",
         transition: theme.transitions.create(["margin"], {
           easing: theme.transitions.easing.emphasized,
-          duration: theme.transitions.duration.medium4,
+          duration: theme.transitions.duration.long2,
         }),
         ...(open && {
           marginLeft: theme.drawerWidth
