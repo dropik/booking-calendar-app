@@ -8,7 +8,7 @@ import Collapse from "@mui/material/Collapse";
 import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
 
-import { CityTaxData, fetchCityTaxAsync, fetchPoliceRicevutaAsync, postIstatExportRequestAsync, postPoliceExportRequestAsync } from "../../api";
+import { CityTaxData, fetchCityTaxAsync, fetchPoliceRicevutaAsync, postPoliceExportRequestAsync } from "../../api";
 import { Utils } from "../../utils";
 import { useAppDispatch, useAppSelector, useCurrentDate } from "../../redux/hooks";
 import { show as showMessage } from "../../redux/snackbarMessageSlice";
@@ -18,7 +18,7 @@ import M3DatePicker from "../m3/M3DatePicker";
 import M3TextButton from "../m3/M3TextButton";
 import { SurfaceTint } from "../m3/Tints";
 import M3Skeleton from "../m3/M3Skeleton";
-import M3Chip from "../m3/M3Chip";
+import IstatTools from "./IstatTools";
 
 export default function Tools(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -102,7 +102,7 @@ export default function Tools(): JSX.Element {
       <Stack spacing={1} sx={{ pr: "1rem" }}>
         <Typography variant="displaySmall" sx={{ pt: "3rem", pl: "1rem" }}>Strumenti</Typography>
         <Stack direction="row" spacing={1}>
-          <M3Chip selected={false} onClick={() => void 0} label="ISTAT" />
+          <IstatTools />
         </Stack>
         <Stack direction="row" spacing={2} sx={{ mt: "2rem !important" }}>
           <Stack spacing={2} sx={{
@@ -131,7 +131,6 @@ export default function Tools(): JSX.Element {
                 <>
                   <M3TextButton onClick={downloadRicevuta}>Scarica ricevuta</M3TextButton>
                   <M3TextButton onClick={() => requestExport(postPoliceExportRequestAsync)}>Polizia</M3TextButton>
-                  <M3TextButton onClick={() => requestExport(postIstatExportRequestAsync)}>ISTAT</M3TextButton>
                 </>
               )}
             </Stack>
