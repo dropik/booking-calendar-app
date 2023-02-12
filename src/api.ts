@@ -102,6 +102,19 @@ export type AckBookingsRequest = {
   sessionId: string
 }
 
+export type Movement = {
+  italia: boolean,
+  targa: string,
+  arrivi: number,
+  partenze: number,
+};
+
+export type MovementDTO = {
+  date: string,
+  prevTotal: number,
+  movements: Movement[],
+};
+
 export function fetchFloorsAsync(): Promise<{ data: Floor[] }> {
   return fetchJsonDataAsync<Floor[]>("/api/v1/floors");
 }
@@ -180,6 +193,14 @@ export async function fetchBookings(name: string, from: string, to: string): Pro
 
 export async function fetchClientsByQuery(query: string, from: string, to: string): Promise<{ data: ClientWithBooking[] }> {
   return fetchJsonDataAsync<ClientWithBooking[]>(`/api/v1/clients-by-query?query=${query}&from=${from}&to=${to}`);
+}
+
+export async function fetchIstatMovementsAsync(): Promise<{ data: MovementDTO }> {
+  return fetchJsonDataAsync<MovementDTO>("/api/v1/istat/movements");
+}
+
+export async function postIstatMovementsAsync(data: MovementDTO): Promise<void> {
+  return postDataWithoutResponseAsync("/api/v1/istat/send", data);
 }
 
 async function fetchJsonDataAsync<T>(query: string): Promise<{ data: T }> {
