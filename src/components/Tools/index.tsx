@@ -18,6 +18,7 @@ import M3DatePicker from "../m3/M3DatePicker";
 import M3TextButton from "../m3/M3TextButton";
 import { SurfaceTint } from "../m3/Tints";
 import M3Skeleton from "../m3/M3Skeleton";
+import M3Chip from "../m3/M3Chip";
 
 export default function Tools(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -98,9 +99,12 @@ export default function Tools(): JSX.Element {
 
   return (
     <DrawerAdjacent>
-      <Stack spacing={2} sx={{ pr: "1rem" }}>
-        <Typography variant="displayLarge" sx={{ pt: "4rem", pl: "1rem" }}>Strumenti</Typography>
-        <Stack direction="row" spacing={2}>
+      <Stack spacing={1} sx={{ pr: "1rem" }}>
+        <Typography variant="displaySmall" sx={{ pt: "3rem", pl: "1rem" }}>Strumenti</Typography>
+        <Stack direction="row" spacing={1}>
+          <M3Chip selected={false} onClick={() => void 0} label="ISTAT" />
+        </Stack>
+        <Stack direction="row" spacing={2} sx={{ mt: "2rem !important" }}>
           <Stack spacing={2} sx={{
             position: "relative",
             justifyContent: "space-between",
