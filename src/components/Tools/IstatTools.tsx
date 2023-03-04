@@ -114,7 +114,17 @@ export default function IstatTools(): JSX.Element {
             </Stack>
             <Stack direction="row" spacing={1} sx={{ width: "100%" }} justifyContent="flex-end">
               <M3TextButton onClick={close}>Cancella</M3TextButton>
-              {movementsData ? <M3TextButton>Esporta</M3TextButton> : <CircularProgress />}
+              {movementsData
+                ? <M3TextButton>Esporta</M3TextButton>
+                : <Box sx={{
+                  width: "4.58rem",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}>
+                  <CircularProgress size="1.5rem" />
+                </Box>
+              }
             </Stack>
           </Stack>
         </Stack>
@@ -169,7 +179,6 @@ function useMovementRowsMemo(movements: MovementEntry[]): JSX.Element[] {
     }}>
       <Box sx={{
         flexBasis: "50%",
-        // textAlign: "center",
         maxWidth: "50%",
       }}>
         {entry.targa === undefined
