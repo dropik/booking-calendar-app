@@ -88,8 +88,8 @@ export default function IstatTools(): JSX.Element {
                   flexBasis: "50%",
                   borderRight: `1px solid ${theme.palette.outline.main}`
                 }}>
-                  <Stack direction="row" sx={{ width: "calc(100% - 2rem)", py: "0.25rem", mx: "1rem" }}>
-                    <Typography variant="titleSmall" textAlign="center" sx={{ flexBasis: "50%"}}>Targa</Typography>
+                  <Stack direction="row" spacing={2} sx={{ width: "calc(100% - 2rem)", py: "0.25rem", mx: "1rem" }}>
+                    <Typography variant="titleSmall" textAlign="left" sx={{ flexBasis: "50%" }}>Targa</Typography>
                     <Typography variant="titleSmall" textAlign="center" sx={{ flexBasis: "25%" }}>Arrivi</Typography>
                     <Typography variant="titleSmall" textAlign="center" sx={{ flexBasis: "25%" }}>Partenze</Typography>
                   </Stack>
@@ -98,8 +98,8 @@ export default function IstatTools(): JSX.Element {
                   </Box>
                 </Stack>
                 <Stack direction="column" sx={{ flexBasis: "50%" }}>
-                  <Stack direction="row" sx={{ width: "calc(100% - 2rem)", py: "0.25rem", mx: "1rem" }}>
-                    <Typography variant="titleSmall" textAlign="center" sx={{ flexBasis: "50%"}}>Targa</Typography>
+                  <Stack direction="row" spacing={2} sx={{ width: "calc(100% - 2rem)", py: "0.25rem", mx: "1rem" }}>
+                    <Typography variant="titleSmall" textAlign="left" sx={{ flexBasis: "50%" }}>Targa</Typography>
                     <Typography variant="titleSmall" textAlign="center" sx={{ flexBasis: "25%" }}>Arrivi</Typography>
                     <Typography variant="titleSmall" textAlign="center" sx={{ flexBasis: "25%" }}>Partenze</Typography>
                   </Stack>
@@ -155,7 +155,7 @@ function splitMovements(movements?: MovementDTO): { italians: MovementEntry[], f
 
 function useMovementRowsMemo(movements: MovementEntry[]): JSX.Element[] {
   return useMemo(() => movements.map((entry, index) => (
-    <Stack key={entry.targa ?? index} direction="row" spacing={0} sx={{
+    <Stack key={entry.targa ?? index} direction="row" spacing={2} sx={{
       width: "calc(100% - 2rem)",
       height: "2rem",
       py: "0.25rem",
@@ -164,14 +164,13 @@ function useMovementRowsMemo(movements: MovementEntry[]): JSX.Element[] {
       alignItems: "center",
       ".MuiBox-root": {
         height: "max-content",
-        px: "1rem",
         boxSizing: "border-box",
       },
     }}>
       <Box sx={{
         flexBasis: "50%",
-        textAlign: "center",
-        maxWidth: "50%"
+        // textAlign: "center",
+        maxWidth: "50%",
       }}>
         {entry.targa === undefined
           ? <M3Skeleton variant="rounded" />
