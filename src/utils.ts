@@ -16,7 +16,7 @@ export class Utils {
   }
 
   static dateToString(date: Date): string {
-    return date.toLocaleDateString("en-CA");
+    return date.toLocaleDateString("fr-CA");
   }
 
   static getDateShift(date: string | Date, shift: number): string {
