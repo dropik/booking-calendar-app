@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
@@ -17,11 +17,22 @@ import { fetchIstatMovementsAsync, MovementDTO } from "../../api";
 import { useAppDispatch } from "../../redux/hooks";
 import { show as showSnackbarMessage } from "../../redux/snackbarMessageSlice";
 
+type MovementEntry = {
+  targa?: string,
+  arrivals?: number,
+  departures?: number,
+};
+
 export default function IstatTools(): JSX.Element {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const [selected, setSelected] = useState(false);
   const [movementsData, setMovementsData] = useState<MovementDTO | undefined>(undefined);
+
+  const { italians, foreigns } = splitMovements(movementsData);
+
+  const italianRows = useMovementRowsMemo(italians);
+  const foreignRows = useMovementRowsMemo(foreigns);
 
   function open(): void {
     setSelected(true);
@@ -83,59 +94,7 @@ export default function IstatTools(): JSX.Element {
                     <Typography variant="titleSmall" textAlign="center" sx={{ flexBasis: "25%" }}>Partenze</Typography>
                   </Stack>
                   <Box sx={{ height: "15rem", overflowY: "overlay" }}>
-                    <Stack direction="row" spacing={0} sx={{
-                      width: "calc(100% - 2rem)",
-                      height: "2rem",
-                      py: "0.25rem",
-                      mx: "1rem",
-                      boxSizing: "border-box",
-                      alignItems: "center",
-                      borderBottom: `1px solid ${theme.palette.outline.main}`,
-                      ".MuiBox-root": {
-                        height: "max-content",
-                        px: "1rem",
-                        boxSizing: "border-box",
-                      },
-                    }}>
-                      <Box sx={{ flexBasis: "50%" }}><M3Skeleton variant="rounded" /></Box>
-                      <Box sx={{ flexBasis: "25%" }}><M3Skeleton variant="rounded" /></Box>
-                      <Box sx={{ flexBasis: "25%" }}><M3Skeleton variant="rounded" /></Box>
-                    </Stack>
-                    <Stack direction="row" spacing={0} sx={{
-                      width: "calc(100% - 2rem)",
-                      height: "2rem",
-                      py: "0.25rem",
-                      mx: "1rem",
-                      boxSizing: "border-box",
-                      alignItems: "center",
-                      borderBottom: `1px solid ${theme.palette.outline.main}`,
-                      ".MuiBox-root": {
-                        height: "max-content",
-                        px: "1rem",
-                        boxSizing: "border-box",
-                      },
-                    }}>
-                      <Box sx={{ flexBasis: "50%" }}><M3Skeleton variant="rounded" /></Box>
-                      <Box sx={{ flexBasis: "25%" }}><M3Skeleton variant="rounded" /></Box>
-                      <Box sx={{ flexBasis: "25%" }}><M3Skeleton variant="rounded" /></Box>
-                    </Stack>
-                    <Stack direction="row" spacing={0} sx={{
-                      width: "calc(100% - 2rem)",
-                      height: "2rem",
-                      py: "0.25rem",
-                      mx: "1rem",
-                      boxSizing: "border-box",
-                      alignItems: "center",
-                      ".MuiBox-root": {
-                        height: "max-content",
-                        px: "1rem",
-                        boxSizing: "border-box",
-                      },
-                    }}>
-                      <Box sx={{ flexBasis: "50%" }}><M3Skeleton variant="rounded" /></Box>
-                      <Box sx={{ flexBasis: "25%" }}><M3Skeleton variant="rounded" /></Box>
-                      <Box sx={{ flexBasis: "25%" }}><M3Skeleton variant="rounded" /></Box>
-                    </Stack>
+                    {italianRows}
                   </Box>
                 </Stack>
                 <Stack direction="column" sx={{ flexBasis: "50%" }}>
@@ -145,59 +104,7 @@ export default function IstatTools(): JSX.Element {
                     <Typography variant="titleSmall" textAlign="center" sx={{ flexBasis: "25%" }}>Partenze</Typography>
                   </Stack>
                   <Box sx={{ height: "15rem", overflowY: "overlay" }}>
-                    <Stack direction="row" spacing={0} sx={{
-                      width: "calc(100% - 2rem)",
-                      height: "2rem",
-                      py: "0.25rem",
-                      mx: "1rem",
-                      boxSizing: "border-box",
-                      alignItems: "center",
-                      borderBottom: `1px solid ${theme.palette.outline.main}`,
-                      ".MuiBox-root": {
-                        height: "max-content",
-                        px: "1rem",
-                        boxSizing: "border-box",
-                      },
-                    }}>
-                      <Box sx={{ flexBasis: "50%" }}><M3Skeleton variant="rounded" /></Box>
-                      <Box sx={{ flexBasis: "25%" }}><M3Skeleton variant="rounded" /></Box>
-                      <Box sx={{ flexBasis: "25%" }}><M3Skeleton variant="rounded" /></Box>
-                    </Stack>
-                    <Stack direction="row" spacing={0} sx={{
-                      width: "calc(100% - 2rem)",
-                      height: "2rem",
-                      py: "0.25rem",
-                      mx: "1rem",
-                      boxSizing: "border-box",
-                      alignItems: "center",
-                      borderBottom: `1px solid ${theme.palette.outline.main}`,
-                      ".MuiBox-root": {
-                        height: "max-content",
-                        px: "1rem",
-                        boxSizing: "border-box",
-                      },
-                    }}>
-                      <Box sx={{ flexBasis: "50%" }}><M3Skeleton variant="rounded" /></Box>
-                      <Box sx={{ flexBasis: "25%" }}><M3Skeleton variant="rounded" /></Box>
-                      <Box sx={{ flexBasis: "25%" }}><M3Skeleton variant="rounded" /></Box>
-                    </Stack>
-                    <Stack direction="row" spacing={0} sx={{
-                      width: "calc(100% - 2rem)",
-                      height: "2rem",
-                      py: "0.25rem",
-                      mx: "1rem",
-                      boxSizing: "border-box",
-                      alignItems: "center",
-                      ".MuiBox-root": {
-                        height: "max-content",
-                        px: "1rem",
-                        boxSizing: "border-box",
-                      },
-                    }}>
-                      <Box sx={{ flexBasis: "50%" }}><M3Skeleton variant="rounded" /></Box>
-                      <Box sx={{ flexBasis: "25%" }}><M3Skeleton variant="rounded" /></Box>
-                      <Box sx={{ flexBasis: "25%" }}><M3Skeleton variant="rounded" /></Box>
-                    </Stack>
+                    {foreignRows}
                   </Box>
                 </Stack>
               </Stack>
@@ -214,4 +121,81 @@ export default function IstatTools(): JSX.Element {
       </M3Dialog>
     </>
   );
+}
+
+function splitMovements(movements?: MovementDTO): { italians: MovementEntry[], foreigns: MovementEntry[] } {
+  if (!movements) {
+    return {
+      italians: [{}, {}, {}],
+      foreigns: [{}, {}, {}],
+    };
+  }
+
+  const italians: MovementEntry[] = [];
+  const foreigns: MovementEntry[] = [];
+
+  for (const movement of movements.movements) {
+    if (movement.italia) {
+      italians.push({
+        targa: movement.targa,
+        arrivals: movement.arrivi,
+        departures: movement.partenze,
+      });
+    } else {
+      foreigns.push({
+        targa: movement.targa,
+        arrivals: movement.arrivi,
+        departures: movement.partenze,
+      });
+    }
+  }
+
+  return { italians, foreigns };
+}
+
+function useMovementRowsMemo(movements: MovementEntry[]): JSX.Element[] {
+  return useMemo(() => movements.map((entry, index) => (
+    <Stack key={entry.targa ?? index} direction="row" spacing={0} sx={{
+      width: "calc(100% - 2rem)",
+      height: "2rem",
+      py: "0.25rem",
+      mx: "1rem",
+      boxSizing: "border-box",
+      alignItems: "center",
+      ".MuiBox-root": {
+        height: "max-content",
+        px: "1rem",
+        boxSizing: "border-box",
+      },
+    }}>
+      <Box sx={{
+        flexBasis: "50%",
+        textAlign: "center",
+        maxWidth: "50%"
+      }}>
+        {entry.targa === undefined
+          ? <M3Skeleton variant="rounded" />
+          : <Typography variant="bodyLarge" sx={{
+            width: "100%",
+            display: "inline-block",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}>{entry.targa}</Typography>
+        }
+      </Box>
+      <Box sx={{ flexBasis: "25%", textAlign: "center" }}>
+        {entry.arrivals === undefined
+          ? <M3Skeleton variant="rounded" />
+          : <Typography variant="bodyLarge">{entry.arrivals}</Typography>
+        }
+      </Box>
+      <Box sx={{ flexBasis: "25%", textAlign: "center" }}>
+        {entry.departures === undefined
+          ? <M3Skeleton variant="rounded" />
+          : <Typography variant="bodyLarge">{entry.departures}</Typography>
+        }
+      </Box>
+    </Stack>
+  )), [movements]);
 }
