@@ -26,6 +26,8 @@ A client side part of a web app for managing hotel bookings by organazing them i
 - **React Router**: single page app routing.
 
 ## Changes
+### v1.4.2
+- Fixed canadian locale date strings breaking date string formatting.
 ### v1.4.1
 - Added error detailed description in snackbar.
 ### v1.4.0
