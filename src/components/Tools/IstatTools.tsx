@@ -13,7 +13,7 @@ import M3Skeleton from "../m3/M3Skeleton";
 import M3Divider from "../m3/M3Divider";
 import M3TextButton from "../m3/M3TextButton";
 
-import { fetchIstatMovementsAsync, MovementDTO } from "../../api";
+import { fetchCountriesAsync, fetchIstatMovementsAsync, fetchProvincesAsync, MovementDTO } from "../../api";
 import { useAppDispatch } from "../../redux/hooks";
 import { show as showSnackbarMessage } from "../../redux/snackbarMessageSlice";
 
@@ -28,8 +28,11 @@ export default function IstatTools(): JSX.Element {
   const dispatch = useAppDispatch();
   const [selected, setSelected] = useState(false);
   const [movementsData, setMovementsData] = useState<MovementDTO | undefined>(undefined);
+  const [countries, setCountries] = useState<string[] | undefined>(undefined);
+  const [provinces, setProvinces] = useState<string[] | undefined>(undefined);
 
-  const { italians, foreigns } = splitMovements(movementsData);
+  const isLoaded = Boolean(movementsData) && Boolean(countries) && Boolean(provinces);
+  const { italians, foreigns } = splitMovements(movementsData, isLoaded);
 
   const italianRows = useMovementRowsMemo(italians);
   const foreignRows = useMovementRowsMemo(foreigns);
@@ -52,10 +55,38 @@ export default function IstatTools(): JSX.Element {
         dispatch(showSnackbarMessage({ type: "error", message: error?.message }));
       }
     }
-    if (!movementsData) {
+    if (selected && !movementsData) {
       downloadData();
     }
-  }, [dispatch, movementsData]);
+  }, [dispatch, movementsData, selected]);
+
+  useEffect(() => {
+    async function downloadData(): Promise<void> {
+      try {
+        const { data } = await fetchCountriesAsync();
+        setCountries(data);
+      } catch (error: any) {
+        dispatch(showSnackbarMessage({ type: "error", message: error?.message }));
+      }
+    }
+    if (selected && !countries) {
+      downloadData();
+    }
+  }, [dispatch, countries, selected]);
+
+  useEffect(() => {
+    async function downloadData(): Promise<void> {
+      try {
+        const { data } = await fetchProvincesAsync();
+        setProvinces(data);
+      } catch (error: any) {
+        dispatch(showSnackbarMessage({ type: "error", message: error?.message }));
+      }
+    }
+    if (selected && !provinces) {
+      downloadData();
+    }
+  }, [dispatch, provinces, selected]);
 
   return (
     <>
@@ -114,7 +145,7 @@ export default function IstatTools(): JSX.Element {
             </Stack>
             <Stack direction="row" spacing={1} sx={{ width: "100%" }} justifyContent="flex-end">
               <M3TextButton onClick={close}>Cancella</M3TextButton>
-              {movementsData
+              {isLoaded
                 ? <M3TextButton>Esporta</M3TextButton>
                 : <Box sx={{
                   width: "4.58rem",
@@ -133,8 +164,8 @@ export default function IstatTools(): JSX.Element {
   );
 }
 
-function splitMovements(movements?: MovementDTO): { italians: MovementEntry[], foreigns: MovementEntry[] } {
-  if (!movements) {
+function splitMovements(movements: MovementDTO | undefined, isLoaded: boolean): { italians: MovementEntry[], foreigns: MovementEntry[] } {
+  if (!movements || !isLoaded) {
     return {
       italians: [{}, {}, {}],
       foreigns: [{}, {}, {}],
