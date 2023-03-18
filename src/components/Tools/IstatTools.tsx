@@ -5,6 +5,9 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
+import FormControl from "@mui/material/FormControl";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
 import AddchartOutlinedIcon from "@mui/icons-material/AddchartOutlined";
 
 import M3Chip from "../m3/M3Chip";
@@ -18,6 +21,7 @@ import { useAppDispatch } from "../../redux/hooks";
 import { show as showSnackbarMessage } from "../../redux/snackbarMessageSlice";
 
 type MovementEntry = {
+  id: number,
   targa?: string,
   arrivals?: number,
   departures?: number,
@@ -34,8 +38,59 @@ export default function IstatTools(): JSX.Element {
   const isLoaded = Boolean(movementsData) && Boolean(countries) && Boolean(provinces);
   const { italians, foreigns } = splitMovements(movementsData, isLoaded);
 
-  const italianRows = useMovementRowsMemo(italians);
-  const foreignRows = useMovementRowsMemo(foreigns);
+  function changeTarga(id: number, value: string): void {
+    setMovementsData(prevValue => {
+      if (!prevValue) {
+        return prevValue;
+      }
+
+      const movements = [...prevValue.movements];
+      movements[id].targa = value;
+      return {
+        ...prevValue,
+        movements: movements,
+      };
+    });
+  }
+
+  function changeArrivals(id: number, value: number): void {
+    setMovementsData(prevValue => {
+      if (!prevValue) {
+        return prevValue;
+      }
+
+      const movements = [...prevValue.movements];
+      if (Number.isNaN(value)) {
+        value = 0;
+      }
+      movements[id].arrivi = Math.abs(value);
+      return {
+        ...prevValue,
+        movements: movements
+      };
+    });
+  }
+
+  function changeDepartures(id: number, value: number): void {
+    setMovementsData(prevValue => {
+      if (!prevValue) {
+        return prevValue;
+      }
+
+      const movements = [...prevValue.movements];
+      if (Number.isNaN(value)) {
+        value = 0;
+      }
+      movements[id].partenze = Math.abs(value);
+      return {
+        ...prevValue,
+        movements: movements
+      };
+    });
+  }
+
+  const italianRows = useMovementRowsMemo(italians, provinces ?? [], changeTarga, changeArrivals, changeDepartures);
+  const foreignRows = useMovementRowsMemo(foreigns, countries ?? [], changeTarga, changeArrivals, changeDepartures);
 
   function open(): void {
     setSelected(true);
@@ -167,23 +222,26 @@ export default function IstatTools(): JSX.Element {
 function splitMovements(movements: MovementDTO | undefined, isLoaded: boolean): { italians: MovementEntry[], foreigns: MovementEntry[] } {
   if (!movements || !isLoaded) {
     return {
-      italians: [{}, {}, {}],
-      foreigns: [{}, {}, {}],
+      italians: [{ id: 0 }, { id: 1 }, { id: 2 }],
+      foreigns: [{ id: 0 }, { id: 1 }, { id: 2 }],
     };
   }
 
   const italians: MovementEntry[] = [];
   const foreigns: MovementEntry[] = [];
 
-  for (const movement of movements.movements) {
+  for (let i = 0; i < movements.movements.length; i++) {
+    const movement = movements.movements[i];
     if (movement.italia) {
       italians.push({
+        id: i,
         targa: movement.targa,
         arrivals: movement.arrivi,
         departures: movement.partenze,
       });
     } else {
       foreigns.push({
+        id: i,
         targa: movement.targa,
         arrivals: movement.arrivi,
         departures: movement.partenze,
@@ -194,11 +252,16 @@ function splitMovements(movements: MovementDTO | undefined, isLoaded: boolean): 
   return { italians, foreigns };
 }
 
-function useMovementRowsMemo(movements: MovementEntry[]): JSX.Element[] {
-  return useMemo(() => movements.map((entry, index) => (
-    <Stack key={entry.targa ?? index} direction="row" spacing={2} sx={{
+function useMovementRowsMemo(
+  movements: MovementEntry[],
+  options: string[],
+  onTargaChange: (index: number, value: string) => void,
+  onArrivalsChange: (index: number, value: number) => void,
+  onDeparturesChange: (index: number, value: number) => void,
+): JSX.Element[] {
+  return useMemo(() => movements.map((entry) => (
+    <Stack key={entry.id} direction="row" spacing={1} sx={{
       width: "calc(100% - 2rem)",
-      height: "2rem",
       py: "0.25rem",
       mx: "1rem",
       boxSizing: "border-box",
@@ -208,33 +271,51 @@ function useMovementRowsMemo(movements: MovementEntry[]): JSX.Element[] {
         boxSizing: "border-box",
       },
     }}>
-      <Box sx={{
-        flexBasis: "50%",
-        maxWidth: "50%",
-      }}>
-        {entry.targa === undefined
-          ? <M3Skeleton variant="rounded" />
-          : <Typography variant="bodyLarge" sx={{
-            width: "100%",
-            display: "inline-block",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-          }}>{entry.targa}</Typography>
-        }
-      </Box>
-      <Box sx={{ flexBasis: "25%", textAlign: "center" }}>
-        {entry.arrivals === undefined
-          ? <M3Skeleton variant="rounded" />
-          : <Typography variant="bodyLarge">{entry.arrivals}</Typography>
-        }
-      </Box>
-      <Box sx={{ flexBasis: "25%", textAlign: "center" }}>
-        {entry.departures === undefined
-          ? <M3Skeleton variant="rounded" />
-          : <Typography variant="bodyLarge">{entry.departures}</Typography>
-        }
-      </Box>
+      {entry.targa === undefined || entry.arrivals === undefined || entry.departures === undefined
+        ? <M3Skeleton variant="rounded" height="2.5rem" width="100%" />
+        : <>
+          <Box sx={{
+            flexBasis: "50%",
+            maxWidth: "50%",
+          }}>
+            <FormControl fullWidth>
+              <Autocomplete
+                disableClearable
+                id="targa"
+                size="small"
+                options={options}
+                value={entry.targa}
+                onChange={(_, value) => onTargaChange(entry.id, value)}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </FormControl>
+          </Box>
+          <Box sx={{ flexBasis: "25%", textAlign: "center" }}>
+            <FormControl fullWidth>
+              <TextField
+                id="arrivi"
+                type="number"
+                size="small"
+                inputProps={{ min: 0 }}
+                value={entry.arrivals}
+                onChange={event => onArrivalsChange(entry.id, Number.parseInt(event.target.value as string))}
+              ></TextField>
+            </FormControl>
+          </Box>
+          <Box sx={{ flexBasis: "25%", textAlign: "center" }}>
+            <FormControl fullWidth>
+              <TextField
+                id="partenze"
+                type="number"
+                size="small"
+                inputProps={{ min: 0 }}
+                value={entry.departures}
+                onChange={event => onDeparturesChange(entry.id, Number.parseInt(event.target.value as string))}
+              ></TextField>
+            </FormControl>
+          </Box>
+        </>
+      }
     </Stack>
-  )), [movements]);
+  )), [movements, options, onTargaChange, onArrivalsChange, onDeparturesChange]);
 }
