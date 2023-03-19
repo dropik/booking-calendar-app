@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import FormControl from "@mui/material/FormControl";
-import Autocomplete from "@mui/material/Autocomplete";
+import Autocomplete, { AutocompleteProps } from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import AddchartOutlinedIcon from "@mui/icons-material/AddchartOutlined";
 
@@ -172,7 +172,7 @@ export default function IstatTools(): JSX.Element {
               <Stack direction="row" sx={{ width: "100%", }}>
                 <Stack direction="column" sx={{
                   flexBasis: "50%",
-                  borderRight: `1px solid ${theme.palette.outline.main}`
+                  borderRight: (theme) => `1px solid ${theme.palette.outline.main}`
                 }}>
                   <Stack direction="row" spacing={2} sx={{ width: "calc(100% - 2rem)", py: "0.25rem", mx: "1rem" }}>
                     <Typography variant="titleSmall" textAlign="left" sx={{ flexBasis: "50%" }}>Targa</Typography>
@@ -278,17 +278,13 @@ function useMovementRowsMemo(
             flexBasis: "50%",
             maxWidth: "50%",
           }}>
-            <FormControl fullWidth>
-              <Autocomplete
-                disableClearable
-                id="targa"
-                size="small"
-                options={options}
-                value={entry.targa}
-                onChange={(_, value) => onTargaChange(entry.id, value)}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </FormControl>
+            <TargaAutocomplete
+              id="targa"
+              value={entry.targa}
+              options={options}
+              onChange={(_, value) => onTargaChange(entry.id, value as string)}
+              renderInput={(params) => <TextField {...params} />}
+            />
           </Box>
           <Box sx={{ flexBasis: "25%", textAlign: "center" }}>
             <FormControl fullWidth>
@@ -318,4 +314,90 @@ function useMovementRowsMemo(
       }
     </Stack>
   )), [movements, options, onTargaChange, onArrivalsChange, onDeparturesChange]);
+}
+
+function TargaAutocomplete<T, Multple extends boolean | undefined, FreeSolo extends boolean | undefined>(
+  { ...props }: AutocompleteProps<T, Multple, boolean, FreeSolo>): JSX.Element {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isOpening, setIsOpening] = useState(false);
+  const [transformOrigin, setTransformOrigin] = useState<"top" | "bottom">("top");
+
+  useEffect(() => {
+    if (isOpen) {
+      setIsOpening(true);
+    }
+  }, [isOpen]);
+
+  return (
+    <FormControl fullWidth>
+      <Autocomplete
+        {...props}
+        disableClearable
+        forcePopupIcon={false}
+        size="small"
+        open={isOpen}
+        onOpen={() => setIsOpen(true)}
+        onClose={() => setIsOpening(false)}
+        slotProps={{
+          popper: {
+            keepMounted: true,
+            modifiers: [
+              {
+                name: "setTransformOrigin",
+                enabled: true,
+                phase: "main",
+                fn: ({ state }) => {
+                  if (state.placement === "top") {
+                    setTransformOrigin("bottom");
+                  } else {
+                    setTransformOrigin("top");
+                  }
+                }
+              }
+            ]
+          },
+          paper: {
+            className: isOpening ? "opening" : undefined,
+            elevation: isOpening ? 2 : 0,
+            sx: {
+              backgroundColor: (theme) => theme.palette.surface.main,
+              transformOrigin: transformOrigin,
+              transition: (theme) => theme.transitions.create(
+                ["transform", "opacity", "box-shadow"],
+                {
+                  duration: isOpening ? theme.transitions.duration.medium4 : theme.transitions.duration.standard,
+                  easing: isOpening ? theme.transitions.easing.emphasizedDecelerate : theme.transitions.easing.emphasized,
+                }),
+              transform: "scaleY(0)",
+              opacity: 0,
+              "&.opening": {
+                transform: "scaleY(1)",
+                opacity: 1,
+              },
+              "&::after": {
+                position: "absolute",
+                zIndex: 99999,
+                pointerEvents: "none",
+                content: "' '",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: (theme) => theme.palette.primary.main,
+                opacity: (theme) => theme.opacities.surface5,
+              },
+              "& .MuiAutocomplete-listbox": {
+                overflowY: "overlay",
+              }
+            },
+            onTransitionEnd: () => {
+              if (!isOpening) {
+                setIsOpen(false);
+              }
+            }
+          },
+        }}
+      />
+    </FormControl>
+  );
 }
