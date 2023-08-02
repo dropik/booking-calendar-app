@@ -2,20 +2,19 @@ import React, { useRef, useState } from "react";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDownOutlined";
 import Box from "@mui/material/Box";
 import Popover from "@mui/material/Popover";
+import { SelectChangeEvent } from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 import ChevronLeftOutlined from "@mui/icons-material/ChevronLeftOutlined";
 import ChevronRightOutlined from "@mui/icons-material/ChevronRightOutlined";
 
 import M3TextButton from "../../../m3/M3TextButton";
 import M3IconButton from "../../../m3/M3IconButton";
 import M3DatePicker from "../../../m3/M3DatePicker";
+import M3Selectbox from "../../../m3/M3Selectbox";
 
 import { Utils } from "../../../../utils";
 import { useAppDispatch, useColumns, useLeftmostDate } from "../../../../redux/hooks";
 import * as TableSlice from "../../../../redux/tableSlice";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
 
 export default function DateInput(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -85,7 +84,6 @@ export default function DateInput(): JSX.Element {
       justifyContent: "center",
       gap: "0.5rem",
       alignItems: "center",
-      py: "0.5rem",
     }}>
       <Box sx={{
         display: "flex",
@@ -119,15 +117,12 @@ export default function DateInput(): JSX.Element {
           }}
         />
       </Popover>
-      <FormControl>
-        <InputLabel id="days-label">Giorni</InputLabel>
-        <Select value={columns} label="Giorni" labelId="days-label" onChange={tryUpdateColumns}>
-          <MenuItem value={15}>15 Giorni</MenuItem>
-          <MenuItem value={30}>30 Giorni</MenuItem>
-          <MenuItem value={45}>45 Giorni</MenuItem>
-          <MenuItem value={60}>60 Giorni</MenuItem>
-        </Select>
-      </FormControl>
+      <M3Selectbox value={columns} onChange={tryUpdateColumns}>
+        <MenuItem value={15}>15 Giorni</MenuItem>
+        <MenuItem value={30}>30 Giorni</MenuItem>
+        <MenuItem value={45}>45 Giorni</MenuItem>
+        <MenuItem value={60}>60 Giorni</MenuItem>
+      </M3Selectbox>
     </Box>
   );
 }
