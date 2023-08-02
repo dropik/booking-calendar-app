@@ -27,9 +27,6 @@ export function useRightmostDate(): string {
   return useAppSelector((state) => Utils.getDateShift(state.table.leftmostDate, state.table.columns - 1));
 }
 
-export const useCurrentDate:        () => string =
-  () => useAppSelector((state) => state.table.currentDate);
-
 export const useLeftmostDate:       () => string =
   () => useAppSelector(state => state.table.leftmostDate);
 
