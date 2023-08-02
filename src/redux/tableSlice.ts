@@ -9,7 +9,6 @@ export type FetchPeriod = {
 };
 
 export type State = {
-  currentDate: string,
   leftmostDate: string,
   columns: number,
   offsetHeight: number,
@@ -20,20 +19,17 @@ export type State = {
 
 function getInitialState(): State {
   const dateObj = new Date();
-  const initialDate = Utils.dateToString(dateObj);
-  const columns = getColumnsAmount(dateObj);
-  dateObj.setDate(1);
   const leftmostDate = Utils.dateToString(dateObj);
+  const initialColumns = 30;
 
   return {
-    currentDate: initialDate,
     leftmostDate: leftmostDate,
-    columns: columns,
+    columns: initialColumns,
     offsetHeight: 0,
     clientHeight: 0,
     lastFetchPeriod: {
       from: leftmostDate,
-      to: Utils.getDateShift(leftmostDate, columns - 1)
+      to: Utils.getDateShift(leftmostDate, initialColumns - 1),
     },
     scrollLeft: 0,
   };
@@ -54,7 +50,11 @@ export const tableSlice = createSlice({
       updateStateByNewDate(state, Utils.getDateShift(state.leftmostDate, state.columns));
     },
     goPrev: (state) => {
-      updateStateByNewDate(state, Utils.getDateShift(state.leftmostDate, -1));
+      updateStateByNewDate(state, Utils.getDateShift(state.leftmostDate, -state.columns));
+    },
+    updateColums: (state, action: PayloadAction<{ columns: number }>) => {
+      state.columns = action.payload.columns;
+      state.lastFetchPeriod.to = Utils.getDateShift(state.leftmostDate, state.columns - 1);
     },
     scrollX: (state, action: PayloadAction<number>) => {
       state.scrollLeft = action.payload;
@@ -65,20 +65,12 @@ export const tableSlice = createSlice({
   }
 });
 
-export const { updateHeights, changeDate, goNext, goPrev, scrollX } = tableSlice.actions;
+export const { updateHeights, changeDate, goNext, goPrev, updateColums, scrollX } = tableSlice.actions;
 
 export default tableSlice.reducer;
 
 function updateStateByNewDate(state: WritableDraft<State>, date: string): void {
-  state.currentDate = date;
-  const dateObj = new Date(date);
-  state.columns = getColumnsAmount(dateObj);
-  dateObj.setDate(1);
-  state.leftmostDate = Utils.dateToString(dateObj);
+  state.leftmostDate = date;
   state.lastFetchPeriod.from = state.leftmostDate,
   state.lastFetchPeriod.to = Utils.getDateShift(state.leftmostDate, state.columns - 1);
-}
-
-function getColumnsAmount(date: Date): number {
-  return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
 }

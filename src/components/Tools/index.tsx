@@ -10,7 +10,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 import { CityTaxData, fetchCityTaxAsync, fetchPoliceRicevutaAsync, postPoliceExportRequestAsync } from "../../api";
 import { Utils } from "../../utils";
-import { useAppDispatch, useAppSelector, useCurrentDate } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector, useLeftmostDate } from "../../redux/hooks";
 import { show as showMessage } from "../../redux/snackbarMessageSlice";
 
 import DrawerAdjacent from "../m3/DrawerAdjacent";
@@ -22,10 +22,10 @@ import IstatTools from "./IstatTools";
 
 export default function Tools(): JSX.Element {
   const dispatch = useAppDispatch();
-  const currentDate = useCurrentDate();
-  const [downloadDate, setDownloadDate] = useState(currentDate);
-  const [from, setFrom] = useState(currentDate);
-  const [to, setTo] = useState(Utils.getDateShift(currentDate, 1));
+  const leftmostDate = useLeftmostDate();
+  const [downloadDate, setDownloadDate] = useState(leftmostDate);
+  const [from, setFrom] = useState(leftmostDate);
+  const [to, setTo] = useState(Utils.getDateShift(leftmostDate, 1));
   const [isFromValid, setIsFromValid] = useState(true);
   const [isToValid, setIsToValid] = useState(true);
   const theme = useTheme();
