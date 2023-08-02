@@ -21,9 +21,8 @@ export type State = {
 function getInitialState(): State {
   const dateObj = new Date();
   const initialDate = Utils.dateToString(dateObj);
-  const columns = getColumnsAmount(dateObj);
-  dateObj.setDate(1);
-  const leftmostDate = Utils.dateToString(dateObj);
+  const columns = getColumnsAmount();
+  const leftmostDate = initialDate;
 
   return {
     currentDate: initialDate,
@@ -71,14 +70,12 @@ export default tableSlice.reducer;
 
 function updateStateByNewDate(state: WritableDraft<State>, date: string): void {
   state.currentDate = date;
-  const dateObj = new Date(date);
-  state.columns = getColumnsAmount(dateObj);
-  dateObj.setDate(1);
-  state.leftmostDate = Utils.dateToString(dateObj);
+  state.columns = getColumnsAmount();
+  state.leftmostDate = date;
   state.lastFetchPeriod.from = state.leftmostDate,
   state.lastFetchPeriod.to = Utils.getDateShift(state.leftmostDate, state.columns - 1);
 }
 
-function getColumnsAmount(date: Date): number {
-  return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+function getColumnsAmount(): number {
+  return 30;
 }
