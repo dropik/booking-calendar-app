@@ -10,12 +10,11 @@ import M3IconButton from "../../../m3/M3IconButton";
 import M3DatePicker from "../../../m3/M3DatePicker";
 
 import { Utils } from "../../../../utils";
-import { useAppDispatch, useColumns, useCurrentDate, useLeftmostDate } from "../../../../redux/hooks";
+import { useAppDispatch, useColumns, useLeftmostDate } from "../../../../redux/hooks";
 import * as TableSlice from "../../../../redux/tableSlice";
 
 export default function DateInput(): JSX.Element {
   const dispatch = useAppDispatch();
-  const currentDate = useCurrentDate();
   const leftmostDate = useLeftmostDate();
   const columns = useColumns();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -95,7 +94,7 @@ export default function DateInput(): JSX.Element {
       </M3TextButton>
       <Popover open={open} anchorReference="none" PaperProps={{ sx: { display: "none" } }}>
         <M3DatePicker
-          value={new Date(currentDate)}
+          value={new Date(leftmostDate)}
           onChange={tryUpdateDate}
           renderInput={() => <></>}
           open={open}

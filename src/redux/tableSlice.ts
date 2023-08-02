@@ -9,7 +9,6 @@ export type FetchPeriod = {
 };
 
 export type State = {
-  currentDate: string,
   leftmostDate: string,
   columns: number,
   offsetHeight: number,
@@ -20,12 +19,10 @@ export type State = {
 
 function getInitialState(): State {
   const dateObj = new Date();
-  const initialDate = Utils.dateToString(dateObj);
+  const leftmostDate = Utils.dateToString(dateObj);
   const columns = getColumnsAmount();
-  const leftmostDate = initialDate;
 
   return {
-    currentDate: initialDate,
     leftmostDate: leftmostDate,
     columns: columns,
     offsetHeight: 0,
@@ -69,9 +66,8 @@ export const { updateHeights, changeDate, goNext, goPrev, scrollX } = tableSlice
 export default tableSlice.reducer;
 
 function updateStateByNewDate(state: WritableDraft<State>, date: string): void {
-  state.currentDate = date;
-  state.columns = getColumnsAmount();
   state.leftmostDate = date;
+  state.columns = getColumnsAmount();
   state.lastFetchPeriod.from = state.leftmostDate,
   state.lastFetchPeriod.to = Utils.getDateShift(state.leftmostDate, state.columns - 1);
 }
