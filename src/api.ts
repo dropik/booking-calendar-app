@@ -203,6 +203,14 @@ export async function postIstatMovementsAsync(data: MovementDTO): Promise<void> 
   return postDataWithoutResponseAsync("/api/v1/istat/send", data);
 }
 
+export async function fetchCountriesAsync(): Promise<{ data: string[] }> {
+  return fetchJsonDataAsync<string[]>("/api/v1/istat/countries");
+}
+
+export async function fetchProvincesAsync(): Promise<{ data: string[] }> {
+  return fetchJsonDataAsync<string[]>("/api/v1/police/provinces");
+}
+
 async function fetchJsonDataAsync<T>(query: string): Promise<{ data: T }> {
   const response = await fetch(query);
   if (response.status === 408) {
