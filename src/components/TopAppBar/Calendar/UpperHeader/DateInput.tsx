@@ -12,6 +12,10 @@ import M3DatePicker from "../../../m3/M3DatePicker";
 import { Utils } from "../../../../utils";
 import { useAppDispatch, useColumns, useLeftmostDate } from "../../../../redux/hooks";
 import * as TableSlice from "../../../../redux/tableSlice";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
 
 export default function DateInput(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -49,10 +53,17 @@ export default function DateInput(): JSX.Element {
   const open = Boolean(anchorEl);
   const id = open ? "datepicker-wrapper" : undefined;
 
-  function tryUpdateDate(date: Date | null) {
+  function tryUpdateDate(date: Date | null): void {
     if (date) {
       setAnchorEl(null);
       dispatch(TableSlice.changeDate({ date: Utils.dateToString(date) }));
+    }
+  }
+
+  function tryUpdateColumns(event: SelectChangeEvent<number>): void {
+    const columns = event.target.value as number;
+    if (columns > 0) {
+      dispatch(TableSlice.updateColums({ columns }));
     }
   }
 
@@ -72,9 +83,12 @@ export default function DateInput(): JSX.Element {
     <Box sx={{
       display: "flex",
       justifyContent: "center",
+      gap: "0.5rem",
+      alignItems: "center",
+      py: "0.5rem",
     }}>
       <Box sx={{
-        display: "flex"
+        display: "flex",
       }}>
         <M3IconButton onClick={goPrev}>
           <ChevronLeftOutlined />
@@ -105,6 +119,15 @@ export default function DateInput(): JSX.Element {
           }}
         />
       </Popover>
+      <FormControl>
+        <InputLabel id="days-label">Giorni</InputLabel>
+        <Select value={columns} label="Giorni" labelId="days-label" onChange={tryUpdateColumns}>
+          <MenuItem value={15}>15 Giorni</MenuItem>
+          <MenuItem value={30}>30 Giorni</MenuItem>
+          <MenuItem value={45}>45 Giorni</MenuItem>
+          <MenuItem value={60}>60 Giorni</MenuItem>
+        </Select>
+      </FormControl>
     </Box>
   );
 }

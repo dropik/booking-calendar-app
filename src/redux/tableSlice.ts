@@ -20,16 +20,16 @@ export type State = {
 function getInitialState(): State {
   const dateObj = new Date();
   const leftmostDate = Utils.dateToString(dateObj);
-  const columns = getColumnsAmount();
+  const initialColumns = 30;
 
   return {
     leftmostDate: leftmostDate,
-    columns: columns,
+    columns: initialColumns,
     offsetHeight: 0,
     clientHeight: 0,
     lastFetchPeriod: {
       from: leftmostDate,
-      to: Utils.getDateShift(leftmostDate, columns - 1)
+      to: Utils.getDateShift(leftmostDate, initialColumns - 1),
     },
     scrollLeft: 0,
   };
@@ -52,6 +52,10 @@ export const tableSlice = createSlice({
     goPrev: (state) => {
       updateStateByNewDate(state, Utils.getDateShift(state.leftmostDate, -state.columns));
     },
+    updateColums: (state, action: PayloadAction<{ columns: number }>) => {
+      state.columns = action.payload.columns;
+      state.lastFetchPeriod.to = Utils.getDateShift(state.leftmostDate, state.columns - 1);
+    },
     scrollX: (state, action: PayloadAction<number>) => {
       state.scrollLeft = action.payload;
       if (state.scrollLeft < 0) {
@@ -61,17 +65,12 @@ export const tableSlice = createSlice({
   }
 });
 
-export const { updateHeights, changeDate, goNext, goPrev, scrollX } = tableSlice.actions;
+export const { updateHeights, changeDate, goNext, goPrev, updateColums, scrollX } = tableSlice.actions;
 
 export default tableSlice.reducer;
 
 function updateStateByNewDate(state: WritableDraft<State>, date: string): void {
   state.leftmostDate = date;
-  state.columns = getColumnsAmount();
   state.lastFetchPeriod.from = state.leftmostDate,
   state.lastFetchPeriod.to = Utils.getDateShift(state.leftmostDate, state.columns - 1);
-}
-
-function getColumnsAmount(): number {
-  return 30;
 }
