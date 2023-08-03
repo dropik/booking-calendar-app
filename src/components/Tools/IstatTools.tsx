@@ -19,6 +19,7 @@ import M3TextButton from "../m3/M3TextButton";
 import { fetchCountriesAsync, fetchIstatMovementsAsync, fetchProvincesAsync, MovementDTO } from "../../api";
 import { useAppDispatch } from "../../redux/hooks";
 import { show as showSnackbarMessage } from "../../redux/snackbarMessageSlice";
+import { NavLink } from "react-router-dom";
 
 type MovementEntry = {
   id: number,
@@ -92,10 +93,6 @@ export default function IstatTools(): JSX.Element {
   const italianRows = useMovementRowsMemo(italians, provinces ?? [], changeTarga, changeArrivals, changeDepartures);
   const foreignRows = useMovementRowsMemo(foreigns, countries ?? [], changeTarga, changeArrivals, changeDepartures);
 
-  function open(): void {
-    setSelected(true);
-  }
-
   function close(): void {
     setSelected(false);
     setMovementsData(undefined);
@@ -145,7 +142,9 @@ export default function IstatTools(): JSX.Element {
 
   return (
     <>
-      <M3Chip selected={selected} onClick={open} label="ISTAT" />
+      <NavLink to="istat">
+        <M3Chip selected={false} onClick={() => void 0} label="ISTAT" />
+      </NavLink>
       <M3Dialog open={selected} onClose={close} heightRem={35.125} transitionDuration={theme.transitions.duration.medium4}>
         <Stack spacing={3} sx={{ p: "1.5rem", minWidth: "45rem", }}>
           <Stack spacing={2} alignItems="center">

@@ -65,7 +65,7 @@ export default function AppDrawer(): JSX.Element {
               {
                 text: "Strumenti",
                 link: "/tools",
-                end: true,
+                end: false,
                 icon: <CreateOutlinedIcon />
               },
               {
