@@ -10,7 +10,6 @@ import Autocomplete, { AutocompleteProps } from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import AddchartOutlinedIcon from "@mui/icons-material/AddchartOutlined";
 
-import M3Chip from "../m3/M3Chip";
 import M3Dialog from "../m3/M3Dialog";
 import M3Skeleton from "../m3/M3Skeleton";
 import M3Divider from "../m3/M3Divider";
@@ -19,7 +18,6 @@ import M3TextButton from "../m3/M3TextButton";
 import { fetchCountriesAsync, fetchIstatMovementsAsync, fetchProvincesAsync, MovementDTO } from "../../api";
 import { useAppDispatch } from "../../redux/hooks";
 import { show as showSnackbarMessage } from "../../redux/snackbarMessageSlice";
-import { NavLink } from "react-router-dom";
 
 type MovementEntry = {
   id: number,
@@ -28,7 +26,7 @@ type MovementEntry = {
   departures?: number,
 };
 
-export default function IstatTools(): JSX.Element {
+export default function Istat(): JSX.Element {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const [selected, setSelected] = useState(false);
@@ -142,9 +140,6 @@ export default function IstatTools(): JSX.Element {
 
   return (
     <>
-      <NavLink to="istat">
-        <M3Chip selected={false} onClick={() => void 0} label="ISTAT" />
-      </NavLink>
       <M3Dialog open={selected} onClose={close} heightRem={35.125} transitionDuration={theme.transitions.duration.medium4}>
         <Stack spacing={3} sx={{ p: "1.5rem", minWidth: "45rem", }}>
           <Stack spacing={2} alignItems="center">

@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useRef, useState } from "react";
 
+import { NavLink } from "react-router-dom";
+
 import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
@@ -14,11 +16,11 @@ import { show as showMessage } from "../../redux/snackbarMessageSlice";
 import { CityTaxData, fetchCityTaxAsync, fetchPoliceRicevutaAsync, postPoliceExportRequestAsync } from "../../api";
 import { Utils } from "../../utils";
 
-import IstatTools from "./IstatTools";
 import M3DatePicker from "../m3/M3DatePicker";
 import M3TextButton from "../m3/M3TextButton";
 import { SurfaceTint } from "../m3/Tints";
 import M3Skeleton from "../m3/M3Skeleton";
+import M3Chip from "../m3/M3Chip";
 
 export default function Dashboard(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -101,7 +103,9 @@ export default function Dashboard(): JSX.Element {
     <Stack spacing={1} sx={{ pr: "1rem" }}>
       <Typography variant="displaySmall" sx={{ pt: "3rem", pl: "1rem" }}>Strumenti</Typography>
       <Stack direction="row" spacing={1}>
-        <IstatTools />
+        <NavLink to="istat">
+          <M3Chip selected={false} onClick={() => void 0} label="ISTAT" />
+        </NavLink>
       </Stack>
       <Stack direction="row" spacing={2} sx={{ mt: "2rem !important" }}>
         <Stack spacing={2} sx={{

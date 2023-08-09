@@ -7,8 +7,8 @@ import BookingDetails from "./BookingDetails";
 import Tools from "./Tools";
 import Clients from "./Clients";
 import Settings from "./Settings";
-import Typography from "@mui/material/Typography";
 import Dashboard from "./Tools/Dashboard";
+import Istat from "./Tools/Istat";
 
 export default function AppRoutes(): JSX.Element {
   return (
@@ -19,7 +19,7 @@ export default function AppRoutes(): JSX.Element {
       </Route>
       <Route path="tools" element={<Tools />}>
         <Route path="" element={<Dashboard />} />
-        <Route path="istat" element={<Typography>ISTAT</Typography>} />
+        <Route path="istat" element={<Istat />} />
       </Route>
       <Route path="clients" element={<Clients />} />
       <Route path="settings" element={<Settings />} />
