@@ -19,6 +19,7 @@ export default function M3GlobalStyles(): JSX.Element {
         backgroundColor: location.pathname === "/tools/istat"
           ? theme.palette.surfaceDim.main
           : theme.palette.surface.main,
+        transition: theme.transitions.create(["background-color"], { duration: theme.transitions.duration.shorter, easing: theme.transitions.easing.emphasized }),
       },
       body: {
         margin: 0,
