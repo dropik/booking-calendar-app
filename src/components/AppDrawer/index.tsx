@@ -30,7 +30,7 @@ export default function AppDrawer(): JSX.Element {
           top: "10.5rem",
           width: "5rem",
           boxSizing: "border-box",
-          backgroundColor: theme.palette.surface.main,
+          backgroundColor: "transparent",
           border: "none",
           borderTopRightRadius: "1rem",
           borderBottomRightRadius: "1rem",

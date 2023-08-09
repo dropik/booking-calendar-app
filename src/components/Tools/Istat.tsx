@@ -140,6 +140,13 @@ export default function Istat(): JSX.Element {
 
   return (
     <>
+      <Stack direction="column" sx={{
+        width: "100%",
+        height: "100vh",
+        backgroundColor: theme.palette.surfaceContainer.main,
+      }}>
+
+      </Stack>
       <M3Dialog open={selected} onClose={close} heightRem={35.125} transitionDuration={theme.transitions.duration.medium4}>
         <Stack spacing={3} sx={{ p: "1.5rem", minWidth: "45rem", }}>
           <Stack spacing={2} alignItems="center">

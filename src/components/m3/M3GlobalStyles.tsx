@@ -6,15 +6,19 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
+import { useLocation } from "react-router-dom";
 
 export default function M3GlobalStyles(): JSX.Element {
   const theme = useTheme();
+  const location = useLocation();
 
   return (
     <GlobalStyles styles={{
       html: {
         fontFamily: "Roboto, Arial, Helvetica, sans-serif",
-        backgroundColor: theme.palette.surface.main
+        backgroundColor: location.pathname === "/tools/istat"
+          ? theme.palette.surfaceDim.main
+          : theme.palette.surface.main,
       },
       body: {
         margin: 0,
