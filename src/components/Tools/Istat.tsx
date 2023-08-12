@@ -43,114 +43,131 @@ export default function Istat(): JSX.Element {
   const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [selected, setSelected] = useState(false);
+  // const [selected, setSelected] = useState(false);
   const [movementsData, setMovementsData] = useState<MovementDTO | undefined>(undefined);
-  const [countries, setCountries] = useState<string[] | undefined>(undefined);
-  const [provinces, setProvinces] = useState<string[] | undefined>(undefined);
+  // const [countries, setCountries] = useState<string[] | undefined>(undefined);
+  // const [provinces, setProvinces] = useState<string[] | undefined>(undefined);
 
-  const isLoaded = Boolean(movementsData) && Boolean(countries) && Boolean(provinces);
+  const isLoaded = Boolean(movementsData);
   const { italians, foreigns } = splitMovements(movementsData, isLoaded);
-
-  function changeTarga(id: number, value: string): void {
-    setMovementsData(prevValue => {
-      if (!prevValue) {
-        return prevValue;
-      }
-
-      const movements = [...prevValue.movements];
-      movements[id].targa = value;
-      return {
-        ...prevValue,
-        movements: movements,
-      };
-    });
+  let totalArrivals = 0;
+  let totalDepartures = 0;
+  for (const movement of (movementsData?.movements ?? [])) {
+    totalArrivals += movement.arrivi;
+    totalDepartures += movement.partenze;
   }
+  const nextTotal = movementsData?.prevTotal === undefined ? undefined : movementsData.prevTotal + totalArrivals - totalDepartures;
 
-  function changeArrivals(id: number, value: number): void {
-    setMovementsData(prevValue => {
-      if (!prevValue) {
-        return prevValue;
-      }
+  // function changeTarga(id: number, value: string): void {
+  //   setMovementsData(prevValue => {
+  //     if (!prevValue) {
+  //       return prevValue;
+  //     }
 
-      const movements = [...prevValue.movements];
-      if (Number.isNaN(value)) {
-        value = 0;
-      }
-      movements[id].arrivi = Math.abs(value);
-      return {
-        ...prevValue,
-        movements: movements
-      };
-    });
-  }
+  //     const movements = [...prevValue.movements];
+  //     movements[id].targa = value;
+  //     return {
+  //       ...prevValue,
+  //       movements: movements,
+  //     };
+  //   });
+  // }
 
-  function changeDepartures(id: number, value: number): void {
-    setMovementsData(prevValue => {
-      if (!prevValue) {
-        return prevValue;
-      }
+  // function changeArrivals(id: number, value: number): void {
+  //   setMovementsData(prevValue => {
+  //     if (!prevValue) {
+  //       return prevValue;
+  //     }
 
-      const movements = [...prevValue.movements];
-      if (Number.isNaN(value)) {
-        value = 0;
-      }
-      movements[id].partenze = Math.abs(value);
-      return {
-        ...prevValue,
-        movements: movements
-      };
-    });
-  }
+  //     const movements = [...prevValue.movements];
+  //     if (Number.isNaN(value)) {
+  //       value = 0;
+  //     }
+  //     movements[id].arrivi = Math.abs(value);
+  //     return {
+  //       ...prevValue,
+  //       movements: movements
+  //     };
+  //   });
+  // }
 
-  const italianRows = useMovementRowsMemo(italians, provinces ?? [], changeTarga, changeArrivals, changeDepartures);
-  const foreignRows = useMovementRowsMemo(foreigns, countries ?? [], changeTarga, changeArrivals, changeDepartures);
+  // function changeDepartures(id: number, value: number): void {
+  //   setMovementsData(prevValue => {
+  //     if (!prevValue) {
+  //       return prevValue;
+  //     }
 
-  function close(): void {
-    setSelected(false);
-    setMovementsData(undefined);
-  }
+  //     const movements = [...prevValue.movements];
+  //     if (Number.isNaN(value)) {
+  //       value = 0;
+  //     }
+  //     movements[id].partenze = Math.abs(value);
+  //     return {
+  //       ...prevValue,
+  //       movements: movements
+  //     };
+  //   });
+  // }
+
+  // const italianRows = useMovementRowsMemo(italians, provinces ?? [], changeTarga, changeArrivals, changeDepartures);
+  // const foreignRows = useMovementRowsMemo(foreigns, countries ?? [], changeTarga, changeArrivals, changeDepartures);
+
+  // function close(): void {
+  //   setSelected(false);
+  //   setMovementsData(undefined);
+  // }
 
   useEffect(() => {
+    let isSubscribed = true;
+
     async function downloadData(): Promise<void> {
       try {
         const { data } = await fetchIstatMovementsAsync();
-        setMovementsData(data);
+        if (isSubscribed) {
+          setMovementsData(data);
+        }
       } catch (error: any) {
-        dispatch(showSnackbarMessage({ type: "error", message: error?.message }));
+        if (isSubscribed) {
+          dispatch(showSnackbarMessage({ type: "error", message: error?.message }));
+        }
       }
     }
-    if (selected && !movementsData) {
+    if (!movementsData) {
       downloadData();
     }
-  }, [dispatch, movementsData, selected]);
 
-  useEffect(() => {
-    async function downloadData(): Promise<void> {
-      try {
-        const { data } = await fetchCountriesAsync();
-        setCountries(data);
-      } catch (error: any) {
-        dispatch(showSnackbarMessage({ type: "error", message: error?.message }));
-      }
-    }
-    if (selected && !countries) {
-      downloadData();
-    }
-  }, [dispatch, countries, selected]);
+    return () => {
+      isSubscribed = false;
+    };
+  }, [dispatch, movementsData]);
 
-  useEffect(() => {
-    async function downloadData(): Promise<void> {
-      try {
-        const { data } = await fetchProvincesAsync();
-        setProvinces(data);
-      } catch (error: any) {
-        dispatch(showSnackbarMessage({ type: "error", message: error?.message }));
-      }
-    }
-    if (selected && !provinces) {
-      downloadData();
-    }
-  }, [dispatch, provinces, selected]);
+  // useEffect(() => {
+  //   async function downloadData(): Promise<void> {
+  //     try {
+  //       const { data } = await fetchCountriesAsync();
+  //       setCountries(data);
+  //     } catch (error: any) {
+  //       dispatch(showSnackbarMessage({ type: "error", message: error?.message }));
+  //     }
+  //   }
+  //   if (selected && !countries) {
+  //     downloadData();
+  //   }
+  // }, [dispatch, countries, selected]);
+
+  // useEffect(() => {
+  //   async function downloadData(): Promise<void> {
+  //     try {
+  //       const { data } = await fetchProvincesAsync();
+  //       setProvinces(data);
+  //     } catch (error: any) {
+  //       dispatch(showSnackbarMessage({ type: "error", message: error?.message }));
+  //     }
+  //   }
+  //   if (selected && !provinces) {
+  //     downloadData();
+  //   }
+  // }, [dispatch, provinces, selected]);
 
   return (
     <>
@@ -169,9 +186,9 @@ export default function Istat(): JSX.Element {
         <Stack direction="row" justifyContent="space-between" alignItems="center" py="1rem">
           <Typography variant="displaySmall">ISTAT</Typography>
           <Stack direction="column" alignItems="flex-end">
-            <Typography variant="titleLarge">04/08/2023</Typography>
-            <Typography variant="titleMedium">8 presenze precedenti</Typography>
-            <Typography variant="titleMedium">24 presenze attuali</Typography>
+            <Typography variant="titleLarge">{movementsData?.date}</Typography>
+            <Typography variant="titleMedium">{movementsData?.prevTotal} presenze precedenti</Typography>
+            <Typography variant="titleMedium">{nextTotal} presenze attuali</Typography>
           </Stack>
         </Stack>
         <Box sx={{
@@ -185,12 +202,12 @@ export default function Istat(): JSX.Element {
             right: 0,
             bottom: 0,
           }}>
-            <PresenseList title="Italiani" />
-            <PresenseList title="Stranieri" />
+            <PresenseList title="Italiani" list={italians} />
+            <PresenseList title="Stranieri" list={foreigns} />
           </Stack>
         </Box>
       </Stack>
-      <M3Dialog open={selected} onClose={close} heightRem={35.125} transitionDuration={theme.transitions.duration.medium4}>
+      {/* <M3Dialog open={selected} onClose={close} heightRem={35.125} transitionDuration={theme.transitions.duration.medium4}>
         <Stack spacing={3} sx={{ p: "1.5rem", minWidth: "45rem", }}>
           <Stack spacing={2} alignItems="center">
             <AddchartOutlinedIcon />
@@ -258,7 +275,7 @@ export default function Istat(): JSX.Element {
             </Stack>
           </Stack>
         </Stack>
-      </M3Dialog>
+      </M3Dialog> */}
     </>
   );
 }
@@ -296,161 +313,162 @@ function splitMovements(movements: MovementDTO | undefined, isLoaded: boolean): 
   return { italians, foreigns };
 }
 
-function useMovementRowsMemo(
-  movements: MovementEntry[],
-  options: string[],
-  onTargaChange: (index: number, value: string) => void,
-  onArrivalsChange: (index: number, value: number) => void,
-  onDeparturesChange: (index: number, value: number) => void,
-): JSX.Element[] {
-  return useMemo(() => movements.map((entry) => (
-    <Stack key={entry.id} direction="row" spacing={1} sx={{
-      width: "calc(100% - 2rem)",
-      py: "0.25rem",
-      mx: "1rem",
-      boxSizing: "border-box",
-      alignItems: "center",
-      ".MuiBox-root": {
-        height: "max-content",
-        boxSizing: "border-box",
-      },
-    }}>
-      {entry.targa === undefined || entry.arrivals === undefined || entry.departures === undefined
-        ? <M3Skeleton variant="rounded" height="2.5rem" width="100%" />
-        : <>
-          <Box sx={{
-            flexBasis: "50%",
-            maxWidth: "50%",
-          }}>
-            <TargaAutocomplete
-              id="targa"
-              value={entry.targa}
-              options={options}
-              onChange={(_, value) => onTargaChange(entry.id, value as string)}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </Box>
-          <Box sx={{ flexBasis: "25%", textAlign: "center" }}>
-            <FormControl fullWidth>
-              <TextField
-                id="arrivi"
-                type="number"
-                size="small"
-                inputProps={{ min: 0 }}
-                value={entry.arrivals}
-                onChange={event => onArrivalsChange(entry.id, Number.parseInt(event.target.value as string))}
-              ></TextField>
-            </FormControl>
-          </Box>
-          <Box sx={{ flexBasis: "25%", textAlign: "center" }}>
-            <FormControl fullWidth>
-              <TextField
-                id="partenze"
-                type="number"
-                size="small"
-                inputProps={{ min: 0 }}
-                value={entry.departures}
-                onChange={event => onDeparturesChange(entry.id, Number.parseInt(event.target.value as string))}
-              ></TextField>
-            </FormControl>
-          </Box>
-        </>
-      }
-    </Stack>
-  )), [movements, options, onTargaChange, onArrivalsChange, onDeparturesChange]);
-}
+// function useMovementRowsMemo(
+//   movements: MovementEntry[],
+//   options: string[],
+//   onTargaChange: (index: number, value: string) => void,
+//   onArrivalsChange: (index: number, value: number) => void,
+//   onDeparturesChange: (index: number, value: number) => void,
+// ): JSX.Element[] {
+//   return useMemo(() => movements.map((entry) => (
+//     <Stack key={entry.id} direction="row" spacing={1} sx={{
+//       width: "calc(100% - 2rem)",
+//       py: "0.25rem",
+//       mx: "1rem",
+//       boxSizing: "border-box",
+//       alignItems: "center",
+//       ".MuiBox-root": {
+//         height: "max-content",
+//         boxSizing: "border-box",
+//       },
+//     }}>
+//       {entry.targa === undefined || entry.arrivals === undefined || entry.departures === undefined
+//         ? <M3Skeleton variant="rounded" height="2.5rem" width="100%" />
+//         : <>
+//           <Box sx={{
+//             flexBasis: "50%",
+//             maxWidth: "50%",
+//           }}>
+//             <TargaAutocomplete
+//               id="targa"
+//               value={entry.targa}
+//               options={options}
+//               onChange={(_, value) => onTargaChange(entry.id, value as string)}
+//               renderInput={(params) => <TextField {...params} />}
+//             />
+//           </Box>
+//           <Box sx={{ flexBasis: "25%", textAlign: "center" }}>
+//             <FormControl fullWidth>
+//               <TextField
+//                 id="arrivi"
+//                 type="number"
+//                 size="small"
+//                 inputProps={{ min: 0 }}
+//                 value={entry.arrivals}
+//                 onChange={event => onArrivalsChange(entry.id, Number.parseInt(event.target.value as string))}
+//               ></TextField>
+//             </FormControl>
+//           </Box>
+//           <Box sx={{ flexBasis: "25%", textAlign: "center" }}>
+//             <FormControl fullWidth>
+//               <TextField
+//                 id="partenze"
+//                 type="number"
+//                 size="small"
+//                 inputProps={{ min: 0 }}
+//                 value={entry.departures}
+//                 onChange={event => onDeparturesChange(entry.id, Number.parseInt(event.target.value as string))}
+//               ></TextField>
+//             </FormControl>
+//           </Box>
+//         </>
+//       }
+//     </Stack>
+//   )), [movements, options, onTargaChange, onArrivalsChange, onDeparturesChange]);
+// }
 
-function TargaAutocomplete<T, Multple extends boolean | undefined, FreeSolo extends boolean | undefined>(
-  { ...props }: AutocompleteProps<T, Multple, boolean, FreeSolo>): JSX.Element {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isOpening, setIsOpening] = useState(false);
-  const [transformOrigin, setTransformOrigin] = useState<"top" | "bottom">("top");
+// function TargaAutocomplete<T, Multple extends boolean | undefined, FreeSolo extends boolean | undefined>(
+//   { ...props }: AutocompleteProps<T, Multple, boolean, FreeSolo>): JSX.Element {
+//   const [isOpen, setIsOpen] = useState(false);
+//   const [isOpening, setIsOpening] = useState(false);
+//   const [transformOrigin, setTransformOrigin] = useState<"top" | "bottom">("top");
 
-  useEffect(() => {
-    if (isOpen) {
-      setIsOpening(true);
-    }
-  }, [isOpen]);
+//   useEffect(() => {
+//     if (isOpen) {
+//       setIsOpening(true);
+//     }
+//   }, [isOpen]);
 
-  return (
-    <FormControl fullWidth>
-      <Autocomplete
-        {...props}
-        disableClearable
-        forcePopupIcon={false}
-        size="small"
-        open={isOpen}
-        onOpen={() => setIsOpen(true)}
-        onClose={() => setIsOpening(false)}
-        slotProps={{
-          popper: {
-            keepMounted: true,
-            modifiers: [
-              {
-                name: "setTransformOrigin",
-                enabled: true,
-                phase: "main",
-                fn: ({ state }) => {
-                  if (state.placement === "top") {
-                    setTransformOrigin("bottom");
-                  } else {
-                    setTransformOrigin("top");
-                  }
-                }
-              }
-            ]
-          },
-          paper: {
-            className: isOpening ? "opening" : undefined,
-            elevation: isOpening ? 2 : 0,
-            sx: {
-              backgroundColor: (theme) => theme.palette.surface.main,
-              transformOrigin: transformOrigin,
-              transition: (theme) => theme.transitions.create(
-                ["transform", "opacity", "box-shadow"],
-                {
-                  duration: isOpening ? theme.transitions.duration.medium4 : theme.transitions.duration.standard,
-                  easing: isOpening ? theme.transitions.easing.emphasizedDecelerate : theme.transitions.easing.emphasized,
-                }),
-              transform: "scaleY(0)",
-              opacity: 0,
-              "&.opening": {
-                transform: "scaleY(1)",
-                opacity: 1,
-              },
-              "&::after": {
-                position: "absolute",
-                zIndex: 99999,
-                pointerEvents: "none",
-                content: "' '",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: (theme) => theme.palette.primary.main,
-                opacity: (theme) => theme.opacities.surface5,
-              },
-              "& .MuiAutocomplete-listbox": {
-                overflowY: "overlay",
-              }
-            },
-            onTransitionEnd: () => {
-              if (!isOpening) {
-                setIsOpen(false);
-              }
-            }
-          },
-        }}
-      />
-    </FormControl>
-  );
-}
+//   return (
+//     <FormControl fullWidth>
+//       <Autocomplete
+//         {...props}
+//         disableClearable
+//         forcePopupIcon={false}
+//         size="small"
+//         open={isOpen}
+//         onOpen={() => setIsOpen(true)}
+//         onClose={() => setIsOpening(false)}
+//         slotProps={{
+//           popper: {
+//             keepMounted: true,
+//             modifiers: [
+//               {
+//                 name: "setTransformOrigin",
+//                 enabled: true,
+//                 phase: "main",
+//                 fn: ({ state }) => {
+//                   if (state.placement === "top") {
+//                     setTransformOrigin("bottom");
+//                   } else {
+//                     setTransformOrigin("top");
+//                   }
+//                 }
+//               }
+//             ]
+//           },
+//           paper: {
+//             className: isOpening ? "opening" : undefined,
+//             elevation: isOpening ? 2 : 0,
+//             sx: {
+//               backgroundColor: (theme) => theme.palette.surface.main,
+//               transformOrigin: transformOrigin,
+//               transition: (theme) => theme.transitions.create(
+//                 ["transform", "opacity", "box-shadow"],
+//                 {
+//                   duration: isOpening ? theme.transitions.duration.medium4 : theme.transitions.duration.standard,
+//                   easing: isOpening ? theme.transitions.easing.emphasizedDecelerate : theme.transitions.easing.emphasized,
+//                 }),
+//               transform: "scaleY(0)",
+//               opacity: 0,
+//               "&.opening": {
+//                 transform: "scaleY(1)",
+//                 opacity: 1,
+//               },
+//               "&::after": {
+//                 position: "absolute",
+//                 zIndex: 99999,
+//                 pointerEvents: "none",
+//                 content: "' '",
+//                 top: 0,
+//                 left: 0,
+//                 right: 0,
+//                 bottom: 0,
+//                 backgroundColor: (theme) => theme.palette.primary.main,
+//                 opacity: (theme) => theme.opacities.surface5,
+//               },
+//               "& .MuiAutocomplete-listbox": {
+//                 overflowY: "overlay",
+//               }
+//             },
+//             onTransitionEnd: () => {
+//               if (!isOpening) {
+//                 setIsOpen(false);
+//               }
+//             }
+//           },
+//         }}
+//       />
+//     </FormControl>
+//   );
+// }
 
 type PresenseListProps = {
   title: string,
+  list: MovementEntry[],
 }
 
-function PresenseList({ title }: PresenseListProps): JSX.Element {
+function PresenseList({ title, list }: PresenseListProps): JSX.Element {
   const theme = useTheme();
   const [scrollTop, setScrollTop] = useState(0);
   const isScrolled = scrollTop > 0;
@@ -494,21 +512,20 @@ function PresenseList({ title }: PresenseListProps): JSX.Element {
           onScroll={event => {
             setScrollTop(event.currentTarget?.scrollTop ?? 0);
           }}>
-          <PresenseItem />
-          <PresenseItem />
-          <PresenseItem />
-          <PresenseItem />
-          <PresenseItem />
-          <PresenseItem />
-          <PresenseItem />
-          <PresenseItem />
+          {list.map(item => (
+            <PresenseItem key={item.id} movementEntry={item} />
+          ))}
         </Stack>
       </Box>
     </Stack>
   );
 }
 
-function PresenseItem(): JSX.Element {
+type PresenseItemProps = {
+  movementEntry: MovementEntry,
+};
+
+function PresenseItem({ movementEntry }: PresenseItemProps): JSX.Element {
   const theme = useTheme();
 
   return (
@@ -523,7 +540,7 @@ function PresenseItem(): JSX.Element {
       flexShrink: 0,
     }}>
       <Stack direction="column" spacing={1}>
-        <Typography variant="titleLarge">BZ</Typography>
+        <Typography variant="titleLarge">{movementEntry.targa}</Typography>
         <Stack direction="row" spacing={1}>
           <Box sx={{
             backgroundColor: theme.palette.surfaceContainerHighest.main,
@@ -531,7 +548,7 @@ function PresenseItem(): JSX.Element {
             py: "0.25rem",
             px: "1rem",
           }}>
-            <Typography variant="labelLarge">9 arrivi</Typography>
+            <Typography variant="labelLarge">{movementEntry.arrivals} arrivi</Typography>
           </Box>
           <SwapHorizOutlinedIcon />
           <Box sx={{
@@ -540,7 +557,7 @@ function PresenseItem(): JSX.Element {
             py: "0.25rem",
             px: "1rem",
           }}>
-            <Typography variant="labelLarge">0 partenze</Typography>
+            <Typography variant="labelLarge">{movementEntry.departures} partenze</Typography>
           </Box>
         </Stack>
       </Stack>
