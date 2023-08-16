@@ -28,15 +28,20 @@ import M3IconButton from "../m3/M3IconButton";
 import M3FilledButton from "../m3/M3FilledButton";
 import M3Fab from "../m3/M3Fab";
 
-import { fetchCountriesAsync, fetchIstatMovementsAsync, fetchProvincesAsync, MovementDTO } from "../../api";
+import {
+  fetchCountriesAsync,
+  fetchIstatMovementsAsync,
+  fetchProvincesAsync,
+  MovementDTO,
+} from "../../api";
 import { useAppDispatch } from "../../redux/hooks";
 import { show as showSnackbarMessage } from "../../redux/snackbarMessageSlice";
 
 type MovementEntry = {
-  id: number,
-  targa?: string,
-  arrivals?: number,
-  departures?: number,
+  id: number;
+  targa?: string;
+  arrivals?: number;
+  departures?: number;
 };
 
 export default function Istat(): JSX.Element {
@@ -44,7 +49,9 @@ export default function Istat(): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   // const [selected, setSelected] = useState(false);
-  const [movementsData, setMovementsData] = useState<MovementDTO | undefined>(undefined);
+  const [movementsData, setMovementsData] = useState<MovementDTO | undefined>(
+    undefined
+  );
   // const [countries, setCountries] = useState<string[] | undefined>(undefined);
   // const [provinces, setProvinces] = useState<string[] | undefined>(undefined);
 
@@ -52,11 +59,14 @@ export default function Istat(): JSX.Element {
   const { italians, foreigns } = splitMovements(movementsData, isLoaded);
   let totalArrivals = 0;
   let totalDepartures = 0;
-  for (const movement of (movementsData?.movements ?? [])) {
+  for (const movement of movementsData?.movements ?? []) {
     totalArrivals += movement.arrivi;
     totalDepartures += movement.partenze;
   }
-  const nextTotal = movementsData?.prevTotal === undefined ? undefined : movementsData.prevTotal + totalArrivals - totalDepartures;
+  const nextTotal =
+    movementsData?.prevTotal === undefined
+      ? undefined
+      : movementsData.prevTotal + totalArrivals - totalDepartures;
 
   // function changeTarga(id: number, value: string): void {
   //   setMovementsData(prevValue => {
@@ -128,7 +138,9 @@ export default function Istat(): JSX.Element {
         }
       } catch (error: any) {
         if (isSubscribed) {
-          dispatch(showSnackbarMessage({ type: "error", message: error?.message }));
+          dispatch(
+            showSnackbarMessage({ type: "error", message: error?.message })
+          );
         }
       }
     }
@@ -171,37 +183,60 @@ export default function Istat(): JSX.Element {
 
   return (
     <>
-      <Stack direction="column" spacing={2} sx={{
-        width: "100%",
-        height: "100vh",
-        backgroundColor: theme.palette.surfaceContainer.main,
-        borderRadius: "24px 0px 0px 24px",
-        p: "1rem",
-        boxSizing: "border-box",
-      }}>
+      <Stack
+        direction="column"
+        spacing={2}
+        sx={{
+          width: "100%",
+          height: "100vh",
+          backgroundColor: theme.palette.surfaceContainer.main,
+          borderRadius: "24px 0px 0px 24px",
+          p: "1rem",
+          boxSizing: "border-box",
+        }}
+      >
         <Stack direction="row" justifyContent="space-between">
-          <M3IconButton onClick={() => navigate(-1)}><ArrowBackOutlinedIcon /></M3IconButton>
-          <M3FilledButton startIcon={<CheckOutlinedIcon />}>Accetta</M3FilledButton>
+          <M3IconButton onClick={() => navigate(-1)}>
+            <ArrowBackOutlinedIcon />
+          </M3IconButton>
+          <M3FilledButton startIcon={<CheckOutlinedIcon />}>
+            Accetta
+          </M3FilledButton>
         </Stack>
-        <Stack direction="row" justifyContent="space-between" alignItems="center" py="1rem">
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          py="1rem"
+        >
           <Typography variant="displaySmall">ISTAT</Typography>
           <Stack direction="column" alignItems="flex-end">
-            <Typography variant="titleLarge">{movementsData?.date}</Typography>
-            <Typography variant="titleMedium">{movementsData?.prevTotal} presenze precedenti</Typography>
-            <Typography variant="titleMedium">{nextTotal} presenze attuali</Typography>
+            <Typography variant="titleLarge">{!movementsData ? <M3Skeleton width="8rem" /> : movementsData.date}</Typography>
+            <Typography variant="titleMedium">
+              {!movementsData ? <M3Skeleton width="12rem" /> : `${movementsData.prevTotal} presenze precedenti`}
+            </Typography>
+            <Typography variant="titleMedium">
+              {!movementsData ? <M3Skeleton width="12rem" /> : `${nextTotal} presenze attuali`}
+            </Typography>
           </Stack>
         </Stack>
-        <Box sx={{
-          position: "relative",
-          flex: 1,
-        }}>
-          <Stack direction="row" spacing={2} sx={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-          }}>
+        <Box
+          sx={{
+            position: "relative",
+            flex: 1,
+          }}
+        >
+          <Stack
+            direction="row"
+            spacing={2}
+            sx={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+            }}
+          >
             <PresenseList title="Italiani" list={italians} />
             <PresenseList title="Stranieri" list={foreigns} />
           </Stack>
@@ -280,11 +315,14 @@ export default function Istat(): JSX.Element {
   );
 }
 
-function splitMovements(movements: MovementDTO | undefined, isLoaded: boolean): { italians: MovementEntry[], foreigns: MovementEntry[] } {
+function splitMovements(
+  movements: MovementDTO | undefined,
+  isLoaded: boolean
+): { italians: MovementEntry[]; foreigns: MovementEntry[] } {
   if (!movements || !isLoaded) {
     return {
-      italians: [{ id: 0 }, { id: 1 }, { id: 2 }],
-      foreigns: [{ id: 0 }, { id: 1 }, { id: 2 }],
+      italians: [{ id: 0 }, { id: 1 }],
+      foreigns: [{ id: 0 }, { id: 1 }],
     };
   }
 
@@ -464,9 +502,9 @@ function splitMovements(movements: MovementDTO | undefined, isLoaded: boolean): 
 // }
 
 type PresenseListProps = {
-  title: string,
-  list: MovementEntry[],
-}
+  title: string;
+  list: MovementEntry[];
+};
 
 function PresenseList({ title, list }: PresenseListProps): JSX.Element {
   const theme = useTheme();
@@ -474,29 +512,50 @@ function PresenseList({ title, list }: PresenseListProps): JSX.Element {
   const isScrolled = scrollTop > 0;
 
   return (
-    <Stack direction="column" spacing={0} sx={{
-      height: "100%",
-      boxSizing: "border-box",
-      flex: "1",
-      backgroundColor: theme.palette.surfaceContainerLow.main,
-      borderRadius: "24px",
-      overflow: "hidden",
-    }} >
-      <Stack direction="row" sx={{
-        justifyContent: "space-between",
-        alignItems: "center",
-        p: "1rem",
-        zIndex: theme.zIndex.appBar,
-        backgroundColor: isScrolled ? theme.palette.surfaceVariant.main : theme.palette.surfaceContainerLow.main,
-        transition: theme.transitions.create(["background-color"], { duration: theme.transitions.duration.shorter, easing: theme.transitions.easing.emphasized }),
-      }}>
-        <Typography variant="headlineMedium" color={theme.palette.onSurfaceVariant.main}>{title}</Typography>
-        <M3Fab colorCombination="surface" elevation="none" sx={{ margin: 0 }}><AddOutlinedIcon /></M3Fab>
+    <Stack
+      direction="column"
+      spacing={0}
+      sx={{
+        height: "100%",
+        boxSizing: "border-box",
+        flex: "1",
+        backgroundColor: theme.palette.surfaceContainerLow.main,
+        borderRadius: "24px",
+        overflow: "hidden",
+      }}
+    >
+      <Stack
+        direction="row"
+        sx={{
+          justifyContent: "space-between",
+          alignItems: "center",
+          p: "1rem",
+          zIndex: theme.zIndex.appBar,
+          backgroundColor: isScrolled
+            ? theme.palette.surfaceVariant.main
+            : theme.palette.surfaceContainerLow.main,
+          transition: theme.transitions.create(["background-color"], {
+            duration: theme.transitions.duration.shorter,
+            easing: theme.transitions.easing.emphasized,
+          }),
+        }}
+      >
+        <Typography
+          variant="headlineMedium"
+          color={theme.palette.onSurfaceVariant.main}
+        >
+          {title}
+        </Typography>
+        <M3Fab colorCombination="surface" elevation="none" sx={{ margin: 0 }}>
+          <AddOutlinedIcon />
+        </M3Fab>
       </Stack>
-      <Box sx={{
-        position: "relative",
-        flex: 1,
-      }}>
+      <Box
+        sx={{
+          position: "relative",
+          flex: 1,
+        }}
+      >
         <Stack
           direction="column"
           spacing={2}
@@ -509,10 +568,11 @@ function PresenseList({ title, list }: PresenseListProps): JSX.Element {
             p: "1rem",
             overflowY: "auto",
           }}
-          onScroll={event => {
+          onScroll={(event) => {
             setScrollTop(event.currentTarget?.scrollTop ?? 0);
-          }}>
-          {list.map(item => (
+          }}
+        >
+          {list.map((item) => (
             <PresenseItem key={item.id} movementEntry={item} />
           ))}
         </Stack>
@@ -522,50 +582,129 @@ function PresenseList({ title, list }: PresenseListProps): JSX.Element {
 }
 
 type PresenseItemProps = {
-  movementEntry: MovementEntry,
+  movementEntry: MovementEntry;
 };
 
 function PresenseItem({ movementEntry }: PresenseItemProps): JSX.Element {
   const theme = useTheme();
 
+  if (!movementEntry.targa) {
+    return (
+      <M3Skeleton
+        variant="rounded"
+        sx={{
+          height: "6rem",
+          width: "100%",
+          borderRadius: "12px",
+          backgroundColor: theme.palette.surfaceContainer.main,
+          display: "flex",
+          justifyContent: "space-between",
+          maxWidth: "unset",
+          px: "1rem",
+          boxSizing: "border-box",
+          alignItems: "center",
+          "*": {
+            visibility: "visible",
+          },
+        }}
+      >
+        <Stack direction="column" spacing={1}>
+          <Box height="1.75rem"></Box>
+          <Stack direction="row" spacing={1}>
+            <Box
+              sx={{
+                backgroundColor: theme.palette.surfaceContainerHighest.main,
+                borderRadius: "8px",
+                py: "0.25rem",
+                px: "1rem",
+                width: "6rem",
+                height: "1.25rem",
+              }}
+            >
+            </Box>
+            <SwapHorizOutlinedIcon />
+            <Box
+              sx={{
+                backgroundColor: theme.palette.surfaceContainerLowest.main,
+                borderRadius: "8px",
+                py: "0.25rem",
+                px: "1rem",
+                width: "6rem",
+                height: "1.25rem",
+              }}
+            >
+            </Box>
+          </Stack>
+        </Stack>
+        <Stack direction="row" spacing={2}>
+          <Box sx={{
+            width: "2.5rem",
+            height: "2.5rem",
+            borderRadius: "1.25rem",
+            backgroundColor: theme.palette.surfaceContainerLowest.main,
+          }}></Box>
+        </Stack>
+      </M3Skeleton>
+    );
+  }
+
   return (
-    <Stack direction="row" sx={{
-      justifyContent: "space-between",
-      alignItems: "center",
-      backgroundColor: theme.palette.surfaceContainer.main,
-      borderRadius: "12px",
-      height: "6rem",
-      boxSizing: "border-box",
-      px: "1rem",
-      flexShrink: 0,
-    }}>
+    <Stack
+      direction="row"
+      sx={{
+        justifyContent: "space-between",
+        alignItems: "center",
+        backgroundColor: theme.palette.surfaceContainer.main,
+        borderRadius: "12px",
+        height: "6rem",
+        boxSizing: "border-box",
+        px: "1rem",
+        flexShrink: 0,
+      }}
+    >
       <Stack direction="column" spacing={1}>
         <Typography variant="titleLarge">{movementEntry.targa}</Typography>
         <Stack direction="row" spacing={1}>
-          <Box sx={{
-            backgroundColor: theme.palette.surfaceContainerHighest.main,
-            borderRadius: "8px",
-            py: "0.25rem",
-            px: "1rem",
-          }}>
-            <Typography variant="labelLarge">{movementEntry.arrivals} arrivi</Typography>
+          <Box
+            sx={{
+              backgroundColor: theme.palette.surfaceContainerHighest.main,
+              borderRadius: "8px",
+              py: "0.25rem",
+              px: "1rem",
+            }}
+          >
+            <Typography variant="labelLarge">
+              {movementEntry.arrivals} arrivi
+            </Typography>
           </Box>
           <SwapHorizOutlinedIcon />
-          <Box sx={{
-            backgroundColor: theme.palette.surfaceContainerLowest.main,
-            borderRadius: "8px",
-            py: "0.25rem",
-            px: "1rem",
-          }}>
-            <Typography variant="labelLarge">{movementEntry.departures} partenze</Typography>
+          <Box
+            sx={{
+              backgroundColor: theme.palette.surfaceContainerLowest.main,
+              borderRadius: "8px",
+              py: "0.25rem",
+              px: "1rem",
+            }}
+          >
+            <Typography variant="labelLarge">
+              {movementEntry.departures} partenze
+            </Typography>
           </Box>
         </Stack>
       </Stack>
       <Stack direction="row" spacing={2}>
-        <M3IconButton><DeleteOutlineOutlinedIcon /></M3IconButton>
-        <M3IconButton variant="contained" disableElevation={true} sx={{
-          backgroundColor: theme.palette.surfaceContainerLowest.main,
-        }}><EditOutlinedIcon /></M3IconButton>
+        <M3IconButton>
+          <DeleteOutlineOutlinedIcon />
+        </M3IconButton>
+        <M3IconButton
+          variant="contained"
+          disableElevation={true}
+          sx={{
+            backgroundColor: theme.palette.surfaceContainerLowest.main,
+          }}
+        >
+          <EditOutlinedIcon />
+        </M3IconButton>
       </Stack>
     </Stack>
   );
