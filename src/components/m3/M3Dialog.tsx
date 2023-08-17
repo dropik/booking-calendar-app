@@ -9,9 +9,10 @@ import { SurfaceTint } from "./Tints";
 type M3DialogProps = {
   heightRem: number,
   transitionDuration?: number,
+  floating?: "right" | "left",
 } & DialogProps;
 
-export default function M3Dialog({ heightRem, children, open, transitionDuration, ...props }: M3DialogProps): JSX.Element {
+export default function M3Dialog({ heightRem, children, open, transitionDuration, floating, ...props }: M3DialogProps): JSX.Element {
   const theme = useTheme();
 
   return (
@@ -22,7 +23,9 @@ export default function M3Dialog({ heightRem, children, open, transitionDuration
         backgroundColor: "transparent",
         overflow: "visible",
         pointerEvents: "none",
-        maxWidth: "50rem",
+        maxWidth: floating === undefined ? "50rem" : "unset",
+        alignItems: floating === undefined ? "center" : (floating === "left" ? "flex-start" : "flex-end"),
+        flexGrow: floating === undefined ? undefined : 1,
       }
     }}>
       <Paper elevation={3} sx={{
