@@ -53,6 +53,7 @@ export default function Istat(): JSX.Element {
   const [italians, setItalians] = useState<MovementEntry[]>([{ id: 0 }, { id: 1 }]);
   const [foreigns, setForeigns] = useState<MovementEntry[]>([{ id: 0 }, { id: 1 }]);
 
+  const isLoaded = italians.every(i => i.targa) && foreigns.every(i => i.targa);
   let totalArrivals = 0;
   let totalDepartures = 0;
   for (const entry of italians) {
@@ -125,9 +126,11 @@ export default function Istat(): JSX.Element {
           <M3IconButton onClick={() => navigate(-1)}>
             <ArrowBackOutlinedIcon />
           </M3IconButton>
-          <M3FilledButton startIcon={<CheckOutlinedIcon />}>
-            Accetta
-          </M3FilledButton>
+          {isLoaded ? (
+            <M3FilledButton startIcon={<CheckOutlinedIcon />}>
+              Accetta
+            </M3FilledButton>
+          ) : <></>}
         </Stack>
         <Stack
           direction="row"
@@ -482,28 +485,94 @@ type MovementEntryDialogProps = {
 
 function MovementEntryDialog({ locations, open, onClose, floating, entry, onAcceptAction }: MovementEntryDialogProps): JSX.Element {
   const theme = useTheme();
-  const targaRef = useRef<HTMLInputElement | null>(null);
+  const [targa, setTarga] = useState("");
   const arrivalsRef = useRef<HTMLInputElement | null>(null);
   const departuresRef = useRef<HTMLInputElement | null>(null);
+  const [errorState, setErrorState] = useState({
+    targa: false,
+    arrivals: false,
+    departures: false,
+  });
+  const [touchedState, setTouchedState] = useState({
+    targa: false,
+    arrivals: false,
+    departures: false,
+  });
+  const showError = {
+    targa: errorState.targa && touchedState.targa,
+    arrivals: errorState.arrivals && touchedState.arrivals,
+    departures: errorState.departures && touchedState.departures,
+  };
+  const errorText = "Il campo è obbligatorio";
 
-  function acceptAndClose(event: React.FormEvent<HTMLFormElement>): void {
-    event.preventDefault();
+  function acceptAndClose(): void {
+    touchForm();
+    if (invalidateErrorState()) {
+      return;
+    }
+
     onAcceptAction({
       id: entry?.id ?? 0,
-      targa: targaRef.current?.value,
+      targa: targa,
       arrivals: Number.parseInt(arrivalsRef.current?.value as string),
       departures: Number.parseInt(departuresRef.current?.value as string),
     });
-    if (targaRef.current) {
-      targaRef.current.value = "";
-    }
+
+    clearForm();
+    onClose();
+  }
+
+  function touchField(field: "targa" | "arrivals" | "departures"): void {
+    const newTouchedState = { ...touchedState };
+    newTouchedState[field] = true;
+    setTouchedState(newTouchedState);
+    invalidateErrorState();
+  }
+
+  function touchForm(): void {
+    setTouchedState({
+      targa: true,
+      arrivals: true,
+      departures: true,
+    });
+  }
+
+  function clearForm(): void {
+    setTarga("");
     if (arrivalsRef.current) {
       arrivalsRef.current.value = "";
     }
     if (departuresRef.current) {
       departuresRef.current.value = "";
     }
-    onClose();
+    setTouchedState({
+      targa: false,
+      arrivals: false,
+      departures: false,
+    });
+  }
+
+  function invalidateErrorState(): boolean {
+    let result = false;
+    const newErrorState = {
+      targa: false,
+      arrivals: false,
+      departures: false,
+    };
+    if (targa === "") {
+      newErrorState.targa = true;
+      result = true;
+    }
+    if (arrivalsRef.current && arrivalsRef.current.value === "") {
+      newErrorState.arrivals = true;
+      result = true;
+    }
+    if (departuresRef.current && departuresRef.current.value === "") {
+      newErrorState.departures = true;
+      result = true;
+    }
+    setErrorState(newErrorState);
+    return result;
   }
 
   return (
@@ -518,45 +587,65 @@ function MovementEntryDialog({ locations, open, onClose, floating, entry, onAcce
         <Stack spacing={4} alignItems="center">
           <AddchartOutlinedIcon />
           <Typography variant="headlineSmall">Aggiungi targa</Typography>
-          <Stack direction="column" spacing={4} component="form" onSubmit={acceptAndClose} sx={{
+          <Stack direction="row" spacing={1} sx={{
+            width: "100%",
+            height: "5rem",
+          }}>
+            <TargaAutocomplete
+              id="targa"
+              defaultValue={entry?.targa}
+              options={locations}
+              value={targa}
+              onChange={(_, value) => {
+                if (typeof(value) === "string") {
+                  setTarga(value);
+                }
+                touchField("targa");
+              }}
+              onInputChange={(_e, _v, reason) => {
+                if (reason !== "reset") {
+                  touchField("targa");
+                }
+              }}
+              onHighlightChange={() => touchField("targa")}
+              renderInput={(params) => <TextField
+                {...params}
+                fullWidth
+                error={showError.targa}
+                helperText={showError.targa ? errorText : undefined}
+                size="medium"
+                label="Targa" />}
+            />
+            <TextField
+              fullWidth
+              error={errorState.arrivals && touchedState.arrivals}
+              helperText={showError.arrivals ? errorText : undefined}
+              onChange={() => touchField("arrivals")}
+              inputRef={arrivalsRef}
+              id="arrivi"
+              type="number"
+              inputProps={{ min: 0 }}
+              defaultValue={entry?.arrivals}
+              label="Arrivi"
+            ></TextField>
+            <TextField
+              fullWidth
+              error={errorState.departures && touchedState.departures}
+              helperText={showError.departures ? errorText : undefined}
+              onChange={() => touchField("departures")}
+              inputRef={departuresRef}
+              id="partenze"
+              type="number"
+              inputProps={{ min: 0 }}
+              defaultValue={entry?.departures}
+              label="Partenze"
+            ></TextField>
+          </Stack>
+          <Stack direction="row" spacing={1} justifyContent="flex-end" sx={{
             width: "100%",
           }}>
-            <Stack direction="row" spacing={1} sx={{
-              width: "100%",
-            }}>
-              <TargaAutocomplete
-                id="targa"
-                defaultValue={entry?.targa}
-                options={locations}
-                renderInput={(params) => <TextField {...params} required inputRef={targaRef} size="medium" fullWidth label="Targa" />}
-              />
-              <TextField
-                required
-                fullWidth
-                inputRef={arrivalsRef}
-                id="arrivi"
-                type="number"
-                inputProps={{ min: 0 }}
-                defaultValue={entry?.arrivals}
-                label="Arrivi"
-              ></TextField>
-              <TextField
-                required
-                fullWidth
-                inputRef={departuresRef}
-                id="partenze"
-                type="number"
-                inputProps={{ min: 0 }}
-                defaultValue={entry?.departures}
-                label="Partenze"
-              ></TextField>
-            </Stack>
-            <Stack direction="row" spacing={1} justifyContent="flex-end" sx={{
-              width: "100%",
-            }}>
-              <M3TextButton onClick={onClose}>Cancella</M3TextButton>
-              <M3FilledButton type="submit">Accetta</M3FilledButton>
-            </Stack>
+            <M3TextButton onClick={onClose}>Cancella</M3TextButton>
+            <M3FilledButton onClick={acceptAndClose}>Accetta</M3FilledButton>
           </Stack>
         </Stack>
       </Stack>
