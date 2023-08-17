@@ -36,6 +36,7 @@ import {
 } from "../../api";
 import { useAppDispatch } from "../../redux/hooks";
 import { show as showSnackbarMessage } from "../../redux/snackbarMessageSlice";
+import Input from "@mui/material/Input";
 
 type MovementEntry = {
   id: number;
@@ -485,13 +486,23 @@ function MovementEntryDialog({ locations, open, onClose, floating, entry, onAcce
   const arrivalsRef = useRef<HTMLInputElement | null>(null);
   const departuresRef = useRef<HTMLInputElement | null>(null);
 
-  function acceptAndClose(): void {
+  function acceptAndClose(event: React.FormEvent<HTMLFormElement>): void {
+    event.preventDefault();
     onAcceptAction({
       id: entry?.id ?? 0,
       targa: targaRef.current?.value,
       arrivals: Number.parseInt(arrivalsRef.current?.value as string),
       departures: Number.parseInt(departuresRef.current?.value as string),
     });
+    if (targaRef.current) {
+      targaRef.current.value = "";
+    }
+    if (arrivalsRef.current) {
+      arrivalsRef.current.value = "";
+    }
+    if (departuresRef.current) {
+      departuresRef.current.value = "";
+    }
     onClose();
   }
 
@@ -507,41 +518,45 @@ function MovementEntryDialog({ locations, open, onClose, floating, entry, onAcce
         <Stack spacing={4} alignItems="center">
           <AddchartOutlinedIcon />
           <Typography variant="headlineSmall">Aggiungi targa</Typography>
-          <Stack direction="row" spacing={1} component="form" sx={{
+          <Stack direction="column" spacing={4} component="form" onSubmit={acceptAndClose} sx={{
             width: "100%",
           }}>
-            <TargaAutocomplete
-              id="targa"
-              defaultValue={entry?.targa}
-              options={locations}
-              renderInput={(params) => <TextField {...params} required inputRef={targaRef} size="medium" fullWidth label="Targa" />}
-            />
-            <TextField
-              required
-              fullWidth
-              inputRef={arrivalsRef}
-              id="arrivi"
-              type="number"
-              inputProps={{ min: 0 }}
-              defaultValue={entry?.arrivals}
-              label="Arrivi"
-            ></TextField>
-            <TextField
-              required
-              fullWidth
-              inputRef={departuresRef}
-              id="partenze"
-              type="number"
-              inputProps={{ min: 0 }}
-              defaultValue={entry?.departures}
-              label="Partenze"
-            ></TextField>
-          </Stack>
-          <Stack direction="row" spacing={1} justifyContent="flex-end" sx={{
-            width: "100%",
-          }}>
-            <M3TextButton onClick={onClose}>Cancella</M3TextButton>
-            <M3FilledButton onClick={acceptAndClose}>Aggiungi</M3FilledButton>
+            <Stack direction="row" spacing={1} sx={{
+              width: "100%",
+            }}>
+              <TargaAutocomplete
+                id="targa"
+                defaultValue={entry?.targa}
+                options={locations}
+                renderInput={(params) => <TextField {...params} required inputRef={targaRef} size="medium" fullWidth label="Targa" />}
+              />
+              <TextField
+                required
+                fullWidth
+                inputRef={arrivalsRef}
+                id="arrivi"
+                type="number"
+                inputProps={{ min: 0 }}
+                defaultValue={entry?.arrivals}
+                label="Arrivi"
+              ></TextField>
+              <TextField
+                required
+                fullWidth
+                inputRef={departuresRef}
+                id="partenze"
+                type="number"
+                inputProps={{ min: 0 }}
+                defaultValue={entry?.departures}
+                label="Partenze"
+              ></TextField>
+            </Stack>
+            <Stack direction="row" spacing={1} justifyContent="flex-end" sx={{
+              width: "100%",
+            }}>
+              <M3TextButton onClick={onClose}>Cancella</M3TextButton>
+              <M3FilledButton type="submit">Accetta</M3FilledButton>
+            </Stack>
           </Stack>
         </Stack>
       </Stack>
