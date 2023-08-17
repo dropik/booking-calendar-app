@@ -485,7 +485,7 @@ type MovementEntryDialogProps = {
 
 function MovementEntryDialog({ locations, open, onClose, floating, entry, onAcceptAction }: MovementEntryDialogProps): JSX.Element {
   const theme = useTheme();
-  const [targa, setTarga] = useState("");
+  const [targa, setTarga] = useState<string | null>(null);
   const arrivalsRef = useRef<HTMLInputElement | null>(null);
   const departuresRef = useRef<HTMLInputElement | null>(null);
   const [errorState, setErrorState] = useState({
@@ -513,7 +513,7 @@ function MovementEntryDialog({ locations, open, onClose, floating, entry, onAcce
 
     onAcceptAction({
       id: entry?.id ?? 0,
-      targa: targa,
+      targa: targa ?? "",
       arrivals: Number.parseInt(arrivalsRef.current?.value as string),
       departures: Number.parseInt(departuresRef.current?.value as string),
     });
@@ -538,7 +538,7 @@ function MovementEntryDialog({ locations, open, onClose, floating, entry, onAcce
   }
 
   function clearForm(): void {
-    setTarga("");
+    setTarga(null);
     if (arrivalsRef.current) {
       arrivalsRef.current.value = "";
     }
@@ -559,7 +559,7 @@ function MovementEntryDialog({ locations, open, onClose, floating, entry, onAcce
       arrivals: false,
       departures: false,
     };
-    if (targa === "") {
+    if (targa === null) {
       newErrorState.targa = true;
       result = true;
     }
