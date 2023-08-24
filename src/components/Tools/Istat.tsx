@@ -224,6 +224,7 @@ function PresenseList({ title, list, dialogFloating, fetchLocations, onEntryAdd 
   const [locations, setLocations] = useState<string[]>([]);
   const isScrolled = scrollTop > 0;
 
+  const usableLocations = locations.filter(l => !list.map(i => i.targa).includes(l));
   const isLoaded = list.every(i => i.targa) && locations.length > 0;
 
   function closeEdit(): void {
@@ -303,7 +304,7 @@ function PresenseList({ title, list, dialogFloating, fetchLocations, onEntryAdd 
           </M3Fab>
         )}
         <MovementEntryDialog
-          locations={locations}
+          locations={usableLocations}
           open={editOpen}
           onClose={closeEdit}
           floating={dialogFloating}
