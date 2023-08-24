@@ -39,7 +39,6 @@ import { show as showSnackbarMessage } from "../../redux/snackbarMessageSlice";
 import Input from "@mui/material/Input";
 
 type MovementEntry = {
-  id: number;
   targa?: string;
   arrivals?: number;
   departures?: number;
@@ -50,8 +49,8 @@ export default function Istat(): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [movementsData, setMovementsData] = useState<MovementDTO | undefined>(undefined);
-  const [italians, setItalians] = useState<MovementEntry[]>([{ id: 0 }, { id: 1 }]);
-  const [foreigns, setForeigns] = useState<MovementEntry[]>([{ id: 0 }, { id: 1 }]);
+  const [italians, setItalians] = useState<MovementEntry[]>([{ }, { }]);
+  const [foreigns, setForeigns] = useState<MovementEntry[]>([{ }, { }]);
 
   const isLoaded = italians.every(i => i.targa) && foreigns.every(i => i.targa);
   let totalArrivals = 0;
@@ -99,12 +98,10 @@ export default function Istat(): JSX.Element {
   }, [dispatch, movementsData]);
 
   function addItalianEntry(entry: MovementEntry): void {
-    entry.id = italians.length;
     setItalians([...italians, entry]);
   }
 
   function addForeignEntry(entry: MovementEntry): void {
-    entry.id = foreigns.length;
     setForeigns([...foreigns, entry]);
   }
 
@@ -195,14 +192,12 @@ function splitMovements(movements: MovementDTO): { italians: MovementEntry[]; fo
     const movement = movements.movements[i];
     if (movement.italia) {
       italians.push({
-        id: i,
         targa: movement.targa,
         arrivals: movement.arrivi,
         departures: movement.partenze,
       });
     } else {
       foreigns.push({
-        id: i,
         targa: movement.targa,
         arrivals: movement.arrivi,
         departures: movement.partenze,
@@ -336,8 +331,8 @@ function PresenseList({ title, list, dialogFloating, fetchLocations, onEntryAdd 
             setScrollTop(event.currentTarget?.scrollTop ?? 0);
           }}
         >
-          {list.map((item) => (
-            <PresenseItem key={item.id} movementEntry={item} />
+          {list.map((item, index) => (
+            <PresenseItem key={item.targa ?? index} movementEntry={item} />
           ))}
         </Stack>
       </Box>
@@ -512,7 +507,6 @@ function MovementEntryDialog({ locations, open, onClose, floating, entry, onAcce
     }
 
     onAcceptAction({
-      id: entry?.id ?? 0,
       targa: targa ?? "",
       arrivals: Number.parseInt(arrivalsRef.current?.value as string),
       departures: Number.parseInt(departuresRef.current?.value as string),
