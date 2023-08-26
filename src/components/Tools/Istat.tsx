@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -22,7 +22,6 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
 import M3Dialog from "../m3/M3Dialog";
 import M3Skeleton from "../m3/M3Skeleton";
-import M3Divider from "../m3/M3Divider";
 import M3TextButton from "../m3/M3TextButton";
 import M3IconButton from "../m3/M3IconButton";
 import M3FilledButton from "../m3/M3FilledButton";
@@ -37,7 +36,6 @@ import {
 } from "../../api";
 import { useAppDispatch } from "../../redux/hooks";
 import { show as showSnackbarMessage } from "../../redux/snackbarMessageSlice";
-import Input from "@mui/material/Input";
 
 type MovementEntry = {
   id: string;
@@ -634,18 +632,23 @@ function MovementEntryDialog({ locations, open, onClose, floating, entry, onAcce
     departures: false,
   });
 
+  const requiredText = "Il campo è obbligatorio";
+  const zeroArrivalAndDepartureText = "Almeno arrivi o partenze devono essere presenti";
   const errors = {
-    targa: targa === null,
-    arrivals: arrivals === null,
-    departures: departures === null,
+    targa: targa === null ? requiredText : undefined,
+    arrivals: arrivals === null ? requiredText : (
+      arrivals === 0 && departures === 0 ? zeroArrivalAndDepartureText : undefined
+    ),
+    departures: departures === null ? requiredText : (
+      arrivals === 0 && departures === 0 ? zeroArrivalAndDepartureText : undefined
+    ),
+  };
+  const showError = {
+    targa: touchedState.targa && Boolean(errors.targa),
+    arrivals: touchedState.arrivals && Boolean(errors.arrivals),
+    departures: touchedState.departures && Boolean(errors.departures),
   };
   const hasErrors = errors.targa || errors.arrivals || errors.departures;
-  const showError = {
-    targa: errors.targa && touchedState.targa,
-    arrivals: errors.arrivals && touchedState.arrivals,
-    departures: errors.departures && touchedState.departures,
-  };
-  const errorText = "Il campo è obbligatorio";
 
   function acceptAndClose(): void {
     touchForm();
@@ -746,14 +749,14 @@ function MovementEntryDialog({ locations, open, onClose, floating, entry, onAcce
                 {...params}
                 fullWidth
                 error={showError.targa}
-                helperText={showError.targa ? errorText : undefined}
+                helperText={showError.targa ? errors.targa : undefined}
                 size="medium"
                 label="Targa" />}
             />
             <TextField
               fullWidth
               error={showError.arrivals}
-              helperText={showError.arrivals ? errorText : undefined}
+              helperText={showError.arrivals ? errors.arrivals : undefined}
               value={drawNumberValue(arrivals)}
               onChange={event => updateNumberValue(event, setArrivals, "arrivals")}
               id="arrivi"
@@ -764,7 +767,7 @@ function MovementEntryDialog({ locations, open, onClose, floating, entry, onAcce
             <TextField
               fullWidth
               error={showError.departures}
-              helperText={showError.departures ? errorText : undefined}
+              helperText={showError.departures ? errors.departures : undefined}
               value={drawNumberValue(departures)}
               onChange={event => updateNumberValue(event, setDepartures, "departures")}
               id="partenze"
