@@ -32,6 +32,7 @@ import {
   fetchCountriesAsync,
   fetchIstatMovementsAsync,
   fetchProvincesAsync,
+  postIstatMovementsAsync,
   MovementDTO,
 } from "../../api";
 import { useAppDispatch } from "../../redux/hooks";
@@ -62,6 +63,7 @@ export default function Istat(): JSX.Element {
     placeholder1: { id: "placeholder1" },
     placeholder2: { id: "placeholder2" },
   });
+  const [isSending, setIsSending] = useState(false);
 
   const italianKeys = Object.keys(italians);
   const foreignKeys = Object.keys(foreigns);
@@ -151,6 +153,54 @@ export default function Istat(): JSX.Element {
     setForeigns(copy);
   }
 
+  function sendData(): void {
+    async function sendAsync(): Promise<void> {
+      if (!movementsData) {
+        return;
+      }
+
+      const dto: MovementDTO = {
+        date: movementsData.date,
+        prevTotal: movementsData.prevTotal,
+        movements: [],
+      };
+
+      for (const key in italians) {
+        const entry = italians[key];
+        dto.movements.push({
+          italia: true,
+          targa: entry.targa ?? "",
+          arrivi: entry.arrivals ?? 0,
+          partenze: entry.departures ?? 0,
+        });
+      }
+
+      for (const key in foreigns) {
+        const entry = foreigns[key];
+        dto.movements.push({
+          italia: false,
+          targa: entry.targa ?? "",
+          arrivi: entry.arrivals ?? 0,
+          partenze: entry.departures ?? 0,
+        });
+      }
+
+      try {
+        await postIstatMovementsAsync(dto);
+        dispatch(showSnackbarMessage({ type: "success", message: "I dati sono stati mandati correttamente!" }));
+        navigate(-1);
+      } catch (exception: any) {
+        dispatch(showSnackbarMessage({ type: "error", message: `Errore durante elaborazione dei dati: ${exception}`}));
+        setIsSending(false);
+      }
+    }
+
+    if (!isSending) {
+      setIsSending(true);
+      sendAsync();
+    }
+  }
+
   return (
     <>
       <Stack
@@ -170,10 +220,13 @@ export default function Istat(): JSX.Element {
             <ArrowBackOutlinedIcon />
           </M3IconButton>
           {isLoaded ? (
-            <M3FilledButton startIcon={<CheckOutlinedIcon />}>
+            isSending ? (
+              <CircularProgress />
+            ) : (
+              <M3FilledButton onClick={sendData} startIcon={<CheckOutlinedIcon />}>
               Accetta
-            </M3FilledButton>
-          ) : <></>}
+              </M3FilledButton>
+            )) : <></>}
         </Stack>
         <Stack
           direction="row"
