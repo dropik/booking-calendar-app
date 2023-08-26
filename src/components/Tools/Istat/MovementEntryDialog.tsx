@@ -8,7 +8,6 @@ import AddchartOutlinedIcon from "@mui/icons-material/AddchartOutlined";
 
 import M3Dialog from "../../m3/M3Dialog";
 import M3TextButton from "../../m3/M3TextButton";
-import M3FilledButton from "../../m3/M3FilledButton";
 import M3TargaAutocomplete from "../../m3/M3TargaAutocomplete";
 
 import { MovementEntry } from "./models";
@@ -130,7 +129,7 @@ export default function MovementEntryDialog({ locations, open, onClose, floating
       <Stack spacing={3} sx={{ p: "1.5rem", minWidth: "45rem", }}>
         <Stack spacing={4} alignItems="center">
           <AddchartOutlinedIcon />
-          <Typography variant="headlineSmall">Aggiungi targa</Typography>
+          <Typography variant="headlineSmall">{!entry ? "Aggiungi targa" : entry.targa}</Typography>
           <Stack direction="row" spacing={1} sx={{
             width: "100%",
             height: "5rem",
@@ -186,7 +185,7 @@ export default function MovementEntryDialog({ locations, open, onClose, floating
             width: "100%",
           }}>
             <M3TextButton onClick={onClose}>Cancella</M3TextButton>
-            <M3FilledButton onClick={acceptAndClose}>Accetta</M3FilledButton>
+            <M3TextButton onClick={acceptAndClose}>Salva</M3TextButton>
           </Stack>
         </Stack>
       </Stack>

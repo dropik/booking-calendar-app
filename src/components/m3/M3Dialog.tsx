@@ -34,6 +34,7 @@ export default function M3Dialog({ heightRem, children, open, transitionDuration
         maxWidth: "50rem",
         position: "relative",
         mt: `calc(50vh - ${heightRem / 2 + 2}rem)`,
+        mx: floating === undefined ? undefined : "3rem",
         pointerEvents: "auto"
       }}>
         <Collapse
