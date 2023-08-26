@@ -26,6 +26,10 @@ A client side part of a web app for managing hotel bookings by organazing them i
 - **React Router**: single page app routing.
 
 ## Changes
+### v1.5.1
+- Overhaul of ISTAT export. Data can be edited before exporting.
+- Better error handling from backend.
+- Added possibility to dim surface.
 ### v1.5.0
 - Introduced selector of columns in table.
 - Selecting date in date picker in table moves first column to selected date.

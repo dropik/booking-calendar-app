@@ -1,11 +1,13 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 export type State = {
-  adjustLayoutRequestId: number
+  adjustLayoutRequestId: number,
+  surfaceDim: boolean,
 };
 
 const initialState: State = {
-  adjustLayoutRequestId: 0
+  adjustLayoutRequestId: 0,
+  surfaceDim: false,
 };
 
 export const layoutSlice = createSlice({
@@ -14,10 +16,13 @@ export const layoutSlice = createSlice({
   reducers: {
     addAdjustRequest: (state) => {
       state.adjustLayoutRequestId++;
-    }
+    },
+    setSurfaceDim: (state, action: PayloadAction<boolean>) => {
+      state.surfaceDim = action.payload;
+    },
   }
 });
 
-export const { addAdjustRequest } = layoutSlice.actions;
+export const { addAdjustRequest, setSurfaceDim } = layoutSlice.actions;
 
 export default layoutSlice.reducer;

@@ -21,7 +21,7 @@ const M3Snackbar = forwardRef<HTMLDivElement, SnackbarProps>(function M3Snackbar
       {...props}
       open={open}
       ref={ref}
-      anchorOrigin={anchorOrigin ? anchorOrigin : { vertical: "bottom", horizontal: "center" }}
+      anchorOrigin={anchorOrigin ? anchorOrigin : { vertical: "bottom", horizontal: "left" }}
       TransitionComponent={Collapse}
       transitionDuration={theme.transitions.duration.short}
       TransitionProps={{

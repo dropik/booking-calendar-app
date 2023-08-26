@@ -102,6 +102,19 @@ export type AckBookingsRequest = {
   sessionId: string
 }
 
+export type Movement = {
+  italia: boolean,
+  targa: string,
+  arrivi: number,
+  partenze: number,
+};
+
+export type MovementDTO = {
+  date: string,
+  prevTotal: number,
+  movements: Movement[],
+};
+
 export function fetchFloorsAsync(): Promise<{ data: Floor[] }> {
   return fetchJsonDataAsync<Floor[]>("/api/v1/floors");
 }
@@ -182,14 +195,36 @@ export async function fetchClientsByQuery(query: string, from: string, to: strin
   return fetchJsonDataAsync<ClientWithBooking[]>(`/api/v1/clients-by-query?query=${query}&from=${from}&to=${to}`);
 }
 
+export async function fetchIstatMovementsAsync(): Promise<{ data: MovementDTO }> {
+  return fetchJsonDataAsync<MovementDTO>("/api/v1/istat/movements");
+}
+
+export async function postIstatMovementsAsync(data: MovementDTO): Promise<void> {
+  return postDataWithoutResponseAsync("/api/v1/istat/send", data);
+}
+
+export async function fetchCountriesAsync(): Promise<{ data: string[] }> {
+  return fetchJsonDataAsync<string[]>("/api/v1/istat/countries");
+}
+
+export async function fetchProvincesAsync(): Promise<{ data: string[] }> {
+  return fetchJsonDataAsync<string[]>("/api/v1/police/provinces");
+}
+
 async function fetchJsonDataAsync<T>(query: string): Promise<{ data: T }> {
   const response = await fetch(query);
   if (response.status === 408) {
     throw new Error("Errore di conessione!");
   }
   if (!response.ok) {
-    const json = await response.json();
-    throw new Error(`Server error! ${json.message}`);
+    let message = "";
+    try {
+      const json = await response.clone().json();
+      message = json.message;
+    } catch {
+      message = await response.text();
+    }
+    throw new Error(`Server error! ${message}`);
   }
   const data = await response.json() as T;
   if (!data) {
@@ -204,8 +239,14 @@ async function fetchBlobDataAsync(query: string): Promise<{ data: Blob }> {
     throw new Error("Errore di conessione!");
   }
   if (!response.ok) {
-    const json = await response.json();
-    throw new Error(`Server error! ${json.message}`);
+    let message = "";
+    try {
+      const json = await response.clone().json();
+      message = json.message;
+    } catch {
+      message = await response.text();
+    }
+    throw new Error(`Server error! ${message}`);
   }
   const data = await response.blob();
   return { data };
@@ -228,8 +269,14 @@ async function postDataWithoutResponseAsync<TData>(url: string, data: TData): Pr
     throw new Error("Errore di conessione!");
   }
   if (!response.ok) {
-    const json = await response.json();
-    throw new Error(`Server error! ${json.message}`);
+    let message = "";
+    try {
+      const json = await response.clone().json();
+      message = json.message;
+    } catch {
+      message = await response.text();
+    }
+    throw new Error(`Server error! ${message}`);
   }
 }
 
@@ -250,8 +297,14 @@ async function postDataAsync<TData, TResponse>(url: string, data: TData): Promis
     throw new Error("Errore di conessione!");
   }
   if (!response.ok) {
-    const json = await response.json();
-    throw new Error(`Server error! ${json.message}`);
+    let message = "";
+    try {
+      const json = await response.clone().json();
+      message = json.message;
+    } catch {
+      message = await response.text();
+    }
+    throw new Error(`Server error! ${message}`);
   }
   const responseData = await response.json() as TResponse;
   if (!responseData) {
@@ -277,8 +330,14 @@ async function putDataAsync<T>(url: string, data: T): Promise<void> {
     throw new Error("Errore di conessione!");
   }
   if (!response.ok) {
-    const json = await response.json();
-    throw new Error(`Server error! ${json.message}`);
+    let message = "";
+    try {
+      const json = await response.clone().json();
+      message = json.message;
+    } catch {
+      message = await response.text();
+    }
+    throw new Error(`Server error! ${message}`);
   }
 }
 
@@ -295,7 +354,13 @@ async function deleteDataAsync(url: string): Promise<void> {
     throw new Error("Errore di conessione!");
   }
   if (!response.ok) {
-    const json = await response.json();
-    throw new Error(`Server error! ${json.message}`);
+    let message = "";
+    try {
+      const json = await response.clone().json();
+      message = json.message;
+    } catch {
+      message = await response.text();
+    }
+    throw new Error(`Server error! ${message}`);
   }
 }

@@ -9,6 +9,7 @@ import { StateLayer } from "./Tints";
 export interface M3TextButtonProps extends ButtonProps {
   iconOnly?: boolean;
   focused?: boolean;
+  children: React.ReactNode,
 }
 
 const CustomizedButton = styled(Button, {

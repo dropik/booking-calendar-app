@@ -45,7 +45,7 @@ export default function DrawerLists({ open, lists }: Props): JSX.Element {
                     overflow: "hidden",
                     transition: theme.transitions.create(["height", "margin-bottom"], {
                       easing: theme.transitions.easing.emphasized,
-                      duration: theme.transitions.duration.medium4,
+                      duration: theme.transitions.duration.long2,
                     }),
                     ...(!open && {
                       height: "2rem",

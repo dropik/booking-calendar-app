@@ -30,7 +30,7 @@ export default function AppDrawer(): JSX.Element {
           top: "10.5rem",
           width: "5rem",
           boxSizing: "border-box",
-          backgroundColor: theme.palette.surface.main,
+          backgroundColor: "transparent",
           border: "none",
           borderTopRightRadius: "1rem",
           borderBottomRightRadius: "1rem",
@@ -38,7 +38,7 @@ export default function AppDrawer(): JSX.Element {
           paddingRight: "0.75rem",
           transition: theme.transitions.create(["width"], {
             easing: theme.transitions.easing.emphasized,
-            duration: theme.transitions.duration.medium4,
+            duration: theme.transitions.duration.long2,
           }),
           ...(open && {
             width: theme.drawerWidth
@@ -65,7 +65,7 @@ export default function AppDrawer(): JSX.Element {
               {
                 text: "Strumenti",
                 link: "/tools",
-                end: true,
+                end: false,
                 icon: <CreateOutlinedIcon />
               },
               {

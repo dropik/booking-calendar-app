@@ -27,7 +27,7 @@ export default function SnackbarMessage(): JSX.Element {
           boxSizing: "border-box",
           py: 0,
           pl: "1rem",
-          pr: 0,
+          pr: message.type === "error" ? "0.5rem" : "1rem",
           backgroundColor: theme.palette.inverseSurface.main,
           color: theme.palette.inverseOnSurface.main,
           ".MuiAlert-icon": {

@@ -78,6 +78,14 @@ function makePalette(color: SchemeColors): PaletteColorOptions {
   };
 }
 
+function makePaletteFromARGB(argb: number): PaletteColorOptions {
+  return {
+    main: hexFromArgb(argb),
+    light: hexFromArgb(argb),
+    dark: hexFromArgb(argb),
+  };
+}
+
 function makeCustomPalette(id: number, color: CustomColors): PaletteColorOptions {
   return {
     main: hexFromArgb(themeObj.customColors[id].light[color]),
@@ -164,6 +172,13 @@ declare module "@mui/material/styles" {
 
     surfaceVariant: Palette["colorBackground"];
     onSurfaceVariant: Palette["colorBackground"];
+    surfaceContainerLowest: Palette["surface"];
+    surfaceContainerLow: Palette["surface"];
+    surfaceContainer: Palette["surface"];
+    surfaceContainerHigh: Palette["surface"];
+    surfaceContainerHighest: Palette["surface"];
+    surfaceDim: Palette["surface"];
+
     outline: Palette["colorBackground"];
 
     shadow: Palette["colorBackground"];
@@ -254,6 +269,13 @@ declare module "@mui/material/styles" {
 
     surfaceVariant?: PaletteOptions["colorBackground"];
     onSurfaceVariant?: PaletteOptions["colorBackground"];
+    surfaceContainerLowest?: PaletteOptions["surface"];
+    surfaceContainerLow?: PaletteOptions["surface"];
+    surfaceContainer?: PaletteOptions["surface"];
+    surfaceContainerHigh?: PaletteOptions["surface"];
+    surfaceContainerHighest?: PaletteOptions["surface"];
+    surfaceDim?: PaletteOptions["surface"];
+
     outline?: PaletteOptions["colorBackground"];
 
     shadow?: PaletteOptions["colorBackground"];
@@ -450,10 +472,18 @@ const theme = createTheme({
 
     colorBackground: makePalette("background"),
     onBackground: makePalette("onBackground"),
+
     surface: makePalette("surface"),
     onSurface: makePalette("onSurface"),
     surfaceVariant: makePalette("surfaceVariant"),
     onSurfaceVariant: makePalette("onSurfaceVariant"),
+    surfaceContainerLowest: makePaletteFromARGB(themeObj.palettes.neutral.tone(100)),
+    surfaceContainerLow: makePaletteFromARGB(themeObj.palettes.neutral.tone(96)),
+    surfaceContainer: makePaletteFromARGB(themeObj.palettes.neutral.tone(94)),
+    surfaceContainerHigh: makePaletteFromARGB(themeObj.palettes.neutral.tone(92)),
+    surfaceContainerHighest: makePaletteFromARGB(themeObj.palettes.neutral.tone(90)),
+    surfaceDim: makePaletteFromARGB(themeObj.palettes.neutral.tone(87)),
+
     outline: makePalette("outline"),
     shadow: makePalette("shadow"),
     surfaceTint: makePalette("primary"),
@@ -577,7 +607,7 @@ const theme = createTheme({
 
   transitions: {
     easing: {
-      emphasized: "cubic-bezier(0.3, 0, 0.1, 1)",
+      emphasized: "cubic-bezier(0.61, -0.02, 0.11, 0.94)",
       emphasizedAccelerate: "cubic-bezier(0.3, 0, 0.8, 0.15)",
       emphasizedDecelerate: "cubic-bezier(0.05, 0.7, 0.1, 1)",
     },
