@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 
 import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
@@ -22,9 +22,17 @@ type PresenseItemProps = {
   onEntryDelete: (id: string) => void,
 };
 
-export default function PresenseItem({ entry, usableLocations, dialogFloating, onEntryEdit, onEntryDelete }: PresenseItemProps): JSX.Element {
+export default memo(function PresenseItem({ entry, usableLocations, dialogFloating, onEntryEdit, onEntryDelete }: PresenseItemProps): JSX.Element {
   const theme = useTheme();
   const [editOpen, setEditOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (isDeleting && containerRef.current) {
+      containerRef.current?.style.setProperty("height", "0px");
+    }
+  }, [isDeleting]);
 
   if (!entry.targa) {
     return (
@@ -39,6 +47,7 @@ export default function PresenseItem({ entry, usableLocations, dialogFloating, o
           justifyContent: "space-between",
           maxWidth: "unset",
           px: "1rem",
+          mb: "1rem",
           boxSizing: "border-box",
           alignItems: "center",
           "*": {
@@ -88,6 +97,7 @@ export default function PresenseItem({ entry, usableLocations, dialogFloating, o
 
   return (
     <Stack
+      ref={containerRef}
       direction="row"
       sx={{
         justifyContent: "space-between",
@@ -97,7 +107,21 @@ export default function PresenseItem({ entry, usableLocations, dialogFloating, o
         height: "6rem",
         boxSizing: "border-box",
         px: "1rem",
+        mb: "1rem",
         flexShrink: 0,
+        ...(isDeleting && {
+          visibility: "hidden",
+          transition: theme.transitions.create(["height", "margin-bottom"], {
+            duration: theme.transitions.duration.short,
+            easing: theme.transitions.easing.emphasized
+          }),
+          mb: 0,
+        }),
+      }}
+      onTransitionEnd={() => {
+        if (isDeleting) {
+          onEntryDelete(entry.id);
+        }
       }}
     >
       <Stack direction="column" spacing={1}>
@@ -131,7 +155,15 @@ export default function PresenseItem({ entry, usableLocations, dialogFloating, o
         </Stack>
       </Stack>
       <Stack direction="row" spacing={2}>
-        <M3IconButton onClick={() => onEntryDelete(entry.id)}>
+        <M3IconButton onClick={() => {
+          if (!isDeleting) {
+            setIsDeleting(true);
+            if (containerRef.current) {
+              const rect = containerRef.current.getBoundingClientRect();
+              containerRef.current.style.setProperty("height", `${rect.height}px`);
+            }
+          }
+        }}>
           <DeleteOutlineOutlinedIcon />
         </M3IconButton>
         <M3IconButton
@@ -154,4 +186,4 @@ export default function PresenseItem({ entry, usableLocations, dialogFloating, o
       </Stack>
     </Stack>
   );
-}
+});

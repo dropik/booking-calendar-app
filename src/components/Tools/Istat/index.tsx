@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -94,43 +94,43 @@ export default function Istat(): JSX.Element {
     };
   }, [dispatch, movementsData]);
 
-  function addItalianEntry(entry: MovementEntry): void {
+  const addItalianEntry = useCallback((entry: MovementEntry) => {
     const copy = {...italians};
     entry.id = self.crypto.randomUUID();
     copy[entry.id] = entry;
     setItalians(copy);
-  }
+  }, [italians]);
 
-  function editItalianEntry(entry: MovementEntry): void {
+  const editItalianEntry = useCallback((entry: MovementEntry) => {
     const copy = {...italians};
     copy[entry.id] = entry;
     setItalians(copy);
-  }
+  }, [italians]);
 
-  function deleteItalianEntry(id: string): void {
+  const deleteItalianEntry = useCallback((id: string) => {
     const copy = {...italians};
     delete copy[id];
     setItalians(copy);
-  }
+  }, [italians]);
 
-  function addForeignEntry(entry: MovementEntry): void {
+  const addForeignEntry = useCallback((entry: MovementEntry) => {
     const copy = {...foreigns};
     entry.id = self.crypto.randomUUID();
     copy[entry.id] = entry;
     setForeigns(copy);
-  }
+  }, [foreigns]);
 
-  function editForeignEntry(entry: MovementEntry): void {
+  const editForeignEntry = useCallback((entry: MovementEntry) => {
     const copy = {...foreigns};
     copy[entry.id] = entry;
     setForeigns(copy);
-  }
+  }, [foreigns]);
 
-  function deleteForeignEntry(id: string): void {
+  const deleteForeignEntry = useCallback((id: string) => {
     const copy = {...foreigns};
     delete copy[id];
     setForeigns(copy);
-  }
+  }, [foreigns]);
 
   function sendData(): void {
     async function sendAsync(): Promise<void> {
@@ -179,6 +179,30 @@ export default function Istat(): JSX.Element {
       sendAsync();
     }
   }
+
+  const italianList = useMemo(() => (
+    <PresenseList
+      title="Italiani"
+      list={italians}
+      dialogFloating="left"
+      fetchLocations={fetchProvincesAsync}
+      onEntryAdd={addItalianEntry}
+      onEntryEdit={editItalianEntry}
+      onEntryDelete={deleteItalianEntry}
+    />
+  ), [addItalianEntry, deleteItalianEntry, editItalianEntry, italians]);
+
+  const foreignList = useMemo(() => (
+    <PresenseList
+      title="Stranieri"
+      list={foreigns}
+      dialogFloating="right"
+      fetchLocations={fetchCountriesAsync}
+      onEntryAdd={addForeignEntry}
+      onEntryEdit={editForeignEntry}
+      onEntryDelete={deleteForeignEntry}
+    />
+  ), [addForeignEntry, deleteForeignEntry, editForeignEntry, foreigns]);
 
   return (
     <>
@@ -241,24 +265,8 @@ export default function Istat(): JSX.Element {
               bottom: 0,
             }}
           >
-            <PresenseList
-              title="Italiani"
-              list={italians}
-              dialogFloating="left"
-              fetchLocations={fetchProvincesAsync}
-              onEntryAdd={addItalianEntry}
-              onEntryEdit={editItalianEntry}
-              onEntryDelete={deleteItalianEntry}
-            />
-            <PresenseList
-              title="Stranieri"
-              list={foreigns}
-              dialogFloating="right"
-              fetchLocations={fetchCountriesAsync}
-              onEntryAdd={addForeignEntry}
-              onEntryEdit={editForeignEntry}
-              onEntryDelete={deleteForeignEntry}
-            />
+            {italianList}
+            {foreignList}
           </Stack>
         </Box>
       </Stack>

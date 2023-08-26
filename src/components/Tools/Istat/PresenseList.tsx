@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, memo } from "react";
 
 import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
@@ -26,7 +26,7 @@ type PresenseListProps = {
   onEntryDelete: (id: string) => void,
 };
 
-export default function PresenseList({ title, list, dialogFloating, fetchLocations, onEntryAdd, onEntryEdit, onEntryDelete }: PresenseListProps): JSX.Element {
+export default memo(function PresenseList({ title, list, dialogFloating, fetchLocations, onEntryAdd, onEntryEdit, onEntryDelete }: PresenseListProps): JSX.Element {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const [scrollTop, setScrollTop] = useState(0);
@@ -73,6 +73,20 @@ export default function PresenseList({ title, list, dialogFloating, fetchLocatio
       isSubscribed = false;
     };
   }, [dispatch, fetchLocations]);
+
+  const items = useMemo(() => itemsKeys.map((key) => {
+    const item = list[key];
+    return (
+      <PresenseItem
+        key={key}
+        entry={item}
+        usableLocations={usableLocations}
+        dialogFloating={dialogFloating}
+        onEntryEdit={onEntryEdit}
+        onEntryDelete={onEntryDelete}
+      />
+    );
+  }), [dialogFloating, itemsKeys, list, onEntryDelete, onEntryEdit, usableLocations]);
 
   return (
     <Stack
@@ -136,7 +150,7 @@ export default function PresenseList({ title, list, dialogFloating, fetchLocatio
       >
         <Stack
           direction="column"
-          spacing={2}
+          spacing={0}
           sx={{
             position: "absolute",
             top: 0,
@@ -144,27 +158,16 @@ export default function PresenseList({ title, list, dialogFloating, fetchLocatio
             right: 0,
             bottom: 0,
             p: "1rem",
+            pb: 0,
             overflowY: "auto",
           }}
           onScroll={(event) => {
             setScrollTop(event.currentTarget?.scrollTop ?? 0);
           }}
         >
-          {itemsKeys.map((key) => {
-            const item = list[key];
-            return (
-              <PresenseItem
-                key={key}
-                entry={item}
-                usableLocations={usableLocations}
-                dialogFloating={dialogFloating}
-                onEntryEdit={onEntryEdit}
-                onEntryDelete={onEntryDelete}
-              />
-            );
-          })}
+          {items}
         </Stack>
       </Box>
     </Stack>
   );
-}
+});
