@@ -29,6 +29,7 @@ import {
 
 import { MovementEntry, MovementsList } from "./models";
 import PresenseList from "./PresenseList";
+import ConfirmExitDialog from "./ConfirmExitDialog";
 
 export default function Istat(): JSX.Element {
   const theme = useTheme();
@@ -46,6 +47,7 @@ export default function Istat(): JSX.Element {
   const [isSending, setIsSending] = useState(false);
   const [isEntered, setIsEntered] = useState(false);
   const [shouldExit, setShouldExit] = useState(false);
+  const [openConfirmExitDialog, setOpenConfirmExitDialog] = useState(false);
 
   const italianKeys = Object.keys(italians);
   const foreignKeys = Object.keys(foreigns);
@@ -194,6 +196,19 @@ export default function Istat(): JSX.Element {
     }
   }
 
+  function tryExit(): void {
+    setOpenConfirmExitDialog(true);
+  }
+
+  function closeConfirm(): void {
+    setOpenConfirmExitDialog(false);
+  }
+
+  function confirmExit(): void {
+    setIsEntered(false);
+    dispatch(setSurfaceDim(false));
+  }
+
   const italianList = useMemo(() => (
     <PresenseList
       title="Italiani"
@@ -246,12 +261,10 @@ export default function Istat(): JSX.Element {
         }}
       >
         <Stack direction="row" justifyContent="space-between">
-          <M3IconButton onClick={() => {
-            setIsEntered(false);
-            dispatch(setSurfaceDim(false));
-          }}>
+          <M3IconButton onClick={tryExit}>
             <ArrowBackOutlinedIcon />
           </M3IconButton>
+          <ConfirmExitDialog open={openConfirmExitDialog} onCancel={closeConfirm} onConfirm={confirmExit} />
           {isLoaded ? (
             isSending ? (
               <CircularProgress />
