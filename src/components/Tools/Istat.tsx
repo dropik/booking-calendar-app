@@ -39,10 +39,14 @@ import { show as showSnackbarMessage } from "../../redux/snackbarMessageSlice";
 import Input from "@mui/material/Input";
 
 type MovementEntry = {
-  id: number;
+  id: string;
   targa?: string;
   arrivals?: number;
   departures?: number;
+};
+
+type MovementsList = {
+  [key: string]: MovementEntry,
 };
 
 export default function Istat(): JSX.Element {
@@ -50,17 +54,28 @@ export default function Istat(): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [movementsData, setMovementsData] = useState<MovementDTO | undefined>(undefined);
-  const [italians, setItalians] = useState<MovementEntry[]>([{ id: 0 }, { id: 1 }]);
-  const [foreigns, setForeigns] = useState<MovementEntry[]>([{ id: 0 }, { id: 1 }]);
+  const [italians, setItalians] = useState<MovementsList>({
+    placeholder1: { id: "placeholder1" },
+    placeholder2: { id: "placeholder2" },
+  });
+  const [foreigns, setForeigns] = useState<MovementsList>({
+    placeholder1: { id: "placeholder1" },
+    placeholder2: { id: "placeholder2" },
+  });
 
-  const isLoaded = italians.every(i => i.targa) && foreigns.every(i => i.targa);
+  const italianKeys = Object.keys(italians);
+  const foreignKeys = Object.keys(foreigns);
+
+  const isLoaded = italianKeys.every(key => key.search("placeholder") < 0) && foreignKeys.every(key => key.search("placeholder") < 0);
   let totalArrivals = 0;
   let totalDepartures = 0;
-  for (const entry of italians) {
+  for (const key of italianKeys) {
+    const entry = italians[key];
     totalArrivals += entry.arrivals ?? 0;
     totalDepartures += entry.departures ?? 0;
   }
-  for (const entry of foreigns) {
+  for (const key of foreignKeys) {
+    const entry = foreigns[key];
     totalArrivals += entry.arrivals ?? 0;
     totalDepartures += entry.departures ?? 0;
   }
@@ -99,36 +114,40 @@ export default function Istat(): JSX.Element {
   }, [dispatch, movementsData]);
 
   function addItalianEntry(entry: MovementEntry): void {
-    entry.id = italians.length;
-    setItalians([...italians, entry]);
-  }
-
-  function editItalianEntry(entry: MovementEntry): void {
-    const copy = [...italians];
+    const copy = {...italians};
+    entry.id = self.crypto.randomUUID();
     copy[entry.id] = entry;
     setItalians(copy);
   }
 
-  function deleteItalianEntry(id: number): void {
-    const copy = [...italians];
-    copy.splice(id, 1);
+  function editItalianEntry(entry: MovementEntry): void {
+    const copy = {...italians};
+    copy[entry.id] = entry;
+    setItalians(copy);
+  }
+
+  function deleteItalianEntry(id: string): void {
+    const copy = {...italians};
+    delete copy[id];
     setItalians(copy);
   }
 
   function addForeignEntry(entry: MovementEntry): void {
-    entry.id = foreigns.length;
-    setForeigns([...foreigns, entry]);
-  }
-
-  function editForeignEntry(entry: MovementEntry): void {
-    const copy = [...foreigns];
+    const copy = {...foreigns};
+    entry.id = self.crypto.randomUUID();
     copy[entry.id] = entry;
     setForeigns(copy);
   }
 
-  function deleteForeignEntry(id: number): void {
-    const copy = [...foreigns];
-    copy.splice(id, 1);
+  function editForeignEntry(entry: MovementEntry): void {
+    const copy = {...foreigns};
+    copy[entry.id] = entry;
+    setForeigns(copy);
+  }
+
+  function deleteForeignEntry(id: string): void {
+    const copy = {...foreigns};
+    delete copy[id];
     setForeigns(copy);
   }
 
@@ -215,26 +234,27 @@ export default function Istat(): JSX.Element {
   );
 }
 
-function splitMovements(movements: MovementDTO): { italians: MovementEntry[]; foreigns: MovementEntry[] } {
-  const italians: MovementEntry[] = [];
-  const foreigns: MovementEntry[] = [];
+function splitMovements(movements: MovementDTO): { italians: MovementsList; foreigns: MovementsList } {
+  const italians: MovementsList = {};
+  const foreigns: MovementsList = {};
 
   for (let i = 0; i < movements.movements.length; i++) {
     const movement = movements.movements[i];
+    const key = self.crypto.randomUUID();
     if (movement.italia) {
-      italians.push({
-        id: italians.length,
+      italians[key] = {
+        id: key,
         targa: movement.targa,
         arrivals: movement.arrivi,
         departures: movement.partenze,
-      });
+      };
     } else {
-      foreigns.push({
-        id: foreigns.length,
+      foreigns[key] = {
+        id: key,
         targa: movement.targa,
         arrivals: movement.arrivi,
         departures: movement.partenze,
-      });
+      };
     }
   }
 
@@ -243,12 +263,12 @@ function splitMovements(movements: MovementDTO): { italians: MovementEntry[]; fo
 
 type PresenseListProps = {
   title: string;
-  list: MovementEntry[];
+  list: MovementsList;
   dialogFloating: "right" | "left",
   fetchLocations: () => Promise<{data: string[] }>,
   onEntryAdd: (entry: MovementEntry) => void,
   onEntryEdit: (entry: MovementEntry) => void,
-  onEntryDelete: (id: number) => void,
+  onEntryDelete: (id: string) => void,
 };
 
 function PresenseList({ title, list, dialogFloating, fetchLocations, onEntryAdd, onEntryEdit, onEntryDelete }: PresenseListProps): JSX.Element {
@@ -259,8 +279,16 @@ function PresenseList({ title, list, dialogFloating, fetchLocations, onEntryAdd,
   const [locations, setLocations] = useState<string[]>([]);
   const isScrolled = scrollTop > 0;
 
-  const usableLocations = locations.filter(l => !list.map(i => i.targa).includes(l));
-  const isLoaded = list.every(i => i.targa) && locations.length > 0;
+  const itemsKeys = Object.keys(list);
+
+  const usedTarga: string[] = [];
+  for (const key in list) {
+    const entry = list[key];
+    usedTarga.push(entry.targa ?? "");
+  }
+
+  const usableLocations = locations.filter(l => !usedTarga.includes(l));
+  const isLoaded = itemsKeys.every(key => key.search("placeholder") < 0) && locations.length > 0;
 
   function closeEdit(): void {
     setEditOpen(false);
@@ -367,16 +395,19 @@ function PresenseList({ title, list, dialogFloating, fetchLocations, onEntryAdd,
             setScrollTop(event.currentTarget?.scrollTop ?? 0);
           }}
         >
-          {list.map((item) => (
-            <PresenseItem
-              key={item.id}
-              entry={item}
-              usableLocations={usableLocations}
-              dialogFloating={dialogFloating}
-              onEntryEdit={onEntryEdit}
-              onEntryDelete={onEntryDelete}
-            />
-          ))}
+          {itemsKeys.map((key) => {
+            const item = list[key];
+            return (
+              <PresenseItem
+                key={key}
+                entry={item}
+                usableLocations={usableLocations}
+                dialogFloating={dialogFloating}
+                onEntryEdit={onEntryEdit}
+                onEntryDelete={onEntryDelete}
+              />
+            );
+          })}
         </Stack>
       </Box>
     </Stack>
@@ -388,7 +419,7 @@ type PresenseItemProps = {
   usableLocations: string[],
   dialogFloating: "right" | "left",
   onEntryEdit: (entry: MovementEntry) => void,
-  onEntryDelete: (id: number) => void,
+  onEntryDelete: (id: string) => void,
 };
 
 function PresenseItem({ entry, usableLocations, dialogFloating, onEntryEdit, onEntryDelete }: PresenseItemProps): JSX.Element {
@@ -570,7 +601,7 @@ function MovementEntryDialog({ locations, open, onClose, floating, entry, onAcce
     }
 
     onAcceptAction({
-      id: entry?.id ?? 0,
+      id: entry?.id ?? "",
       targa: targa ?? "",
       arrivals: arrivals ?? 0,
       departures: departures ?? 0,
