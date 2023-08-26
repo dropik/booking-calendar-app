@@ -39,6 +39,7 @@ import { show as showSnackbarMessage } from "../../redux/snackbarMessageSlice";
 import Input from "@mui/material/Input";
 
 type MovementEntry = {
+  id: number;
   targa?: string;
   arrivals?: number;
   departures?: number;
@@ -49,8 +50,8 @@ export default function Istat(): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [movementsData, setMovementsData] = useState<MovementDTO | undefined>(undefined);
-  const [italians, setItalians] = useState<MovementEntry[]>([{ }, { }]);
-  const [foreigns, setForeigns] = useState<MovementEntry[]>([{ }, { }]);
+  const [italians, setItalians] = useState<MovementEntry[]>([{ id: 0 }, { id: 1 }]);
+  const [foreigns, setForeigns] = useState<MovementEntry[]>([{ id: 0 }, { id: 1 }]);
 
   const isLoaded = italians.every(i => i.targa) && foreigns.every(i => i.targa);
   let totalArrivals = 0;
@@ -98,11 +99,25 @@ export default function Istat(): JSX.Element {
   }, [dispatch, movementsData]);
 
   function addItalianEntry(entry: MovementEntry): void {
+    entry.id = italians.length;
     setItalians([...italians, entry]);
   }
 
+  function editItalianEntry(entry: MovementEntry): void {
+    const copy = [...italians];
+    copy[entry.id] = entry;
+    setItalians(copy);
+  }
+
   function addForeignEntry(entry: MovementEntry): void {
+    entry.id = foreigns.length;
     setForeigns([...foreigns, entry]);
+  }
+
+  function editForeignEntry(entry: MovementEntry): void {
+    const copy = [...foreigns];
+    copy[entry.id] = entry;
+    setForeigns(copy);
   }
 
   return (
@@ -169,6 +184,7 @@ export default function Istat(): JSX.Element {
               dialogFloating="left"
               fetchLocations={fetchProvincesAsync}
               onEntryAdd={addItalianEntry}
+              onEntryEdit={editItalianEntry}
             />
             <PresenseList
               title="Stranieri"
@@ -176,6 +192,7 @@ export default function Istat(): JSX.Element {
               dialogFloating="right"
               fetchLocations={fetchCountriesAsync}
               onEntryAdd={addForeignEntry}
+              onEntryEdit={editForeignEntry}
             />
           </Stack>
         </Box>
@@ -192,12 +209,14 @@ function splitMovements(movements: MovementDTO): { italians: MovementEntry[]; fo
     const movement = movements.movements[i];
     if (movement.italia) {
       italians.push({
+        id: italians.length,
         targa: movement.targa,
         arrivals: movement.arrivi,
         departures: movement.partenze,
       });
     } else {
       foreigns.push({
+        id: foreigns.length,
         targa: movement.targa,
         arrivals: movement.arrivi,
         departures: movement.partenze,
@@ -214,9 +233,10 @@ type PresenseListProps = {
   dialogFloating: "right" | "left",
   fetchLocations: () => Promise<{data: string[] }>,
   onEntryAdd: (entry: MovementEntry) => void,
+  onEntryEdit: (entry: MovementEntry) => void,
 };
 
-function PresenseList({ title, list, dialogFloating, fetchLocations, onEntryAdd }: PresenseListProps): JSX.Element {
+function PresenseList({ title, list, dialogFloating, fetchLocations, onEntryAdd, onEntryEdit }: PresenseListProps): JSX.Element {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const [scrollTop, setScrollTop] = useState(0);
@@ -332,8 +352,8 @@ function PresenseList({ title, list, dialogFloating, fetchLocations, onEntryAdd 
             setScrollTop(event.currentTarget?.scrollTop ?? 0);
           }}
         >
-          {list.map((item, index) => (
-            <PresenseItem key={item.targa ?? index} movementEntry={item} />
+          {list.map((item) => (
+            <PresenseItem key={item.id} entry={item} usableLocations={usableLocations} dialogFloating={dialogFloating} onEntryEdit={onEntryEdit} />
           ))}
         </Stack>
       </Box>
@@ -342,13 +362,17 @@ function PresenseList({ title, list, dialogFloating, fetchLocations, onEntryAdd 
 }
 
 type PresenseItemProps = {
-  movementEntry: MovementEntry;
+  entry: MovementEntry,
+  usableLocations: string[],
+  dialogFloating: "right" | "left",
+  onEntryEdit: (entry: MovementEntry) => void,
 };
 
-function PresenseItem({ movementEntry }: PresenseItemProps): JSX.Element {
+function PresenseItem({ entry, usableLocations, dialogFloating, onEntryEdit }: PresenseItemProps): JSX.Element {
   const theme = useTheme();
+  const [editOpen, setEditOpen] = useState(false);
 
-  if (!movementEntry.targa) {
+  if (!entry.targa) {
     return (
       <M3Skeleton
         variant="rounded"
@@ -423,7 +447,7 @@ function PresenseItem({ movementEntry }: PresenseItemProps): JSX.Element {
       }}
     >
       <Stack direction="column" spacing={1}>
-        <Typography variant="titleLarge">{movementEntry.targa}</Typography>
+        <Typography variant="titleLarge">{entry.targa}</Typography>
         <Stack direction="row" spacing={1}>
           <Box
             sx={{
@@ -434,7 +458,7 @@ function PresenseItem({ movementEntry }: PresenseItemProps): JSX.Element {
             }}
           >
             <Typography variant="labelLarge">
-              {movementEntry.arrivals} arrivi
+              {entry.arrivals} arrivi
             </Typography>
           </Box>
           <SwapHorizOutlinedIcon />
@@ -447,7 +471,7 @@ function PresenseItem({ movementEntry }: PresenseItemProps): JSX.Element {
             }}
           >
             <Typography variant="labelLarge">
-              {movementEntry.departures} partenze
+              {entry.departures} partenze
             </Typography>
           </Box>
         </Stack>
@@ -459,12 +483,20 @@ function PresenseItem({ movementEntry }: PresenseItemProps): JSX.Element {
         <M3IconButton
           variant="contained"
           disableElevation={true}
+          onClick={() => setEditOpen(true)}
           sx={{
             backgroundColor: theme.palette.surfaceContainerLowest.main,
           }}
         >
           <EditOutlinedIcon />
         </M3IconButton>
+        <MovementEntryDialog
+          locations={usableLocations}
+          open={editOpen}
+          onClose={() => setEditOpen(false)}
+          floating={dialogFloating}
+          entry={entry}
+          onAcceptAction={onEntryEdit} />
       </Stack>
     </Stack>
   );
@@ -482,9 +514,12 @@ type MovementEntryDialogProps = {
 function MovementEntryDialog({ locations, open, onClose, floating, entry, onAcceptAction }: MovementEntryDialogProps): JSX.Element {
   const theme = useTheme();
 
-  const [targa, setTarga] = useState<string | null>(null);
-  const [arrivals, setArrivals] = useState<number | null>(null);
-  const [departures, setDepartures] = useState<number | null>(null);
+  const usableLocations = !entry ? locations : [...locations, entry.targa];
+  usableLocations.sort();
+
+  const [targa, setTarga] = useState<string | null>(entry?.targa ?? null);
+  const [arrivals, setArrivals] = useState<number | null>(entry?.arrivals ?? null);
+  const [departures, setDepartures] = useState<number | null>(entry?.departures ?? null);
 
   const [touchedState, setTouchedState] = useState({
     targa: false,
@@ -512,12 +547,16 @@ function MovementEntryDialog({ locations, open, onClose, floating, entry, onAcce
     }
 
     onAcceptAction({
+      id: entry?.id ?? 0,
       targa: targa ?? "",
       arrivals: arrivals ?? 0,
       departures: departures ?? 0,
     });
 
-    clearForm();
+    if (!entry) {
+      clearForm();
+    }
+
     onClose();
   }
 
@@ -582,8 +621,7 @@ function MovementEntryDialog({ locations, open, onClose, floating, entry, onAcce
           }}>
             <TargaAutocomplete
               id="targa"
-              defaultValue={entry?.targa}
-              options={locations}
+              options={usableLocations}
               value={targa}
               onChange={(_, value) => {
                 if (typeof(value) === "string") {
@@ -614,7 +652,6 @@ function MovementEntryDialog({ locations, open, onClose, floating, entry, onAcce
               id="arrivi"
               type="number"
               inputProps={{ min: 0 }}
-              defaultValue={entry?.arrivals}
               label="Arrivi"
             ></TextField>
             <TextField
@@ -626,7 +663,6 @@ function MovementEntryDialog({ locations, open, onClose, floating, entry, onAcce
               id="partenze"
               type="number"
               inputProps={{ min: 0 }}
-              defaultValue={entry?.departures}
               label="Partenze"
             ></TextField>
           </Stack>
