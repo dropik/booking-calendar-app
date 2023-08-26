@@ -30,6 +30,7 @@ import {
 import { MovementEntry, MovementsList } from "./models";
 import PresenseList from "./PresenseList";
 import ConfirmExitDialog from "./ConfirmExitDialog";
+import NegativePresenseDialog from "./NegativePresenseDialog";
 
 export default function Istat(): JSX.Element {
   const theme = useTheme();
@@ -48,6 +49,7 @@ export default function Istat(): JSX.Element {
   const [isEntered, setIsEntered] = useState(false);
   const [shouldExit, setShouldExit] = useState(false);
   const [openConfirmExitDialog, setOpenConfirmExitDialog] = useState(false);
+  const [openErrorDialog, setOpenErrorDialog] = useState(false);
 
   const italianKeys = Object.keys(italians);
   const foreignKeys = Object.keys(foreigns);
@@ -191,8 +193,12 @@ export default function Istat(): JSX.Element {
     }
 
     if (!isSending) {
-      setIsSending(true);
-      sendAsync();
+      if (nextTotal !== undefined && nextTotal < 0) {
+        setOpenErrorDialog(true);
+      } else {
+        setIsSending(true);
+        sendAsync();
+      }
     }
   }
 
@@ -273,9 +279,12 @@ export default function Istat(): JSX.Element {
             isSending ? (
               <CircularProgress />
             ) : (
-              <M3FilledButton onClick={sendData} startIcon={<CheckOutlinedIcon />}>
+              <>
+                <M3FilledButton onClick={sendData} startIcon={<CheckOutlinedIcon />}>
               Accetta
-              </M3FilledButton>
+                </M3FilledButton>
+                <NegativePresenseDialog open={openErrorDialog} onClose={() => setOpenErrorDialog(false)} />
+              </>
             )) : <></>}
         </Stack>
         <Stack

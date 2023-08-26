@@ -29,9 +29,9 @@ export default function ConfirmExitDialog({ open, onCancel, onConfirm }: Confirm
       floating="left"
       transitionDuration={theme.transitions.duration.medium4}
     >
-      <Stack direction="column" spacing={3} sx={{ p: "1.5rem", minWidth: "30rem", alignItems: "center" }}>
+      <Stack direction="column" spacing={3} sx={{ p: "1.5rem", minWidth: "20rem", alignItems: "center" }}>
         <Typography variant="headlineSmall">Uscire?</Typography>
-        <Typography variant="bodyMedium">Le modifiche effettuate non verranno salvate.</Typography>
+        <Typography variant="bodyMedium" width="100%">Le modifiche effettuate non verranno salvate.</Typography>
         <Stack direction="row" spacing={1} sx={{
           width: "100%",
           justifyContent: "flex-end",
