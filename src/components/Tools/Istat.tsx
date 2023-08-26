@@ -109,6 +109,12 @@ export default function Istat(): JSX.Element {
     setItalians(copy);
   }
 
+  function deleteItalianEntry(id: number): void {
+    const copy = [...italians];
+    copy.splice(id, 1);
+    setItalians(copy);
+  }
+
   function addForeignEntry(entry: MovementEntry): void {
     entry.id = foreigns.length;
     setForeigns([...foreigns, entry]);
@@ -117,6 +123,12 @@ export default function Istat(): JSX.Element {
   function editForeignEntry(entry: MovementEntry): void {
     const copy = [...foreigns];
     copy[entry.id] = entry;
+    setForeigns(copy);
+  }
+
+  function deleteForeignEntry(id: number): void {
+    const copy = [...foreigns];
+    copy.splice(id, 1);
     setForeigns(copy);
   }
 
@@ -185,6 +197,7 @@ export default function Istat(): JSX.Element {
               fetchLocations={fetchProvincesAsync}
               onEntryAdd={addItalianEntry}
               onEntryEdit={editItalianEntry}
+              onEntryDelete={deleteItalianEntry}
             />
             <PresenseList
               title="Stranieri"
@@ -193,6 +206,7 @@ export default function Istat(): JSX.Element {
               fetchLocations={fetchCountriesAsync}
               onEntryAdd={addForeignEntry}
               onEntryEdit={editForeignEntry}
+              onEntryDelete={deleteForeignEntry}
             />
           </Stack>
         </Box>
@@ -234,9 +248,10 @@ type PresenseListProps = {
   fetchLocations: () => Promise<{data: string[] }>,
   onEntryAdd: (entry: MovementEntry) => void,
   onEntryEdit: (entry: MovementEntry) => void,
+  onEntryDelete: (id: number) => void,
 };
 
-function PresenseList({ title, list, dialogFloating, fetchLocations, onEntryAdd, onEntryEdit }: PresenseListProps): JSX.Element {
+function PresenseList({ title, list, dialogFloating, fetchLocations, onEntryAdd, onEntryEdit, onEntryDelete }: PresenseListProps): JSX.Element {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const [scrollTop, setScrollTop] = useState(0);
@@ -353,7 +368,14 @@ function PresenseList({ title, list, dialogFloating, fetchLocations, onEntryAdd,
           }}
         >
           {list.map((item) => (
-            <PresenseItem key={item.id} entry={item} usableLocations={usableLocations} dialogFloating={dialogFloating} onEntryEdit={onEntryEdit} />
+            <PresenseItem
+              key={item.id}
+              entry={item}
+              usableLocations={usableLocations}
+              dialogFloating={dialogFloating}
+              onEntryEdit={onEntryEdit}
+              onEntryDelete={onEntryDelete}
+            />
           ))}
         </Stack>
       </Box>
@@ -366,9 +388,10 @@ type PresenseItemProps = {
   usableLocations: string[],
   dialogFloating: "right" | "left",
   onEntryEdit: (entry: MovementEntry) => void,
+  onEntryDelete: (id: number) => void,
 };
 
-function PresenseItem({ entry, usableLocations, dialogFloating, onEntryEdit }: PresenseItemProps): JSX.Element {
+function PresenseItem({ entry, usableLocations, dialogFloating, onEntryEdit, onEntryDelete }: PresenseItemProps): JSX.Element {
   const theme = useTheme();
   const [editOpen, setEditOpen] = useState(false);
 
@@ -477,7 +500,7 @@ function PresenseItem({ entry, usableLocations, dialogFloating, onEntryEdit }: P
         </Stack>
       </Stack>
       <Stack direction="row" spacing={2}>
-        <M3IconButton>
+        <M3IconButton onClick={() => onEntryDelete(entry.id)}>
           <DeleteOutlineOutlinedIcon />
         </M3IconButton>
         <M3IconButton
