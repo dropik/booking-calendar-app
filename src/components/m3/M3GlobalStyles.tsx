@@ -6,20 +6,24 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-import { useLocation } from "react-router-dom";
+
+import { useAppSelector } from "../../redux/hooks";
 
 export default function M3GlobalStyles(): JSX.Element {
   const theme = useTheme();
-  const location = useLocation();
+  const surfaceDim = useAppSelector(state => state.layout.surfaceDim);
 
   return (
     <GlobalStyles styles={{
       html: {
         fontFamily: "Roboto, Arial, Helvetica, sans-serif",
-        backgroundColor: location.pathname === "/tools/istat"
+        backgroundColor: surfaceDim
           ? theme.palette.surfaceDim.main
           : theme.palette.surface.main,
-        transition: theme.transitions.create(["background-color"], { duration: theme.transitions.duration.shorter, easing: theme.transitions.easing.emphasized }),
+        transition: theme.transitions.create(["background-color"], {
+          duration: theme.transitions.duration.short,
+          easing: theme.transitions.easing.emphasized
+        }),
       },
       body: {
         margin: 0,

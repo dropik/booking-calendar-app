@@ -17,6 +17,7 @@ import M3Skeleton from "../../m3/M3Skeleton";
 
 import { useAppDispatch } from "../../../redux/hooks";
 import { show as showSnackbarMessage } from "../../../redux/snackbarMessageSlice";
+import { setSurfaceDim } from "../../../redux/layoutSlice";
 
 import {
   fetchCountriesAsync,
@@ -43,6 +44,8 @@ export default function Istat(): JSX.Element {
     placeholder2: { id: "placeholder2" },
   });
   const [isSending, setIsSending] = useState(false);
+  const [isEntered, setIsEntered] = useState(false);
+  const [shouldExit, setShouldExit] = useState(false);
 
   const italianKeys = Object.keys(italians);
   const foreignKeys = Object.keys(foreigns);
@@ -93,6 +96,17 @@ export default function Istat(): JSX.Element {
       isSubscribed = false;
     };
   }, [dispatch, movementsData]);
+
+  useEffect(() => {
+    setIsEntered(true);
+    dispatch(setSurfaceDim(true));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (shouldExit) {
+      navigate(-1);
+    }
+  }, [navigate, shouldExit]);
 
   const addItalianEntry = useCallback((entry: MovementEntry) => {
     const copy = {...italians};
@@ -216,10 +230,26 @@ export default function Istat(): JSX.Element {
           borderRadius: "24px 0px 0px 24px",
           p: "1rem",
           boxSizing: "border-box",
+          transition: theme.transitions.create(["transform", "opacity"], {
+            duration: isEntered ? theme.transitions.duration.short : theme.transitions.duration.shortest,
+            easing: isEntered
+              ? theme.transitions.easing.emphasized
+              : theme.transitions.easing.emphasizedAccelerate,
+          }),
+          transform: isEntered ? "none" : "translateX(50px)",
+          opacity: isEntered ? 1 : 0,
+        }}
+        onTransitionEnd={() => {
+          if (!isEntered) {
+            setShouldExit(true);
+          }
         }}
       >
         <Stack direction="row" justifyContent="space-between">
-          <M3IconButton onClick={() => navigate(-1)}>
+          <M3IconButton onClick={() => {
+            setIsEntered(false);
+            dispatch(setSurfaceDim(false));
+          }}>
             <ArrowBackOutlinedIcon />
           </M3IconButton>
           {isLoaded ? (
