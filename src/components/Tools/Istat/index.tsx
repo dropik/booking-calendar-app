@@ -197,7 +197,11 @@ export default function Istat(): JSX.Element {
   }
 
   function tryExit(): void {
-    setOpenConfirmExitDialog(true);
+    if (movementsData && checkDataWasTouched(movementsData, italians, foreigns)) {
+      setOpenConfirmExitDialog(true);
+    } else {
+      confirmExit();
+    }
   }
 
   function closeConfirm(): void {
@@ -342,4 +346,32 @@ function splitMovements(movements: MovementDTO): { italians: MovementsList; fore
   }
 
   return { italians, foreigns };
+}
+
+function checkDataWasTouched(originalDTO: MovementDTO, italians: MovementsList, foreigns: MovementsList): boolean {
+  const originalLists = splitMovements(originalDTO);
+
+  return checkListWasTouched(originalLists.italians, italians) ||
+    checkListWasTouched(originalLists.foreigns, foreigns);
+}
+
+function checkListWasTouched(original: MovementsList, current: MovementsList): boolean {
+  const originalKeys = Object.keys(original);
+  const currentKeys = Object.keys(current);
+
+  if (originalKeys.length !== currentKeys.length) {
+    return true;
+  }
+
+  for (let i = 0; i < originalKeys.length; i++) {
+    const originalEntry = original[originalKeys[i]];
+    const currentEntry = current[currentKeys[i]];
+    if (originalEntry.targa !== currentEntry.targa ||
+      originalEntry.arrivals !== currentEntry.arrivals ||
+      originalEntry.departures !== currentEntry.departures) {
+      return true;
+    }
+  }
+
+  return false;
 }
