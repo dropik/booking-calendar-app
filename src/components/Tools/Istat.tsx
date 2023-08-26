@@ -556,7 +556,8 @@ function MovementEntryDialog({ locations, open, onClose, floating, entry, onAcce
     fieldName: "arrivals" | "departures"
   ): void {
     if (event.target.value && event.target.value !== "") {
-      setter(Number.parseInt(event.target.value));
+      const newValue = Number.parseInt(event.target.value);
+      setter(Math.max(newValue, 0));
     } else {
       setter(null);
     }
