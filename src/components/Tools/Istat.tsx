@@ -481,36 +481,40 @@ type MovementEntryDialogProps = {
 
 function MovementEntryDialog({ locations, open, onClose, floating, entry, onAcceptAction }: MovementEntryDialogProps): JSX.Element {
   const theme = useTheme();
+
   const [targa, setTarga] = useState<string | null>(null);
-  const arrivalsRef = useRef<HTMLInputElement | null>(null);
-  const departuresRef = useRef<HTMLInputElement | null>(null);
-  const [errorState, setErrorState] = useState({
-    targa: false,
-    arrivals: false,
-    departures: false,
-  });
+  const [arrivals, setArrivals] = useState<number | null>(null);
+  const [departures, setDepartures] = useState<number | null>(null);
+
   const [touchedState, setTouchedState] = useState({
     targa: false,
     arrivals: false,
     departures: false,
   });
+
+  const errors = {
+    targa: targa === null,
+    arrivals: arrivals === null,
+    departures: departures === null,
+  };
+  const hasErrors = errors.targa || errors.arrivals || errors.departures;
   const showError = {
-    targa: errorState.targa && touchedState.targa,
-    arrivals: errorState.arrivals && touchedState.arrivals,
-    departures: errorState.departures && touchedState.departures,
+    targa: errors.targa && touchedState.targa,
+    arrivals: errors.arrivals && touchedState.arrivals,
+    departures: errors.departures && touchedState.departures,
   };
   const errorText = "Il campo è obbligatorio";
 
   function acceptAndClose(): void {
     touchForm();
-    if (invalidateErrorState()) {
+    if (hasErrors) {
       return;
     }
 
     onAcceptAction({
       targa: targa ?? "",
-      arrivals: Number.parseInt(arrivalsRef.current?.value as string),
-      departures: Number.parseInt(departuresRef.current?.value as string),
+      arrivals: arrivals ?? 0,
+      departures: departures ?? 0,
     });
 
     clearForm();
@@ -521,7 +525,6 @@ function MovementEntryDialog({ locations, open, onClose, floating, entry, onAcce
     const newTouchedState = { ...touchedState };
     newTouchedState[field] = true;
     setTouchedState(newTouchedState);
-    invalidateErrorState();
   }
 
   function touchForm(): void {
@@ -534,12 +537,8 @@ function MovementEntryDialog({ locations, open, onClose, floating, entry, onAcce
 
   function clearForm(): void {
     setTarga(null);
-    if (arrivalsRef.current) {
-      arrivalsRef.current.value = "";
-    }
-    if (departuresRef.current) {
-      departuresRef.current.value = "";
-    }
+    setArrivals(null);
+    setDepartures(null);
     setTouchedState({
       targa: false,
       arrivals: false,
@@ -547,27 +546,21 @@ function MovementEntryDialog({ locations, open, onClose, floating, entry, onAcce
     });
   }
 
-  function invalidateErrorState(): boolean {
-    let result = false;
-    const newErrorState = {
-      targa: false,
-      arrivals: false,
-      departures: false,
-    };
-    if (targa === null) {
-      newErrorState.targa = true;
-      result = true;
+  function drawNumberValue(value: number | null): string {
+    return value === null ? "" : value.toString();
+  }
+
+  function updateNumberValue(
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    setter: (value: number | null) => void,
+    fieldName: "arrivals" | "departures"
+  ): void {
+    if (event.target.value && event.target.value !== "") {
+      setter(Number.parseInt(event.target.value));
+    } else {
+      setter(null);
     }
-    if (arrivalsRef.current && arrivalsRef.current.value === "") {
-      newErrorState.arrivals = true;
-      result = true;
-    }
-    if (departuresRef.current && departuresRef.current.value === "") {
-      newErrorState.departures = true;
-      result = true;
-    }
-    setErrorState(newErrorState);
-    return result;
+    touchField(fieldName);
   }
 
   return (
@@ -613,10 +606,10 @@ function MovementEntryDialog({ locations, open, onClose, floating, entry, onAcce
             />
             <TextField
               fullWidth
-              error={errorState.arrivals && touchedState.arrivals}
+              error={showError.arrivals}
               helperText={showError.arrivals ? errorText : undefined}
-              onChange={() => touchField("arrivals")}
-              inputRef={arrivalsRef}
+              value={drawNumberValue(arrivals)}
+              onChange={event => updateNumberValue(event, setArrivals, "arrivals")}
               id="arrivi"
               type="number"
               inputProps={{ min: 0 }}
@@ -625,10 +618,10 @@ function MovementEntryDialog({ locations, open, onClose, floating, entry, onAcce
             ></TextField>
             <TextField
               fullWidth
-              error={errorState.departures && touchedState.departures}
+              error={showError.departures}
               helperText={showError.departures ? errorText : undefined}
-              onChange={() => touchField("departures")}
-              inputRef={departuresRef}
+              value={drawNumberValue(departures)}
+              onChange={event => updateNumberValue(event, setDepartures, "departures")}
               id="partenze"
               type="number"
               inputProps={{ min: 0 }}
