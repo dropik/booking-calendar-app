@@ -26,6 +26,9 @@ A client side part of a web app for managing hotel bookings by organazing them i
 - **React Router**: single page app routing.
 
 ## Changes
+### v1.5.2
+- Animated exit from ISTAT screen on data sent.
+- Fixed surface dim not restored when exiting from ISTAT not by navigation back button.
 ### v1.5.1
 - Overhaul of ISTAT export. Data can be edited before exporting.
 - Better error handling from backend.
