@@ -26,6 +26,8 @@ A client side part of a web app for managing hotel bookings by organazing them i
 - **React Router**: single page app routing.
 
 ## Changes
+### v1.5.4
+- Considering wether deposit is with bank transfer for displaying payment notification
 ### v1.5.3
 - Added deposit not confirmd sign to tiles.
 ### v1.5.2

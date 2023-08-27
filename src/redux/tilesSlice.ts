@@ -24,6 +24,7 @@ export type TileData = {
   rateId: string,
   deposit: number,
   depositConfirmed: boolean,
+  isBankTransfer: boolean,
 };
 
 export type RoomChanges = {
@@ -344,6 +345,7 @@ function addFetchedBookings(state: WritableDraft<State>, bookings: ColoredBookin
         rateId: tile.rateId,
         deposit: booking.deposit,
         depositConfirmed: booking.depositConfirmed,
+        isBankTransfer: booking.isBankTransfer,
       };
 
       state.data[newTile.id] = newTile;

@@ -27,7 +27,7 @@ function ErrorWrappee({ tile }: ErrorWrappeeProps): JSX.Element | null {
   const theme = useTheme();
   const errorType: "none" | "warning" | "error" = useErrorType(tile);
   const { errorColor, errorMsg } = useErrorParams(errorType);
-  const hasDepositError = (tile.deposit > 0) && !tile.depositConfirmed;
+  const hasDepositError = tile.isBankTransfer && (tile.deposit > 0) && !tile.depositConfirmed;
 
   return (
     <Stack spacing={1} direction="column">

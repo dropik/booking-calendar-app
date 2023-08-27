@@ -1,6 +1,6 @@
 {
   "name": "booking-calendar",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "description": "Calendar view of reservations",
   "main": "dist/bundle.js",
   "scripts": {

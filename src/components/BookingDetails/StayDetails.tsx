@@ -31,6 +31,7 @@ export default memo(function StayDetails(props: StayDetailsProps): JSX.Element {
       rateId: tile.rateId,
       deposit: booking.deposit,
       depositConfirmed: booking.depositConfirmed,
+      isBankTransfer: booking.isBankTransfer,
     };
 
     return (

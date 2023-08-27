@@ -14,7 +14,7 @@ export default function DepositAlert({ fontSize }: DepositAlertProps): JSX.Eleme
   const theme = useTheme();
   const { data } = useContext(TileContext);
 
-  const hasDepositError = data && (data.deposit > 0) && !data.depositConfirmed;
+  const hasDepositError = data && data.isBankTransfer && (data.deposit > 0) && !data.depositConfirmed;
 
   return (
     <Box>

@@ -15,6 +15,7 @@ export type Booking<TPerson> = {
   to: string,
   deposit: number,
   depositConfirmed: boolean,
+  isBankTransfer: boolean,
   color?: TileColor,
   tiles: Tile<TPerson>[]
 };
