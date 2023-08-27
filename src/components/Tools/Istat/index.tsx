@@ -104,6 +104,10 @@ export default function Istat(): JSX.Element {
   useEffect(() => {
     setIsEntered(true);
     dispatch(setSurfaceDim(true));
+
+    return () => {
+      dispatch(setSurfaceDim(false));
+    };
   }, [dispatch]);
 
   useEffect(() => {
