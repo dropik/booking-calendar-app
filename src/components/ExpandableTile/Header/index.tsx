@@ -1,5 +1,8 @@
 import React, { forwardRef } from "react";
+
 import Stack from "@mui/material/Stack";
+
+import DepositAlert from "../../Tile/DepositAlert";
 
 import Container from "./Container";
 import HeadlineRow from "./HeadlineRow";
@@ -20,7 +23,10 @@ const Header = forwardRef<HTMLDivElement, {}>(function Header(_, ref): JSX.Eleme
           <RoomType />
           <RoomNumber />
         </Stack>
-        <Board />
+        <Stack direction="row" sx={{ gap: "0.5rem", justifyContent: "center", px: "0.5rem" }}>
+          <DepositAlert />
+          <Board />
+        </Stack>
       </Stack>
     </Container>
   );

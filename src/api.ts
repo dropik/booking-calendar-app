@@ -13,6 +13,8 @@ export type Booking<TPerson> = {
   lastModified: string,
   from: string,
   to: string,
+  deposit: number,
+  depositConfirmed: boolean,
   color?: TileColor,
   tiles: Tile<TPerson>[]
 };

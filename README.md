@@ -26,6 +26,8 @@ A client side part of a web app for managing hotel bookings by organazing them i
 - **React Router**: single page app routing.
 
 ## Changes
+### v1.5.3
+- Added deposit not confirmd sign to tiles.
 ### v1.5.2
 - Animated exit from ISTAT screen on data sent.
 - Fixed surface dim not restored when exiting from ISTAT not by navigation back button.
