@@ -185,7 +185,7 @@ export default function Istat(): JSX.Element {
       try {
         await postIstatMovementsAsync(dto);
         dispatch(showSnackbarMessage({ type: "success", message: "I dati sono stati mandati correttamente!" }));
-        navigate(-1);
+        confirmExit();
       } catch (exception: any) {
         dispatch(showSnackbarMessage({ type: "error", message: `Errore durante elaborazione dei dati: ${exception}`}));
         setIsSending(false);
@@ -280,9 +280,11 @@ export default function Istat(): JSX.Element {
               <CircularProgress />
             ) : (
               <>
-                <M3FilledButton onClick={sendData} startIcon={<CheckOutlinedIcon />}>
-              Accetta
-                </M3FilledButton>
+                {isEntered ? (
+                  <M3FilledButton onClick={sendData} startIcon={<CheckOutlinedIcon />}>
+                    Accetta
+                  </M3FilledButton>
+                ) : null}
                 <NegativePresenseDialog open={openErrorDialog} onClose={() => setOpenErrorDialog(false)} />
               </>
             )) : <></>}
