@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+
 import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
@@ -23,20 +24,33 @@ type ErrorWrappeeProps = {
 };
 
 function ErrorWrappee({ tile }: ErrorWrappeeProps): JSX.Element | null {
+  const theme = useTheme();
   const errorType: "none" | "warning" | "error" = useErrorType(tile);
   const { errorColor, errorMsg } = useErrorParams(errorType);
-
-  if (errorType === "none") {
-    return null;
-  }
+  const hasDepositError = (tile.deposit > 0) && !tile.depositConfirmed;
 
   return (
-    <Stack spacing={1} direction="row" sx={{
-      color: errorColor,
-      alignItems: "center"
-    }}>
-      <ErrorOutlineOutlined />
-      <Typography variant="bodySmall">{errorMsg}</Typography>
+    <Stack spacing={1} direction="column">
+      {errorType !== "none" ? (
+        <Stack spacing={1} direction="row" sx={{
+          color: errorColor,
+          alignItems: "center",
+        }}>
+          <ErrorOutlineOutlined />
+          <Typography variant="bodySmall">{errorMsg}</Typography>
+        </Stack>
+      ) : null}
+      {hasDepositError ? (
+        <Stack spacing={1} direction="row" sx={{
+          color: theme.palette.error.main,
+          alignItems: "center",
+        }}>
+          <ErrorOutlineOutlined />
+          <Typography variant="bodySmall">
+            Il bonifico non è stato confermato
+          </Typography>
+        </Stack>
+      ) : null}
     </Stack>
   );
 }
