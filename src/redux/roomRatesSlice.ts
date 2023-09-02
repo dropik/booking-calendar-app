@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchRoomRatesAction } from "./roomTypesSlice";
+import { fetchAsync as fetchCurrentUserAction } from "./userSlice";
 
 export type RoomRate = {
   baseBoard: string,
@@ -25,10 +25,10 @@ export const roomRatesSlice = createSlice({
   reducers: { },
   extraReducers: builder => {
     builder
-      .addCase(fetchRoomRatesAction.pending, state => {
+      .addCase(fetchCurrentUserAction.pending, state => {
         state.status = "loading";
       })
-      .addCase(fetchRoomRatesAction.fulfilled, (state, action) => {
+      .addCase(fetchCurrentUserAction.fulfilled, (state, action) => {
         state.status = "idle";
         state.data = { };
         const response = action.payload;
@@ -36,7 +36,7 @@ export const roomRatesSlice = createSlice({
           state.data[rateId] = { baseBoard };
         }
       })
-      .addCase(fetchRoomRatesAction.rejected, state => {
+      .addCase(fetchCurrentUserAction.rejected, state => {
         state.status = "failed";
       });
   }

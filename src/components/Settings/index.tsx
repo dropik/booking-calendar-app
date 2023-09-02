@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import { useAppDispatch, useAppSelector, useFloors } from "../../redux/hooks";
-import { fetchAsync as fetchFloorsAsync } from "../../redux/floorsSlice";
+import { useAppSelector, useFloors } from "../../redux/hooks";
 
 import DrawerAdjacent from "../m3/DrawerAdjacent";
 import CreateFloorDialog from "./CreateFloorDialog";
@@ -11,15 +10,9 @@ import Skeleton from "./Skeleton";
 import Floor from "./Floor";
 
 export default function Settings(): JSX.Element {
-  const dispatch = useAppDispatch();
   const floors = useFloors();
   const floorsReady = useAppSelector((state) => state.floors.status === "idle");
-
   const floorIds = Object.keys(floors).map(Number);
-
-  useEffect(() => {
-    dispatch(fetchFloorsAsync());
-  }, [dispatch]);
 
   return (
     <DrawerAdjacent>

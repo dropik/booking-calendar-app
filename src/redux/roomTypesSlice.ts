@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-
-import { fetchRoomRatesAsync } from "../api";
-import { show as showMessage } from "./snackbarMessageSlice";
+import { createSlice } from "@reduxjs/toolkit";
+import { fetchAsync as fetchCurrentUserAction } from "./userSlice";
 
 export type RoomType = {
   minOccupancy: number,
@@ -23,31 +21,16 @@ const initialState: State = {
   status: "idle"
 };
 
-export const fetchRoomRatesAction = createAsyncThunk(
-  "roomRates/fetch",
-  async (_, thunkApi) => {
-    try {
-      const response = await fetchRoomRatesAsync();
-      return response.data;
-    } catch(error: any) {
-      thunkApi.dispatch(showMessage({ type: "error", message: error?.message }));
-      throw thunkApi.rejectWithValue({});
-    }
-  }
-);
-
-export type FetchRoomRatesAction = ReturnType<typeof fetchRoomRatesAction>;
-
 export const roomTypesSlice = createSlice({
   name: "roomTypes",
   initialState: initialState,
   reducers: { },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchRoomRatesAction.pending, (state) => {
+      .addCase(fetchCurrentUserAction.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(fetchRoomRatesAction.fulfilled, (state, action) => {
+      .addCase(fetchCurrentUserAction.fulfilled, (state, action) => {
         state.status = "idle";
         state.data = {};
         const response = action.payload;
@@ -55,7 +38,7 @@ export const roomTypesSlice = createSlice({
           state.data[name] = { minOccupancy, maxOccupancy };
         }
       })
-      .addCase(fetchRoomRatesAction.rejected, (state) => {
+      .addCase(fetchCurrentUserAction.rejected, (state) => {
         state.status = "failed";
       });
   }

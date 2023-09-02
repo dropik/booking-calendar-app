@@ -118,6 +118,18 @@ export type MovementDTO = {
   movements: Movement[],
 };
 
+export type CurrentUser = {
+  username: string,
+  visibleName: string,
+  roomTypes: RoomType[],
+  roomRates: RoomRate[],
+  floors: Floor[],
+};
+
+export function fetchCurrentUserAsync(): Promise<{ data: CurrentUser }> {
+  return fetchJsonDataAsync<CurrentUser>("/api/v1/users/current");
+}
+
 export function fetchFloorsAsync(): Promise<{ data: Floor[] }> {
   return fetchJsonDataAsync<Floor[]>("/api/v1/floors");
 }
