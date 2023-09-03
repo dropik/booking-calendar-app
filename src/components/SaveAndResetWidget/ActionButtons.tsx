@@ -4,7 +4,7 @@ import Stack from "@mui/material/Stack";
 import RestoreIcon from "@mui/icons-material/Restore";
 import SaveIcon from "@mui/icons-material/Save";
 
-import { ColorAssignments, postRoomAssignmentsAsync, postColorAssignments, RoomAssignments } from "../../api";
+import { api, ColorAssignments, postRoomAssignmentsAsync, RoomAssignments } from "../../api";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { SaveAndResetWidgetContext } from ".";
 import * as TilesSlice from "../../redux/tilesSlice";
@@ -23,6 +23,7 @@ export default function ActionButtons(): JSX.Element {
   const hasChanges = hasRoomChanges || hasColorChanges;
   const roomChanges = useAppSelector((state) => state.tiles.roomChanges);
   const colorChanges = useAppSelector((state) => state.tiles.colorChanges);
+  const [postColorAssignments] = api.endpoints.postColorAssignments.useMutation();
 
   const open = status === "idle" && hasChanges;
 
@@ -46,7 +47,7 @@ export default function ActionButtons(): JSX.Element {
             const change = colorChanges[changeKey];
             colorAssignments[changeKey] = change.newColor;
           }
-          await postColorAssignments(colorAssignments);
+          postColorAssignments(colorAssignments);
         }
 
         dispatch(TilesSlice.saveChanges());

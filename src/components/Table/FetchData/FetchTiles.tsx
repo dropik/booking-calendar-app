@@ -1,20 +1,40 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-import { useAppSelector } from "../../../redux/hooks";
-import { fetchAsync } from "../../../redux/tilesSlice";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 
-import FetchDataBase from "./FetchDataBase";
+import { ColorAssignments, api } from "../../../api";
+import { ColoredBooking, TileColor, addColorizedBookings } from "../../../redux/tilesSlice";
 
-export default function FetchTiles(): JSX.Element {
+export default function FetchTiles(): null {
+  const dispatch = useAppDispatch();
   const args = useAppSelector((state) => state.table.lastFetchPeriod);
-  const [, setUpdateRequest] = useState(0);
+  const query = api.endpoints.getBookings.useQuery(args, { pollingInterval: 180000 });
+  const [postColorAssignments] = api.endpoints.postColorAssignments.useMutation();
 
   useEffect(() => {
-    const interval = setInterval(() => setUpdateRequest((r) => r + 1), 180000);
-    return () => clearInterval(interval);
-  }, []);
+    const bookings = query.data;
+    if (!bookings) return;
 
-  return (
-    <FetchDataBase fetchCallbackAsync={fetchAsync({ from: args.from, to: args.to })} />
-  );
+    const coloredBookings: ColoredBooking[] = [];
+
+    const assignments: ColorAssignments = { };
+
+    for (const booking of bookings) {
+      if (!booking.color) {
+        const newColor = `booking${Math.floor((Math.random() * 7)) + 1}` as TileColor;
+        assignments[booking.id] = newColor;
+        coloredBookings.push({ color: newColor, ...booking });
+      } else {
+        coloredBookings.push({ color: booking.color, ...booking });
+      }
+    }
+
+    dispatch(addColorizedBookings(coloredBookings));
+
+    if (Object.keys(assignments).length > 0) {
+      postColorAssignments(assignments);
+    }
+  }, [postColorAssignments, query.data, dispatch]);
+
+  return null;
 }

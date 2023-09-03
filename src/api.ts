@@ -102,14 +102,6 @@ export type RoomAssignments = {
   [key: string]: number | null
 }
 
-export type AckBookingsRequest = {
-  bookings: {
-    bookingId: string,
-    lastModified: string
-  }[],
-  sessionId: string
-}
-
 export type Movement = {
   italia: boolean,
   targa: string,
@@ -257,20 +249,20 @@ export const api = createApi({
         method: "DELETE",
       }),
     }),
+
+    getBookings: builder.query<Booking<number>[], { from: string, to: string}>({
+      query: ({ from, to }) => `bookings?from=${from}&to=${to}`,
+    }),
+
+    postColorAssignments: builder.mutation<null, ColorAssignments>({
+      query: (request) => ({
+        url: "color-assignments",
+        method: "POST",
+        body: request,
+      }),
+    }),
   }),
 });
-
-export function fetchBookingsBySessionAsync(from: string, to: string, sessionId?: string): Promise<{ data: { bookings: Booking<number>[], sessionId: string } }> {
-  return fetchJsonDataAsync<{ bookings: Booking<number>[], sessionId: string }>(`/api/v1/bookings-by-session?from=${from}&to=${to}${sessionId ? `&sessionId=${sessionId}` : ""}`);
-}
-
-export function ackBookingsAsync(request: AckBookingsRequest): Promise<void> {
-  return postDataWithoutResponseAsync("/api/v1/ack-bookings", request);
-}
-
-export function postColorAssignments(assignments: ColorAssignments): Promise<void> {
-  return postDataWithoutResponseAsync("/api/v1/color-assignments", assignments);
-}
 
 export function postRoomAssignmentsAsync(assignments: RoomAssignments): Promise<void> {
   return postDataWithoutResponseAsync("/api/v1/room-assignments", assignments);

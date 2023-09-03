@@ -1,12 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { WritableDraft } from "immer/dist/internal";
 
 import { Utils } from "../utils";
-import { ackBookingsAsync, AckBookingsRequest, api, Booking, ColorAssignments, fetchBookingsBySessionAsync, postColorAssignments } from "../api";
-import { show as showMessage } from "./snackbarMessageSlice";
-import { FetchPeriod } from "./tableSlice";
-import { RootState } from "./store";
+import { api, Booking } from "../api";
 
 export type TileColor = "booking1" | "booking2" | "booking3" | "booking4" | "booking5" | "booking6" | "booking7" | "booking8";
 
@@ -40,8 +36,6 @@ export type ColorChanges = {
   }
 };
 
-type ColoredBooking = Required<Booking<number>>;
-
 export type State = {
   status: "idle" | "loading" | "failed",
   data: {
@@ -63,8 +57,9 @@ export type State = {
   roomChanges: RoomChanges,
   colorChanges: ColorChanges,
   grabbedTile?: string,
-  sessionId?: string
 };
+
+export type ColoredBooking = Required<Booking<number>>;
 
 const initialState: State = {
   status: "idle",
@@ -75,53 +70,6 @@ const initialState: State = {
   roomChanges: { },
   colorChanges: { },
 };
-
-export const fetchAsync = createAsyncThunk<{ bookings: ColoredBooking[], sessionId: string }, FetchPeriod>(
-  "bookings-by-session/fetch",
-  async (arg: FetchPeriod, thunkApi) => {
-    try {
-      const state = thunkApi.getState() as RootState;
-      const response = await fetchBookingsBySessionAsync(arg.from, arg.to, state.tiles.sessionId);
-      const bookings = response.data.bookings;
-      const coloredBookings: ColoredBooking[] = [];
-
-      const ackRequest: AckBookingsRequest = {
-        bookings: [],
-        sessionId: response.data.sessionId
-      };
-      const assignments: ColorAssignments = { };
-
-      for (const booking of bookings) {
-        if (!booking.color) {
-          const newColor = `booking${Math.floor((Math.random() * 7)) + 1}` as TileColor;
-          assignments[booking.id] = newColor;
-          coloredBookings.push({ color: newColor, ...booking });
-        } else {
-          coloredBookings.push({ color: booking.color, ...booking });
-        }
-
-        ackRequest.bookings.push({
-          bookingId: booking.id,
-          lastModified: booking.lastModified
-        });
-      }
-
-      if (Object.keys(assignments).length > 0) {
-        await postColorAssignments(assignments);
-      }
-
-      if (ackRequest.bookings.length > 0) {
-        await ackBookingsAsync(ackRequest);
-      }
-      return { bookings: coloredBookings, sessionId: response.data.sessionId };
-    } catch(error: any) {
-      thunkApi.dispatch(showMessage({ type: "error", message: error?.message }));
-      throw thunkApi.rejectWithValue([]);
-    }
-  }
-);
-
-export type FetchAsyncAction = ReturnType<typeof fetchAsync>;
 
 export const tilesSlice = createSlice({
   name: "tiles",
@@ -189,7 +137,6 @@ export const tilesSlice = createSlice({
     },
     saveChanges: (state) => {
       state.roomChanges = { };
-      state.colorChanges = { };
     },
     undoChanges: (state) => {
       unassignChangedTiles(state);
@@ -216,18 +163,19 @@ export const tilesSlice = createSlice({
         delete state.colorChanges[bookingId];
       }
     },
+    addColorizedBookings: (state, action: PayloadAction<ColoredBooking[]>) => {
+      addBookingsToState(state, action.payload);
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAsync.pending, (state) => {
+      .addMatcher(api.endpoints.getBookings.matchPending, (state) => {
         state.status = "loading";
       })
-      .addCase(fetchAsync.fulfilled, (state, action) => {
+      .addMatcher(api.endpoints.getBookings.matchFulfilled, (state) => {
         state.status = "idle";
-        addFetchedBookings(state, action.payload.bookings);
-        state.sessionId = action.payload.sessionId;
       })
-      .addCase(fetchAsync.rejected, (state) => {
+      .addMatcher(api.endpoints.getBookings.matchRejected, (state) => {
         state.status = "failed";
       })
       .addMatcher(api.endpoints.getCurrentUser.matchFulfilled, (state, { payload }) => {
@@ -243,6 +191,9 @@ export const tilesSlice = createSlice({
         if (!state.assignedMap[payload.id]) {
           state.assignedMap[payload.id] = { };
         }
+      })
+      .addMatcher(api.endpoints.postColorAssignments.matchFulfilled, (state) => {
+        state.colorChanges = { };
       });
   }
 });
@@ -256,11 +207,12 @@ export const {
   saveChanges,
   undoChanges,
   setColor,
+  addColorizedBookings,
 } = tilesSlice.actions;
 
 export default tilesSlice.reducer;
 
-function addFetchedBookings(state: WritableDraft<State>, bookings: ColoredBooking[]): void {
+function addBookingsToState(state: WritableDraft<State>, bookings: ColoredBooking[]): void {
   for (const booking of bookings) {
     // remove all previous tiles and changes if booking was already fetched
     if (state.bookingsMap[booking.id]) {

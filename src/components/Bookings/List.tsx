@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 
-import { BookingShort as BookingShortResponse, ColorAssignments, fetchBookings, postColorAssignments } from "../../api";
+import { BookingShort as BookingShortResponse, ColorAssignments, api, fetchBookings } from "../../api";
 import { useAppDispatch } from "../../redux/hooks";
 import { show as showMessage } from "../../redux/snackbarMessageSlice";
 
@@ -23,6 +23,7 @@ type ListProps = {
 export default function List({ name, from, to, isValid }: ListProps): JSX.Element {
   const dispatch = useAppDispatch();
   const [bookings, setBookings] = useState<BookingShort[]>([]);
+  const [postColorAssignments] = api.endpoints.postColorAssignments.useMutation();
 
   useEffect(() => {
     let subscribed = true;
@@ -45,7 +46,7 @@ export default function List({ name, from, to, isValid }: ListProps): JSX.Elemen
           }
 
           if (Object.keys(colorAssignments).length > 0) {
-            await postColorAssignments(colorAssignments);
+            postColorAssignments(colorAssignments);
           }
 
           if (subscribed) {
@@ -60,7 +61,7 @@ export default function List({ name, from, to, isValid }: ListProps): JSX.Elemen
     fetchData();
 
     return () => { subscribed = false; };
-  }, [dispatch, name, from, to, isValid]);
+  }, [dispatch, name, from, to, isValid, postColorAssignments]);
 
   return (
     <Box sx={{ maxHeight: "calc(100vh - 21rem)", overflowY: "auto" }}>
