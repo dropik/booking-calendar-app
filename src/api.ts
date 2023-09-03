@@ -160,12 +160,15 @@ export const api = createApi({
     getCurrentUser: builder.query<CurrentUser, null>({
       query: () => "users/current",
     }),
+    postAuthToken: builder.mutation<TokenResponse, TokenRequest>({
+      query: (request: TokenRequest) => ({
+        url: "auth/token",
+        method: "POST",
+        body: request,
+      }),
+    })
   }),
 });
-
-export function postAuthTokenAsync(request: TokenRequest): Promise<TokenResponse> {
-  return postDataAsync("/api/v1/auth/token", request);
-}
 
 export function fetchFloorsAsync(): Promise<{ data: Floor[] }> {
   return fetchJsonDataAsync<Floor[]>("/api/v1/floors");
