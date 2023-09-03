@@ -11,11 +11,13 @@ import Clients from "./Clients";
 import Settings from "./Settings";
 import Dashboard from "./Tools/Dashboard";
 import Istat from "./Tools/Istat";
+import Login from "./Login";
 
 export default function AppRoutes(): JSX.Element {
   return (
     <Routes>
       <Route path="/" element={<ApiController />}>
+        <Route path="login" element={<Login />} />
         <Route path="app" element={<AppRoot />}>
           <Route path="table" element={<Table />} />
           <Route path="bookings" element={<Bookings />}>
