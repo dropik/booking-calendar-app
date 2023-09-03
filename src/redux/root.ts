@@ -13,6 +13,7 @@ import layout from "./layoutSlice";
 import bookingsForm from "./bookingsFormSlice";
 import roomRates from "./roomRatesSlice";
 import user from "./userSlice";
+import auth from "./authSlice";
 
 export default combineReducers(
   {
@@ -29,5 +30,6 @@ export default combineReducers(
     bookingsForm,
     roomRates,
     user,
+    auth,
   }
 );

@@ -126,6 +126,25 @@ export type CurrentUser = {
   floors: Floor[],
 };
 
+export type TokenRequest = {
+  username: string,
+  password: string,
+};
+
+export type TokenResponse = {
+  accessToken: string,
+  refreshToken: string,
+};
+
+export type RefreshTokenRequest = {
+  accessToken: string,
+  refreshToken: string,
+};
+
+export function postAuthTokenAsync(request: TokenRequest): Promise<TokenResponse> {
+  return postDataAsync("/api/v1/auth/token", request);
+}
+
 export function fetchCurrentUserAsync(): Promise<{ data: CurrentUser }> {
   return fetchJsonDataAsync<CurrentUser>("/api/v1/users/current");
 }
