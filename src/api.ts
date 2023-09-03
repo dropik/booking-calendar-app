@@ -1,7 +1,9 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { BaseQueryFn, FetchArgs, FetchBaseQueryError, createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { TileColor } from "./redux/tilesSlice";
 import { RootState } from "./redux/store";
+import { show as showSnackbarMessage } from "./redux/snackbarMessageSlice";
+import { setTokens } from "./redux/authSlice";
 
 export type CityTaxData = {
   standard: number,
@@ -139,68 +141,124 @@ export type TokenResponse = {
   refreshToken: string,
 };
 
-export type RefreshTokenRequest = {
-  accessToken: string,
-  refreshToken: string,
+const baseQuery = fetchBaseQuery({
+  baseUrl: "/api/v1/",
+  prepareHeaders: (headers, { getState }) => {
+    const token = (getState() as RootState).auth.accessToken;
+    if (token !== "") {
+      headers.set("Authorization", `Bearer ${token}`);
+    }
+    return headers;
+  },
+});
+
+const customFetchBase: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => {
+  let result = await baseQuery(args, api, extraOptions);
+
+  if (result.meta?.response?.ok) {
+    return result;
+  }
+
+  let errorMessage = "";
+  if (result.error?.status === 401) {
+    try {
+      const auth = (api.getState() as RootState).auth;
+
+      const refreshResult = await baseQuery(
+        { url: "auth/refresh", method: "POST", body: auth, },
+        api,
+        extraOptions,
+      );
+
+      if (refreshResult.meta?.response?.ok && refreshResult.data) {
+        api.dispatch(setTokens(refreshResult.data as TokenResponse));
+        result = await baseQuery(args, api, extraOptions);
+      } else {
+        window.location.href = "/login";
+      }
+    } catch (error) {
+      errorMessage = "Errore di reautenticazione";
+    }
+  } else if (result.error?.status === 408) {
+    errorMessage = "Errore di connessione";
+  } else {
+    if (result.error?.data && typeof(result.error?.data) === "object" && "message" in result.error.data) {
+      errorMessage = (result.error.data.message as string) ?? "Server error";
+    } else {
+      errorMessage = "Server error";
+    }
+  }
+
+  if (errorMessage && errorMessage !== "") {
+    api.dispatch(showSnackbarMessage({ type: "error", message: errorMessage }));
+  }
+
+  return result;
 };
 
 export const api = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({
-    baseUrl: "/api/v1/",
-    prepareHeaders: (headers, { getState }) => {
-      const token = (getState() as RootState).auth.accessToken;
-      if (token !== "") {
-        headers.set("Authorization", `Bearer ${token}`);
-      }
-      return headers;
-    },
-  }),
+  baseQuery: customFetchBase,
   endpoints: (builder) => ({
     getCurrentUser: builder.query<CurrentUser, null>({
       query: () => "users/current",
     }),
+
     postAuthToken: builder.mutation<TokenResponse, TokenRequest>({
       query: (request: TokenRequest) => ({
         url: "auth/token",
         method: "POST",
         body: request,
       }),
-    })
+    }),
+
+    postFloor: builder.mutation<Floor, { name: string }>({
+      query: (request) => ({
+        url: "floors",
+        method: "POST",
+        body: request,
+      }),
+    }),
+
+    putFloor: builder.mutation<Floor, Floor>({
+      query: (request) => ({
+        url: `floors/${request.id}`,
+        method: "PUT",
+        body: request,
+      }),
+    }),
+
+    deleteFloor: builder.mutation<null, number>({
+      query: (id) => ({
+        url: `floors/${id}`,
+        method: "DELETE",
+      }),
+    }),
+
+    postRoom: builder.mutation<Room, { floorId: number, number: string, type: string }>({
+      query: (request) => ({
+        url: "rooms",
+        method: "POST",
+        body: request,
+      }),
+    }),
+
+    putRoom: builder.mutation<Room, Room>({
+      query: (request) => ({
+        url: `rooms/${request.id}`,
+        method: "PUT",
+        body: request,
+      }),
+    }),
+
+    deleteRoom: builder.mutation<null, number>({
+      query: (id) => ({
+        url: `rooms/${id}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
-
-export function fetchFloorsAsync(): Promise<{ data: Floor[] }> {
-  return fetchJsonDataAsync<Floor[]>("/api/v1/floors");
-}
-
-export function postFloorAsync(floor: { name: string }): Promise<{ id: number }> {
-  return postDataAsync("/api/v1/floors", floor);
-}
-
-export function putFloorAsync(floor: Floor): Promise<void> {
-  return putDataAsync(`api/v1/floors/${floor.id}`, floor);
-}
-
-export function deleteFloorAsync(id: number): Promise<void> {
-  return deleteDataAsync(`api/v1/floors/${id}`);
-}
-
-export function postRoomAsync(room: { floorId: number, number: string, type: string }): Promise<{ id: number }> {
-  return postDataAsync("api/v1/rooms", room);
-}
-
-export function putRoomAsync(room: Room): Promise<void> {
-  return putDataAsync(`api/v1/rooms/${room.id}`, room);
-}
-
-export function deleteRoomAsync(id: number): Promise<void> {
-  return deleteDataAsync(`api/v1/rooms/${id}`);
-}
-
-export function fetchRoomRatesAsync(): Promise<{ data: RoomRatesResponse }> {
-  return fetchJsonDataAsync<RoomRatesResponse>("/api/v1/room-rates");
-}
 
 export function fetchBookingsBySessionAsync(from: string, to: string, sessionId?: string): Promise<{ data: { bookings: Booking<number>[], sessionId: string } }> {
   return fetchJsonDataAsync<{ bookings: Booking<number>[], sessionId: string }>(`/api/v1/bookings-by-session?from=${from}&to=${to}${sessionId ? `&sessionId=${sessionId}` : ""}`);

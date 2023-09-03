@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { api } from "../api";
 
 export type Floor = {
+  id: number,
   name: string,
-  roomIds: number[]
 };
 
 export type Floors = {
@@ -13,69 +12,38 @@ export type Floors = {
 
 export type State = {
   data: Floors,
-  status: "idle" | "loading" | "failed"
 };
 
 const initialState: State = {
   data: { },
-  status: "idle"
 };
 
 export const floorsSlice = createSlice({
   name: "floors",
   initialState: initialState,
-  reducers: {
-    createFloor: (state, action: PayloadAction<{ id: number, name: string }>) => {
-      const floor = action.payload;
-      state.data[floor.id] = { name: floor.name, roomIds: [ ]};
-    },
-    editFloor: (state, action: PayloadAction<{ id: number, name: string }>) => {
-      const floor = action.payload;
-      if (state.data[floor.id]) {
-        state.data[floor.id].name = floor.name;
-      }
-    },
-    deleteFloor: (state, action: PayloadAction<number>) => {
-      if (state.data[action.payload]) {
-        delete state.data[action.payload];
-      }
-    },
-    createRoom: (state, action: PayloadAction<{ floorId: number, roomId: number }>) => {
-      const room = action.payload;
-      const floor = state.data[room.floorId];
-      if (floor) {
-        floor.roomIds.push(room.roomId);
-      }
-    },
-    deleteRoom: (state, action: PayloadAction<{ floorId: number, roomId: number }>) => {
-      const room = action.payload;
-      const floor = state.data[room.floorId];
-      if (floor) {
-        const index = floor.roomIds.indexOf(room.roomId);
-        if (index > -1) {
-          floor.roomIds.splice(index, 1);
-        }
-      }
-    }
-  },
+  reducers: { },
   extraReducers: (builder) => {
     builder
-      .addMatcher(api.endpoints.getCurrentUser.matchPending, (state) => {
-        state.status = "loading";
-        state.data = { };
-      })
       .addMatcher(api.endpoints.getCurrentUser.matchFulfilled, (state, { payload }) => {
-        state.status = "idle";
         for (const floor of payload.floors) {
-          state.data[floor.id] = { name: floor.name, roomIds: floor.rooms.map((room) => room.id) };
+          state.data[floor.id] = { id: floor.id, name: floor.name, };
         }
       })
-      .addMatcher(api.endpoints.getCurrentUser.matchRejected, (state) => {
-        state.status = "failed";
+      .addMatcher(api.endpoints.postFloor.matchFulfilled, (state, { payload }) => {
+        state.data[payload.id] = { id: payload.id, name: payload.name, };
+      })
+      .addMatcher(api.endpoints.putFloor.matchFulfilled, (state, { payload }) => {
+        if (state.data[payload.id]) {
+          state.data[payload.id].name = payload.name;
+        }
+      })
+      .addMatcher(api.endpoints.deleteFloor.matchFulfilled, (state, action) => {
+        const id = action.meta.arg.originalArgs;
+        if (state.data[id]) {
+          delete state.data[id];
+        }
       });
   }
 });
-
-export const { createFloor, editFloor, deleteFloor, createRoom, deleteRoom } = floorsSlice.actions;
 
 export default floorsSlice.reducer;

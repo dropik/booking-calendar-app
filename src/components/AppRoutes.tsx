@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import ApiController from "./ApiController";
 import AppRoot from "./AppRoot";
@@ -17,6 +17,7 @@ export default function AppRoutes(): JSX.Element {
   return (
     <Routes>
       <Route path="/" element={<ApiController />}>
+        <Route index element={<Navigate to="/app/table" />} />
         <Route path="login" element={<Login />} />
         <Route path="app" element={<AppRoot />}>
           <Route path="table" element={<Table />} />

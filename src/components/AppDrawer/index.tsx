@@ -52,31 +52,31 @@ export default function AppDrawer(): JSX.Element {
             items: [
               {
                 text: "Calendario",
-                link: "/",
+                link: "/app/table",
                 end: true,
                 icon: <CalendarMonthOutlinedIcon />
               },
               {
                 text: "Trova prenotazione",
-                link: "/bookings",
+                link: "/app/bookings",
                 end: false,
                 icon: <BookmarkBorderOutlinedIcon />
               },
               {
                 text: "Strumenti",
-                link: "/tools",
+                link: "/app/tools",
                 end: false,
                 icon: <CreateOutlinedIcon />
               },
               {
                 text: "Trova cliente",
-                link: "/clients",
+                link: "/app/clients",
                 end: true,
                 icon: <PersonOutlineOutlinedIcon />
               },
               {
                 text: "Impostazioni",
-                link: "/settings",
+                link: "/app/settings",
                 end: true,
                 icon: <SettingsIcon />
               }

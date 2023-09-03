@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+
 import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
@@ -7,10 +7,7 @@ import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 
-import { postFloorAsync } from "../../api";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { createFloor } from "../../redux/floorsSlice";
-import { show as showMessage } from "../../redux/snackbarMessageSlice";
+import { api } from "../../api";
 
 import M3TextButton from "../m3/M3TextButton";
 import M3Fab from "../m3/M3Fab";
@@ -19,11 +16,11 @@ import M3Dialog from "../m3/M3Dialog";
 
 export default function CreateFloorDialog(): JSX.Element {
   const theme = useTheme();
-  const dispatch = useAppDispatch();
-  const [creatingState, setCreatingState] = useState<"idle" | "creating" | "loading">("idle");
+  const [creatingState, setCreatingState] = useState<"idle" | "creating">("idle");
   const [name, setName] = useState("");
   const [validated, setValidated] = useState(true);
-  const floorsReady = useAppSelector((state) => state.floors.status === "idle");
+  const isUserDataLoaded = api.endpoints.getCurrentUser.useQueryState(null).isSuccess;
+  const [postFloor, postFloorResult] = api.endpoints.postFloor.useMutation();
 
   const openDialog = creatingState !== "idle";
 
@@ -31,21 +28,16 @@ export default function CreateFloorDialog(): JSX.Element {
     setCreatingState("idle");
   }
 
-  function create(): void {
-    async function postAsync(): Promise<void> {
-      try {
-        const response = await postFloorAsync({ name });
-        dispatch(createFloor({ id: response.id, name }));
-      } catch (error: any) {
-        dispatch(showMessage({ type: "error", message: error?.message }));
-      } finally {
-        setCreatingState("idle");
-      }
+  useEffect(() => {
+    if (postFloorResult.isSuccess) {
+      setCreatingState("idle");
+      postFloorResult.reset();
     }
+  }, [postFloorResult]);
 
+  function create(): void {
     if (name !== "" && validated) {
-      setCreatingState("loading");
-      postAsync();
+      postFloor({ name });
     } else {
       setValidated(false);
     }
@@ -53,7 +45,7 @@ export default function CreateFloorDialog(): JSX.Element {
 
   return (
     <>
-      {floorsReady ? (<M3Fab onClick={() => setCreatingState("creating")} sx={{
+      {isUserDataLoaded ? (<M3Fab onClick={() => setCreatingState("creating")} sx={{
         position: "fixed",
         right: 0,
         bottom: 0,
@@ -98,7 +90,7 @@ export default function CreateFloorDialog(): JSX.Element {
               sx={{ minWidth: "20rem" }} />
           </Stack>
           <Stack direction="row" spacing={1} justifyContent="flex-end">
-            {creatingState === "loading" ?
+            {postFloorResult.isLoading ?
               <CircularProgress /> :
               (<>
                 <M3TextButton onClick={closeDialog}>Cancella</M3TextButton>

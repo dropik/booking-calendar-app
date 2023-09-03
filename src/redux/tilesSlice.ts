@@ -216,40 +216,6 @@ export const tilesSlice = createSlice({
         delete state.colorChanges[bookingId];
       }
     },
-    createRoom: (state, action: PayloadAction<number>) => {
-      const newRoom = action.payload;
-      if (!state.assignedMap[newRoom]) {
-        state.assignedMap[newRoom] = { };
-      }
-    },
-    deleteRooms: (state, action: PayloadAction<number[]>) => {
-      const rooms = action.payload;
-      for (const roomId of rooms) {
-        const room = state.assignedMap[roomId];
-        if (room) {
-          for (const date in room) {
-            const tileId = room[date];
-            if (tileId) {
-              const tile = state.data[tileId];
-              if (tile) {
-                tile.roomId = undefined;
-                const dateCounter = new Date(tile.from);
-                for (let i = 0; i < tile.nights; i++) {
-                  const x = Utils.dateToString(dateCounter);
-                  if (!state.unassignedMap[x]) {
-                    state.unassignedMap[x] = { };
-                  }
-                  state.unassignedMap[x][tileId] = tileId;
-                  dateCounter.setDate(dateCounter.getDate() + 1);
-                }
-              }
-              delete room[date];
-            }
-          }
-          delete state.assignedMap[roomId];
-        }
-      }
-    }
   },
   extraReducers: (builder) => {
     builder
@@ -272,6 +238,11 @@ export const tilesSlice = createSlice({
             }
           });
         });
+      })
+      .addMatcher(api.endpoints.postRoom.matchFulfilled, (state, { payload }) => {
+        if (!state.assignedMap[payload.id]) {
+          state.assignedMap[payload.id] = { };
+        }
       });
   }
 });
@@ -285,8 +256,6 @@ export const {
   saveChanges,
   undoChanges,
   setColor,
-  createRoom,
-  deleteRooms
 } = tilesSlice.actions;
 
 export default tilesSlice.reducer;

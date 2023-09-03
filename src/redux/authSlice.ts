@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { api } from "../api";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { TokenResponse, api } from "../api";
 
 export type State = {
   accessToken: string,
@@ -14,7 +14,14 @@ const initialState: State = {
 export const authSlice = createSlice({
   name: "auth",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    setTokens: (state, action: PayloadAction<TokenResponse>) => {
+      state.accessToken = action.payload.accessToken;
+      state.refreshToken = action.payload.refreshToken;
+      window.localStorage.setItem("accessToken", action.payload.accessToken);
+      window.localStorage.setItem("refreshToken", action.payload.refreshToken);
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addMatcher(api.endpoints.postAuthToken.matchFulfilled, (state, { payload }) => {
@@ -25,5 +32,7 @@ export const authSlice = createSlice({
       });
   }
 });
+
+export const { setTokens } = authSlice.actions;
 
 export default authSlice.reducer;

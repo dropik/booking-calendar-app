@@ -4,6 +4,7 @@ import Stack from "@mui/material/Stack";
 
 import Header from "./Header";
 import { Floor } from "../../../../../redux/floorsSlice";
+import { useFloorRoomIds } from "../../../../../redux/hooks";
 
 type RoomHeadersProps = {
   floor: Floor,
@@ -11,13 +12,14 @@ type RoomHeadersProps = {
 
 export default function RoomHeaders({ floor }: RoomHeadersProps): JSX.Element {
   const theme = useTheme();
+  const roomIds = useFloorRoomIds(floor.id);
 
   return (
     <Stack sx={{
       borderRight: `1px solid ${theme.palette.outline.light}`,
     }}>
-      {floor.roomIds.map((roomId, index) => (
-        <Header key={roomId} roomId={roomId} isFirst={index === 0} isLast={index === floor.roomIds.length - 1} />
+      {roomIds.map((roomId, index) => (
+        <Header key={roomId} roomId={roomId} isFirst={index === 0} isLast={index === roomIds.length - 1} />
       ))}
     </Stack>
   );
