@@ -1,4 +1,7 @@
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+
 import { TileColor } from "./redux/tilesSlice";
+import { RootState } from "./redux/store";
 
 export type CityTaxData = {
   standard: number,
@@ -141,12 +144,27 @@ export type RefreshTokenRequest = {
   refreshToken: string,
 };
 
+export const api = createApi({
+  reducerPath: "api",
+  baseQuery: fetchBaseQuery({
+    baseUrl: "/api/v1/",
+    prepareHeaders: (headers, { getState }) => {
+      const token = (getState() as RootState).auth.accessToken;
+      if (token !== "") {
+        headers.set("Authorization", `Bearer ${token}`);
+      }
+      return headers;
+    },
+  }),
+  endpoints: (builder) => ({
+    getCurrentUser: builder.query<CurrentUser, null>({
+      query: () => "users/current",
+    }),
+  }),
+});
+
 export function postAuthTokenAsync(request: TokenRequest): Promise<TokenResponse> {
   return postDataAsync("/api/v1/auth/token", request);
-}
-
-export function fetchCurrentUserAsync(): Promise<{ data: CurrentUser }> {
-  return fetchJsonDataAsync<CurrentUser>("/api/v1/users/current");
 }
 
 export function fetchFloorsAsync(): Promise<{ data: Floor[] }> {

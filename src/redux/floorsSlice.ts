@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { fetchAsync as fetchCurrentUserAction } from "./userSlice";
+import { api } from "../api";
 
 export type Floor = {
   name: string,
@@ -60,18 +60,17 @@ export const floorsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchCurrentUserAction.pending, (state) => {
+      .addMatcher(api.endpoints.getCurrentUser.matchPending, (state) => {
         state.status = "loading";
         state.data = { };
       })
-      .addCase(fetchCurrentUserAction.fulfilled, (state, action) => {
+      .addMatcher(api.endpoints.getCurrentUser.matchFulfilled, (state, { payload }) => {
         state.status = "idle";
-        const data = action.payload.floors;
-        for (const floor of data) {
+        for (const floor of payload.floors) {
           state.data[floor.id] = { name: floor.name, roomIds: floor.rooms.map((room) => room.id) };
         }
       })
-      .addCase(fetchCurrentUserAction.rejected, (state) => {
+      .addMatcher(api.endpoints.getCurrentUser.matchRejected, (state) => {
         state.status = "failed";
       });
   }

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchAsync as fetchCurrentUserAction } from "./userSlice";
+import { api } from "../api";
 
 export type RoomRate = {
   baseBoard: string,
@@ -25,18 +25,17 @@ export const roomRatesSlice = createSlice({
   reducers: { },
   extraReducers: builder => {
     builder
-      .addCase(fetchCurrentUserAction.pending, state => {
+      .addMatcher(api.endpoints.getCurrentUser.matchPending, state => {
         state.status = "loading";
       })
-      .addCase(fetchCurrentUserAction.fulfilled, (state, action) => {
+      .addMatcher(api.endpoints.getCurrentUser.matchFulfilled, (state, { payload }) => {
         state.status = "idle";
         state.data = { };
-        const response = action.payload;
-        for (const { rateId, baseBoard } of response.roomRates) {
+        for (const { rateId, baseBoard } of payload.roomRates) {
           state.data[rateId] = { baseBoard };
         }
       })
-      .addCase(fetchCurrentUserAction.rejected, state => {
+      .addMatcher(api.endpoints.getCurrentUser.matchRejected, state => {
         state.status = "failed";
       });
   }

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { fetchCurrentUserAsync } from "../api";
+import { createSlice } from "@reduxjs/toolkit";
+import { api } from "../api";
 
 export type User = {
   username: string,
@@ -12,29 +12,15 @@ const initialState: User = {
   visibleName: "",
 };
 
-export const fetchAsync = createAsyncThunk(
-  "users/current",
-  async (_, thunkApi) => {
-    try {
-      const response = await fetchCurrentUserAsync();
-      return response.data;
-    } catch (error: any) {
-      throw thunkApi.rejectWithValue({});
-    }
-  }
-);
-
-export type FetchCurrentUserAction = ReturnType<typeof fetchAsync>;
-
 export const userSlice = createSlice({
   name: "user",
   initialState: initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAsync.fulfilled, (state, action) => {
-        state.username = action.payload.username;
-        state.visibleName = action.payload.visibleName;
+      .addMatcher(api.endpoints.getCurrentUser.matchFulfilled, (state, { payload }) => {
+        state.username = payload.username;
+        state.visibleName = payload.visibleName;
       });
   }
 });

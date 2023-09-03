@@ -1,14 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Outlet } from "react-router-dom";
-import { useAppDispatch } from "../redux/hooks";
-import { fetchAsync as fetchCurrentUserAsync } from "../redux/userSlice";
+import { api } from "../api";
 
 export default function ApiController(): JSX.Element {
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(fetchCurrentUserAsync());
-  }, [dispatch]);
+  api.endpoints.getCurrentUser.useQuery(null);
 
   return <Outlet />;
 }

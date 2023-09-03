@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { fetchAsync as fetchCurrentUserAction } from "./userSlice";
+import { api } from "../api";
 
 export type Room = {
   number: string,
@@ -36,11 +36,11 @@ export const roomsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchCurrentUserAction.pending, (state) => {
+      .addMatcher(api.endpoints.getCurrentUser.matchPending, (state) => {
         state.data = { };
       })
-      .addCase(fetchCurrentUserAction.fulfilled, (state, action) => {
-        const floors = action.payload.floors;
+      .addMatcher(api.endpoints.getCurrentUser.matchFulfilled, (state, { payload }) => {
+        const floors = payload.floors;
         for (const floor of floors) {
           for (const room of floor.rooms) {
             state.data[room.id] = { number: room.number, type: room.type };

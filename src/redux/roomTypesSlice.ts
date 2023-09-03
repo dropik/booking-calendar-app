@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchAsync as fetchCurrentUserAction } from "./userSlice";
+import { api } from "../api";
 
 export type RoomType = {
   minOccupancy: number,
@@ -27,18 +27,17 @@ export const roomTypesSlice = createSlice({
   reducers: { },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchCurrentUserAction.pending, (state) => {
+      .addMatcher(api.endpoints.getCurrentUser.matchPending, (state) => {
         state.status = "loading";
       })
-      .addCase(fetchCurrentUserAction.fulfilled, (state, action) => {
+      .addMatcher(api.endpoints.getCurrentUser.matchFulfilled, (state, { payload }) => {
         state.status = "idle";
         state.data = {};
-        const response = action.payload;
-        for (const { name, minOccupancy, maxOccupancy } of response.roomTypes) {
+        for (const { name, minOccupancy, maxOccupancy } of payload.roomTypes) {
           state.data[name] = { minOccupancy, maxOccupancy };
         }
       })
-      .addCase(fetchCurrentUserAction.rejected, (state) => {
+      .addMatcher(api.endpoints.getCurrentUser.matchRejected, (state) => {
         state.status = "failed";
       });
   }

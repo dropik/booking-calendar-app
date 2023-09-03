@@ -3,9 +3,8 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { WritableDraft } from "immer/dist/internal";
 
 import { Utils } from "../utils";
-import { ackBookingsAsync, AckBookingsRequest, Booking, ColorAssignments, fetchBookingsBySessionAsync, postColorAssignments } from "../api";
+import { ackBookingsAsync, AckBookingsRequest, api, Booking, ColorAssignments, fetchBookingsBySessionAsync, postColorAssignments } from "../api";
 import { show as showMessage } from "./snackbarMessageSlice";
-import { fetchAsync as fetchCurrentUserAction } from "./userSlice";
 import { FetchPeriod } from "./tableSlice";
 import { RootState } from "./store";
 
@@ -265,8 +264,8 @@ export const tilesSlice = createSlice({
       .addCase(fetchAsync.rejected, (state) => {
         state.status = "failed";
       })
-      .addCase(fetchCurrentUserAction.fulfilled, (state, action) => {
-        action.payload.floors.forEach((floor) => {
+      .addMatcher(api.endpoints.getCurrentUser.matchFulfilled, (state, { payload }) => {
+        payload.floors.forEach((floor) => {
           floor.rooms.forEach((room) => {
             if (!state.assignedMap[room.id]) {
               state.assignedMap[room.id] = { };

@@ -1,5 +1,6 @@
 import { combineReducers } from "@reduxjs/toolkit";
 
+import { api } from "../api";
 import table from "./tableSlice";
 import floors from "./floorsSlice";
 import rooms from "./roomsSlice";
@@ -17,6 +18,7 @@ import auth from "./authSlice";
 
 export default combineReducers(
   {
+    [api.reducerPath]: api.reducer,
     table,
     floors,
     rooms,
