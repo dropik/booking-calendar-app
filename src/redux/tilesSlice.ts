@@ -114,6 +114,8 @@ export const tilesSlice = createSlice({
       state.grabbedTile = undefined;
 
       const tile = state.data[action.payload.tileId];
+      if (!tile) return;
+
       for (const roomId in state.assignedMap) {
         if (state.assignedMap[roomId][tile.from] === "dropzone") {
           const dateCounter = new Date(tile.from);
