@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Stack from "@mui/material/Stack";
 import RestoreIcon from "@mui/icons-material/Restore";
 import SaveIcon from "@mui/icons-material/Save";
 
-import { api, ColorAssignments, postRoomAssignmentsAsync, RoomAssignments } from "../../api";
+import { api, ColorAssignments, RoomAssignments } from "../../api";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { SaveAndResetWidgetContext } from ".";
 import * as TilesSlice from "../../redux/tilesSlice";
-import { show as showMessage } from "../../redux/snackbarMessageSlice";
 
 import M3Snackbar from "../m3/M3Snackbar";
 import M3Card from "../m3/M3Card";
@@ -23,42 +22,42 @@ export default function ActionButtons(): JSX.Element {
   const hasChanges = hasRoomChanges || hasColorChanges;
   const roomChanges = useAppSelector((state) => state.tiles.roomChanges);
   const colorChanges = useAppSelector((state) => state.tiles.colorChanges);
-  const [postColorAssignments] = api.endpoints.postColorAssignments.useMutation();
+  const [postAssignments, postAssignmentsResult] = api.endpoints.postAssignments.useMutation();
 
   const open = status === "idle" && hasChanges;
 
-  function save() {
-    async function launchSaveAsync(): Promise<void> {
-      try {
-        if (hasRoomChanges) {
-          const roomAssignments: RoomAssignments = { };
-          const roomChangesKeys = Object.keys(roomChanges);
-          for (const changeKey of roomChangesKeys) {
-            const change = roomChanges[changeKey];
-            roomAssignments[changeKey] = change.newRoom !== undefined ? change.newRoom : null;
-          }
-          await postRoomAssignmentsAsync(roomAssignments);
-        }
-
-        if (hasColorChanges) {
-          const colorAssignments: ColorAssignments = { };
-          const colorChangesKeys = Object.keys(colorChanges);
-          for (const changeKey of colorChangesKeys) {
-            const change = colorChanges[changeKey];
-            colorAssignments[changeKey] = change.newColor;
-          }
-          postColorAssignments(colorAssignments);
-        }
-
-        dispatch(TilesSlice.saveChanges());
-        setStatus("fulfilled");
-      } catch (error: any) {
-        dispatch(showMessage({ type: "error", message: error?.message }));
-        setStatus("idle");
-      }
+  useEffect(() => {
+    if (postAssignmentsResult.isSuccess) {
+      setStatus("fulfilled");
+      postAssignmentsResult.reset();
+    } else if (postAssignmentsResult.isError) {
+      setStatus("idle");
     }
-    launchSaveAsync();
-    setStatus("loading");
+  }, [postAssignmentsResult, setStatus]);
+
+  function save() {
+    if (hasChanges) {
+      const roomAssignments: RoomAssignments = { };
+      const roomChangesKeys = Object.keys(roomChanges);
+      for (const changeKey of roomChangesKeys) {
+        const change = roomChanges[changeKey];
+        roomAssignments[changeKey] = change.newRoom !== undefined ? change.newRoom : null;
+      }
+
+      const colorAssignments: ColorAssignments = { };
+      const colorChangesKeys = Object.keys(colorChanges);
+      for (const changeKey of colorChangesKeys) {
+        const change = colorChanges[changeKey];
+        colorAssignments[changeKey] = change.newColor;
+      }
+
+      postAssignments({
+        colors: colorAssignments,
+        rooms: roomAssignments,
+      });
+
+      setStatus("loading");
+    }
   }
 
   function reset() {

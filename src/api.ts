@@ -100,7 +100,12 @@ export type ColorAssignments = {
 
 export type RoomAssignments = {
   [key: string]: number | null
-}
+};
+
+export type AssignmentsRequest = {
+  colors: ColorAssignments,
+  rooms: RoomAssignments,
+};
 
 export type Movement = {
   italia: boolean,
@@ -254,19 +259,23 @@ export const api = createApi({
       query: ({ from, to }) => `bookings?from=${from}&to=${to}`,
     }),
 
+    postAssignments: builder.mutation<null, AssignmentsRequest>({
+      query: (request) => ({
+        url: "assignments",
+        method: "POST",
+        body: request,
+      }),
+    }),
+
     postColorAssignments: builder.mutation<null, ColorAssignments>({
       query: (request) => ({
-        url: "color-assignments",
+        url: "assignments/colors",
         method: "POST",
         body: request,
       }),
     }),
   }),
 });
-
-export function postRoomAssignmentsAsync(assignments: RoomAssignments): Promise<void> {
-  return postDataWithoutResponseAsync("/api/v1/room-assignments", assignments);
-}
 
 export async function fetchBookingById(bookingId: string, from: string): Promise<{ data: Booking<Client[]> }> {
   return fetchJsonDataAsync<Booking<Client[]>>(`/api/v1/booking?id=${bookingId}&from=${from}`);

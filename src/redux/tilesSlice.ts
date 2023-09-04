@@ -135,9 +135,6 @@ export const tilesSlice = createSlice({
         checkRoomReturnedToOriginal(state, state.grabbedTile);
       }
     },
-    saveChanges: (state) => {
-      state.roomChanges = { };
-    },
     undoChanges: (state) => {
       unassignChangedTiles(state);
       reassignTiles(state);
@@ -194,6 +191,10 @@ export const tilesSlice = createSlice({
       })
       .addMatcher(api.endpoints.postColorAssignments.matchFulfilled, (state) => {
         state.colorChanges = { };
+      })
+      .addMatcher(api.endpoints.postAssignments.matchFulfilled, (state) => {
+        state.colorChanges = { };
+        state.roomChanges = { };
       });
   }
 });
@@ -204,7 +205,6 @@ export const {
   drop,
   unassign,
   tryUnassignGrabbed,
-  saveChanges,
   undoChanges,
   setColor,
   addColorizedBookings,
