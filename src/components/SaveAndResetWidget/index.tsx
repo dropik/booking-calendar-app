@@ -1,27 +1,35 @@
-import React, { createContext, useState } from "react";
+import React, { createContext } from "react";
+
+import { AssignmentsRequest, api } from "../../api";
 
 import ActionButtons from "./ActionButtons";
 import SavedNotification from "./SavedNotification";
 import SavingNotification from "./SavingNotification";
 
-type Status = "idle" | "loading" | "fulfilled";
-
 type SaveAndResetWidgetContextProps = {
-  status: Status,
-  setStatus: (newStatus: Status) => void
+  postAssignments: (request: AssignmentsRequest) => void,
+  status: {
+    isLoading: boolean,
+    isSuccess: boolean,
+    reset: () => void,
+  },
 };
 
 export const SaveAndResetWidgetContext = createContext<SaveAndResetWidgetContextProps>({
-  status: "idle",
-  setStatus: () => void 0
+  postAssignments: () => void 0,
+  status: {
+    isLoading: false,
+    isSuccess: false,
+    reset: () => void 0,
+  },
 });
 
 export default function SaveAndResetWidget(): JSX.Element {
-  const [status, setStatus] = useState<Status>("idle");
+  const [postAssignments, postAssignmentsResult] = api.endpoints.postAssignments.useMutation();
 
   const context: SaveAndResetWidgetContextProps = {
-    status: status,
-    setStatus: setStatus
+    postAssignments: postAssignments,
+    status: postAssignmentsResult,
   };
 
   return (

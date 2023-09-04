@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import Stack from "@mui/material/Stack";
 import RestoreIcon from "@mui/icons-material/Restore";
 import SaveIcon from "@mui/icons-material/Save";
 
-import { api, ColorAssignments, RoomAssignments } from "../../api";
+import { ColorAssignments, RoomAssignments } from "../../api";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { SaveAndResetWidgetContext } from ".";
 import * as TilesSlice from "../../redux/tilesSlice";
@@ -15,25 +14,15 @@ import M3Fab from "../m3/M3Fab";
 import M3TextButton from "../m3/M3TextButton";
 
 export default function ActionButtons(): JSX.Element {
-  const { status, setStatus } = useContext(SaveAndResetWidgetContext);
+  const { status, postAssignments } = useContext(SaveAndResetWidgetContext);
   const dispatch = useAppDispatch();
   const hasRoomChanges = useAppSelector((state) => Object.keys(state.tiles.roomChanges).length > 0);
   const hasColorChanges = useAppSelector((state) => Object.keys(state.tiles.colorChanges).length > 0);
   const hasChanges = hasRoomChanges || hasColorChanges;
   const roomChanges = useAppSelector((state) => state.tiles.roomChanges);
   const colorChanges = useAppSelector((state) => state.tiles.colorChanges);
-  const [postAssignments, postAssignmentsResult] = api.endpoints.postAssignments.useMutation();
 
-  const open = status === "idle" && hasChanges;
-
-  useEffect(() => {
-    if (postAssignmentsResult.isSuccess) {
-      setStatus("fulfilled");
-      postAssignmentsResult.reset();
-    } else if (postAssignmentsResult.isError) {
-      setStatus("idle");
-    }
-  }, [postAssignmentsResult, setStatus]);
+  const open = !status.isLoading && !status.isSuccess && hasChanges;
 
   function save() {
     if (hasChanges) {
@@ -55,8 +44,6 @@ export default function ActionButtons(): JSX.Element {
         colors: colorAssignments,
         rooms: roomAssignments,
       });
-
-      setStatus("loading");
     }
   }
 
