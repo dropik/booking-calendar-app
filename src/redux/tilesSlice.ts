@@ -191,9 +191,6 @@ export const tilesSlice = createSlice({
           state.assignedMap[payload.id] = { };
         }
       })
-      .addMatcher(api.endpoints.postColorAssignments.matchFulfilled, (state) => {
-        state.colorChanges = { };
-      })
       .addMatcher(api.endpoints.postAssignments.matchFulfilled, (state) => {
         state.colorChanges = { };
         state.roomChanges = { };

@@ -266,14 +266,6 @@ export const api = createApi({
         body: request,
       }),
     }),
-
-    postColorAssignments: builder.mutation<null, ColorAssignments>({
-      query: (request) => ({
-        url: "assignments/colors",
-        method: "POST",
-        body: request,
-      }),
-    }),
   }),
 });
 

@@ -23,7 +23,7 @@ type ListProps = {
 export default function List({ name, from, to, isValid }: ListProps): JSX.Element {
   const dispatch = useAppDispatch();
   const [bookings, setBookings] = useState<BookingShort[]>([]);
-  const [postColorAssignments] = api.endpoints.postColorAssignments.useMutation();
+  const [postAssignments] = api.endpoints.postAssignments.useMutation();
 
   useEffect(() => {
     let subscribed = true;
@@ -46,7 +46,10 @@ export default function List({ name, from, to, isValid }: ListProps): JSX.Elemen
           }
 
           if (Object.keys(colorAssignments).length > 0) {
-            postColorAssignments(colorAssignments);
+            postAssignments({
+              colors: colorAssignments,
+              rooms: { },
+            });
           }
 
           if (subscribed) {
@@ -61,7 +64,7 @@ export default function List({ name, from, to, isValid }: ListProps): JSX.Elemen
     fetchData();
 
     return () => { subscribed = false; };
-  }, [dispatch, name, from, to, isValid, postColorAssignments]);
+  }, [dispatch, name, from, to, isValid, postAssignments]);
 
   return (
     <Box sx={{ maxHeight: "calc(100vh - 21rem)", overflowY: "auto" }}>

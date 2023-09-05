@@ -9,7 +9,7 @@ export default function FetchTiles(): null {
   const dispatch = useAppDispatch();
   const args = useAppSelector((state) => state.table.lastFetchPeriod);
   const query = api.endpoints.getBookings.useQuery(args, { pollingInterval: 180000 });
-  const [postColorAssignments] = api.endpoints.postColorAssignments.useMutation();
+  const [postAssignments] = api.endpoints.postAssignments.useMutation();
 
   useEffect(() => {
     const bookings = query.data;
@@ -32,9 +32,12 @@ export default function FetchTiles(): null {
     dispatch(addColorizedBookings(coloredBookings));
 
     if (Object.keys(assignments).length > 0) {
-      postColorAssignments(assignments);
+      postAssignments({
+        colors: assignments,
+        rooms: { },
+      });
     }
-  }, [postColorAssignments, query.data, dispatch]);
+  }, [postAssignments, query.data, dispatch]);
 
   return null;
 }
