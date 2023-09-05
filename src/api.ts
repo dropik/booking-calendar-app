@@ -197,9 +197,8 @@ export const api = createApi({
   reducerPath: "api",
   baseQuery: customFetchBase,
   endpoints: (builder) => ({
-    getCurrentUser: builder.query<CurrentUser, null>({
-      query: () => "users/current",
-    }),
+
+    // auth
 
     postAuthToken: builder.mutation<TokenResponse, TokenRequest>({
       query: (request: TokenRequest) => ({
@@ -208,6 +207,14 @@ export const api = createApi({
         body: request,
       }),
     }),
+
+    // user
+
+    getCurrentUser: builder.query<CurrentUser, null>({
+      query: () => "users/current",
+    }),
+
+    // floors
 
     postFloor: builder.mutation<Floor, { name: string }>({
       query: (request) => ({
@@ -232,6 +239,8 @@ export const api = createApi({
       }),
     }),
 
+    // rooms
+
     postRoom: builder.mutation<Room, { floorId: number, number: string, type: string }>({
       query: (request) => ({
         url: "rooms",
@@ -255,9 +264,21 @@ export const api = createApi({
       }),
     }),
 
+    // bookings
+
     getBookings: builder.query<Booking<number>[], { from: string, to: string}>({
       query: ({ from, to }) => `bookings?from=${from}&to=${to}`,
     }),
+
+    getBookingsByName: builder.query<BookingShort[], { name: string, from: string, to: string }>({
+      query: ({ name, from, to }) => `bookings/by-name?name=${name}&from=${from}&to=${to}`,
+    }),
+
+    getBooking: builder.query<Booking<Client[]>, { bookingId: string, from: string }>({
+      query: ({ bookingId, from }) => `bookings/${bookingId}?from=${from}`,
+    }),
+
+    // assignments
 
     postAssignments: builder.mutation<null, AssignmentsRequest>({
       query: (request) => ({
@@ -267,15 +288,13 @@ export const api = createApi({
       }),
     }),
 
+    // clients
+
     getClientsByTile: builder.query<Client[], { bookingId: string, tileId: string }>({
-      query: ({ bookingId, tileId }) => `clients-by-tile?bookingId=${bookingId}&tileId=${tileId}`,
+      query: ({ bookingId, tileId }) => `clients/by-tile?bookingId=${bookingId}&tileId=${tileId}`,
     }),
   }),
 });
-
-export async function fetchBookingById(bookingId: string, from: string): Promise<{ data: Booking<Client[]> }> {
-  return fetchJsonDataAsync<Booking<Client[]>>(`/api/v1/booking?id=${bookingId}&from=${from}`);
-}
 
 export async function postPoliceExportRequestAsync(date: string): Promise<void> {
   return postDataWithoutResponseAsync("/api/v1/police", { date });
@@ -293,12 +312,8 @@ export async function fetchCityTaxAsync(from: string, to: string): Promise<{ dat
   return fetchJsonDataAsync<CityTaxData>(`/api/v1/city-tax?from=${from}&to=${to}`);
 }
 
-export async function fetchBookings(name: string, from: string, to: string): Promise<{ data: BookingShort[] }> {
-  return fetchJsonDataAsync<BookingShort[]>(`/api/v1/bookings-by-name?name=${name}&from=${from}&to=${to}`);
-}
-
 export async function fetchClientsByQuery(query: string, from: string, to: string): Promise<{ data: ClientWithBooking[] }> {
-  return fetchJsonDataAsync<ClientWithBooking[]>(`/api/v1/clients-by-query?query=${query}&from=${from}&to=${to}`);
+  return fetchJsonDataAsync<ClientWithBooking[]>(`/api/v1/clients/by-query?query=${query}&from=${from}&to=${to}`);
 }
 
 export async function fetchIstatMovementsAsync(): Promise<{ data: MovementDTO }> {

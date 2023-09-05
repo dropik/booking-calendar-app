@@ -1,15 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
+
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 
-import { BookingShort as BookingShortResponse, ColorAssignments, api, fetchBookings } from "../../api";
-import { useAppDispatch } from "../../redux/hooks";
-import { show as showMessage } from "../../redux/snackbarMessageSlice";
+import { BookingShort as BookingShortResponse, ColorAssignments, api } from "../../api";
+import { TileColor } from "../../redux/tilesSlice";
 
 import Booking from "./Booking";
 import Skeleton from "./Skeleton";
-import { TileColor } from "../../redux/tilesSlice";
 
 export type BookingShort = Required<BookingShortResponse>;
 
@@ -21,56 +19,46 @@ type ListProps = {
 }
 
 export default function List({ name, from, to, isValid }: ListProps): JSX.Element {
-  const dispatch = useAppDispatch();
-  const [bookings, setBookings] = useState<BookingShort[]>([]);
+  const { data: bookings, isSuccess: isLoaded, isFetching } = api.endpoints.getBookingsByName.useQuery({ name, from, to });
   const [postAssignments] = api.endpoints.postAssignments.useMutation();
+  const [assignedColors, setAssignedColors] = useState<ColorAssignments>({ });
 
   useEffect(() => {
-    let subscribed = true;
+    if (isLoaded && isValid) {
+      const newColorAssignments: ColorAssignments = { };
+      const colorAssignments: ColorAssignments = { };
 
-    async function fetchData() {
-      if (isValid) {
-        try {
-          const response = await fetchBookings(name, from, to);
-          const newBookings: BookingShort[] = [];
-          const colorAssignments: ColorAssignments = { };
-
-          for (const booking of response.data) {
-            if (booking.color) {
-              newBookings.push({ ...booking, color: booking.color });
-            } else {
-              const newColor: TileColor = `booking${Math.floor(Math.random() * 7) + 1}` as TileColor;
-              colorAssignments[booking.id] = newColor;
-              newBookings.push({ ...booking, color: newColor });
-            }
-          }
-
-          if (Object.keys(colorAssignments).length > 0) {
-            postAssignments({
-              colors: colorAssignments,
-              rooms: { },
-            });
-          }
-
-          if (subscribed) {
-            setBookings(newBookings);
-          }
-        } catch(error: any) {
-          dispatch(showMessage({ type: "error", message: error?.message }));
+      for (const booking of bookings) {
+        if (booking.color) {
+          colorAssignments[booking.id] = booking.color;
+        } else {
+          const newColor: TileColor = `booking${Math.floor(Math.random() * 7) + 1}` as TileColor;
+          newColorAssignments[booking.id] = newColor;
+          colorAssignments[booking.id] = newColor;
         }
       }
+
+      setAssignedColors(colorAssignments);
+
+      if (Object.keys(newColorAssignments).length > 0) {
+        postAssignments({
+          colors: newColorAssignments,
+          rooms: { },
+        });
+      }
     }
-
-    fetchData();
-
-    return () => { subscribed = false; };
-  }, [dispatch, name, from, to, isValid, postAssignments]);
+  }, [bookings, isLoaded, isValid, postAssignments]);
 
   return (
     <Box sx={{ maxHeight: "calc(100vh - 21rem)", overflowY: "auto" }}>
       <Stack spacing={0} sx={{ position: "relative", pb: "1rem" }}>
-        {bookings.length > 0 ?
-          bookings.map((booking) => <Booking key={booking.id} booking={booking}/>) :
+        {!isFetching && isLoaded ?
+          bookings.map((booking) => {
+            const coloredBooking: Required<BookingShort> = { ...booking, color: assignedColors[booking.id] ?? "booking1" };
+            return (
+              <Booking key={booking.id} booking={coloredBooking}/>
+            );
+          }) :
           <Skeleton />}
       </Stack>
     </Box>

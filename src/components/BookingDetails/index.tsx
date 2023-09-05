@@ -1,14 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useState } from "react";
+import React from "react";
+
 import { useParams } from "react-router-dom";
+
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import { Booking, Client, fetchBookingById } from "../../api";
-import { useAppDispatch } from "../../redux/hooks";
-import { show as showMessage } from "../../redux/snackbarMessageSlice";
+import { api } from "../../api";
 
 import { TileContext } from "../Tile/context";
 import ExpandableTile from "../ExpandableTile";
@@ -19,38 +18,12 @@ import { Utils } from "../../utils";
 export default function BookingDetails(): JSX.Element {
   const theme = useTheme();
   const { from, bookingId } = useParams();
-  const dispatch = useAppDispatch();
-  const [booking, setBooking] = useState<Booking<Client[]> | undefined>(undefined);
+  const { data: booking, isSuccess: isLoaded, isFetching } = api.endpoints.getBooking.useQuery({ bookingId: bookingId ?? "", from: from ?? "" });
   const skeletonRooms = [0, 1];
 
-  const periodStr = booking ?
+  const periodStr = (isLoaded && !isFetching) ?
     `${(new Date(booking.from)).toLocaleDateString()} - ${(new Date(booking.to)).toLocaleDateString()}` :
     undefined;
-
-  useEffect(() => {
-    let isSubscribed = true;
-
-    async function fetchData() {
-      if (from && bookingId) {
-        try {
-          const response = await fetchBookingById(bookingId, from);
-
-          if (isSubscribed) {
-            setBooking(response.data);
-          }
-        } catch(error: any) {
-          dispatch(showMessage({ type: "error", message: error?.message }));
-        }
-      }
-    }
-
-    fetchData();
-
-    return () => {
-      isSubscribed = false;
-      setBooking(undefined);
-    };
-  }, [dispatch, from, bookingId]);
 
   return (
     <Stack
@@ -80,7 +53,7 @@ export default function BookingDetails(): JSX.Element {
           pr: "1rem",
           pl: "1rem"
         }}>
-          <Typography variant="titleMedium">{booking ? Utils.evaluateEntitiesInString(booking.name) : <M3Skeleton width="6rem" />}</Typography>
+          <Typography variant="titleMedium">{(isLoaded && !isFetching) ? Utils.evaluateEntitiesInString(booking.name) : <M3Skeleton width="6rem" />}</Typography>
           <Typography variant="bodySmall">{periodStr ? periodStr : <M3Skeleton width="10rem" />}</Typography>
         </Stack>
       </Box>
@@ -92,7 +65,7 @@ export default function BookingDetails(): JSX.Element {
         boxSizing: "border-box",
         pb: "1rem"
       }}>
-        {booking
+        {(isLoaded && !isFetching)
           ? booking.tiles.map((tile, index) => <StayDetails key={tile.id} tile={tile} booking={booking} isFirst={index === 0} />)
           : skeletonRooms.map((room) => (
             <TileContext.Provider key={room} value={{ cropRight: false, cropLeft: false }}>
