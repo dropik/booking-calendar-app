@@ -266,15 +266,15 @@ export const api = createApi({
         body: request,
       }),
     }),
+
+    getClientsByTile: builder.query<Client[], { bookingId: string, tileId: string }>({
+      query: ({ bookingId, tileId }) => `clients-by-tile?bookingId=${bookingId}&tileId=${tileId}`,
+    }),
   }),
 });
 
 export async function fetchBookingById(bookingId: string, from: string): Promise<{ data: Booking<Client[]> }> {
   return fetchJsonDataAsync<Booking<Client[]>>(`/api/v1/booking?id=${bookingId}&from=${from}`);
-}
-
-export async function fetchClientsByTile(bookingId: string, tileId: string): Promise<{ data: Client[] }> {
-  return fetchJsonDataAsync<Client[]>(`/api/v1/clients-by-tile?bookingId=${bookingId}&tileId=${tileId}`);
 }
 
 export async function postPoliceExportRequestAsync(date: string): Promise<void> {
