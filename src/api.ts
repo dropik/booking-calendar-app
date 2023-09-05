@@ -297,19 +297,21 @@ export const api = createApi({
     getClientsByQuery: builder.query<ClientWithBooking[], { query: string, from: string, to: string }>({
       query: ({ query, from, to }) => `clients/by-query?query=${query}&from=${from}&to=${to}`,
     }),
+
+    // police
+
+    postPoliceRicevuta: builder.mutation<null, { date: string }>({
+      query: (request) => ({
+        url: "police",
+        method: "POST",
+        body: request,
+      }),
+    }),
   }),
 });
 
-export async function postPoliceExportRequestAsync(date: string): Promise<void> {
-  return postDataWithoutResponseAsync("/api/v1/police", { date });
-}
-
 export async function postIstatExportRequestAsync(date: string): Promise<void> {
   return postDataWithoutResponseAsync("/api/v1/istat", { date });
-}
-
-export async function fetchPoliceRicevutaAsync(date: string): Promise<{ data: Blob }> {
-  return fetchBlobDataAsync(`/api/v1/police/ricevuta?date=${date}`);
 }
 
 export async function fetchCityTaxAsync(from: string, to: string): Promise<{ data: CityTaxData }> {
@@ -354,25 +356,6 @@ async function fetchJsonDataAsync<T>(query: string): Promise<{ data: T }> {
   return { data };
 }
 
-async function fetchBlobDataAsync(query: string): Promise<{ data: Blob }> {
-  const response = await fetch(query);
-  if (response.status === 408) {
-    throw new Error("Errore di conessione!");
-  }
-  if (!response.ok) {
-    let message = "";
-    try {
-      const json = await response.clone().json();
-      message = json.message;
-    } catch {
-      message = await response.text();
-    }
-    throw new Error(`Server error! ${message}`);
-  }
-  const data = await response.blob();
-  return { data };
-}
-
 async function postDataWithoutResponseAsync<TData>(url: string, data: TData): Promise<void> {
   const response = await fetch(url, {
     method: "POST",
@@ -385,91 +368,6 @@ async function postDataWithoutResponseAsync<TData>(url: string, data: TData): Pr
     redirect: "follow",
     referrerPolicy: "no-referrer",
     body: JSON.stringify(data)
-  });
-  if (response.status === 408) {
-    throw new Error("Errore di conessione!");
-  }
-  if (!response.ok) {
-    let message = "";
-    try {
-      const json = await response.clone().json();
-      message = json.message;
-    } catch {
-      message = await response.text();
-    }
-    throw new Error(`Server error! ${message}`);
-  }
-}
-
-async function postDataAsync<TData, TResponse>(url: string, data: TData): Promise<TResponse> {
-  const response = await fetch(url, {
-    method: "POST",
-    mode: "cors",
-    cache: "no-cache",
-    credentials: "same-origin",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    redirect: "follow",
-    referrerPolicy: "no-referrer",
-    body: JSON.stringify(data)
-  });
-  if (response.status === 408) {
-    throw new Error("Errore di conessione!");
-  }
-  if (!response.ok) {
-    let message = "";
-    try {
-      const json = await response.clone().json();
-      message = json.message;
-    } catch {
-      message = await response.text();
-    }
-    throw new Error(`Server error! ${message}`);
-  }
-  const responseData = await response.json() as TResponse;
-  if (!responseData) {
-    throw new Error("Server error!");
-  }
-  return responseData;
-}
-
-async function putDataAsync<T>(url: string, data: T): Promise<void> {
-  const response = await fetch(url, {
-    method: "PUT",
-    mode: "cors",
-    cache: "no-cache",
-    credentials: "same-origin",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    redirect: "follow",
-    referrerPolicy: "no-referrer",
-    body: JSON.stringify(data)
-  });
-  if (response.status === 408) {
-    throw new Error("Errore di conessione!");
-  }
-  if (!response.ok) {
-    let message = "";
-    try {
-      const json = await response.clone().json();
-      message = json.message;
-    } catch {
-      message = await response.text();
-    }
-    throw new Error(`Server error! ${message}`);
-  }
-}
-
-async function deleteDataAsync(url: string): Promise<void> {
-  const response = await fetch(url, {
-    method: "DELETE",
-    mode: "cors",
-    cache: "no-cache",
-    credentials: "same-origin",
-    redirect: "follow",
-    referrerPolicy: "no-referrer"
   });
   if (response.status === 408) {
     throw new Error("Errore di conessione!");

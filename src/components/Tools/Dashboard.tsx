@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { NavLink } from "react-router-dom";
 
@@ -13,7 +13,7 @@ import Collapse from "@mui/material/Collapse";
 
 import { useAppDispatch, useAppSelector, useLeftmostDate } from "../../redux/hooks";
 import { show as showMessage } from "../../redux/snackbarMessageSlice";
-import { CityTaxData, fetchCityTaxAsync, fetchPoliceRicevutaAsync, postPoliceExportRequestAsync } from "../../api";
+import { CityTaxData, TokenResponse, api, fetchCityTaxAsync } from "../../api";
 import { Utils } from "../../utils";
 
 import M3DatePicker from "../m3/M3DatePicker";
@@ -21,6 +21,7 @@ import M3TextButton from "../m3/M3TextButton";
 import { SurfaceTint } from "../m3/Tints";
 import M3Skeleton from "../m3/M3Skeleton";
 import M3Chip from "../m3/M3Chip";
+import { setTokens } from "../../redux/authSlice";
 
 export default function Dashboard(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -34,11 +35,13 @@ export default function Dashboard(): JSX.Element {
   const drawerOpened = useAppSelector((state) => state.drawer.open);
   const [cityTaxData, setCityTaxData] = useState<CityTaxData | undefined>(undefined);
   const [isCityTaxLoading, setIsCityTaxLoading] = useState(false);
-  const [isDownloadDataLoading, setIsDownloadDataLoading] = useState(false);
+  const [postPoliceRicevuta, postPoliceRicevutaResult] = api.endpoints.postPoliceRicevuta.useMutation();
+  const getPoliceRicevuta = useGetPoliceRicevuta();
   const anchorRef = useRef<HTMLAnchorElement>(null);
 
   const isValid = isFromValid && isToValid;
   const openDetails = cityTaxData !== undefined;
+  const isPoliceLoading = postPoliceRicevutaResult.isLoading || getPoliceRicevuta.isLoading;
 
   function calculateCityTax(): void {
     async function fetchDataAsync(): Promise<void> {
@@ -58,46 +61,28 @@ export default function Dashboard(): JSX.Element {
     }
   }
 
-  function requestExport(onPostAsync: (date: string) => Promise<void>): void {
-    async function postDataAsync() {
-      try {
-        await onPostAsync(downloadDate);
-        dispatch(showMessage({ type: "success", message: "I dati sono stati mandati correttamente!" }));
-      } catch (error: any) {
-        dispatch(showMessage({ type: "error", message: error?.message }));
-      } finally {
-        setIsDownloadDataLoading(false);
-      }
+  useEffect(() => {
+    if (postPoliceRicevutaResult.isSuccess) {
+      dispatch(showMessage({ type: "success", message: "I dati sono stati mandati correttamente!" }));
+      postPoliceRicevutaResult.reset();
     }
+  }, [dispatch, postPoliceRicevutaResult]);
 
-    setIsDownloadDataLoading(true);
-    postDataAsync();
-  }
-
-  function downloadRicevuta(): void {
-    async function fetchDataAsync() {
-      try {
-        const response = await fetchPoliceRicevutaAsync(downloadDate);
-        const data = response.data;
-        if (anchorRef.current) {
-          if (data.size > 0) {
-            anchorRef.current.href = URL.createObjectURL(data);
-            anchorRef.current.download = `polizia-ricevuta-${downloadDate}.pdf`;
-            anchorRef.current.click();
-          } else {
-            dispatch(showMessage({ type: "info", message: "Niente data da scaricare!" }));
-          }
+  useEffect(() => {
+    if (getPoliceRicevuta.isSuccess && getPoliceRicevuta.data) {
+      const data = getPoliceRicevuta.data;
+      if (anchorRef.current) {
+        if (data.size > 0) {
+          anchorRef.current.href = URL.createObjectURL(data);
+          anchorRef.current.download = `polizia-ricevuta-${downloadDate}.pdf`;
+          anchorRef.current.click();
+        } else {
+          dispatch(showMessage({ type: "info", message: "Niente data da scaricare!" }));
         }
-      } catch (error: any) {
-        dispatch(showMessage({ type: "error", message: error?.message }));
-      } finally {
-        setIsDownloadDataLoading(false);
       }
+      getPoliceRicevuta.reset();
     }
-
-    setIsDownloadDataLoading(true);
-    fetchDataAsync();
-  }
+  }, [dispatch, downloadDate, getPoliceRicevuta]);
 
   return (
     <Stack spacing={1} sx={{ pr: "1rem" }}>
@@ -130,10 +115,10 @@ export default function Dashboard(): JSX.Element {
           </Stack>
           <a ref={anchorRef}></a>
           <Stack spacing={1} direction="row" justifyContent="flex-end">
-            {isDownloadDataLoading ? <CircularProgress color="primary" /> : (
+            {isPoliceLoading ? <CircularProgress color="primary" /> : (
               <>
-                <M3TextButton onClick={downloadRicevuta}>Scarica ricevuta</M3TextButton>
-                <M3TextButton onClick={() => requestExport(postPoliceExportRequestAsync)}>Polizia</M3TextButton>
+                <M3TextButton onClick={() => getPoliceRicevuta.query(downloadDate)}>Scarica ricevuta</M3TextButton>
+                <M3TextButton onClick={() => postPoliceRicevuta({ date: downloadDate })}>Polizia</M3TextButton>
               </>
             )}
           </Stack>
@@ -236,4 +221,93 @@ export default function Dashboard(): JSX.Element {
       </Stack>
     </Stack>
   );
+}
+
+function useGetPoliceRicevuta(): { query: (date: string) => void, data: Blob | undefined, isLoading: boolean, isSuccess: boolean, reset: () => void } {
+  const dispatch = useAppDispatch();
+  const auth = useAppSelector(state => state.auth);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [data, setData] = useState<Blob | undefined>(undefined);
+
+  function reset(): void {
+    setData(undefined);
+    setIsLoading(false);
+    setIsSuccess(false);
+  }
+
+  return {
+    query: (date: string) => {
+      async function fetchData() {
+        let workingAuth = auth;
+        try {
+          let response = await fetch(`/api/v1/police/ricevuta?date=${date}`, {
+            headers: {
+              "Authorization": `Bearer ${workingAuth.accessToken}`,
+            },
+          });
+          if (!response.ok) {
+            if (response.status === 408) {
+              throw new Error("Errore di connessione!");
+            } else if (response.status === 401) {
+              try {
+                const refreshResponse = await fetch("/api/v1/auth/refresh", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(auth),
+                });
+                if (!refreshResponse.ok) {
+                  window.location.href = "/login";
+                } else {
+                  const newAuth = (await refreshResponse.json()) as TokenResponse;
+                  dispatch(setTokens(newAuth));
+                  workingAuth = newAuth;
+                }
+              } catch (exception) {
+                window.location.href = "/login";
+              }
+              response = await fetch(`/api/v1/police/ricevuta?date=${date}`, {
+                headers: {
+                  "Authorization": `Bearer ${workingAuth.accessToken}`,
+                },
+              });
+            } else {
+              throw new Error("Errore durante caricamento della ricevuta");
+            }
+          }
+
+          // repeating if because we have to consider that after refetch the response may become ok
+          if (!response.ok) {
+            throw new Error("Errore durante caricamento della ricevuta");
+          }
+
+          try {
+            const data = await response.blob();
+            setData(data);
+            setIsLoading(false);
+            setIsSuccess(true);
+          } catch (exception) {
+            throw new Error("Formato della risposta sbagliata");
+          }
+        } catch (exception) {
+          if (exception && typeof(exception) === "object" && "message" in exception) {
+            dispatch(showMessage({ type: "error", message: exception.message as string }));
+          } else {
+            dispatch(showMessage({ type: "error", message: "Server error" }));
+          }
+          setIsLoading(false);
+        }
+      }
+
+      fetchData();
+      setIsLoading(true);
+      setIsSuccess(false);
+    },
+    data: data,
+    isLoading: isLoading,
+    isSuccess: isSuccess,
+    reset: reset,
+  };
 }
