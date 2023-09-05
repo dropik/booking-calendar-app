@@ -293,6 +293,10 @@ export const api = createApi({
     getClientsByTile: builder.query<Client[], { bookingId: string, tileId: string }>({
       query: ({ bookingId, tileId }) => `clients/by-tile?bookingId=${bookingId}&tileId=${tileId}`,
     }),
+
+    getClientsByQuery: builder.query<ClientWithBooking[], { query: string, from: string, to: string }>({
+      query: ({ query, from, to }) => `clients/by-query?query=${query}&from=${from}&to=${to}`,
+    }),
   }),
 });
 
@@ -310,10 +314,6 @@ export async function fetchPoliceRicevutaAsync(date: string): Promise<{ data: Bl
 
 export async function fetchCityTaxAsync(from: string, to: string): Promise<{ data: CityTaxData }> {
   return fetchJsonDataAsync<CityTaxData>(`/api/v1/city-tax?from=${from}&to=${to}`);
-}
-
-export async function fetchClientsByQuery(query: string, from: string, to: string): Promise<{ data: ClientWithBooking[] }> {
-  return fetchJsonDataAsync<ClientWithBooking[]>(`/api/v1/clients/by-query?query=${query}&from=${from}&to=${to}`);
 }
 
 export async function fetchIstatMovementsAsync(): Promise<{ data: MovementDTO }> {
