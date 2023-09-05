@@ -308,79 +308,32 @@ export const api = createApi({
       }),
     }),
 
+    getProvinces: builder.query<string[], null>({
+      query: () => "police/provinces",
+    }),
+
     // city tax
+
     getCityTax: builder.query<CityTaxData, { from: string, to: string }>({
       query: ({ from, to }) => `city-tax?from=${from}&to=${to}`,
     }),
+
+    // istat
+
+    postIstat: builder.mutation<null, MovementDTO>({
+      query: (request) => ({
+        url: "istat/movements",
+        method: "POST",
+        body: request,
+      }),
+    }),
+
+    getIstatMovements: builder.query<MovementDTO, null>({
+      query: () => "istat/movements",
+    }),
+
+    getCountries: builder.query<string[], null>({
+      query: () => "istat/countries",
+    }),
   }),
 });
-
-export async function postIstatExportRequestAsync(date: string): Promise<void> {
-  return postDataWithoutResponseAsync("/api/v1/istat", { date });
-}
-
-export async function fetchIstatMovementsAsync(): Promise<{ data: MovementDTO }> {
-  return fetchJsonDataAsync<MovementDTO>("/api/v1/istat/movements");
-}
-
-export async function postIstatMovementsAsync(data: MovementDTO): Promise<void> {
-  return postDataWithoutResponseAsync("/api/v1/istat/send", data);
-}
-
-export async function fetchCountriesAsync(): Promise<{ data: string[] }> {
-  return fetchJsonDataAsync<string[]>("/api/v1/istat/countries");
-}
-
-export async function fetchProvincesAsync(): Promise<{ data: string[] }> {
-  return fetchJsonDataAsync<string[]>("/api/v1/police/provinces");
-}
-
-async function fetchJsonDataAsync<T>(query: string): Promise<{ data: T }> {
-  const response = await fetch(query);
-  if (response.status === 408) {
-    throw new Error("Errore di conessione!");
-  }
-  if (!response.ok) {
-    let message = "";
-    try {
-      const json = await response.clone().json();
-      message = json.message;
-    } catch {
-      message = await response.text();
-    }
-    throw new Error(`Server error! ${message}`);
-  }
-  const data = await response.json() as T;
-  if (!data) {
-    throw new Error("Server error!");
-  }
-  return { data };
-}
-
-async function postDataWithoutResponseAsync<TData>(url: string, data: TData): Promise<void> {
-  const response = await fetch(url, {
-    method: "POST",
-    mode: "cors",
-    cache: "no-cache",
-    credentials: "same-origin",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    redirect: "follow",
-    referrerPolicy: "no-referrer",
-    body: JSON.stringify(data)
-  });
-  if (response.status === 408) {
-    throw new Error("Errore di conessione!");
-  }
-  if (!response.ok) {
-    let message = "";
-    try {
-      const json = await response.clone().json();
-      message = json.message;
-    } catch {
-      message = await response.text();
-    }
-    throw new Error(`Server error! ${message}`);
-  }
-}
