@@ -307,15 +307,16 @@ export const api = createApi({
         body: request,
       }),
     }),
+
+    // city tax
+    getCityTax: builder.query<CityTaxData, { from: string, to: string }>({
+      query: ({ from, to }) => `city-tax?from=${from}&to=${to}`,
+    }),
   }),
 });
 
 export async function postIstatExportRequestAsync(date: string): Promise<void> {
   return postDataWithoutResponseAsync("/api/v1/istat", { date });
-}
-
-export async function fetchCityTaxAsync(from: string, to: string): Promise<{ data: CityTaxData }> {
-  return fetchJsonDataAsync<CityTaxData>(`/api/v1/city-tax?from=${from}&to=${to}`);
 }
 
 export async function fetchIstatMovementsAsync(): Promise<{ data: MovementDTO }> {

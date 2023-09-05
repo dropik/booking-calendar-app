@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef, useState } from "react";
 
 import { NavLink } from "react-router-dom";
@@ -11,9 +10,9 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 
+import { TokenResponse, api } from "../../api";
 import { useAppDispatch, useAppSelector, useLeftmostDate } from "../../redux/hooks";
 import { show as showMessage } from "../../redux/snackbarMessageSlice";
-import { CityTaxData, TokenResponse, api, fetchCityTaxAsync } from "../../api";
 import { Utils } from "../../utils";
 
 import M3DatePicker from "../m3/M3DatePicker";
@@ -31,35 +30,16 @@ export default function Dashboard(): JSX.Element {
   const [to, setTo] = useState(Utils.getDateShift(leftmostDate, 1));
   const [isFromValid, setIsFromValid] = useState(true);
   const [isToValid, setIsToValid] = useState(true);
+  const isCityTaxValid = isFromValid && isToValid;
   const theme = useTheme();
   const drawerOpened = useAppSelector((state) => state.drawer.open);
-  const [cityTaxData, setCityTaxData] = useState<CityTaxData | undefined>(undefined);
-  const [isCityTaxLoading, setIsCityTaxLoading] = useState(false);
   const [postPoliceRicevuta, postPoliceRicevutaResult] = api.endpoints.postPoliceRicevuta.useMutation();
   const getPoliceRicevuta = useGetPoliceRicevuta();
+  const [getCityTaxTrigger, cityTaxResult] = api.endpoints.getCityTax.useLazyQuery();
   const anchorRef = useRef<HTMLAnchorElement>(null);
 
-  const isValid = isFromValid && isToValid;
-  const openDetails = cityTaxData !== undefined;
+  const openDetails = cityTaxResult.isSuccess;
   const isPoliceLoading = postPoliceRicevutaResult.isLoading || getPoliceRicevuta.isLoading;
-
-  function calculateCityTax(): void {
-    async function fetchDataAsync(): Promise<void> {
-      try {
-        const response = await fetchCityTaxAsync(from, to);
-        setCityTaxData(response.data);
-      } catch (error: any) {
-        dispatch(showMessage({ type: "error", message: error?.message }));
-      } finally {
-        setIsCityTaxLoading(false);
-      }
-    }
-
-    if (isValid) {
-      setIsCityTaxLoading(true);
-      fetchDataAsync();
-    }
-  }
 
   useEffect(() => {
     if (postPoliceRicevutaResult.isSuccess) {
@@ -187,9 +167,13 @@ export default function Dashboard(): JSX.Element {
               </Stack>
             </Stack>
             <Stack direction="row" justifyContent="flex-end">
-              {isCityTaxLoading ?
+              {cityTaxResult.isFetching ?
                 <CircularProgress color="primary" /> :
-                <M3TextButton onClick={calculateCityTax}>Calcola</M3TextButton>
+                <M3TextButton onClick={() => {
+                  if (isCityTaxValid) {
+                    getCityTaxTrigger({ from, to });
+                  }
+                }}>Calcola</M3TextButton>
               }
             </Stack>
             <SurfaceTint sx={{
@@ -204,15 +188,15 @@ export default function Dashboard(): JSX.Element {
               <Stack spacing={2} sx={{ p: "1rem" }}>
                 <Stack direction="row" spacing={2} justifyContent="space-between" sx={{ pt: "1rem", pb: "1rem" }}>
                   <Typography variant="titleMedium" sx={{ whiteSpace: "nowrap" }}>Regolari</Typography>
-                  <Typography variant="bodyMedium" sx={{ whiteSpace: "nowrap" }}>{!isCityTaxLoading ? `${cityTaxData?.standard ?? 0} presenze` : <M3Skeleton width="4rem" />}</Typography>
+                  <Typography variant="bodyMedium" sx={{ whiteSpace: "nowrap" }}>{!cityTaxResult.isFetching ? `${cityTaxResult.data?.standard ?? 0} presenze` : <M3Skeleton width="4rem" />}</Typography>
                 </Stack>
                 <Stack direction="row" spacing={2} justifyContent="space-between" sx={{ pt: "1rem", pb: "1rem" }}>
                   <Typography variant="titleMedium" sx={{ whiteSpace: "nowrap" }}>{"Bambini <14"}</Typography>
-                  <Typography variant="bodyMedium" sx={{ whiteSpace: "nowrap" }}>{!isCityTaxLoading ? `${cityTaxData?.children ?? 0} presenze` : <M3Skeleton width="4rem" />}</Typography>
+                  <Typography variant="bodyMedium" sx={{ whiteSpace: "nowrap" }}>{!cityTaxResult.isFetching ? `${cityTaxResult.data?.children ?? 0} presenze` : <M3Skeleton width="4rem" />}</Typography>
                 </Stack>
                 <Stack direction="row" spacing={2} justifyContent="space-between" sx={{ pt: "1rem", pb: "1rem" }}>
                   <Typography variant="titleMedium" sx={{ whiteSpace: "nowrap" }}>{"Permanenze >10 giorni"}</Typography>
-                  <Typography variant="bodyMedium" sx={{ whiteSpace: "nowrap" }}>{!isCityTaxLoading ? `${cityTaxData?.over10Days ?? 0} presenze` : <M3Skeleton width="4rem" />}</Typography>
+                  <Typography variant="bodyMedium" sx={{ whiteSpace: "nowrap" }}>{!cityTaxResult.isFetching ? `${cityTaxResult.data?.over10Days ?? 0} presenze` : <M3Skeleton width="4rem" />}</Typography>
                 </Stack>
               </Stack>
             </Collapse>
