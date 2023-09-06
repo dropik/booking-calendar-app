@@ -29,6 +29,7 @@ A client side part of a web app for managing hotel bookings by organazing them i
 
 ### v1.6.0
 - Migrated API calls to RTK Query.
+- Handling authorization to backend.
 
 ### v1.5.4
 - Considering wether deposit is with bank transfer for displaying payment notification
