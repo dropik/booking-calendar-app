@@ -1,5 +1,8 @@
 import React from "react";
+
 import { Routes, Route, Navigate } from "react-router-dom";
+
+import { useAppSelector } from "../redux/hooks";
 
 import AppRoot from "./AppRoot";
 import Table from "./Table";
@@ -13,9 +16,12 @@ import Istat from "./Tools/Istat";
 import Login from "./Login";
 
 export default function AppRoutes(): JSX.Element {
+  const auth = useAppSelector(state => state.auth);
+  const isAuthenticated = auth && auth.accessToken && auth.accessToken !== "" && auth.refreshToken && auth.refreshToken !== "";
+
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/app/table" />} />
+      <Route path="/" element={<Navigate to={isAuthenticated ? "/app/table" : "/login"} />} />
       <Route path="/login" element={<Login />} />
       <Route path="/app" element={<AppRoot />}>
         <Route path="table" element={<Table />} />
