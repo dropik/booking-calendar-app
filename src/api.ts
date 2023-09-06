@@ -4,6 +4,7 @@ import { TileColor } from "./redux/tilesSlice";
 import { RootState } from "./redux/store";
 import { show as showSnackbarMessage } from "./redux/snackbarMessageSlice";
 import { setTokens } from "./redux/authSlice";
+import { Mutex } from "async-mutex";
 
 export type CityTaxData = {
   standard: number,
@@ -138,6 +139,8 @@ export type TokenResponse = {
   refreshToken: string,
 };
 
+const mutex = new Mutex();
+
 const baseQuery = fetchBaseQuery({
   baseUrl: "/api/v1/",
   prepareHeaders: (headers, { getState }) => {
@@ -150,6 +153,7 @@ const baseQuery = fetchBaseQuery({
 });
 
 const customFetchBase: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => {
+  await mutex.waitForUnlock();
   let result = await baseQuery(args, api, extraOptions);
 
   if (result.meta?.response?.ok) {
@@ -158,23 +162,32 @@ const customFetchBase: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryEr
 
   let errorMessage = "";
   if (result.error?.status === 401) {
-    try {
-      const auth = (api.getState() as RootState).auth;
+    if (!mutex.isLocked()) {
+      const release = await mutex.acquire();
 
-      const refreshResult = await baseQuery(
-        { url: "auth/refresh", method: "POST", body: auth, },
-        api,
-        extraOptions,
-      );
+      try {
+        const auth = (api.getState() as RootState).auth;
 
-      if (refreshResult.meta?.response?.ok && refreshResult.data) {
-        api.dispatch(setTokens(refreshResult.data as TokenResponse));
-        result = await baseQuery(args, api, extraOptions);
-      } else {
-        window.location.href = "/login";
+        const refreshResult = await baseQuery(
+          { url: "auth/refresh", method: "POST", body: auth, },
+          api,
+          extraOptions,
+        );
+
+        if (refreshResult.meta?.response?.ok && refreshResult.data) {
+          api.dispatch(setTokens(refreshResult.data as TokenResponse));
+          result = await baseQuery(args, api, extraOptions);
+        } else {
+          window.location.href = "/login";
+        }
+      } catch (error) {
+        errorMessage = "Errore di reautenticazione";
+      } finally {
+        release();
       }
-    } catch (error) {
-      errorMessage = "Errore di reautenticazione";
+    } else {
+      await mutex.waitForUnlock();
+      result = await baseQuery(args, api, extraOptions);
     }
   } else if (result.error?.status === 408) {
     errorMessage = "Errore di connessione";
