@@ -1,7 +1,6 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
-import ApiController from "./ApiController";
 import AppRoot from "./AppRoot";
 import Table from "./Table";
 import Bookings from "./Bookings";
@@ -16,21 +15,19 @@ import Login from "./Login";
 export default function AppRoutes(): JSX.Element {
   return (
     <Routes>
-      <Route path="/" element={<ApiController />}>
-        <Route index element={<Navigate to="/app/table" />} />
-        <Route path="login" element={<Login />} />
-        <Route path="app" element={<AppRoot />}>
-          <Route path="table" element={<Table />} />
-          <Route path="bookings" element={<Bookings />}>
-            <Route path=":from/:bookingId" element={<BookingDetails />} />
-          </Route>
-          <Route path="tools" element={<Tools />}>
-            <Route path="" element={<Dashboard />} />
-            <Route path="istat" element={<Istat />} />
-          </Route>
-          <Route path="clients" element={<Clients />} />
-          <Route path="settings" element={<Settings />} />
+      <Route path="/" element={<Navigate to="/app/table" />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/app" element={<AppRoot />}>
+        <Route path="table" element={<Table />} />
+        <Route path="bookings" element={<Bookings />}>
+          <Route path=":from/:bookingId" element={<BookingDetails />} />
         </Route>
+        <Route path="tools" element={<Tools />}>
+          <Route path="" element={<Dashboard />} />
+          <Route path="istat" element={<Istat />} />
+        </Route>
+        <Route path="clients" element={<Clients />} />
+        <Route path="settings" element={<Settings />} />
       </Route>
     </Routes>
   );
