@@ -163,33 +163,37 @@ const customFetchBase: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryEr
 
   let errorMessage = "";
   if (result.error?.status === 401) {
-    if (!mutex.isLocked()) {
-      const release = await mutex.acquire();
+    if (!result.meta?.request.url.includes("auth/token")) {
+      if (!mutex.isLocked()) {
+        const release = await mutex.acquire();
 
-      try {
-        const auth = (api.getState() as RootState).auth;
+        try {
+          const auth = (api.getState() as RootState).auth;
 
-        const refreshResult = await baseQuery(
-          { url: "auth/refresh", method: "POST", body: auth, },
-          api,
-          extraOptions,
-        );
+          const refreshResult = await baseQuery(
+            { url: "auth/refresh", method: "POST", body: auth, },
+            api,
+            extraOptions,
+          );
 
-        if (refreshResult.meta?.response?.ok && refreshResult.data) {
-          api.dispatch(setTokens(refreshResult.data as TokenResponse));
-          result = await baseQuery(args, api, extraOptions);
-        } else {
-          window.location.href = "/login";
+          if (refreshResult.meta?.response?.ok && refreshResult.data) {
+            api.dispatch(setTokens(refreshResult.data as TokenResponse));
+            result = await baseQuery(args, api, extraOptions);
+          } else {
+            window.location.href = "/login";
+          }
+        } catch (error) {
+          errorMessage = "Errore di reautenticazione";
+        } finally {
+          release();
         }
-      } catch (error) {
-        errorMessage = "Errore di reautenticazione";
-      } finally {
-        release();
+      } else {
+        await mutex.waitForUnlock();
+        result = await baseQuery(args, api, extraOptions);
       }
-    } else {
-      await mutex.waitForUnlock();
-      result = await baseQuery(args, api, extraOptions);
     }
+  } else if (result.error?.status === 403) {
+    errorMessage = "Accesso negato";
   } else if (result.error?.status === 408) {
     errorMessage = "Errore di connessione";
   } else {
