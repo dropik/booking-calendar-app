@@ -225,7 +225,7 @@ function useGetPoliceRicevuta(): { query: (date: string) => void, data: Blob | u
       async function fetchData() {
         let workingAuth = auth;
         try {
-          let response = await fetch(`https://localhost:44346/api/v1/police/ricevuta?date=${date}`, {
+          let response = await fetch(`${process.env.API_URL}/police/ricevuta?date=${date}`, {
             headers: {
               "Authorization": `Bearer ${workingAuth.accessToken}`,
             },
@@ -235,7 +235,7 @@ function useGetPoliceRicevuta(): { query: (date: string) => void, data: Blob | u
               throw new Error("Errore di connessione!");
             } else if (response.status === 401) {
               try {
-                const refreshResponse = await fetch("https://localhost:44346/api/v1/auth/refresh", {
+                const refreshResponse = await fetch(`${process.env.API_URL}/auth/refresh`, {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
@@ -252,7 +252,7 @@ function useGetPoliceRicevuta(): { query: (date: string) => void, data: Blob | u
               } catch (exception) {
                 window.location.href = "/login";
               }
-              response = await fetch(`https://localhost:44346/api/v1/police/ricevuta?date=${date}`, {
+              response = await fetch(`${process.env.API_URL}/police/ricevuta?date=${date}`, {
                 headers: {
                   "Authorization": `Bearer ${workingAuth.accessToken}`,
                 },

@@ -4,7 +4,7 @@ const common = require("./webpack.common.js");
 const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
 const ReactRefreshTypeScript = require("react-refresh-typescript");
 
-module.exports = merge(common, {
+module.exports = (env) => merge(common(env), {
   mode: "development",
   devtool: "source-map",
   plugins: [new ReactRefreshWebpackPlugin()],
@@ -34,12 +34,6 @@ module.exports = merge(common, {
     },
     port: 3000,
     hot: true,
-    proxy: {
-      "/api": {
-        target: "http://localhost:5077",
-        secure: false
-      }
-    },
     historyApiFallback: true
   },
 });

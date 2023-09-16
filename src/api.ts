@@ -142,7 +142,7 @@ export type TokenResponse = {
 const mutex = new Mutex();
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://localhost:44346/api/v1/",
+  baseUrl: `${process.env.API_URL}/`,
   mode: "cors",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.accessToken;
