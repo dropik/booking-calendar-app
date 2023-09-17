@@ -13,7 +13,6 @@ import snackbarMessage from "./snackbarMessageSlice";
 import layout from "./layoutSlice";
 import bookingsForm from "./bookingsFormSlice";
 import roomRates from "./roomRatesSlice";
-import user from "./userSlice";
 import auth from "./authSlice";
 
 export default combineReducers(
@@ -31,7 +30,6 @@ export default combineReducers(
     layout,
     bookingsForm,
     roomRates,
-    user,
     auth,
   }
 );
