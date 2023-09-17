@@ -1,34 +1,25 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 
-import { useNavigate } from "react-router-dom";
-
-import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
-import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 
-import M3IconButton from "../../m3/M3IconButton";
 import M3FilledButton from "../../m3/M3FilledButton";
 import M3Skeleton from "../../m3/M3Skeleton";
 
 import { useAppDispatch } from "../../../redux/hooks";
 import { show as showSnackbarMessage } from "../../../redux/snackbarMessageSlice";
-import { setSurfaceDim } from "../../../redux/layoutSlice";
 
 import { api, MovementDTO } from "../../../api";
 
 import { MovementEntry, MovementsList } from "./models";
 import PresenseList from "./PresenseList";
-import ConfirmExitDialog from "./ConfirmExitDialog";
 import NegativePresenseDialog from "./NegativePresenseDialog";
+import M3Page from "../../m3/M3Page";
 
 export default function Istat(): JSX.Element {
-  const theme = useTheme();
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { data: loadedMovements, isSuccess, isFetching } = api.endpoints.getIstatMovements.useQuery(null, { refetchOnMountOrArgChange: true });
   const [postIstat, postIstatResult] = api.endpoints.postIstat.useMutation();
@@ -40,9 +31,6 @@ export default function Istat(): JSX.Element {
     placeholder1: { id: "placeholder1" },
     placeholder2: { id: "placeholder2" },
   });
-  const [isEntered, setIsEntered] = useState(false);
-  const [shouldExit, setShouldExit] = useState(false);
-  const [openConfirmExitDialog, setOpenConfirmExitDialog] = useState(false);
   const [openErrorDialog, setOpenErrorDialog] = useState(false);
 
   const italianKeys = Object.keys(italians);
@@ -103,11 +91,6 @@ export default function Istat(): JSX.Element {
     setForeigns(copy);
   }, [foreigns]);
 
-  const confirmExit = useCallback(() => {
-    setIsEntered(false);
-    dispatch(setSurfaceDim(false));
-  }, [dispatch]);
-
   useEffect(() => {
     if (isSuccess && !isFetching) {
       const { italians: newItalians, foreigns: newForeigns } = splitMovements(loadedMovements);
@@ -126,28 +109,6 @@ export default function Istat(): JSX.Element {
       });
     };
   }, [isSuccess, loadedMovements, isFetching]);
-
-  useEffect(() => {
-    setIsEntered(true);
-    dispatch(setSurfaceDim(true));
-
-    return () => {
-      dispatch(setSurfaceDim(false));
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (shouldExit) {
-      navigate(-1);
-    }
-  }, [navigate, shouldExit]);
-
-  useEffect(() => {
-    if (postIstatResult.isSuccess) {
-      dispatch(showSnackbarMessage({ type: "success", message: "I dati sono stati mandati correttamente!" }));
-      confirmExit();
-    }
-  }, [confirmExit, dispatch, postIstatResult.isSuccess]);
 
   function sendData(): void {
     if (!isSuccess) {
@@ -189,16 +150,15 @@ export default function Istat(): JSX.Element {
     }
   }
 
-  function tryExit(): void {
+  function onBeforePageExited(): boolean {
     if (loadedMovements && checkDataWasTouched(loadedMovements, italians, foreigns)) {
-      setOpenConfirmExitDialog(true);
-    } else {
-      confirmExit();
+      return false;
     }
+    return true;
   }
 
-  function closeConfirm(): void {
-    setOpenConfirmExitDialog(false);
+  function onPageExited(): void {
+    dispatch(showSnackbarMessage({ type: "success", message: "I dati sono stati mandati correttamente!" }));
   }
 
   const italianList = useMemo(() => (
@@ -226,91 +186,65 @@ export default function Istat(): JSX.Element {
   ), [addForeignEntry, deleteForeignEntry, editForeignEntry, foreigns]);
 
   return (
-    <>
+    <M3Page
+      topBarElement={(isEntered) =>
+        !isFetching ? (
+          postIstatResult.isLoading ? (
+            <CircularProgress />
+          ) : (
+            <>
+              {isEntered ? (
+                <M3FilledButton onClick={sendData} startIcon={<CheckOutlinedIcon />}>
+                Accetta
+                </M3FilledButton>
+              ) : null}
+              <NegativePresenseDialog open={openErrorDialog} onClose={() => setOpenErrorDialog(false)} />
+            </>
+          )) : <></>
+      }
+      exit={postIstatResult.isSuccess}
+      onExited={onPageExited}
+      onBeforeExit={onBeforePageExited}
+    >
       <Stack
-        direction="column"
-        spacing={2}
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        py="1rem"
+      >
+        <Typography variant="displaySmall">ISTAT</Typography>
+        <Stack direction="column" alignItems="flex-end">
+          <Typography variant="titleLarge">{(isFetching || !isSuccess) ? <M3Skeleton width="8rem" /> : loadedMovements.date}</Typography>
+          <Typography variant="titleMedium">
+            {(isFetching || !isSuccess) ? <M3Skeleton width="12rem" /> : `${loadedMovements.prevTotal} presenze precedenti`}
+          </Typography>
+          <Typography variant="titleMedium">
+            {(isFetching || !isSuccess) ? <M3Skeleton width="12rem" /> : `${nextTotal} presenze attuali`}
+          </Typography>
+        </Stack>
+      </Stack>
+      <Box
         sx={{
-          width: "100%",
-          height: "100vh",
-          backgroundColor: theme.palette.surfaceContainer.main,
-          borderRadius: "24px 0px 0px 24px",
-          p: "1rem",
-          boxSizing: "border-box",
-          transition: theme.transitions.create(["transform", "opacity"], {
-            duration: isEntered ? theme.transitions.duration.short : theme.transitions.duration.shortest,
-            easing: isEntered
-              ? theme.transitions.easing.emphasized
-              : theme.transitions.easing.emphasizedAccelerate,
-          }),
-          transform: isEntered ? "none" : "translateX(50px)",
-          opacity: isEntered ? 1 : 0,
-        }}
-        onTransitionEnd={() => {
-          if (!isEntered) {
-            setShouldExit(true);
-          }
+          position: "relative",
+          flex: 1,
         }}
       >
-        <Stack direction="row" justifyContent="space-between">
-          <M3IconButton onClick={tryExit}>
-            <ArrowBackOutlinedIcon />
-          </M3IconButton>
-          <ConfirmExitDialog open={openConfirmExitDialog} onCancel={closeConfirm} onConfirm={confirmExit} />
-          {!isFetching ? (
-            postIstatResult.isLoading ? (
-              <CircularProgress />
-            ) : (
-              <>
-                {isEntered ? (
-                  <M3FilledButton onClick={sendData} startIcon={<CheckOutlinedIcon />}>
-                    Accetta
-                  </M3FilledButton>
-                ) : null}
-                <NegativePresenseDialog open={openErrorDialog} onClose={() => setOpenErrorDialog(false)} />
-              </>
-            )) : <></>}
-        </Stack>
         <Stack
           direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-          py="1rem"
-        >
-          <Typography variant="displaySmall">ISTAT</Typography>
-          <Stack direction="column" alignItems="flex-end">
-            <Typography variant="titleLarge">{(isFetching || !isSuccess) ? <M3Skeleton width="8rem" /> : loadedMovements.date}</Typography>
-            <Typography variant="titleMedium">
-              {(isFetching || !isSuccess) ? <M3Skeleton width="12rem" /> : `${loadedMovements.prevTotal} presenze precedenti`}
-            </Typography>
-            <Typography variant="titleMedium">
-              {(isFetching || !isSuccess) ? <M3Skeleton width="12rem" /> : `${nextTotal} presenze attuali`}
-            </Typography>
-          </Stack>
-        </Stack>
-        <Box
+          spacing={2}
           sx={{
-            position: "relative",
-            flex: 1,
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
           }}
         >
-          <Stack
-            direction="row"
-            spacing={2}
-            sx={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-            }}
-          >
-            {italianList}
-            {foreignList}
-          </Stack>
-        </Box>
-      </Stack>
-    </>
+          {italianList}
+          {foreignList}
+        </Stack>
+      </Box>
+    </M3Page>
   );
 }
 
