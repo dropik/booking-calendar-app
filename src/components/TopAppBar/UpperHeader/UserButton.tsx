@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import { useNavigate } from "react-router-dom";
+
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
@@ -18,6 +20,7 @@ import M3IconButton from "../../m3/M3IconButton";
 export default function UserButton(): JSX.Element {
   const { data: user, isFetching } = api.endpoints.getCurrentUser.useQuery(null);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const open = Boolean(anchorEl);
 
@@ -33,6 +36,10 @@ export default function UserButton(): JSX.Element {
     dispatch(dispatchLogout());
     closeMenu();
     window.location.href = "/login";
+  }
+
+  function openSettings(): void {
+    navigate("/app/settings");
   }
 
   return (
@@ -70,7 +77,9 @@ export default function UserButton(): JSX.Element {
           <Typography variant="titleMedium">{user?.structure}</Typography>
         </Stack>
         <Stack direction="row" justifyContent="space-between" sx={{ width: "100%" }}>
-          <M3IconButton><SettingsOutlinedIcon /></M3IconButton>
+          <M3IconButton onClick={openSettings}>
+            <SettingsOutlinedIcon />
+          </M3IconButton>
           <M3TextButton onClick={logout} startIcon={<LogoutOutlinedIcon />}>Logout</M3TextButton>
         </Stack>
       </M3Menu>

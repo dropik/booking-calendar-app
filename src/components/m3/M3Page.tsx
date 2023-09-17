@@ -15,8 +15,8 @@ import M3ConfirmExitDialog from "./M3ConfirmExitDialog";
 type M3PageProps = {
   children: React.ReactNode,
   topBarElement?: React.ReactNode | ((isEntered: boolean) => React.ReactNode),
-  exit: boolean,
-  onExited: () => void,
+  exit?: boolean,
+  onExited?: () => void,
   onBeforeExit?: () => boolean,
 }
 
@@ -50,7 +50,7 @@ export default function M3Page({ children, topBarElement, exit, onExited, onBefo
 
   useEffect(() => {
     if (exit) {
-      onExited();
+      onExited?.();
       confirmExit();
     }
   }, [confirmExit, dispatch, exit, onExited]);
