@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 
+import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 
 import { api } from "../../../../api";
 import { useAppDispatch } from "../../../../redux/hooks";
@@ -9,8 +12,8 @@ import { logout as dispatchLogout } from "../../../../redux/authSlice";
 
 import M3TextButton from "../../../m3/M3TextButton";
 import M3Menu from "../../../m3/M3Menu";
-import M3MenuItem from "../../../m3/M3MenuItem";
 import M3Skeleton from "../../../m3/M3Skeleton";
+import M3IconButton from "../../../m3/M3IconButton";
 
 export default function UserButton(): JSX.Element {
   const { data: user, isFetching } = api.endpoints.getCurrentUser.useQuery(null);
@@ -35,22 +38,41 @@ export default function UserButton(): JSX.Element {
   return (
     <>
       {!isFetching ? (
-        <M3TextButton onClick={openMenu}>
-          <Typography variant="titleSmall">{user?.visibleName ?? user?.username ?? ""} - {user?.structure}</Typography>
-        </M3TextButton>
+        <M3IconButton onClick={openMenu}>
+          <AccountCircleOutlinedIcon />
+        </M3IconButton>
       ) : (
         <Typography variant="titleSmall">
-          <M3Skeleton variant="text" width="4rem" />
+          <M3Skeleton variant="text" width="2rem" />
         </Typography>
       )}
-      <M3Menu anchorEl={anchorEl} anchorOrigin={{ vertical: "bottom", horizontal: "right" }} open={open} onClose={closeMenu}>
-        <M3MenuItem onClick={logout} sx={{
-          pr: "1.5rem",
-          pl: "1rem",
-        }}>
-          <LogoutOutlinedIcon sx={{ mr: "1rem" }} />
-          Logout
-        </M3MenuItem>
+      <M3Menu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={closeMenu}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        PaperProps={{ sx: {
+          minWidth: "20rem",
+          maxWidth: "20rem",
+          minHeight: "10rem",
+        }}}
+        MenuListProps={{ sx: {
+          p: "1rem",
+          boxSizing: "border-box",
+          display: "flex",
+          minWidth: "20rem",
+          minHeight: "10rem",
+          flexDirection: "column",
+          justifyContent: "space-between"
+        } }}>
+        <Stack spacing={0}>
+          <Typography variant="displaySmall">{user?.visibleName ?? user?.username ?? ""}</Typography>
+          <Typography variant="titleMedium">{user?.structure}</Typography>
+        </Stack>
+        <Stack direction="row" justifyContent="space-between" sx={{ width: "100%" }}>
+          <M3IconButton><SettingsOutlinedIcon /></M3IconButton>
+          <M3TextButton onClick={logout} startIcon={<LogoutOutlinedIcon />}>Logout</M3TextButton>
+        </Stack>
       </M3Menu>
     </>
   );

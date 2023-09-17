@@ -14,14 +14,14 @@ export default function M3Menu({ children, PaperProps, TransitionProps, ...props
       PaperProps={{
         ...PaperProps,
         sx: {
-          ...PaperProps?.sx,
           backgroundColor: theme.palette.surface.main,
           minWidth: "7rem",
           maxWidth: "17.5rem",
           "& .surface-tint": {
             backgroundColor: theme.palette.surfaceTint.main,
             opacity: theme.opacities.surface2
-          }
+          },
+          ...PaperProps?.sx,
         }
       }}
       TransitionProps={{
