@@ -6,7 +6,6 @@ import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
 import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
-import SettingsIcon from "@mui/icons-material/Settings";
 
 import { useAppSelector } from "../../redux/hooks";
 
@@ -29,6 +28,8 @@ export default function AppDrawer(): JSX.Element {
         sx: {
           top: "10.5rem",
           width: "5rem",
+          justifyContent: "center",
+          height: "calc(100vh - 21rem)",
           boxSizing: "border-box",
           backgroundColor: "transparent",
           border: "none",
@@ -74,12 +75,6 @@ export default function AppDrawer(): JSX.Element {
                 end: true,
                 icon: <PersonOutlineOutlinedIcon />
               },
-              {
-                text: "Impostazioni",
-                link: "/app/settings",
-                end: true,
-                icon: <SettingsIcon />
-              }
             ]
           }
         ]} />
