@@ -15,6 +15,8 @@ import DrawerAdjacent from "../m3/DrawerAdjacent";
 import M3IconButton from "../m3/M3IconButton";
 import ClientCard from "./ClientCard";
 import { Utils } from "../../utils";
+import TopAppBar from "../TopAppBar";
+import UpperHeader from "../TopAppBar/UpperHeader";
 
 export default function Clients(): JSX.Element {
   const [query, setQuery] = useState("");
@@ -27,45 +29,41 @@ export default function Clients(): JSX.Element {
   const clients = query === "" || !isLoaded ? [] : loadedClients;
 
   return (
-    <DrawerAdjacent>
-      <Stack spacing={2} sx={{ pr: "1rem", pb: "0.5rem" }}>
-        <Stack
-          spacing={0}
-          direction="row"
-          justifyContent="space-between"
-          alignItems="flex-end"
-          sx={{ pb: "1rem" }}
-        >
-          <Typography variant="displayLarge" sx={{ pt: "4rem", pl: "1rem" }}>Clienti</Typography>
-          <Stack spacing={1} direction="row">
-            <TextField
-              value={query}
-              placeholder="Cerca cliente"
-              InputProps={{
-                endAdornment: query === "" ? (
-                  <InputAdornment position="end">
-                    <SearchOutlined />
-                  </InputAdornment>
-                ) : (
-                  <M3IconButton onClick={() => setQuery("")}><Cancel /></M3IconButton>
-                ),
-                sx: {
-                  borderRadius: "1.75rem",
-                  minWidth: "20rem"
-                }
-              }}
-              onChange={(event) => setQuery(event.target.value)}
-            />
-          </Stack>
+    <>
+      <TopAppBar>
+        <UpperHeader>
+          <Typography variant="displayLarge" sx={{ pl: "1rem" }}>Clienti</Typography>
+          <TextField
+            value={query}
+            placeholder="Cerca cliente"
+            InputProps={{
+              endAdornment: query === "" ? (
+                <InputAdornment position="end">
+                  <SearchOutlined />
+                </InputAdornment>
+              ) : (
+                <M3IconButton onClick={() => setQuery("")}><Cancel /></M3IconButton>
+              ),
+              sx: {
+                borderRadius: "1.75rem",
+                minWidth: "20rem",
+              }
+            }}
+            onChange={(event) => setQuery(event.target.value)}
+          />
+        </UpperHeader>
+      </TopAppBar>
+      <DrawerAdjacent>
+        <Stack spacing={2} sx={{ pt: "1rem", pr: "1rem", pb: "0.5rem" }}>
+          <Box sx={{
+            display: "grid",
+            gridTemplateColumns: `repeat(${drawerOpened ? 3 : 4}, 1fr)`
+          }}>
+            {clients.map((client) => <ClientCard key={client.id} client={client} />)}
+            {isFetching ? skeletonClients.map((client) => <ClientCard key={client} />) : null}
+          </Box>
         </Stack>
-        <Box sx={{
-          display: "grid",
-          gridTemplateColumns: `repeat(${drawerOpened ? 3 : 4}, 1fr)`
-        }}>
-          {clients.map((client) => <ClientCard key={client.id} client={client} />)}
-          {isFetching ? skeletonClients.map((client) => <ClientCard key={client} />) : null}
-        </Box>
-      </Stack>
-    </DrawerAdjacent>
+      </DrawerAdjacent>
+    </>
   );
 }
