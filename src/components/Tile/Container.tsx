@@ -5,7 +5,7 @@ import Stack from "@mui/material/Stack";
 
 import { TileColor } from "../../redux/tilesSlice";
 import { TileContext } from "./context";
-import { SurfaceTint } from "../m3/Tints";
+import { M3SurfaceTint } from "../m3/M3Tints";
 
 type ContainerProps = {
   children?: ReactNode,
@@ -50,7 +50,7 @@ export default function Container({ children, dropZone }: ContainerProps): JSX.E
         {children}
       </Stack>
       {dropZone === true ? (
-        <SurfaceTint sx={{
+        <M3SurfaceTint sx={{
           backgroundColor: theme.palette.primary.light,
           opacity: theme.opacities.surface1
         }} />

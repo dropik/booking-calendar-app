@@ -23,7 +23,7 @@ import { show as showMessage } from "../../redux/snackbarMessageSlice";
 
 import M3FilledButton from "../m3/M3FilledButton";
 import M3IconButton from "../m3/M3IconButton";
-import { SurfaceTint } from "../m3/Tints";
+import { M3SurfaceTint } from "../m3/M3Tints";
 import Room from "./Room";
 import M3Dialog from "../m3/M3Dialog";
 import M3TextButton from "../m3/M3TextButton";
@@ -233,7 +233,7 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
             }
           </Stack>
         )}
-        <SurfaceTint sx={{
+        <M3SurfaceTint sx={{
           backgroundColor: theme.palette.primary.light,
           opacity: theme.opacities.surface1
         }} />

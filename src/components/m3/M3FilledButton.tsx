@@ -3,7 +3,7 @@ import { alpha, styled, Theme, ThemePalettes } from "@mui/material/styles";
 import Button, { ButtonColors, ButtonProps } from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
-import { StateLayer } from "./Tints";
+import { M3StateLayer } from "./M3Tints";
 
 declare module "@mui/material/Button" {
   interface ButtonPropsColorOverrides {
@@ -96,7 +96,7 @@ const CustomizedButton = styled(Button, {
 export default function M3FilledButton(props: M3FilledButtonProps): JSX.Element {
   return (
     <CustomizedButton {...props} variant="contained" disableTouchRipple disableFocusRipple>
-      <StateLayer />
+      <M3StateLayer />
       <Typography variant="labelLarge">
         {props.children}
       </Typography>

@@ -4,7 +4,7 @@ import { alpha, styled } from "@mui/material/styles";
 import Button, { ButtonProps } from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
-import { StateLayer } from "./Tints";
+import { M3StateLayer } from "./M3Tints";
 
 export interface M3TextButtonProps extends ButtonProps {
   iconOnly?: boolean;
@@ -61,7 +61,7 @@ const M3TextButton = forwardRef<HTMLButtonElement, M3TextButtonProps>(function M
       disableTouchRipple
       {...props}
     >
-      <StateLayer />
+      <M3StateLayer />
       <Typography variant="labelLarge">
         {children}
       </Typography>

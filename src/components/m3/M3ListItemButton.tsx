@@ -1,7 +1,7 @@
 import React from "react";
 import { useTheme } from "@mui/material/styles";
 import ListItemButton, { ListItemButtonProps } from "@mui/material/ListItemButton";
-import { StateLayer } from "./Tints";
+import { M3StateLayer } from "./M3Tints";
 
 export default function M3ListItemButton({ sx, children, ...props }: ListItemButtonProps): JSX.Element {
   const theme = useTheme();
@@ -47,7 +47,7 @@ export default function M3ListItemButton({ sx, children, ...props }: ListItemBut
       },
       ...sx
     }}>
-      <StateLayer />
+      <M3StateLayer />
       {children}
     </ListItemButton>
   );

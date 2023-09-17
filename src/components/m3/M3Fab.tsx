@@ -2,7 +2,7 @@ import React from "react";
 import { styled, ThemePalettes } from "@mui/material/styles";
 import Fab, { FabProps } from "@mui/material/Fab";
 
-import { StateLayer } from "./Tints";
+import { M3StateLayer } from "./M3Tints";
 
 type ColorCombination = "primary" | "surface" | "secondary" | "tertiary";
 
@@ -120,7 +120,7 @@ const CustomizedFab = styled(Fab, {
 export default function M3Fab(props: M3FabProps): JSX.Element {
   return (
     <CustomizedFab {...props} disableFocusRipple>
-      <StateLayer />
+      <M3StateLayer />
       {props.children}
     </CustomizedFab>
   );

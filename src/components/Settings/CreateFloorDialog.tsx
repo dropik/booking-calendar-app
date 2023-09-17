@@ -11,7 +11,7 @@ import { api } from "../../api";
 
 import M3TextButton from "../m3/M3TextButton";
 import M3Fab from "../m3/M3Fab";
-import { SurfaceTint } from "../m3/Tints";
+import { M3SurfaceTint } from "../m3/M3Tints";
 import M3Dialog from "../m3/M3Dialog";
 
 export default function CreateFloorDialog(): JSX.Element {
@@ -56,7 +56,7 @@ export default function CreateFloorDialog(): JSX.Element {
           <AddOutlinedIcon />
           <Typography variant="labelLarge">Crea</Typography>
         </Stack>
-        <SurfaceTint sx={{
+        <M3SurfaceTint sx={{
           backgroundColor: theme.palette.primary.light,
           opacity: theme.opacities.surface3
         }} />

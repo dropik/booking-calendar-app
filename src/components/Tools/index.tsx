@@ -1,11 +1,11 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import DrawerAdjacent from "../m3/DrawerAdjacent";
+import M3DrawerAdjacent from "../m3/M3DrawerAdjacent";
 
 export default function Tools(): JSX.Element {
   return (
-    <DrawerAdjacent>
+    <M3DrawerAdjacent>
       <Outlet />
-    </DrawerAdjacent>
+    </M3DrawerAdjacent>
   );
 }

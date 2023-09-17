@@ -2,7 +2,7 @@ import React from "react";
 import { useTheme } from "@mui/material/styles";
 import Menu, { MenuProps } from "@mui/material/Menu";
 
-import { SurfaceTint } from "./Tints";
+import { M3SurfaceTint } from "./M3Tints";
 
 export default function M3Menu({ children, PaperProps, TransitionProps, ...props }: MenuProps): JSX.Element {
   const theme = useTheme();
@@ -31,7 +31,7 @@ export default function M3Menu({ children, PaperProps, TransitionProps, ...props
       }}
     >
       {children}
-      <SurfaceTint />
+      <M3SurfaceTint />
     </Menu>
   );
 }

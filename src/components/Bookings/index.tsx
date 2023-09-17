@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import Stack from "@mui/material/Stack";
 
 
-import DrawerAdjacent from "../m3/DrawerAdjacent";
+import M3DrawerAdjacent from "../m3/M3DrawerAdjacent";
 import Form from "./Form";
 import List from "./List";
 import TopAppBar from "../TopAppBar";
@@ -15,7 +15,7 @@ export default function Bookings(): JSX.Element {
       <TopAppBar>
         <UpperHeader />
       </TopAppBar>
-      <DrawerAdjacent>
+      <M3DrawerAdjacent>
         <Stack spacing={2} direction="row" sx={{ pr: "1rem" }}>
           <Stack spacing={0} sx={{ flexBasis: "25rem", flexShrink: 0 }}>
             <Form>
@@ -24,7 +24,7 @@ export default function Bookings(): JSX.Element {
           </Stack>
           <Outlet />
         </Stack>
-      </DrawerAdjacent>
+      </M3DrawerAdjacent>
     </>
   );
 }

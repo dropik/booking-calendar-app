@@ -9,7 +9,7 @@ import CreateFloorDialog from "./CreateFloorDialog";
 import Skeleton from "./Skeleton";
 import Floor from "./Floor";
 import M3Page from "../m3/M3Page";
-import DrawerAdjacent from "../m3/DrawerAdjacent";
+import M3DrawerAdjacent from "../m3/M3DrawerAdjacent";
 
 export default function Settings(): JSX.Element {
   const floors = useFloors();
@@ -17,7 +17,7 @@ export default function Settings(): JSX.Element {
   const floorIds = Object.keys(floors).map(Number);
 
   return (
-    <DrawerAdjacent>
+    <M3DrawerAdjacent>
       <M3Page>
         <Stack spacing={2} sx={{ pr: "1rem", pb: "1rem" }}>
           <Typography variant="displayLarge" sx={{ pt: "4rem", pl: "1rem" }}>Piani</Typography>
@@ -29,6 +29,6 @@ export default function Settings(): JSX.Element {
         </Stack>
         <CreateFloorDialog />
       </M3Page>
-    </DrawerAdjacent>
+    </M3DrawerAdjacent>
   );
 }

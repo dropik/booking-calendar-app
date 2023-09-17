@@ -17,7 +17,7 @@ import { Utils } from "../../utils";
 
 import M3DatePicker from "../m3/M3DatePicker";
 import M3TextButton from "../m3/M3TextButton";
-import { SurfaceTint } from "../m3/Tints";
+import { M3SurfaceTint } from "../m3/M3Tints";
 import M3Skeleton from "../m3/M3Skeleton";
 import M3Chip from "../m3/M3Chip";
 import { setTokens } from "../../redux/authSlice";
@@ -108,7 +108,7 @@ export default function Dashboard(): JSX.Element {
                 </>
               )}
             </Stack>
-            <SurfaceTint sx={{
+            <M3SurfaceTint sx={{
               backgroundColor: theme.palette.primary.light,
               opacity: theme.opacities.surface2,
               m: "0 !important"
@@ -182,7 +182,7 @@ export default function Dashboard(): JSX.Element {
                   }}>Calcola</M3TextButton>
                 }
               </Stack>
-              <SurfaceTint sx={{
+              <M3SurfaceTint sx={{
                 backgroundColor: theme.palette.primary.light,
                 opacity: theme.opacities.surface2,
                 m: "0 !important"

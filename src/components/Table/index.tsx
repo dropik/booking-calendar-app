@@ -1,6 +1,6 @@
 import React from "react";
 
-import DrawerAdjacent from "../m3/DrawerAdjacent";
+import M3DrawerAdjacent from "../m3/M3DrawerAdjacent";
 import Sections from "./Sections";
 import TextWidthCanvas from "./TextWidthCanvas";
 import ScrollingHandler from "../ScrollingHandler";
@@ -12,12 +12,12 @@ export default function Table(): JSX.Element {
   return (
     <>
       <CalendarTopBar />
-      <DrawerAdjacent>
+      <M3DrawerAdjacent>
         <FetchTiles />
         <TextWidthCanvas>
           <Sections />
         </TextWidthCanvas>
-      </DrawerAdjacent>
+      </M3DrawerAdjacent>
       <SaveAndResetWidget />
       <ScrollingHandler />
     </>

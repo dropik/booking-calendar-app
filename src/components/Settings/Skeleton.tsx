@@ -5,7 +5,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 import M3Skeleton from "../m3/M3Skeleton";
-import { SurfaceTint } from "../m3/Tints";
+import { M3SurfaceTint } from "../m3/M3Tints";
 
 export default function Skeleton(): JSX.Element {
   const theme = useTheme();
@@ -26,7 +26,7 @@ export default function Skeleton(): JSX.Element {
               height: "8rem"
             }}>
               <Typography variant="headlineLarge"><M3Skeleton width="8rem" /></Typography>
-              <SurfaceTint sx={{
+              <M3SurfaceTint sx={{
                 backgroundColor: theme.palette.primary.light,
                 opacity: theme.opacities.surface1
               }} />

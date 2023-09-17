@@ -11,7 +11,7 @@ import Cancel from "@mui/icons-material/Cancel";
 import { api } from "../../api";
 import { useAppSelector } from "../../redux/hooks";
 
-import DrawerAdjacent from "../m3/DrawerAdjacent";
+import M3DrawerAdjacent from "../m3/M3DrawerAdjacent";
 import M3IconButton from "../m3/M3IconButton";
 import ClientCard from "./ClientCard";
 import { Utils } from "../../utils";
@@ -53,7 +53,7 @@ export default function Clients(): JSX.Element {
           />
         </UpperHeader>
       </TopAppBar>
-      <DrawerAdjacent>
+      <M3DrawerAdjacent>
         <Stack spacing={2} sx={{ pt: "1rem", pr: "1rem", pb: "0.5rem" }}>
           <Box sx={{
             display: "grid",
@@ -63,7 +63,7 @@ export default function Clients(): JSX.Element {
             {isFetching ? skeletonClients.map((client) => <ClientCard key={client} />) : null}
           </Box>
         </Stack>
-      </DrawerAdjacent>
+      </M3DrawerAdjacent>
     </>
   );
 }
