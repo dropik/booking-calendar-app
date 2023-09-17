@@ -36,14 +36,14 @@ export default function UserButton(): JSX.Element {
     <>
       {!isFetching ? (
         <M3TextButton onClick={openMenu}>
-          <Typography variant="titleSmall">{user?.visibleName ?? user?.username ?? ""}</Typography>
+          <Typography variant="titleSmall">{user?.visibleName ?? user?.username ?? ""} - {user?.structure}</Typography>
         </M3TextButton>
       ) : (
         <Typography variant="titleSmall">
           <M3Skeleton variant="text" width="4rem" />
         </Typography>
       )}
-      <M3Menu anchorEl={anchorEl} open={open} onClose={closeMenu}>
+      <M3Menu anchorEl={anchorEl} anchorOrigin={{ vertical: "bottom", horizontal: "right" }} open={open} onClose={closeMenu}>
         <M3MenuItem onClick={logout} sx={{
           pr: "1.5rem",
           pl: "1rem",

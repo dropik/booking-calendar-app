@@ -123,7 +123,8 @@ export type MovementDTO = {
 
 export type CurrentUser = {
   username: string,
-  visibleName: string,
+  visibleName?: string,
+  structure: string,
   roomTypes: RoomType[],
   roomRates: RoomRate[],
   floors: Floor[],

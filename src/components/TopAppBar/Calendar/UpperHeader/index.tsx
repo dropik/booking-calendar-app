@@ -6,7 +6,6 @@ import DateInput from "./DateInput";
 import UserButton from "./UserButton";
 
 export default function UpperHeader(): JSX.Element {
-
   return (
     <Grid container columns={3} sx={{
       height: "4rem",
