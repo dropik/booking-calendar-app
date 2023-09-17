@@ -2,18 +2,18 @@ import React from "react";
 
 import CalendarTopBar from "../TopAppBar/Calendar";
 import DrawerAdjacent from "../m3/DrawerAdjacent";
-import FetchData from "./FetchData";
 import Sections from "./Sections";
 import TextWidthCanvas from "./TextWidthCanvas";
 import ScrollingHandler from "../ScrollingHandler";
 import SaveAndResetWidget from "../SaveAndResetWidget";
+import FetchTiles from "./FetchTiles";
 
 export default function Table(): JSX.Element {
   return (
     <>
       <CalendarTopBar />
       <DrawerAdjacent>
-        <FetchData />
+        <FetchTiles />
         <TextWidthCanvas>
           <Sections />
         </TextWidthCanvas>

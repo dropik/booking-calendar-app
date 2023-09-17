@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 
-import { ColorAssignments, api } from "../../../api";
-import { ColoredBooking, TileColor, addColorizedBookings } from "../../../redux/tilesSlice";
+import { ColorAssignments, api } from "../../api";
+import { ColoredBooking, TileColor, addColorizedBookings } from "../../redux/tilesSlice";
 
 export default function FetchTiles(): null {
   const dispatch = useAppDispatch();
   const args = useAppSelector((state) => state.table.lastFetchPeriod);
-  const query = api.endpoints.getBookings.useQuery(args, { pollingInterval: 180000 });
+  const query = api.endpoints.getBookings.useQuery(args, { pollingInterval: 180000, refetchOnMountOrArgChange: true });
   const [postAssignments] = api.endpoints.postAssignments.useMutation();
 
   useEffect(() => {
