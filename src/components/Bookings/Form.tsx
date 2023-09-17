@@ -42,13 +42,12 @@ export default function Form({ children }: FormProps): JSX.Element {
       <Stack spacing={1} sx={{
         position: "sticky",
         boxSizing: "border-box",
-        pt: "1rem",
         pb: "1rem",
         zIndex: theme.zIndex.appBar,
         backgroundColor: theme.palette.surface.light,
         borderRadius: "0.75rem"
       }}>
-        <Typography variant="displayLarge" sx={{ pt: "4rem", pb: "2rem", textAlign: "center" }}>Prenotazioni</Typography>
+        <Typography variant="displayLarge" sx={{ pt: "2rem", pb: "2rem", textAlign: "center" }}>Prenotazioni</Typography>
         <Stack spacing={1} direction="row">
           <FromDateInput from={from} to={to} setFrom={setFrom} setIsFromValid={setIsFromValid} />
           <ToDateInput from={from} to={to} setTo={setTo} setIsToValid={setIsToValid} />

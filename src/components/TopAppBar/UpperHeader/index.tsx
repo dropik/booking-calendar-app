@@ -1,29 +1,38 @@
-import React from "react";
+import React, { Children } from "react";
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
 
-import DateInput from "./DateInput";
 import UserButton from "./UserButton";
 
-export default function UpperHeader(): JSX.Element {
+type UpperHeaderProps = {
+  children?: React.ReactNode,
+};
+
+export default function UpperHeader({ children }: UpperHeaderProps): JSX.Element {
+  const headerParts: React.ReactNode[] = [null, null];
+  Children.forEach(children, (child, index) => {
+    // allow only two slots
+    if (index < 2) {
+      headerParts[index] = child;
+    }
+  });
+
   return (
     <Grid container columns={3} sx={{
       height: "4rem",
     }}>
       <Grid item xs={1} sx={{
         display: "flex",
-        alignItems: "center"
+        justifyContent: "flex-start",
+        alignItems: "center",
       }}>
-        <DateInput />
+        {headerParts[0]}
       </Grid>
       <Grid item xs={1} sx={{
         display: "flex",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
       }}>
-        <Typography variant="titleLarge">
-          Booking Calendar
-        </Typography>
+        {headerParts[1]}
       </Grid>
       <Grid item xs={1} sx={{
         display: "flex",

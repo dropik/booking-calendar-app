@@ -9,9 +9,9 @@ export default function AppRoot(): JSX.Element {
 
   return (
     <>
-      <Outlet />
-      <AppDrawer />
       <DrawerButton />
+      <AppDrawer />
+      <Outlet />
     </>
   );
 }

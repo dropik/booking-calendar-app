@@ -7,14 +7,14 @@ import MenuItem from "@mui/material/MenuItem";
 import ChevronLeftOutlined from "@mui/icons-material/ChevronLeftOutlined";
 import ChevronRightOutlined from "@mui/icons-material/ChevronRightOutlined";
 
-import M3TextButton from "../../../m3/M3TextButton";
-import M3IconButton from "../../../m3/M3IconButton";
-import M3DatePicker from "../../../m3/M3DatePicker";
-import M3Selectbox from "../../../m3/M3Selectbox";
+import M3TextButton from "../../m3/M3TextButton";
+import M3IconButton from "../../m3/M3IconButton";
+import M3DatePicker from "../../m3/M3DatePicker";
+import M3Selectbox from "../../m3/M3Selectbox";
 
-import { Utils } from "../../../../utils";
-import { useAppDispatch, useColumns, useLeftmostDate } from "../../../../redux/hooks";
-import * as TableSlice from "../../../../redux/tableSlice";
+import { Utils } from "../../../utils";
+import { useAppDispatch, useColumns, useLeftmostDate } from "../../../redux/hooks";
+import * as TableSlice from "../../../redux/tableSlice";
 
 export default function DateInput(): JSX.Element {
   const dispatch = useAppDispatch();

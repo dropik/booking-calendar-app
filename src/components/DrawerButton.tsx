@@ -23,7 +23,7 @@ export default function DrawerButton(): JSX.Element {
       position: "fixed",
       top: "0.75rem",
       left: "1.25rem",
-      zIndex: theme.zIndex.appBar
+      zIndex: theme.zIndex.appBar + 1,
     }}>
       <M3IconButton
         onClick={openDrawer}

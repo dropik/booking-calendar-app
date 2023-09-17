@@ -6,14 +6,14 @@ import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 
-import { api } from "../../../../api";
-import { useAppDispatch } from "../../../../redux/hooks";
-import { logout as dispatchLogout } from "../../../../redux/authSlice";
+import { api } from "../../../api";
+import { useAppDispatch } from "../../../redux/hooks";
+import { logout as dispatchLogout } from "../../../redux/authSlice";
 
-import M3TextButton from "../../../m3/M3TextButton";
-import M3Menu from "../../../m3/M3Menu";
-import M3Skeleton from "../../../m3/M3Skeleton";
-import M3IconButton from "../../../m3/M3IconButton";
+import M3TextButton from "../../m3/M3TextButton";
+import M3Menu from "../../m3/M3Menu";
+import M3Skeleton from "../../m3/M3Skeleton";
+import M3IconButton from "../../m3/M3IconButton";
 
 export default function UserButton(): JSX.Element {
   const { data: user, isFetching } = api.endpoints.getCurrentUser.useQuery(null);
