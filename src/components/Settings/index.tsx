@@ -107,11 +107,100 @@ function PersonalDataSection(): JSX.Element {
 }
 
 function ChangePasswordSection(): JSX.Element {
+  const dispatch = useAppDispatch();
   const [oldPassword, setOldPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string >("");
   const [confirmNewPassword, setConfirmNewPassword] = useState<string>("");
+  const [touched, setTouched] = useState<{ oldPassword: boolean, newPassword: boolean, confirmNewPassword: boolean }>({
+    oldPassword: false,
+    newPassword: false,
+    confirmNewPassword: false,
+  });
+  const [updatePassword, updatePasswordResult] = api.endpoints.updatePassword.useMutation();
+
+  const updateField = {
+    oldPassword: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setOldPassword(event.target.value);
+    },
+    newPassword: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setNewPassword(event.target.value);
+    },
+    confirmNewPassword: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setConfirmNewPassword(event.target.value);
+    },
+  };
+
+  const error = {
+    oldPassword: "",
+    newPassword: "",
+    confirmNewPassword: "",
+  };
+
+  const isValid = Object.keys(error).every(key => error[key as keyof typeof error] === "");
+
+  if (newPassword === "") {
+    error.newPassword = "Password non può essere vuota";
+  }
+  if (confirmNewPassword !== newPassword && confirmNewPassword !== "") {
+    error.newPassword = "Le password non coincidono";
+    error.confirmNewPassword = "Le password non coincidono";
+  }
+
+  const showError = {
+    oldPassword: touched.oldPassword && (error.oldPassword !== ""),
+    newPassword: touched.newPassword && (error.newPassword !== ""),
+    confirmNewPassword: touched.confirmNewPassword && (error.confirmNewPassword !== ""),
+  };
+
+  function touchField(name: keyof typeof touched, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void {
+    setTouched(prevTouched => {
+      const newTouched = {...prevTouched};
+      newTouched[name] = true;
+      return newTouched;
+    });
+    updateField[name](event);
+  }
+
+  function touchForm(): void {
+    setTouched(prevTouched => {
+      const newTouched = {...prevTouched};
+      Object.keys(newTouched).forEach(key => {
+        newTouched[key as keyof typeof newTouched] = true;
+      });
+      return newTouched;
+    });
+  }
+
+  function clearForm(): void {
+    setTouched(prevTouched => {
+      const newTouched = {...prevTouched};
+      Object.keys(newTouched).forEach(key => {
+        newTouched[key as keyof typeof newTouched] = false;
+      });
+      return newTouched;
+    });
+    setNewPassword("");
+    setConfirmNewPassword("");
+  }
+
+  function submit(event: React.FormEvent<HTMLFormElement>): void {
+    event.preventDefault();
+    touchForm();
+    if (isValid) {
+      updatePassword({ oldPassword, newPassword });
+    }
+  }
+
+  useEffect(() => {
+    if (updatePasswordResult.isSuccess) {
+      dispatch(showSnackbarMessage({ type: "success", message: "La password è stata aggiornata!" }));
+      clearForm();
+      updatePasswordResult.reset();
+    }
+  }, [dispatch, updatePasswordResult]);
+
   return (
-    <Stack spacing={2} component="form">
+    <Stack spacing={2} component="form" onSubmit={submit}>
       <Typography variant="headlineLarge">Password</Typography>
       <Typography variant="bodyLarge">Qua puoi modificare la password del tuo utente</Typography>
       <TextField id="username" autoComplete="username" type="text" sx={{ display: "none" }} />
@@ -121,7 +210,7 @@ function ChangePasswordSection(): JSX.Element {
         autoComplete="current-password"
         value={oldPassword}
         type="password"
-        onChange={(event) => setOldPassword(event.target.value)}
+        onChange={(event) => touchField("oldPassword", event)}
         sx={{
           maxWidth: "20rem",
         }}
@@ -131,8 +220,10 @@ function ChangePasswordSection(): JSX.Element {
         label="Nuova password"
         autoComplete="new-password"
         value={newPassword}
+        error={showError.newPassword}
+        helperText={showError.newPassword ? error.newPassword : undefined}
         type="password"
-        onChange={(event) => setNewPassword(event.target.value)}
+        onChange={(event) => touchField("newPassword", event)}
         sx={{
           maxWidth: "20rem",
         }}
@@ -142,14 +233,16 @@ function ChangePasswordSection(): JSX.Element {
         label="Conferma nuova password"
         autoComplete="new-password"
         value={confirmNewPassword}
+        error={showError.confirmNewPassword}
+        helperText={showError.confirmNewPassword ? error.confirmNewPassword : undefined}
         type="password"
-        onChange={(event) => setConfirmNewPassword(event.target.value)}
+        onChange={(event) => touchField("confirmNewPassword", event)}
         sx={{
           maxWidth: "20rem",
         }}
       />
       <Stack direction="row">
-        <M3FilledButton>Aggiorna password</M3FilledButton>
+        <M3FilledButton type="submit">Aggiorna password</M3FilledButton>
       </Stack>
     </Stack>
   );
