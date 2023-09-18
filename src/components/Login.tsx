@@ -79,8 +79,8 @@ export default function Login(): JSX.Element {
                 pr: "2rem",
               }}>
               <Typography variant="headlineMedium" mb="1rem">Log-in</Typography>
-              <TextField fullWidth inputRef={usernameRef} name="username" label="Username" />
-              <TextField fullWidth inputRef={passwordRef} name="password" type="password" label="Password" />
+              <TextField fullWidth inputRef={usernameRef} name="username" label="Username" autoComplete="username" />
+              <TextField fullWidth inputRef={passwordRef} name="password" type="password" label="Password" autoComplete="current-password" />
               <Stack direction="row" width="100%" justifyContent="space-between" alignItems="center">
                 <Typography variant="labelMedium" color={theme.palette.error.main}>{authResult.isError ? "Username o password sbagliati" : null}</Typography>
                 {authResult.isLoading || currentUser.isFetching ? <CircularProgress /> : <M3FilledButton type="submit">Log-in</M3FilledButton>}
