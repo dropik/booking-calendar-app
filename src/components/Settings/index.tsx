@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -6,15 +6,20 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import TextField from "@mui/material/TextField";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import { api } from "../../api";
-import { useFloors } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector, useFloors } from "../../redux/hooks";
+import { show as showSnackbarMessage } from "../../redux/snackbarMessageSlice";
 
 import CreateFloorDialog from "./CreateFloorDialog";
 import Skeleton from "./Skeleton";
 import Floor from "./Floor";
 import M3Page from "../m3/M3Page";
 import M3DrawerAdjacent from "../m3/M3DrawerAdjacent";
+import M3FilledButton from "../m3/M3FilledButton";
+import M3Divider from "../m3/M3Divider";
 
 export default function Settings(): JSX.Element {
   const [tab, setTab] = useState(0);
@@ -50,7 +55,103 @@ export default function Settings(): JSX.Element {
 
 function UserTab(): JSX.Element {
   return (
-    <>Utente</>
+    <Stack spacing={4}>
+      <PersonalDataSection />
+      <M3Divider />
+      <ChangePasswordSection />
+    </Stack>
+  );
+}
+
+function PersonalDataSection(): JSX.Element {
+  const dispatch = useAppDispatch();
+  const originalVisibleName = useAppSelector(state => state.user.visibleName);
+  const [visibleName, setVisibleName] = useState<string>(originalVisibleName ?? "");
+  const [updateVisibleName, updateVisibleNameResult] = api.endpoints.updateVisibleName.useMutation();
+
+  function updateField(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void {
+    setVisibleName(event.target?.value ?? "");
+  }
+
+  function save(): void {
+    updateVisibleName({ visibleName: visibleName === "" ? null : visibleName });
+  }
+
+  useEffect(() => {
+    if (updateVisibleNameResult.isSuccess) {
+      dispatch(showSnackbarMessage({ type: "success", message: "Salvato correttamente!" }));
+      updateVisibleNameResult.reset();
+    }
+  }, [dispatch, updateVisibleNameResult]);
+
+  return (
+    <Stack spacing={2}>
+      <Typography variant="headlineLarge">Dati personali</Typography>
+      <Stack direction="row" alignItems="center" spacing={2}>
+        <TextField
+          id="visibleName"
+          label="Nome visualizzato"
+          autoComplete="visible-name"
+          value={visibleName}
+          onChange={updateField}
+          sx={{
+            minWidth: "20rem",
+          }}
+        />
+        {updateVisibleNameResult.isLoading
+          ? <CircularProgress />
+          : <M3FilledButton onClick={save}>Salva</M3FilledButton>}
+      </Stack>
+    </Stack>
+  );
+}
+
+function ChangePasswordSection(): JSX.Element {
+  const [oldPassword, setOldPassword] = useState<string>("");
+  const [newPassword, setNewPassword] = useState<string >("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState<string>("");
+  return (
+    <Stack spacing={2} component="form">
+      <Typography variant="headlineLarge">Password</Typography>
+      <Typography variant="bodyLarge">Qua puoi modificare la password del tuo utente</Typography>
+      <TextField id="username" autoComplete="username" type="text" sx={{ display: "none" }} />
+      <TextField
+        id="oldPassword"
+        label="Vecchia password"
+        autoComplete="current-password"
+        value={oldPassword}
+        type="password"
+        onChange={(event) => setOldPassword(event.target.value)}
+        sx={{
+          maxWidth: "20rem",
+        }}
+      />
+      <TextField
+        id="newPassword"
+        label="Nuova password"
+        autoComplete="new-password"
+        value={newPassword}
+        type="password"
+        onChange={(event) => setNewPassword(event.target.value)}
+        sx={{
+          maxWidth: "20rem",
+        }}
+      />
+      <TextField
+        id="confirmNewPassword"
+        label="Conferma nuova password"
+        autoComplete="new-password"
+        value={confirmNewPassword}
+        type="password"
+        onChange={(event) => setConfirmNewPassword(event.target.value)}
+        sx={{
+          maxWidth: "20rem",
+        }}
+      />
+      <Stack direction="row">
+        <M3FilledButton>Aggiorna password</M3FilledButton>
+      </Stack>
+    </Stack>
   );
 }
 
@@ -102,6 +203,7 @@ function TabPanel({ children, index, tab, id }: TabPanelProps): JSX.Element {
         right: 0,
         bottom: 0,
         overflowY: "auto",
+        p: "1rem",
         opacity: show ? 1 : 0,
         transition: show ? theme.transitions.create(["transform", "opacity"], {
           duration: theme.transitions.duration.standard,

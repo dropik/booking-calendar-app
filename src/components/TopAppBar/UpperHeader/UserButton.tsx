@@ -9,7 +9,7 @@ import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined
 import SettingsIcon from "@mui/icons-material/Settings";
 
 import { api } from "../../../api";
-import { useAppDispatch } from "../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { logout as dispatchLogout } from "../../../redux/authSlice";
 
 import M3TextButton from "../../m3/M3TextButton";
@@ -18,7 +18,8 @@ import M3Skeleton from "../../m3/M3Skeleton";
 import M3IconButton from "../../m3/M3IconButton";
 
 export default function UserButton(): JSX.Element {
-  const { data: user, isFetching } = api.endpoints.getCurrentUser.useQuery(null);
+  const { isFetching } = api.endpoints.getCurrentUser.useQuery(null);
+  const user = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);

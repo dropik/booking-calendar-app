@@ -130,6 +130,15 @@ export type CurrentUser = {
   floors: Floor[],
 };
 
+export type UpdateVisibleNameRequest = {
+  visibleName: string | null,
+};
+
+export type UpdatePasswordRequest = {
+  oldPassword: string,
+  newPassword: string,
+};
+
 export type TokenRequest = {
   username: string,
   password: string,
@@ -231,6 +240,22 @@ export const api = createApi({
 
     getCurrentUser: builder.query<CurrentUser, null>({
       query: () => "users/current",
+    }),
+
+    updateVisibleName: builder.mutation<null, UpdateVisibleNameRequest>({
+      query: (request) => ({
+        url: "users/current/visible-name",
+        method: "PATCH",
+        body: request,
+      }),
+    }),
+
+    updatePassword: builder.mutation<null, UpdatePasswordRequest>({
+      query: (request) => ({
+        url: "users/current/password",
+        method: "PATCH",
+        body: request,
+      }),
     }),
 
     // floors
