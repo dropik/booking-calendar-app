@@ -19,7 +19,6 @@ export default function CreateFloorDialog(): JSX.Element {
   const [creatingState, setCreatingState] = useState<"idle" | "creating">("idle");
   const [name, setName] = useState("");
   const [validated, setValidated] = useState(true);
-  const isUserDataLoaded = api.endpoints.getCurrentUser.useQueryState(null).isSuccess;
   const [postFloor, postFloorResult] = api.endpoints.postFloor.useMutation();
 
   const openDialog = creatingState !== "idle";
@@ -45,22 +44,22 @@ export default function CreateFloorDialog(): JSX.Element {
 
   return (
     <>
-      {isUserDataLoaded ? (<M3Fab onClick={() => setCreatingState("creating")} sx={{
+      <M3Fab onClick={() => setCreatingState("creating")} sx={{
         position: "fixed",
-        right: 0,
-        bottom: 0,
+        right: "2rem",
+        bottom: "2rem",
         width: "auto",
         minWidth: "5rem"
       }}>
         <Stack direction="row" spacing={1.5} alignItems="center" sx={{ p: "1rem" }}>
           <AddOutlinedIcon />
-          <Typography variant="labelLarge">Crea</Typography>
+          <Typography variant="labelLarge">Crea piano</Typography>
         </Stack>
         <M3SurfaceTint sx={{
           backgroundColor: theme.palette.primary.light,
           opacity: theme.opacities.surface3
         }} />
-      </M3Fab>) : null}
+      </M3Fab>
       <M3Dialog open={openDialog} onClose={closeDialog} heightRem={18.25}>
         <Stack spacing={3} sx={{ p: "1.5rem" }}>
           <Stack spacing={2} alignItems="center">

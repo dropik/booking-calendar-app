@@ -255,13 +255,10 @@ function StructureTab(): JSX.Element {
 
   return (
     <>
-      <Stack spacing={2} sx={{ pr: "1rem", pb: "1rem" }}>
-        <Typography variant="displayLarge" sx={{ pt: "4rem", pl: "1rem" }}>Piani</Typography>
-        <Stack spacing={3}>
-          {isUserDataLoaded ?
-            floorIds.map((floorId) => <Floor key={floorId} id={floorId} floor={floors[floorId]} />) :
-            <Skeleton />}
-        </Stack>
+      <Stack spacing={3} sx={{ maxWidth: "60rem" }}>
+        {isUserDataLoaded ?
+          floorIds.map((floorId) => <Floor key={floorId} id={floorId} floor={floors[floorId]} />) :
+          <Skeleton />}
       </Stack>
       <CreateFloorDialog />
     </>
