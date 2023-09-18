@@ -6,7 +6,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 import { api } from "../../../api";
 import { useAppDispatch } from "../../../redux/hooks";
@@ -78,7 +78,7 @@ export default function UserButton(): JSX.Element {
         </Stack>
         <Stack direction="row" justifyContent="space-between" sx={{ width: "100%" }}>
           <M3IconButton onClick={openSettings}>
-            <SettingsOutlinedIcon />
+            <SettingsIcon />
           </M3IconButton>
           <M3TextButton onClick={logout} startIcon={<LogoutOutlinedIcon />}>Logout</M3TextButton>
         </Stack>
