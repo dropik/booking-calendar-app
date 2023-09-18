@@ -149,6 +149,30 @@ export type TokenResponse = {
   refreshToken: string,
 };
 
+export type APIKeysResponse = {
+  iperbookingHotel: string,
+  iperbookingUsername: string,
+  iperbookingPassword: string,
+  asUtente: string,
+  asPassword: string,
+  asWsKey: string,
+  c59Username: string,
+  c59Password: string,
+  c59Struttura: number,
+};
+
+export type UpdateAPIKeysRequest = {
+  iperbookingHotel: string,
+  iperbookingUsername: string,
+  iperbookingPassword: string,
+  asUtente: string,
+  asPassword: string,
+  asWsKey: string,
+  c59Username: string,
+  c59Password: string,
+  c59Struttura: number,
+}
+
 const mutex = new Mutex();
 
 const baseQuery = fetchBaseQuery({
@@ -224,6 +248,7 @@ const customFetchBase: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryEr
 export const api = createApi({
   reducerPath: "api",
   baseQuery: customFetchBase,
+  tagTypes: ["StructureApiKeys"],
   endpoints: (builder) => ({
 
     // auth
@@ -236,7 +261,7 @@ export const api = createApi({
       }),
     }),
 
-    // user
+    // users
 
     getCurrentUser: builder.query<CurrentUser, null>({
       query: () => "users/current",
@@ -256,6 +281,22 @@ export const api = createApi({
         method: "PATCH",
         body: request,
       }),
+    }),
+
+    // structures
+
+    getStructureApiKeys: builder.query<APIKeysResponse, null>({
+      query: () => "structures/current/api-keys",
+      providesTags: ["StructureApiKeys"],
+    }),
+
+    updateApiKeys: builder.mutation<null, UpdateAPIKeysRequest>({
+      query: (request) => ({
+        url: "structures/current/api-keys",
+        method: "PATCH",
+        body: request,
+      }),
+      invalidatesTags: ["StructureApiKeys"],
     }),
 
     // floors
