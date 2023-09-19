@@ -22,7 +22,7 @@ export default function BookingDetails(): JSX.Element {
   const skeletonRooms = [0, 1];
 
   const periodStr = (isLoaded && !isFetching) ?
-    `${(new Date(booking.from)).toLocaleDateString()} - ${(new Date(booking.to)).toLocaleDateString()}` :
+    `${(new Date(booking.from)).toLocaleDateString("it")} - ${(new Date(booking.to)).toLocaleDateString("it")}` :
     undefined;
 
   return (

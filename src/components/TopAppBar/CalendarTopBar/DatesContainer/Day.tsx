@@ -9,7 +9,7 @@ type Props = {
 export default memo(function Day({ x }: Props): JSX.Element {
   const date = new Date(x);
   const day = date.getDate();
-  let dayOfWeek = date.toLocaleDateString("default", { weekday: "short" });
+  let dayOfWeek = date.toLocaleDateString("it", { weekday: "short" });
   dayOfWeek = `${dayOfWeek[0].toLocaleUpperCase()}${dayOfWeek.substring(1)}`;
 
   return (

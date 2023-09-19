@@ -9,8 +9,8 @@ import { Utils } from "../../../utils";
 export default function ShortInfo(): JSX.Element {
   const booking = useContext(BookingContext);
 
-  const formattedFrom = (new Date(booking.from)).toLocaleDateString();
-  const formattedTo = (new Date(booking.to)).toLocaleDateString();
+  const formattedFrom = (new Date(booking.from)).toLocaleDateString("it");
+  const formattedTo = (new Date(booking.to)).toLocaleDateString("it");
 
   return (
     <Stack sx={{

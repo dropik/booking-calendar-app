@@ -19,7 +19,7 @@ export default function Details({ client }: DetailsProps): JSX.Element {
   const dispatch = useAppDispatch();
   const theme = useTheme();
 
-  const periodStr = `${(new Date(client.bookingFrom)).toLocaleDateString()} - ${(new Date(client.bookingTo)).toLocaleDateString()}`;
+  const periodStr = `${(new Date(client.bookingFrom)).toLocaleDateString("it")} - ${(new Date(client.bookingTo)).toLocaleDateString("it")}`;
 
   return (
     <Stack spacing={2} sx={{

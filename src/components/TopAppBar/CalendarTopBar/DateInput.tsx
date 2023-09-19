@@ -26,14 +26,14 @@ export default function DateInput(): JSX.Element {
   const leftmostDateObj = new Date(leftmostDate);
   const rightmostDateObj = new Date(leftmostDate);
   rightmostDateObj.setDate(rightmostDateObj.getDate() + columns - 1);
-  let leftmostMonth = leftmostDateObj.toLocaleDateString("default", { month: "long" });
+  let leftmostMonth = leftmostDateObj.toLocaleDateString("it", { month: "long" });
   if (leftmostMonth.length > 4) {
-    leftmostMonth = leftmostDateObj.toLocaleDateString("default", { month: "short" });
+    leftmostMonth = leftmostDateObj.toLocaleDateString("it", { month: "short" });
   }
   leftmostMonth = `${leftmostMonth[0].toLocaleUpperCase()}${leftmostMonth.substring(1)}`;
-  let rightmostMonth = rightmostDateObj.toLocaleDateString("default", { month: "long" });
+  let rightmostMonth = rightmostDateObj.toLocaleDateString("it", { month: "long" });
   if (rightmostMonth.length > 4) {
-    rightmostMonth = rightmostDateObj.toLocaleDateString("default", { month: "short" });
+    rightmostMonth = rightmostDateObj.toLocaleDateString("it", { month: "short" });
   }
   rightmostMonth = `${rightmostMonth[0].toLocaleUpperCase()}${rightmostMonth.substring(1)}`;
   const leftmostYear = leftmostDateObj.getFullYear();

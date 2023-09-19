@@ -10,7 +10,7 @@ export default function BirthInfo(): JSX.Element {
   return (
     <Typography variant="bodySmall">
       {
-        `${(new Date(client.dateOfBirth)).toLocaleDateString()} -
+        `${(new Date(client.dateOfBirth)).toLocaleDateString("it")} -
         ${client.placeOfBirth ? Utils.evaluateEntitiesInString(`${client.placeOfBirth}${client.provinceOfBirth ? ` (${client.provinceOfBirth})` : ""} - `) : ""}
         ${client.stateOfBirth}`
       }

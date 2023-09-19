@@ -10,7 +10,7 @@ export default function Period(): JSX.Element {
   const { data } = useContext(TileContext);
 
   const periodStr = data ?
-    `${(new Date(data.from)).toLocaleDateString()} - ${(new Date(Utils.getDateShift(data.from, data.nights))).toLocaleDateString()}` :
+    `${(new Date(data.from)).toLocaleDateString("it")} - ${(new Date(Utils.getDateShift(data.from, data.nights))).toLocaleDateString("it")}` :
     undefined;
 
   return (

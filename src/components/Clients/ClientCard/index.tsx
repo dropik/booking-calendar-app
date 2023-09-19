@@ -32,7 +32,7 @@ export default function ClientCard({ client }: ClientCardProps): JSX.Element {
       <Stack spacing={2} sx={{ position: "relative", p: "1rem", flexGrow: 1 }}>
         <Stack>
           <Typography variant="headlineMedium">{client ? `${Utils.evaluateEntitiesInString(client.name)} ${Utils.evaluateEntitiesInString(client.surname)}` : <M3Skeleton width="10rem" />}</Typography>
-          <Typography variant="titleMedium">{client ? (new Date(client.dateOfBirth).toLocaleDateString()) : <M3Skeleton width="6rem" />}</Typography>
+          <Typography variant="titleMedium">{client ? (new Date(client.dateOfBirth).toLocaleDateString("it")) : <M3Skeleton width="6rem" />}</Typography>
         </Stack>
         <Typography variant="bodySmall">
           {client ? Utils.evaluateEntitiesInString(`${client.placeOfBirth ? `${client.placeOfBirth}${client.provinceOfBirth ? ` (${client.provinceOfBirth})` : ""} - ` : ""}${client.stateOfBirth}`) : <M3Skeleton width="9rem" />}
