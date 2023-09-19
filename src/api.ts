@@ -1,10 +1,11 @@
-import { BaseQueryFn, FetchArgs, FetchBaseQueryError, createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { BaseQueryFn, FetchArgs, FetchBaseQueryError, FetchBaseQueryMeta, createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { TileColor } from "./redux/tilesSlice";
 import { RootState } from "./redux/store";
 import { show as showSnackbarMessage } from "./redux/snackbarMessageSlice";
 import { setTokens } from "./redux/authSlice";
 import { Mutex } from "async-mutex";
+import { QueryReturnValue } from "@reduxjs/toolkit/dist/query/baseQueryTypes";
 
 export type CityTaxData = {
   standard: number,
@@ -189,60 +190,69 @@ const baseQuery = fetchBaseQuery({
 
 const customFetchBase: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => {
   await mutex.waitForUnlock();
-  let result = await baseQuery(args, api, extraOptions);
 
-  if (result.meta?.response?.ok) {
+  async function executeQuery(tryReauthenticate: boolean): Promise<QueryReturnValue<unknown, FetchBaseQueryError, FetchBaseQueryMeta>> {
+    let result = await baseQuery(args, api, extraOptions);
+
+    if (result.meta?.response?.ok) {
+      return result;
+    }
+
+    let errorMessage = "";
+    if (result.error?.status === 401) {
+      if (!tryReauthenticate) {
+        window.location.href = "/login";
+      }
+
+      if (!result.meta?.request.url.includes("auth/token")) {
+        if (!mutex.isLocked()) {
+          const release = await mutex.acquire();
+
+          try {
+            const auth = (api.getState() as RootState).auth;
+
+            const refreshResult = await baseQuery(
+              { url: "auth/refresh", method: "POST", body: auth, },
+              api,
+              extraOptions,
+            );
+
+            if (refreshResult.meta?.response?.ok && refreshResult.data) {
+              api.dispatch(setTokens(refreshResult.data as TokenResponse));
+              result = await executeQuery(false);
+            } else {
+              window.location.href = "/login";
+            }
+          } catch (error) {
+            errorMessage = "Errore di reautenticazione";
+          } finally {
+            release();
+          }
+        } else {
+          await mutex.waitForUnlock();
+          result = await baseQuery(args, api, extraOptions);
+        }
+      }
+    } else if (result.error?.status === 403) {
+      errorMessage = "Accesso negato";
+    } else if (result.error?.status === 408) {
+      errorMessage = "Errore di connessione";
+    } else {
+      if (result.error?.data && typeof(result.error?.data) === "object" && "message" in result.error.data) {
+        errorMessage = (result.error.data.message as string) ?? "Server error";
+      } else {
+        errorMessage = "Server error";
+      }
+    }
+
+    if (errorMessage && errorMessage !== "") {
+      api.dispatch(showSnackbarMessage({ type: "error", message: errorMessage }));
+    }
+
     return result;
   }
 
-  let errorMessage = "";
-  if (result.error?.status === 401) {
-    if (!result.meta?.request.url.includes("auth/token")) {
-      if (!mutex.isLocked()) {
-        const release = await mutex.acquire();
-
-        try {
-          const auth = (api.getState() as RootState).auth;
-
-          const refreshResult = await baseQuery(
-            { url: "auth/refresh", method: "POST", body: auth, },
-            api,
-            extraOptions,
-          );
-
-          if (refreshResult.meta?.response?.ok && refreshResult.data) {
-            api.dispatch(setTokens(refreshResult.data as TokenResponse));
-            result = await baseQuery(args, api, extraOptions);
-          } else {
-            window.location.href = "/login";
-          }
-        } catch (error) {
-          errorMessage = "Errore di reautenticazione";
-        } finally {
-          release();
-        }
-      } else {
-        await mutex.waitForUnlock();
-        result = await baseQuery(args, api, extraOptions);
-      }
-    }
-  } else if (result.error?.status === 403) {
-    errorMessage = "Accesso negato";
-  } else if (result.error?.status === 408) {
-    errorMessage = "Errore di connessione";
-  } else {
-    if (result.error?.data && typeof(result.error?.data) === "object" && "message" in result.error.data) {
-      errorMessage = (result.error.data.message as string) ?? "Server error";
-    } else {
-      errorMessage = "Server error";
-    }
-  }
-
-  if (errorMessage && errorMessage !== "") {
-    api.dispatch(showSnackbarMessage({ type: "error", message: errorMessage }));
-  }
-
-  return result;
+  return await executeQuery(true);
 };
 
 export const api = createApi({
