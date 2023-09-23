@@ -4,7 +4,12 @@ React based client side of booking calendar app.
 ## How to run?
 ```
 npm i
+
+// for .NET Framework backend run:
 npm start
+
+// for .NET Core backend run:
+npm start:netcore
 ```
 
 ## What is it?
