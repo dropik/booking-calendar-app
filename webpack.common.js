@@ -32,7 +32,10 @@ module.exports = (env) => {
       filename: "bundle.js",
     },
     plugins: [
-      new webpack.DefinePlugin(envKeys)
+      new webpack.DefinePlugin(envKeys),
+      new webpack.DefinePlugin({
+        "process.env.VERSION": JSON.stringify(process.env.npm_package_version),
+      }),
     ],
   };
 };

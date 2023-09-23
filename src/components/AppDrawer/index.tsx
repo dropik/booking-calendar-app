@@ -92,7 +92,7 @@ export default function AppDrawer(): JSX.Element {
           easing: theme.transitions.easing.emphasized,
         })
       }}>
-        <Typography variant="labelLarge">1.6.0</Typography>
+        <Typography variant="labelLarge">{process.env.VERSION}</Typography>
       </Box>
     </Drawer>
   );
