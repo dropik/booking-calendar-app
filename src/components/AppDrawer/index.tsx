@@ -49,7 +49,8 @@ export default function AppDrawer(): JSX.Element {
         }
       }}
     >
-      <Box>
+      <div></div>
+      <Box sx={{ mb: "10rem" }}>
         <DrawerLists open={open} lists={[
           {
             items: [
