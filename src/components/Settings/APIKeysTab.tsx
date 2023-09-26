@@ -154,7 +154,7 @@ export default function APIKeysTab(): JSX.Element {
         floating="left"
         open={openConfirmDialog}
         onClose={() => setOpenConfirmDialog(false)}
-        heightRem={Utils.pxToRem(window.outerHeight / window.devicePixelRatio) / 2 - 40}
+        heightRem={-Utils.pxToRem(window.innerHeight) + 50}
       >
         <Stack spacing={3} sx={{ p: "1.5rem", maxWidth: "30rem" }}>
           <Stack spacing={2} alignItems="center">
