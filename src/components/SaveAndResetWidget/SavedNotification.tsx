@@ -6,16 +6,14 @@ import M3Alert from "../m3/M3Alert";
 import M3Snackbar from "../m3/M3Snackbar";
 
 export default function SavedNotification(): JSX.Element {
-  const { status, setStatus } = useContext(SaveAndResetWidgetContext);
-
-  const open = status === "fulfilled";
+  const { status } = useContext(SaveAndResetWidgetContext);
 
   function resetIdle() {
-    setStatus("idle");
+    status.reset();
   }
 
   return (
-    <M3Snackbar open={open} onClose={resetIdle} autoHideDuration={1000}>
+    <M3Snackbar open={status.isSuccess} onClose={resetIdle} autoHideDuration={1000}>
       <M3Alert severity="success">Modifiche salvate!</M3Alert>
     </M3Snackbar>
   );

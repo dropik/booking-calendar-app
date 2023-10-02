@@ -1,7 +1,7 @@
 import React from "react";
 import Box, { BoxProps } from "@mui/material/Box";
 
-function Tint({ sx, ...props }: BoxProps): JSX.Element {
+function M3Tint({ sx, ...props }: BoxProps): JSX.Element {
   return (
     <Box {...props} sx={{
       position: "absolute",
@@ -16,10 +16,10 @@ function Tint({ sx, ...props }: BoxProps): JSX.Element {
   );
 }
 
-export function StateLayer(props: BoxProps): JSX.Element {
-  return (<Tint {...props} className="state-layer" />);
+export function M3StateLayer(props: BoxProps): JSX.Element {
+  return (<M3Tint {...props} className="state-layer" />);
 }
 
-export function SurfaceTint(props: BoxProps): JSX.Element {
-  return (<Tint {...props} className="surface-tint" />);
+export function M3SurfaceTint(props: BoxProps): JSX.Element {
+  return (<M3Tint {...props} className="surface-tint" />);
 }

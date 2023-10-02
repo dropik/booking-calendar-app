@@ -3,7 +3,7 @@ import React, { forwardRef } from "react";
 import { alpha, styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
-import { StateLayer } from "./Tints";
+import { M3StateLayer } from "./M3Tints";
 import Select, { SelectProps } from "@mui/material/Select";
 
 export interface M3SelectboxProps extends SelectProps<number> {
@@ -64,7 +64,7 @@ const M3Selectbox = forwardRef<HTMLInputElement, M3SelectboxProps>(function M3Se
           <Typography variant="labelLarge">
             {`${value} Giorni`}
           </Typography>
-          <StateLayer />
+          <M3StateLayer />
         </>
       )}
       {...props}

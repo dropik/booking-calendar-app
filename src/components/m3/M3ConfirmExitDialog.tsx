@@ -4,8 +4,8 @@ import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import M3Dialog from "../../m3/M3Dialog";
-import M3TextButton from "../../m3/M3TextButton";
+import M3Dialog from "./M3Dialog";
+import M3TextButton from "./M3TextButton";
 
 type ConfirmExitDialogProps = {
   open: boolean,
@@ -13,7 +13,7 @@ type ConfirmExitDialogProps = {
   onConfirm: () => void,
 }
 
-export default function ConfirmExitDialog({ open, onCancel, onConfirm }: ConfirmExitDialogProps): JSX.Element {
+export default function M3ConfirmExitDialog({ open, onCancel, onConfirm }: ConfirmExitDialogProps): JSX.Element {
   const theme = useTheme();
 
   function confirm(): void {

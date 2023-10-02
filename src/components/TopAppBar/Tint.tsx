@@ -3,14 +3,14 @@ import { useTheme } from "@mui/material/styles";
 
 import { useAppSelector } from "../../redux/hooks";
 
-import { SurfaceTint } from "../m3/Tints";
+import { M3SurfaceTint } from "../m3/M3Tints";
 
 export default function Tint(): JSX.Element {
   const theme = useTheme();
   const scrollTop = useAppSelector((state) => state.scroll.top);
 
   return (
-    <SurfaceTint sx={{
+    <M3SurfaceTint sx={{
       top: "-1000px",
       backgroundColor: theme.palette.primary.light,
       transition: `opacity ${theme.transitions.duration.standard}ms ${theme.transitions.easing.emphasized}`,

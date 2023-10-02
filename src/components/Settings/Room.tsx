@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
 import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
@@ -14,12 +14,8 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 
-import { deleteRoomAsync, putRoomAsync } from "../../api";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { setRoom, deleteRooms } from "../../redux/roomsSlice";
-import { deleteRoom } from "../../redux/floorsSlice";
-import { deleteRooms as deleteRoomsForTiles } from "../../redux/tilesSlice";
-import { show as showMessage } from "../../redux/snackbarMessageSlice";
+import { api } from "../../api";
+import { useAppSelector } from "../../redux/hooks";
 
 import M3IconButton from "../m3/M3IconButton";
 import M3FilledButton from "../m3/M3FilledButton";
@@ -34,58 +30,38 @@ type RoomProps = {
 
 export default function Room({ id, floorId }: RoomProps): JSX.Element {
   const theme = useTheme();
-  const dispatch = useAppDispatch();
   const room = useAppSelector((state) => state.rooms.data[id]);
   const [state, setState] = useState<"idle" | "edit" | "remove">("idle");
-  const [isLoading, setIsLoading] = useState(false);
   const [numberField, setNumberField] = useState(room.number);
   const [roomTypeField, setRoomTypeField] = useState(room.type);
   const roomTypes = useAppSelector((state) => Object.keys(state.roomTypes.data));
+  const [putRoom, putRoomResult] = api.endpoints.putRoom.useMutation();
+  const [deleteRoom, deleteRoomResult] = api.endpoints.deleteRoom.useMutation();
 
   const roomType = `${room.type[0].toLocaleUpperCase()}${room.type.slice(1)}`;
   const isValid = numberField !== "";
   const openRemoveDialog = state === "remove";
+  const isLoading = putRoomResult.isLoading || deleteRoomResult.isLoading;
+
+  useEffect(() => {
+    if (putRoomResult.isSuccess) {
+      setState("idle");
+      putRoomResult.reset();
+    }
+  }, [putRoomResult]);
 
   function closeRemoveDialog(): void {
     setState("idle");
   }
 
   function edit(): void {
-    async function putAsync(): Promise<void> {
-      try {
-        await putRoomAsync({ id, floorId, number: numberField, type: roomTypeField });
-        dispatch(setRoom({ id, room: { number: numberField, type: roomTypeField } }));
-        setState("idle");
-      } catch (error: any) {
-        dispatch(showMessage({ type: "error", message: error?.message }));
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
     if (isValid) {
-      setIsLoading(true);
-      putAsync();
+      putRoom({ id, floorId, number: numberField, type: roomTypeField });
     }
   }
 
   function remove(): void {
-    async function deleteAsync(): Promise<void> {
-      try {
-        await deleteRoomAsync(id);
-        dispatch(deleteRoomsForTiles([id]));
-        dispatch(deleteRoom({ floorId, roomId: id }));
-        dispatch(deleteRooms({ ids: [id] }));
-        setState("idle");
-      } catch (error: any) {
-        dispatch(showMessage({ type: "error", message: error?.message }));
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    setIsLoading(true);
-    deleteAsync();
+    deleteRoom(id);
   }
 
   return (

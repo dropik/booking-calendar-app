@@ -1,4 +1,11 @@
+import { BaseQueryFn, FetchArgs, FetchBaseQueryError, FetchBaseQueryMeta, createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+
 import { TileColor } from "./redux/tilesSlice";
+import { RootState } from "./redux/store";
+import { show as showSnackbarMessage } from "./redux/snackbarMessageSlice";
+import { setTokens } from "./redux/authSlice";
+import { Mutex } from "async-mutex";
+import { QueryReturnValue } from "@reduxjs/toolkit/dist/query/baseQueryTypes";
 
 export type CityTaxData = {
   standard: number,
@@ -95,15 +102,12 @@ export type ColorAssignments = {
 
 export type RoomAssignments = {
   [key: string]: number | null
-}
+};
 
-export type AckBookingsRequest = {
-  bookings: {
-    bookingId: string,
-    lastModified: string
-  }[],
-  sessionId: string
-}
+export type AssignmentsRequest = {
+  colors: ColorAssignments,
+  rooms: RoomAssignments,
+};
 
 export type Movement = {
   italia: boolean,
@@ -118,252 +122,313 @@ export type MovementDTO = {
   movements: Movement[],
 };
 
-export function fetchFloorsAsync(): Promise<{ data: Floor[] }> {
-  return fetchJsonDataAsync<Floor[]>("/api/v1/floors");
+export type CurrentUser = {
+  username: string,
+  visibleName?: string,
+  structure: string,
+  roomTypes: RoomType[],
+  roomRates: RoomRate[],
+  floors: Floor[],
+};
+
+export type UpdateVisibleNameRequest = {
+  visibleName: string | null,
+};
+
+export type UpdatePasswordRequest = {
+  oldPassword: string,
+  newPassword: string,
+};
+
+export type TokenRequest = {
+  username: string,
+  password: string,
+};
+
+export type TokenResponse = {
+  accessToken: string,
+  refreshToken: string,
+};
+
+export type APIKeysResponse = {
+  iperbookingHotel: string,
+  iperbookingUsername: string,
+  iperbookingPassword: string,
+  asUtente: string,
+  asPassword: string,
+  asWsKey: string,
+  c59Username: string,
+  c59Password: string,
+  c59Struttura: number,
+};
+
+export type UpdateAPIKeysRequest = {
+  iperbookingHotel: string,
+  iperbookingUsername: string,
+  iperbookingPassword: string,
+  asUtente: string,
+  asPassword: string,
+  asWsKey: string,
+  c59Username: string,
+  c59Password: string,
+  c59Struttura: number,
 }
 
-export function postFloorAsync(floor: { name: string }): Promise<{ id: number }> {
-  return postDataAsync("/api/v1/floors", floor);
-}
+const mutex = new Mutex();
 
-export function putFloorAsync(floor: Floor): Promise<void> {
-  return putDataAsync(`api/v1/floors/${floor.id}`, floor);
-}
-
-export function deleteFloorAsync(id: number): Promise<void> {
-  return deleteDataAsync(`api/v1/floors/${id}`);
-}
-
-export function postRoomAsync(room: { floorId: number, number: string, type: string }): Promise<{ id: number }> {
-  return postDataAsync("api/v1/rooms", room);
-}
-
-export function putRoomAsync(room: Room): Promise<void> {
-  return putDataAsync(`api/v1/rooms/${room.id}`, room);
-}
-
-export function deleteRoomAsync(id: number): Promise<void> {
-  return deleteDataAsync(`api/v1/rooms/${id}`);
-}
-
-export function fetchRoomRatesAsync(): Promise<{ data: RoomRatesResponse }> {
-  return fetchJsonDataAsync<RoomRatesResponse>("/api/v1/room-rates");
-}
-
-export function fetchBookingsBySessionAsync(from: string, to: string, sessionId?: string): Promise<{ data: { bookings: Booking<number>[], sessionId: string } }> {
-  return fetchJsonDataAsync<{ bookings: Booking<number>[], sessionId: string }>(`/api/v1/bookings-by-session?from=${from}&to=${to}${sessionId ? `&sessionId=${sessionId}` : ""}`);
-}
-
-export function ackBookingsAsync(request: AckBookingsRequest): Promise<void> {
-  return postDataWithoutResponseAsync("/api/v1/ack-bookings", request);
-}
-
-export function postColorAssignments(assignments: ColorAssignments): Promise<void> {
-  return postDataWithoutResponseAsync("/api/v1/color-assignments", assignments);
-}
-
-export function postRoomAssignmentsAsync(assignments: RoomAssignments): Promise<void> {
-  return postDataWithoutResponseAsync("/api/v1/room-assignments", assignments);
-}
-
-export async function fetchBookingById(bookingId: string, from: string): Promise<{ data: Booking<Client[]> }> {
-  return fetchJsonDataAsync<Booking<Client[]>>(`/api/v1/booking?id=${bookingId}&from=${from}`);
-}
-
-export async function fetchClientsByTile(bookingId: string, tileId: string): Promise<{ data: Client[] }> {
-  return fetchJsonDataAsync<Client[]>(`/api/v1/clients-by-tile?bookingId=${bookingId}&tileId=${tileId}`);
-}
-
-export async function postPoliceExportRequestAsync(date: string): Promise<void> {
-  return postDataWithoutResponseAsync("/api/v1/police", { date });
-}
-
-export async function postIstatExportRequestAsync(date: string): Promise<void> {
-  return postDataWithoutResponseAsync("/api/v1/istat", { date });
-}
-
-export async function fetchPoliceRicevutaAsync(date: string): Promise<{ data: Blob }> {
-  return fetchBlobDataAsync(`/api/v1/police/ricevuta?date=${date}`);
-}
-
-export async function fetchCityTaxAsync(from: string, to: string): Promise<{ data: CityTaxData }> {
-  return fetchJsonDataAsync<CityTaxData>(`/api/v1/city-tax?from=${from}&to=${to}`);
-}
-
-export async function fetchBookings(name: string, from: string, to: string): Promise<{ data: BookingShort[] }> {
-  return fetchJsonDataAsync<BookingShort[]>(`/api/v1/bookings-by-name?name=${name}&from=${from}&to=${to}`);
-}
-
-export async function fetchClientsByQuery(query: string, from: string, to: string): Promise<{ data: ClientWithBooking[] }> {
-  return fetchJsonDataAsync<ClientWithBooking[]>(`/api/v1/clients-by-query?query=${query}&from=${from}&to=${to}`);
-}
-
-export async function fetchIstatMovementsAsync(): Promise<{ data: MovementDTO }> {
-  return fetchJsonDataAsync<MovementDTO>("/api/v1/istat/movements");
-}
-
-export async function postIstatMovementsAsync(data: MovementDTO): Promise<void> {
-  return postDataWithoutResponseAsync("/api/v1/istat/send", data);
-}
-
-export async function fetchCountriesAsync(): Promise<{ data: string[] }> {
-  return fetchJsonDataAsync<string[]>("/api/v1/istat/countries");
-}
-
-export async function fetchProvincesAsync(): Promise<{ data: string[] }> {
-  return fetchJsonDataAsync<string[]>("/api/v1/police/provinces");
-}
-
-async function fetchJsonDataAsync<T>(query: string): Promise<{ data: T }> {
-  const response = await fetch(query);
-  if (response.status === 408) {
-    throw new Error("Errore di conessione!");
-  }
-  if (!response.ok) {
-    let message = "";
-    try {
-      const json = await response.clone().json();
-      message = json.message;
-    } catch {
-      message = await response.text();
+const baseQuery = fetchBaseQuery({
+  baseUrl: `${process.env.API_URL}/`,
+  mode: "cors",
+  prepareHeaders: (headers, { getState }) => {
+    const token = (getState() as RootState).auth.accessToken;
+    if (token !== "") {
+      headers.set("Authorization", `Bearer ${token}`);
     }
-    throw new Error(`Server error! ${message}`);
-  }
-  const data = await response.json() as T;
-  if (!data) {
-    throw new Error("Server error!");
-  }
-  return { data };
-}
+    return headers;
+  },
+});
 
-async function fetchBlobDataAsync(query: string): Promise<{ data: Blob }> {
-  const response = await fetch(query);
-  if (response.status === 408) {
-    throw new Error("Errore di conessione!");
-  }
-  if (!response.ok) {
-    let message = "";
-    try {
-      const json = await response.clone().json();
-      message = json.message;
-    } catch {
-      message = await response.text();
-    }
-    throw new Error(`Server error! ${message}`);
-  }
-  const data = await response.blob();
-  return { data };
-}
+const customFetchBase: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => {
+  await mutex.waitForUnlock();
 
-async function postDataWithoutResponseAsync<TData>(url: string, data: TData): Promise<void> {
-  const response = await fetch(url, {
-    method: "POST",
-    mode: "cors",
-    cache: "no-cache",
-    credentials: "same-origin",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    redirect: "follow",
-    referrerPolicy: "no-referrer",
-    body: JSON.stringify(data)
-  });
-  if (response.status === 408) {
-    throw new Error("Errore di conessione!");
-  }
-  if (!response.ok) {
-    let message = "";
-    try {
-      const json = await response.clone().json();
-      message = json.message;
-    } catch {
-      message = await response.text();
-    }
-    throw new Error(`Server error! ${message}`);
-  }
-}
+  async function executeQuery(tryReauthenticate: boolean): Promise<QueryReturnValue<unknown, FetchBaseQueryError, FetchBaseQueryMeta>> {
+    let result = await baseQuery(args, api, extraOptions);
 
-async function postDataAsync<TData, TResponse>(url: string, data: TData): Promise<TResponse> {
-  const response = await fetch(url, {
-    method: "POST",
-    mode: "cors",
-    cache: "no-cache",
-    credentials: "same-origin",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    redirect: "follow",
-    referrerPolicy: "no-referrer",
-    body: JSON.stringify(data)
-  });
-  if (response.status === 408) {
-    throw new Error("Errore di conessione!");
-  }
-  if (!response.ok) {
-    let message = "";
-    try {
-      const json = await response.clone().json();
-      message = json.message;
-    } catch {
-      message = await response.text();
+    if (result.meta?.response?.ok) {
+      return result;
     }
-    throw new Error(`Server error! ${message}`);
-  }
-  const responseData = await response.json() as TResponse;
-  if (!responseData) {
-    throw new Error("Server error!");
-  }
-  return responseData;
-}
 
-async function putDataAsync<T>(url: string, data: T): Promise<void> {
-  const response = await fetch(url, {
-    method: "PUT",
-    mode: "cors",
-    cache: "no-cache",
-    credentials: "same-origin",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    redirect: "follow",
-    referrerPolicy: "no-referrer",
-    body: JSON.stringify(data)
-  });
-  if (response.status === 408) {
-    throw new Error("Errore di conessione!");
-  }
-  if (!response.ok) {
-    let message = "";
-    try {
-      const json = await response.clone().json();
-      message = json.message;
-    } catch {
-      message = await response.text();
-    }
-    throw new Error(`Server error! ${message}`);
-  }
-}
+    let errorMessage = "";
+    if (result.error?.status === 401) {
+      if (!tryReauthenticate) {
+        window.location.href = "/login";
+      }
 
-async function deleteDataAsync(url: string): Promise<void> {
-  const response = await fetch(url, {
-    method: "DELETE",
-    mode: "cors",
-    cache: "no-cache",
-    credentials: "same-origin",
-    redirect: "follow",
-    referrerPolicy: "no-referrer"
-  });
-  if (response.status === 408) {
-    throw new Error("Errore di conessione!");
-  }
-  if (!response.ok) {
-    let message = "";
-    try {
-      const json = await response.clone().json();
-      message = json.message;
-    } catch {
-      message = await response.text();
+      if (!result.meta?.request.url.includes("auth/token")) {
+        if (!mutex.isLocked()) {
+          const release = await mutex.acquire();
+
+          try {
+            const auth = (api.getState() as RootState).auth;
+
+            const refreshResult = await baseQuery(
+              { url: "auth/refresh", method: "POST", body: auth, },
+              api,
+              extraOptions,
+            );
+
+            if (refreshResult.meta?.response?.ok && refreshResult.data) {
+              api.dispatch(setTokens(refreshResult.data as TokenResponse));
+              result = await executeQuery(false);
+            } else {
+              window.location.href = "/login";
+            }
+          } catch (error) {
+            errorMessage = "Errore di reautenticazione";
+          } finally {
+            release();
+          }
+        } else {
+          await mutex.waitForUnlock();
+          result = await baseQuery(args, api, extraOptions);
+        }
+      }
+    } else if (result.error?.status === 403) {
+      errorMessage = "Accesso negato";
+    } else if (result.error?.status === 408) {
+      errorMessage = "Errore di connessione";
+    } else {
+      if (result.error?.data && typeof(result.error?.data) === "object" && "message" in result.error.data) {
+        errorMessage = (result.error.data.message as string) ?? "Server error";
+      } else {
+        errorMessage = "Server error";
+      }
     }
-    throw new Error(`Server error! ${message}`);
+
+    if (errorMessage && errorMessage !== "") {
+      api.dispatch(showSnackbarMessage({ type: "error", message: errorMessage }));
+    }
+
+    return result;
   }
-}
+
+  return await executeQuery(true);
+};
+
+export const api = createApi({
+  reducerPath: "api",
+  baseQuery: customFetchBase,
+  tagTypes: ["StructureApiKeys"],
+  endpoints: (builder) => ({
+
+    // auth
+
+    postAuthToken: builder.mutation<TokenResponse, TokenRequest>({
+      query: (request: TokenRequest) => ({
+        url: "auth/token",
+        method: "POST",
+        body: request,
+      }),
+    }),
+
+    // users
+
+    getCurrentUser: builder.query<CurrentUser, null>({
+      query: () => "users/current",
+    }),
+
+    updateVisibleName: builder.mutation<null, UpdateVisibleNameRequest>({
+      query: (request) => ({
+        url: "users/current/visible-name",
+        method: "PATCH",
+        body: request,
+      }),
+    }),
+
+    updatePassword: builder.mutation<null, UpdatePasswordRequest>({
+      query: (request) => ({
+        url: "users/current/password",
+        method: "PATCH",
+        body: request,
+      }),
+    }),
+
+    // structures
+
+    getStructureApiKeys: builder.query<APIKeysResponse, null>({
+      query: () => "structures/current/api-keys",
+      providesTags: ["StructureApiKeys"],
+    }),
+
+    updateApiKeys: builder.mutation<null, UpdateAPIKeysRequest>({
+      query: (request) => ({
+        url: "structures/current/api-keys",
+        method: "PATCH",
+        body: request,
+      }),
+      invalidatesTags: ["StructureApiKeys"],
+    }),
+
+    // floors
+
+    postFloor: builder.mutation<Floor, { name: string }>({
+      query: (request) => ({
+        url: "floors",
+        method: "POST",
+        body: request,
+      }),
+    }),
+
+    putFloor: builder.mutation<Floor, Floor>({
+      query: (request) => ({
+        url: `floors/${request.id}`,
+        method: "PUT",
+        body: request,
+      }),
+    }),
+
+    deleteFloor: builder.mutation<null, number>({
+      query: (id) => ({
+        url: `floors/${id}`,
+        method: "DELETE",
+      }),
+    }),
+
+    // rooms
+
+    postRoom: builder.mutation<Room, { floorId: number, number: string, type: string }>({
+      query: (request) => ({
+        url: "rooms",
+        method: "POST",
+        body: request,
+      }),
+    }),
+
+    putRoom: builder.mutation<Room, Room>({
+      query: (request) => ({
+        url: `rooms/${request.id}`,
+        method: "PUT",
+        body: request,
+      }),
+    }),
+
+    deleteRoom: builder.mutation<null, number>({
+      query: (id) => ({
+        url: `rooms/${id}`,
+        method: "DELETE",
+      }),
+    }),
+
+    // bookings
+
+    getBookings: builder.query<Booking<number>[], { from: string, to: string}>({
+      query: ({ from, to }) => `bookings?from=${from}&to=${to}`,
+    }),
+
+    getBookingsByName: builder.query<BookingShort[], { name: string, from: string, to: string }>({
+      query: ({ name, from, to }) => `bookings/by-name?name=${name}&from=${from}&to=${to}`,
+    }),
+
+    getBooking: builder.query<Booking<Client[]>, { bookingId: string, from: string }>({
+      query: ({ bookingId, from }) => `bookings/${bookingId}?from=${from}`,
+    }),
+
+    // assignments
+
+    postAssignments: builder.mutation<null, AssignmentsRequest>({
+      query: (request) => ({
+        url: "assignments",
+        method: "POST",
+        body: request,
+      }),
+    }),
+
+    // clients
+
+    getClientsByTile: builder.query<Client[], { bookingId: string, tileId: string }>({
+      query: ({ bookingId, tileId }) => `clients/by-tile?bookingId=${bookingId}&tileId=${tileId}`,
+    }),
+
+    getClientsByQuery: builder.query<ClientWithBooking[], { query: string, from: string, to: string }>({
+      query: ({ query, from, to }) => `clients/by-query?query=${query}&from=${from}&to=${to}`,
+    }),
+
+    // police
+
+    postPoliceRicevuta: builder.mutation<null, { date: string }>({
+      query: (request) => ({
+        url: "police",
+        method: "POST",
+        body: request,
+      }),
+    }),
+
+    getProvinces: builder.query<string[], null>({
+      query: () => "police/provinces",
+    }),
+
+    // city tax
+
+    getCityTax: builder.query<CityTaxData, { from: string, to: string }>({
+      query: ({ from, to }) => `city-tax?from=${from}&to=${to}`,
+    }),
+
+    // istat
+
+    postIstat: builder.mutation<null, MovementDTO>({
+      query: (request) => ({
+        url: "istat/movements",
+        method: "POST",
+        body: request,
+      }),
+    }),
+
+    getIstatMovements: builder.query<MovementDTO, null>({
+      query: () => "istat/movements",
+    }),
+
+    getCountries: builder.query<string[], null>({
+      query: () => "istat/countries",
+    }),
+  }),
+});

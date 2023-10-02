@@ -3,7 +3,7 @@ import React, { forwardRef } from "react";
 import { styled } from "@mui/material/styles";
 import Card, { CardProps } from "@mui/material/Card";
 
-import { StateLayer, SurfaceTint } from "./Tints";
+import { M3StateLayer, M3SurfaceTint } from "./M3Tints";
 
 interface M3CardProps extends CardProps {
   borderRadius?: string
@@ -58,9 +58,9 @@ const CustomizedCard = styled(Card, {
 const M3Card = forwardRef<HTMLDivElement, M3CardProps>(function M3Card({children, ...props }, ref): JSX.Element {
   return (
     <CustomizedCard {...props} ref={ref}>
-      <StateLayer />
+      <M3StateLayer />
       {children}
-      <SurfaceTint />
+      <M3SurfaceTint />
     </CustomizedCard>
   );
 });

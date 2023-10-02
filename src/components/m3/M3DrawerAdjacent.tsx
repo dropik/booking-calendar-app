@@ -5,7 +5,7 @@ import Box, { BoxProps } from "@mui/material/Box";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import * as LayoutSlice from "../../redux/layoutSlice";
 
-export default function DrawerAdjacent({ children, sx, ...props }: BoxProps): JSX.Element {
+export default function M3DrawerAdjacent({ children, sx, ...props }: BoxProps): JSX.Element {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const open = useAppSelector((state) => state.drawer.open);

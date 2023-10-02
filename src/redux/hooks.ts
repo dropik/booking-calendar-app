@@ -23,6 +23,19 @@ export function useDates(useOneDayBefore = false): string[] {
   return dates;
 }
 
+export function useFloorRoomIds(floorId: number): number[] {
+  return useAppSelector(state => {
+    const result: number[] = [];
+    for (const roomId in state.rooms.data) {
+      const room = state.rooms.data[roomId];
+      if (room.floorId === floorId) {
+        result.push(Number.parseInt(roomId));
+      }
+    }
+    return result;
+  });
+}
+
 export function useRightmostDate(): string {
   return useAppSelector((state) => Utils.getDateShift(state.table.leftmostDate, state.table.columns - 1));
 }

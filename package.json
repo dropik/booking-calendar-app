@@ -1,11 +1,13 @@
 {
   "name": "booking-calendar",
-  "version": "1.5.4",
+  "version": "1.6.0",
   "description": "Calendar view of reservations",
   "main": "dist/bundle.js",
   "scripts": {
-    "start": "npx webpack serve --host 0.0.0.0 --config webpack.dev.js",
-    "build": "npx webpack --config webpack.prod.js",
+    "start": "npx webpack serve --host 0.0.0.0 --env API_URL=https://localhost:44346/api/v1 --config webpack.dev.js",
+    "start:netcore": "npx webpack serve --host 0.0.0.0 --env API_URL=http://localhost:5077/api/v1 --config webpack.dev.js",
+    "build:dev": "npx webpack --env API_URL=https://api-dev.montipallidi.it/api/v1 --config webpack.prod.js",
+    "build": "npx webpack --env API_URL=https://api.montipallidi.it/api/v1 --config webpack.prod.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint \"{src,test}/**/*.{ts,tsx,js}\" --fix"
   },
@@ -56,6 +58,7 @@
     "@mui/material": "^5.6.1",
     "@mui/x-date-pickers": "^5.0.0-alpha.1",
     "@reduxjs/toolkit": "^1.8.1",
+    "async-mutex": "^0.4.0",
     "date-fns": "^2.29.3",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",

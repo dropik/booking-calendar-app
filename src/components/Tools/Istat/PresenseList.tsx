@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect, useMemo, memo } from "react";
+import React, { useState, useMemo, memo } from "react";
 
 import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
@@ -7,12 +6,10 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 
-import M3Fab from "../../m3/M3Fab";
-
-import { useAppDispatch } from "../../../redux/hooks";
-import { show as showSnackbarMessage } from "../../../redux/snackbarMessageSlice";
-
+import { api } from "../../../api";
 import { MovementEntry, MovementsList } from "./models";
+
+import M3Fab from "../../m3/M3Fab";
 import PresenseItem from "./PresenseItem";
 import MovementEntryDialog from "./MovementEntryDialog";
 
@@ -20,18 +17,19 @@ type PresenseListProps = {
   title: string;
   list: MovementsList;
   dialogFloating: "right" | "left",
-  fetchLocations: () => Promise<{data: string[] }>,
+  isItaly: boolean,
   onEntryAdd: (entry: MovementEntry) => void,
   onEntryEdit: (entry: MovementEntry) => void,
   onEntryDelete: (id: string) => void,
 };
 
-export default memo(function PresenseList({ title, list, dialogFloating, fetchLocations, onEntryAdd, onEntryEdit, onEntryDelete }: PresenseListProps): JSX.Element {
+export default memo(function PresenseList({ title, list, dialogFloating, isItaly, onEntryAdd, onEntryEdit, onEntryDelete }: PresenseListProps): JSX.Element {
   const theme = useTheme();
-  const dispatch = useAppDispatch();
   const [scrollTop, setScrollTop] = useState(0);
   const [editOpen, setEditOpen] = useState(false);
-  const [locations, setLocations] = useState<string[]>([]);
+  const { data: provinces } = api.endpoints.getProvinces.useQuery(null, { skip: !isItaly });
+  const { data: countries } = api.endpoints.getCountries.useQuery(null, { skip: isItaly });
+  const locations: string[] = provinces ?? countries ?? [];
   const isScrolled = scrollTop > 0;
 
   const itemsKeys = Object.keys(list);
@@ -52,27 +50,6 @@ export default memo(function PresenseList({ title, list, dialogFloating, fetchLo
   function openEdit(): void {
     setEditOpen(true);
   }
-
-  useEffect(() => {
-    let isSubscribed = true;
-
-    async function downloadData(): Promise<void> {
-      try {
-        const { data } = await fetchLocations();
-        if (isSubscribed && data) {
-          setLocations(data);
-        }
-      } catch (error: any) {
-        dispatch(showSnackbarMessage({ type: "error", message: error?.message }));
-      }
-    }
-
-    downloadData();
-
-    return () => {
-      isSubscribed = false;
-    };
-  }, [dispatch, fetchLocations]);
 
   const items = useMemo(() => itemsKeys.map((key) => {
     const item = list[key];

@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+
 import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
@@ -7,23 +7,19 @@ import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 
-import { postFloorAsync } from "../../api";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { createFloor } from "../../redux/floorsSlice";
-import { show as showMessage } from "../../redux/snackbarMessageSlice";
+import { api } from "../../api";
 
 import M3TextButton from "../m3/M3TextButton";
 import M3Fab from "../m3/M3Fab";
-import { SurfaceTint } from "../m3/Tints";
+import { M3SurfaceTint } from "../m3/M3Tints";
 import M3Dialog from "../m3/M3Dialog";
 
 export default function CreateFloorDialog(): JSX.Element {
   const theme = useTheme();
-  const dispatch = useAppDispatch();
-  const [creatingState, setCreatingState] = useState<"idle" | "creating" | "loading">("idle");
+  const [creatingState, setCreatingState] = useState<"idle" | "creating">("idle");
   const [name, setName] = useState("");
   const [validated, setValidated] = useState(true);
-  const floorsReady = useAppSelector((state) => state.floors.status === "idle");
+  const [postFloor, postFloorResult] = api.endpoints.postFloor.useMutation();
 
   const openDialog = creatingState !== "idle";
 
@@ -31,21 +27,16 @@ export default function CreateFloorDialog(): JSX.Element {
     setCreatingState("idle");
   }
 
-  function create(): void {
-    async function postAsync(): Promise<void> {
-      try {
-        const response = await postFloorAsync({ name });
-        dispatch(createFloor({ id: response.id, name }));
-      } catch (error: any) {
-        dispatch(showMessage({ type: "error", message: error?.message }));
-      } finally {
-        setCreatingState("idle");
-      }
+  useEffect(() => {
+    if (postFloorResult.isSuccess) {
+      setCreatingState("idle");
+      postFloorResult.reset();
     }
+  }, [postFloorResult]);
 
+  function create(): void {
     if (name !== "" && validated) {
-      setCreatingState("loading");
-      postAsync();
+      postFloor({ name });
     } else {
       setValidated(false);
     }
@@ -53,22 +44,22 @@ export default function CreateFloorDialog(): JSX.Element {
 
   return (
     <>
-      {floorsReady ? (<M3Fab onClick={() => setCreatingState("creating")} sx={{
+      <M3Fab onClick={() => setCreatingState("creating")} sx={{
         position: "fixed",
-        right: 0,
-        bottom: 0,
+        right: "2rem",
+        bottom: "2rem",
         width: "auto",
         minWidth: "5rem"
       }}>
         <Stack direction="row" spacing={1.5} alignItems="center" sx={{ p: "1rem" }}>
           <AddOutlinedIcon />
-          <Typography variant="labelLarge">Crea</Typography>
+          <Typography variant="labelLarge">Crea piano</Typography>
         </Stack>
-        <SurfaceTint sx={{
+        <M3SurfaceTint sx={{
           backgroundColor: theme.palette.primary.light,
           opacity: theme.opacities.surface3
         }} />
-      </M3Fab>) : null}
+      </M3Fab>
       <M3Dialog open={openDialog} onClose={closeDialog} heightRem={18.25}>
         <Stack spacing={3} sx={{ p: "1.5rem" }}>
           <Stack spacing={2} alignItems="center">
@@ -98,7 +89,7 @@ export default function CreateFloorDialog(): JSX.Element {
               sx={{ minWidth: "20rem" }} />
           </Stack>
           <Stack direction="row" spacing={1} justifyContent="flex-end">
-            {creatingState === "loading" ?
+            {postFloorResult.isLoading ?
               <CircularProgress /> :
               (<>
                 <M3TextButton onClick={closeDialog}>Cancella</M3TextButton>

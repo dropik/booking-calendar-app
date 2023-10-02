@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+
 import { useTheme } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
@@ -16,16 +16,14 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 
-import { deleteFloorAsync, Floor as FloorDTO, postRoomAsync, putFloorAsync } from "../../api";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { editFloor, deleteFloor, createRoom, Floor as FloorData } from "../../redux/floorsSlice";
+import { api } from "../../api";
+import { useAppDispatch, useAppSelector, useFloorRoomIds } from "../../redux/hooks";
+import { Floor as FloorData } from "../../redux/floorsSlice";
 import { show as showMessage } from "../../redux/snackbarMessageSlice";
-import { deleteRooms as deleteRoomsForTiles, createRoom as createRoomForTiles } from "../../redux/tilesSlice";
-import { setRoom, deleteRooms } from "../../redux/roomsSlice";
 
 import M3FilledButton from "../m3/M3FilledButton";
 import M3IconButton from "../m3/M3IconButton";
-import { SurfaceTint } from "../m3/Tints";
+import { M3SurfaceTint } from "../m3/M3Tints";
 import Room from "./Room";
 import M3Dialog from "../m3/M3Dialog";
 import M3TextButton from "../m3/M3TextButton";
@@ -40,18 +38,43 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const [state, setState] = useState<"idle" | "edit" | "remove" | "createRoom">("idle");
-  const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState(floor.name);
   const tilesHaveChanges = useAppSelector((state) => Object.keys(state.tiles.roomChanges).length > 0);
   const roomTypes = useAppSelector((state) => Object.keys(state.roomTypes.data));
+  const roomIds = useFloorRoomIds(id);
   const [roomNumber, setRoomNumber] = useState("");
   const [isRoomNumberValid, setIsRoomNumberValid] = useState(true);
   const [roomType, setRoomType] = useState("");
   const [isRoomTypeValid, setIsRoomTypeValid] = useState(true);
+  const [putFloor, putFloorResult] = api.endpoints.putFloor.useMutation();
+  const [deleteFloor, deleteFloorResult] = api.endpoints.deleteFloor.useMutation();
+  const [postRoom, postRoomResult] = api.endpoints.postRoom.useMutation();
 
   const floorName = `${floor.name[0].toLocaleUpperCase()}${floor.name.slice(1)}`;
   const validated = name !== "";
   const openRemoveDialog = state === "remove";
+  const isLoading = putFloorResult.isLoading || deleteFloorResult.isLoading || postRoomResult.isLoading;
+
+  useEffect(() => {
+    if (putFloorResult.isSuccess) {
+      setState("idle");
+      putFloorResult.reset();
+    }
+  }, [putFloorResult]);
+
+  useEffect(() => {
+    if (deleteFloorResult.isSuccess) {
+      setState("idle");
+      deleteFloorResult.reset();
+    }
+  }, [deleteFloorResult]);
+
+  useEffect(() => {
+    if (postRoomResult.isSuccess) {
+      setState("idle");
+      postRoomResult.reset();
+    }
+  }, [postRoomResult]);
 
   function startEdit(): void {
     setState("edit");
@@ -63,63 +86,20 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
   }
 
   function edit(): void {
-    async function putAsync(): Promise<void> {
-      try {
-        const newFloor: FloorDTO = { id, name, rooms: [] };
-        await putFloorAsync(newFloor);
-        dispatch(editFloor(newFloor));
-      } catch (error: any) {
-        dispatch(showMessage({ type: "error", message: error?.message }));
-      } finally {
-        setState("idle");
-        setIsLoading(false);
-      }
-    }
-
     if (validated) {
-      setIsLoading(true);
-      putAsync();
+      putFloor({ id, name, rooms: [] });
     }
   }
 
   function remove(): void {
-    async function deleteAsync(): Promise<void> {
-      try {
-        await deleteFloorAsync(id);
-        dispatch(deleteRoomsForTiles(floor.roomIds));
-        dispatch(deleteRooms({ ids: floor.roomIds }));
-        dispatch(deleteFloor(id));
-        setState("idle");
-      } catch (error: any) {
-        dispatch(showMessage({ type: "error", message: error?.message }));
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
     if (!tilesHaveChanges) {
-      setIsLoading(true);
-      deleteAsync();
+      deleteFloor(id);
     } else {
       dispatch(showMessage({ type: "error", message: "Ci sono le modifiche nel calendario non salvate!" }));
     }
   }
 
   function addRoom(): void {
-    async function addAsync(): Promise<void> {
-      try {
-        const response = await postRoomAsync({ floorId: id, number: roomNumber, type: roomType });
-        dispatch(setRoom({ id: response.id, room: { number: roomNumber, type: roomType } }));
-        dispatch(createRoom({ floorId: id, roomId: response.id }));
-        dispatch(createRoomForTiles(response.id));
-        setState("idle");
-      } catch(error: any) {
-        dispatch(showMessage({ type: "error", message: error?.message }));
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
     let hasErrors = false;
     if (roomNumber === "") {
       setIsRoomNumberValid(false);
@@ -131,8 +111,7 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
     }
 
     if (!hasErrors) {
-      setIsLoading(true);
-      addAsync();
+      postRoom({ floorId: id, number: roomNumber, type: roomType });
     }
   }
 
@@ -254,13 +233,13 @@ export default function Floor({ id, floor }: FloorProps): JSX.Element {
             }
           </Stack>
         )}
-        <SurfaceTint sx={{
+        <M3SurfaceTint sx={{
           backgroundColor: theme.palette.primary.light,
           opacity: theme.opacities.surface1
         }} />
       </Paper>
       <Stack>
-        {floor.roomIds.map((roomId) => <Room key={roomId} id={roomId} floorId={id} />)}
+        {roomIds.map((roomId) => <Room key={roomId} id={roomId} floorId={id} />)}
       </Stack>
       <M3Dialog open={openRemoveDialog} onClose={closeRemoveDialog} heightRem={16.25}>
         <Stack spacing={3} sx={{ p: "1.5rem" }}>

@@ -4,7 +4,7 @@ import Collapse from "@mui/material/Collapse";
 import Dialog, { DialogProps } from "@mui/material/Dialog";
 import Paper from "@mui/material/Paper";
 
-import { SurfaceTint } from "./Tints";
+import { M3SurfaceTint } from "./M3Tints";
 
 type M3DialogProps = {
   heightRem: number,
@@ -44,7 +44,7 @@ export default function M3Dialog({ heightRem, children, open, transitionDuration
         >
           {children}
         </Collapse>
-        <SurfaceTint sx={{
+        <M3SurfaceTint sx={{
           backgroundColor: theme.palette.primary.light,
           opacity: theme.opacities.surface3
         }} />

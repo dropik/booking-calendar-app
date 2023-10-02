@@ -1,42 +1,28 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 
-import { useNavigate } from "react-router-dom";
-
-import { useTheme } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
-import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 
-import M3IconButton from "../../m3/M3IconButton";
 import M3FilledButton from "../../m3/M3FilledButton";
 import M3Skeleton from "../../m3/M3Skeleton";
 
 import { useAppDispatch } from "../../../redux/hooks";
 import { show as showSnackbarMessage } from "../../../redux/snackbarMessageSlice";
-import { setSurfaceDim } from "../../../redux/layoutSlice";
 
-import {
-  fetchCountriesAsync,
-  fetchIstatMovementsAsync,
-  fetchProvincesAsync,
-  postIstatMovementsAsync,
-  MovementDTO,
-} from "../../../api";
+import { api, MovementDTO } from "../../../api";
 
 import { MovementEntry, MovementsList } from "./models";
 import PresenseList from "./PresenseList";
-import ConfirmExitDialog from "./ConfirmExitDialog";
 import NegativePresenseDialog from "./NegativePresenseDialog";
+import M3Page from "../../m3/M3Page";
 
 export default function Istat(): JSX.Element {
-  const theme = useTheme();
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [movementsData, setMovementsData] = useState<MovementDTO | undefined>(undefined);
+  const { data: loadedMovements, isSuccess, isFetching } = api.endpoints.getIstatMovements.useQuery(null, { refetchOnMountOrArgChange: true });
+  const [postIstat, postIstatResult] = api.endpoints.postIstat.useMutation();
   const [italians, setItalians] = useState<MovementsList>({
     placeholder1: { id: "placeholder1" },
     placeholder2: { id: "placeholder2" },
@@ -45,16 +31,11 @@ export default function Istat(): JSX.Element {
     placeholder1: { id: "placeholder1" },
     placeholder2: { id: "placeholder2" },
   });
-  const [isSending, setIsSending] = useState(false);
-  const [isEntered, setIsEntered] = useState(false);
-  const [shouldExit, setShouldExit] = useState(false);
-  const [openConfirmExitDialog, setOpenConfirmExitDialog] = useState(false);
   const [openErrorDialog, setOpenErrorDialog] = useState(false);
 
   const italianKeys = Object.keys(italians);
   const foreignKeys = Object.keys(foreigns);
 
-  const isLoaded = italianKeys.every(key => key.search("placeholder") < 0) && foreignKeys.every(key => key.search("placeholder") < 0);
   let totalArrivals = 0;
   let totalDepartures = 0;
   for (const key of italianKeys) {
@@ -68,53 +49,9 @@ export default function Istat(): JSX.Element {
     totalDepartures += entry.departures ?? 0;
   }
   const nextTotal =
-    movementsData?.prevTotal === undefined
+    loadedMovements?.prevTotal === undefined
       ? undefined
-      : movementsData.prevTotal + totalArrivals - totalDepartures;
-
-  useEffect(() => {
-    let isSubscribed = true;
-
-    async function downloadData(): Promise<void> {
-      try {
-        const { data } = await fetchIstatMovementsAsync();
-        if (isSubscribed) {
-          setMovementsData(data);
-          const { italians: newItalians, foreigns: newForeigns } = splitMovements(data);
-          setItalians(newItalians);
-          setForeigns(newForeigns);
-        }
-      } catch (error: any) {
-        if (isSubscribed) {
-          dispatch(
-            showSnackbarMessage({ type: "error", message: error?.message })
-          );
-        }
-      }
-    }
-    if (!movementsData) {
-      downloadData();
-    }
-
-    return () => {
-      isSubscribed = false;
-    };
-  }, [dispatch, movementsData]);
-
-  useEffect(() => {
-    setIsEntered(true);
-    dispatch(setSurfaceDim(true));
-
-    return () => {
-      dispatch(setSurfaceDim(false));
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (shouldExit) {
-      navigate(-1);
-    }
-  }, [navigate, shouldExit]);
+      : loadedMovements.prevTotal + totalArrivals - totalDepartures;
 
   const addItalianEntry = useCallback((entry: MovementEntry) => {
     const copy = {...italians};
@@ -154,73 +91,74 @@ export default function Istat(): JSX.Element {
     setForeigns(copy);
   }, [foreigns]);
 
-  function sendData(): void {
-    async function sendAsync(): Promise<void> {
-      if (!movementsData) {
-        return;
-      }
-
-      const dto: MovementDTO = {
-        date: movementsData.date,
-        prevTotal: movementsData.prevTotal,
-        movements: [],
-      };
-
-      for (const key in italians) {
-        const entry = italians[key];
-        dto.movements.push({
-          italia: true,
-          targa: entry.targa ?? "",
-          arrivi: entry.arrivals ?? 0,
-          partenze: entry.departures ?? 0,
-        });
-      }
-
-      for (const key in foreigns) {
-        const entry = foreigns[key];
-        dto.movements.push({
-          italia: false,
-          targa: entry.targa ?? "",
-          arrivi: entry.arrivals ?? 0,
-          partenze: entry.departures ?? 0,
-        });
-      }
-
-      try {
-        await postIstatMovementsAsync(dto);
-        dispatch(showSnackbarMessage({ type: "success", message: "I dati sono stati mandati correttamente!" }));
-        confirmExit();
-      } catch (exception: any) {
-        dispatch(showSnackbarMessage({ type: "error", message: `Errore durante elaborazione dei dati: ${exception}`}));
-        setIsSending(false);
-      }
+  useEffect(() => {
+    if (isSuccess && !isFetching) {
+      const { italians: newItalians, foreigns: newForeigns } = splitMovements(loadedMovements);
+      setItalians(newItalians);
+      setForeigns(newForeigns);
     }
 
-    if (!isSending) {
+    return () => {
+      setItalians({
+        placeholder1: { id: "placeholder1" },
+        placeholder2: { id: "placeholder2" },
+      });
+      setForeigns({
+        placeholder1: { id: "placeholder1" },
+        placeholder2: { id: "placeholder2" },
+      });
+    };
+  }, [isSuccess, loadedMovements, isFetching]);
+
+  function sendData(): void {
+    if (!isSuccess) {
+      return;
+    }
+
+    const dto: MovementDTO = {
+      date: loadedMovements.date,
+      prevTotal: loadedMovements.prevTotal,
+      movements: [],
+    };
+
+    for (const key in italians) {
+      const entry = italians[key];
+      dto.movements.push({
+        italia: true,
+        targa: entry.targa ?? "",
+        arrivi: entry.arrivals ?? 0,
+        partenze: entry.departures ?? 0,
+      });
+    }
+
+    for (const key in foreigns) {
+      const entry = foreigns[key];
+      dto.movements.push({
+        italia: false,
+        targa: entry.targa ?? "",
+        arrivi: entry.arrivals ?? 0,
+        partenze: entry.departures ?? 0,
+      });
+    }
+
+    if (!postIstatResult.isLoading) {
       if (nextTotal !== undefined && nextTotal < 0) {
         setOpenErrorDialog(true);
       } else {
-        setIsSending(true);
-        sendAsync();
+        postIstat(dto);
       }
     }
   }
 
-  function tryExit(): void {
-    if (movementsData && checkDataWasTouched(movementsData, italians, foreigns)) {
-      setOpenConfirmExitDialog(true);
-    } else {
-      confirmExit();
+  function onBeforePageExited(): boolean {
+    if (loadedMovements && checkDataWasTouched(loadedMovements, italians, foreigns)) {
+      return false;
     }
+    return true;
   }
 
-  function closeConfirm(): void {
-    setOpenConfirmExitDialog(false);
-  }
-
-  function confirmExit(): void {
-    setIsEntered(false);
-    dispatch(setSurfaceDim(false));
+  function onPageExited(): void {
+    dispatch(showSnackbarMessage({ type: "success", message: "I dati sono stati mandati correttamente!" }));
   }
 
   const italianList = useMemo(() => (
@@ -228,7 +166,7 @@ export default function Istat(): JSX.Element {
       title="Italiani"
       list={italians}
       dialogFloating="left"
-      fetchLocations={fetchProvincesAsync}
+      isItaly={true}
       onEntryAdd={addItalianEntry}
       onEntryEdit={editItalianEntry}
       onEntryDelete={deleteItalianEntry}
@@ -240,7 +178,7 @@ export default function Istat(): JSX.Element {
       title="Stranieri"
       list={foreigns}
       dialogFloating="right"
-      fetchLocations={fetchCountriesAsync}
+      isItaly={false}
       onEntryAdd={addForeignEntry}
       onEntryEdit={editForeignEntry}
       onEntryDelete={deleteForeignEntry}
@@ -248,91 +186,65 @@ export default function Istat(): JSX.Element {
   ), [addForeignEntry, deleteForeignEntry, editForeignEntry, foreigns]);
 
   return (
-    <>
+    <M3Page
+      topBarElement={(isEntered) =>
+        !isFetching ? (
+          postIstatResult.isLoading ? (
+            <CircularProgress />
+          ) : (
+            <>
+              {isEntered ? (
+                <M3FilledButton onClick={sendData} startIcon={<CheckOutlinedIcon />}>
+                Accetta
+                </M3FilledButton>
+              ) : null}
+              <NegativePresenseDialog open={openErrorDialog} onClose={() => setOpenErrorDialog(false)} />
+            </>
+          )) : <></>
+      }
+      exit={postIstatResult.isSuccess}
+      onExited={onPageExited}
+      onBeforeExit={onBeforePageExited}
+    >
       <Stack
-        direction="column"
-        spacing={2}
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        py="1rem"
+      >
+        <Typography variant="displaySmall">ISTAT</Typography>
+        <Stack direction="column" alignItems="flex-end">
+          <Typography variant="titleLarge">{(isFetching || !isSuccess) ? <M3Skeleton width="8rem" /> : loadedMovements.date}</Typography>
+          <Typography variant="titleMedium">
+            {(isFetching || !isSuccess) ? <M3Skeleton width="12rem" /> : `${loadedMovements.prevTotal} presenze precedenti`}
+          </Typography>
+          <Typography variant="titleMedium">
+            {(isFetching || !isSuccess) ? <M3Skeleton width="12rem" /> : `${nextTotal} presenze attuali`}
+          </Typography>
+        </Stack>
+      </Stack>
+      <Box
         sx={{
-          width: "100%",
-          height: "100vh",
-          backgroundColor: theme.palette.surfaceContainer.main,
-          borderRadius: "24px 0px 0px 24px",
-          p: "1rem",
-          boxSizing: "border-box",
-          transition: theme.transitions.create(["transform", "opacity"], {
-            duration: isEntered ? theme.transitions.duration.short : theme.transitions.duration.shortest,
-            easing: isEntered
-              ? theme.transitions.easing.emphasized
-              : theme.transitions.easing.emphasizedAccelerate,
-          }),
-          transform: isEntered ? "none" : "translateX(50px)",
-          opacity: isEntered ? 1 : 0,
-        }}
-        onTransitionEnd={() => {
-          if (!isEntered) {
-            setShouldExit(true);
-          }
+          position: "relative",
+          flex: 1,
         }}
       >
-        <Stack direction="row" justifyContent="space-between">
-          <M3IconButton onClick={tryExit}>
-            <ArrowBackOutlinedIcon />
-          </M3IconButton>
-          <ConfirmExitDialog open={openConfirmExitDialog} onCancel={closeConfirm} onConfirm={confirmExit} />
-          {isLoaded ? (
-            isSending ? (
-              <CircularProgress />
-            ) : (
-              <>
-                {isEntered ? (
-                  <M3FilledButton onClick={sendData} startIcon={<CheckOutlinedIcon />}>
-                    Accetta
-                  </M3FilledButton>
-                ) : null}
-                <NegativePresenseDialog open={openErrorDialog} onClose={() => setOpenErrorDialog(false)} />
-              </>
-            )) : <></>}
-        </Stack>
         <Stack
           direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-          py="1rem"
-        >
-          <Typography variant="displaySmall">ISTAT</Typography>
-          <Stack direction="column" alignItems="flex-end">
-            <Typography variant="titleLarge">{!movementsData ? <M3Skeleton width="8rem" /> : movementsData.date}</Typography>
-            <Typography variant="titleMedium">
-              {!movementsData ? <M3Skeleton width="12rem" /> : `${movementsData.prevTotal} presenze precedenti`}
-            </Typography>
-            <Typography variant="titleMedium">
-              {!movementsData ? <M3Skeleton width="12rem" /> : `${nextTotal} presenze attuali`}
-            </Typography>
-          </Stack>
-        </Stack>
-        <Box
+          spacing={2}
           sx={{
-            position: "relative",
-            flex: 1,
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
           }}
         >
-          <Stack
-            direction="row"
-            spacing={2}
-            sx={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-            }}
-          >
-            {italianList}
-            {foreignList}
-          </Stack>
-        </Box>
-      </Stack>
-    </>
+          {italianList}
+          {foreignList}
+        </Stack>
+      </Box>
+    </M3Page>
   );
 }
 
@@ -373,6 +285,10 @@ function checkDataWasTouched(originalDTO: MovementDTO, italians: MovementsList, 
 function checkListWasTouched(original: MovementsList, current: MovementsList): boolean {
   const originalKeys = Object.keys(original);
   const currentKeys = Object.keys(current);
+
+  if (currentKeys.every(k => k.indexOf("placeholder") >= 0)) {
+    return false;
+  }
 
   if (originalKeys.length !== currentKeys.length) {
     return true;

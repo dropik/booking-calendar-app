@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { grab, drop, TileData } from "../../redux/tilesSlice";
 import { TileContext } from "./context";
-import { SurfaceTint } from "../m3/Tints";
+import { M3SurfaceTint } from "../m3/M3Tints";
 
 type DraggableProps = {
   children: React.ReactNode
@@ -132,7 +132,7 @@ function DraggableWrappee({ children, data }: DraggableWrappeeProps): JSX.Elemen
     }}>
       {startedGrabbing ? <ScrollLeftChangeListener onScrollLeftChange={setScrollLeft} /> : null}
       { children }
-      <SurfaceTint sx={{
+      <M3SurfaceTint sx={{
         backgroundColor: theme.palette.primary.light,
         opacity: 0,
         transition: theme.transitions.create(["opacity"], {

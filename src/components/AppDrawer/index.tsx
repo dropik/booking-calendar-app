@@ -2,11 +2,11 @@ import React from "react";
 import { useTheme } from "@mui/material/styles";
 import Drawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
 import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
-import SettingsIcon from "@mui/icons-material/Settings";
 
 import { useAppSelector } from "../../redux/hooks";
 
@@ -29,6 +29,8 @@ export default function AppDrawer(): JSX.Element {
         sx: {
           top: "10.5rem",
           width: "5rem",
+          justifyContent: "space-between",
+          height: "calc(100vh - 12rem)",
           boxSizing: "border-box",
           backgroundColor: "transparent",
           border: "none",
@@ -36,6 +38,7 @@ export default function AppDrawer(): JSX.Element {
           borderBottomRightRadius: "1rem",
           paddingLeft: "0.75rem",
           paddingRight: "0.75rem",
+          overflow: "hidden",
           transition: theme.transitions.create(["width"], {
             easing: theme.transitions.easing.emphasized,
             duration: theme.transitions.duration.long2,
@@ -46,43 +49,51 @@ export default function AppDrawer(): JSX.Element {
         }
       }}
     >
-      <Box>
+      <div></div>
+      <Box sx={{ mb: "10rem" }}>
         <DrawerLists open={open} lists={[
           {
             items: [
               {
                 text: "Calendario",
-                link: "/",
+                link: "/app/table",
                 end: true,
                 icon: <CalendarMonthOutlinedIcon />
               },
               {
                 text: "Trova prenotazione",
-                link: "/bookings",
+                link: "/app/bookings",
                 end: false,
                 icon: <BookmarkBorderOutlinedIcon />
               },
               {
                 text: "Strumenti",
-                link: "/tools",
+                link: "/app/tools",
                 end: false,
                 icon: <CreateOutlinedIcon />
               },
               {
                 text: "Trova cliente",
-                link: "/clients",
+                link: "/app/clients",
                 end: true,
                 icon: <PersonOutlineOutlinedIcon />
               },
-              {
-                text: "Impostazioni",
-                link: "/settings",
-                end: true,
-                icon: <SettingsIcon />
-              }
             ]
           }
         ]} />
+      </Box>
+      <Box sx={{
+        pl: "1rem",
+        width: "100%",
+        boxSizing: "border-box",
+        opacity: open ? 1 : 0,
+        transform: open ? "none" : "translateY(10px)",
+        transition: theme.transitions.create(["opacity", "transform"], {
+          duration: theme.transitions.duration.long2,
+          easing: theme.transitions.easing.emphasized,
+        })
+      }}>
+        <Typography variant="labelLarge">{process.env.VERSION}</Typography>
       </Box>
     </Drawer>
   );

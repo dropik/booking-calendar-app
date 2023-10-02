@@ -10,7 +10,7 @@ import BoardIcon from "./BoardIcon";
 export default function Board(): JSX.Element {
   const theme = useTheme();
   const { data } = useContext(TileContext);
-  const baseBoard: string = useAppSelector(state => data === undefined ? "" : state.roomRates.data[data.rateId].baseBoard ?? "");
+  const baseBoard: string = useAppSelector(state => data === undefined ? "" : state.roomRates.data[data.rateId]?.baseBoard ?? "");
 
   return (
     <Typography variant="bodySmall">

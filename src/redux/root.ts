@@ -1,5 +1,6 @@
 import { combineReducers } from "@reduxjs/toolkit";
 
+import { api } from "../api";
 import table from "./tableSlice";
 import floors from "./floorsSlice";
 import rooms from "./roomsSlice";
@@ -12,9 +13,12 @@ import snackbarMessage from "./snackbarMessageSlice";
 import layout from "./layoutSlice";
 import bookingsForm from "./bookingsFormSlice";
 import roomRates from "./roomRatesSlice";
+import auth from "./authSlice";
+import user from "./userSlice";
 
 export default combineReducers(
   {
+    [api.reducerPath]: api.reducer,
     table,
     floors,
     rooms,
@@ -27,5 +31,7 @@ export default combineReducers(
     layout,
     bookingsForm,
     roomRates,
+    auth,
+    user,
   }
 );

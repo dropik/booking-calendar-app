@@ -27,7 +27,7 @@ export default function ShowBookingButton({ show }: ShowBookingButtonProps): JSX
   return (
     <Stack direction="row" justifyContent="end">
       {show && data ? (
-        <Link to={`/bookings/${data.from}/${data.bookingId}`} style={{ textDecoration: "none" }}>
+        <Link to={`/app/bookings/${data.from}/${data.bookingId}`} style={{ textDecoration: "none" }}>
           <M3TextButton onClick={() => {
             dispatch(setBookingsFormFrom(data.from));
             dispatch(setBookingsFormTo(Utils.getDateShift(data.from, data.nights)));

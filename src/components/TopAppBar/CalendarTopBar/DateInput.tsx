@@ -7,14 +7,14 @@ import MenuItem from "@mui/material/MenuItem";
 import ChevronLeftOutlined from "@mui/icons-material/ChevronLeftOutlined";
 import ChevronRightOutlined from "@mui/icons-material/ChevronRightOutlined";
 
-import M3TextButton from "../../../m3/M3TextButton";
-import M3IconButton from "../../../m3/M3IconButton";
-import M3DatePicker from "../../../m3/M3DatePicker";
-import M3Selectbox from "../../../m3/M3Selectbox";
+import M3TextButton from "../../m3/M3TextButton";
+import M3IconButton from "../../m3/M3IconButton";
+import M3DatePicker from "../../m3/M3DatePicker";
+import M3Selectbox from "../../m3/M3Selectbox";
 
-import { Utils } from "../../../../utils";
-import { useAppDispatch, useColumns, useLeftmostDate } from "../../../../redux/hooks";
-import * as TableSlice from "../../../../redux/tableSlice";
+import { Utils } from "../../../utils";
+import { useAppDispatch, useColumns, useLeftmostDate } from "../../../redux/hooks";
+import * as TableSlice from "../../../redux/tableSlice";
 
 export default function DateInput(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -26,14 +26,14 @@ export default function DateInput(): JSX.Element {
   const leftmostDateObj = new Date(leftmostDate);
   const rightmostDateObj = new Date(leftmostDate);
   rightmostDateObj.setDate(rightmostDateObj.getDate() + columns - 1);
-  let leftmostMonth = leftmostDateObj.toLocaleDateString("default", { month: "long" });
+  let leftmostMonth = leftmostDateObj.toLocaleDateString("it", { month: "long" });
   if (leftmostMonth.length > 4) {
-    leftmostMonth = leftmostDateObj.toLocaleDateString("default", { month: "short" });
+    leftmostMonth = leftmostDateObj.toLocaleDateString("it", { month: "short" });
   }
   leftmostMonth = `${leftmostMonth[0].toLocaleUpperCase()}${leftmostMonth.substring(1)}`;
-  let rightmostMonth = rightmostDateObj.toLocaleDateString("default", { month: "long" });
+  let rightmostMonth = rightmostDateObj.toLocaleDateString("it", { month: "long" });
   if (rightmostMonth.length > 4) {
-    rightmostMonth = rightmostDateObj.toLocaleDateString("default", { month: "short" });
+    rightmostMonth = rightmostDateObj.toLocaleDateString("it", { month: "short" });
   }
   rightmostMonth = `${rightmostMonth[0].toLocaleUpperCase()}${rightmostMonth.substring(1)}`;
   const leftmostYear = leftmostDateObj.getFullYear();

@@ -19,7 +19,7 @@ export default function Details({ client }: DetailsProps): JSX.Element {
   const dispatch = useAppDispatch();
   const theme = useTheme();
 
-  const periodStr = `${(new Date(client.bookingFrom)).toLocaleDateString()} - ${(new Date(client.bookingTo)).toLocaleDateString()}`;
+  const periodStr = `${(new Date(client.bookingFrom)).toLocaleDateString("it")} - ${(new Date(client.bookingTo)).toLocaleDateString("it")}`;
 
   return (
     <Stack spacing={2} sx={{
@@ -32,7 +32,7 @@ export default function Details({ client }: DetailsProps): JSX.Element {
         <Typography variant="bodySmall">{periodStr}</Typography>
       </Stack>
       <Stack alignItems="flex-end">
-        <Link to={`/bookings/${client.bookingFrom}/${client.bookingId}`} style={{ textDecoration: "none" }}>
+        <Link to={`/app/bookings/${client.bookingFrom}/${client.bookingId}`} style={{ textDecoration: "none" }}>
           <M3TextButton onClick={() => {
             dispatch(setBookingsFormFrom(client.bookingFrom));
             dispatch(setBookingsFormTo(client.bookingTo));
