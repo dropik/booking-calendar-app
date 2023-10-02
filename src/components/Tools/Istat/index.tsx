@@ -18,6 +18,7 @@ import { MovementEntry, MovementsList } from "./models";
 import PresenseList from "./PresenseList";
 import NegativePresenseDialog from "./NegativePresenseDialog";
 import M3Page from "../../m3/M3Page";
+import M3DrawerAdjacent from "../../m3/M3DrawerAdjacent";
 
 export default function Istat(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -186,65 +187,67 @@ export default function Istat(): JSX.Element {
   ), [addForeignEntry, deleteForeignEntry, editForeignEntry, foreigns]);
 
   return (
-    <M3Page
-      topBarElement={(isEntered) =>
-        !isFetching ? (
-          postIstatResult.isLoading ? (
-            <CircularProgress />
-          ) : (
-            <>
-              {isEntered ? (
-                <M3FilledButton onClick={sendData} startIcon={<CheckOutlinedIcon />}>
+    <M3DrawerAdjacent>
+      <M3Page
+        topBarElement={(isEntered) =>
+          !isFetching ? (
+            postIstatResult.isLoading ? (
+              <CircularProgress />
+            ) : (
+              <>
+                {isEntered ? (
+                  <M3FilledButton onClick={sendData} startIcon={<CheckOutlinedIcon />}>
                 Accetta
-                </M3FilledButton>
-              ) : null}
-              <NegativePresenseDialog open={openErrorDialog} onClose={() => setOpenErrorDialog(false)} />
-            </>
-          )) : <></>
-      }
-      exit={postIstatResult.isSuccess}
-      onExited={onPageExited}
-      onBeforeExit={onBeforePageExited}
-    >
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        py="1rem"
-      >
-        <Typography variant="displaySmall">ISTAT</Typography>
-        <Stack direction="column" alignItems="flex-end">
-          <Typography variant="titleLarge">{(isFetching || !isSuccess) ? <M3Skeleton width="8rem" /> : loadedMovements.date}</Typography>
-          <Typography variant="titleMedium">
-            {(isFetching || !isSuccess) ? <M3Skeleton width="12rem" /> : `${loadedMovements.prevTotal} presenze precedenti`}
-          </Typography>
-          <Typography variant="titleMedium">
-            {(isFetching || !isSuccess) ? <M3Skeleton width="12rem" /> : `${nextTotal} presenze attuali`}
-          </Typography>
-        </Stack>
-      </Stack>
-      <Box
-        sx={{
-          position: "relative",
-          flex: 1,
-        }}
+                  </M3FilledButton>
+                ) : null}
+                <NegativePresenseDialog open={openErrorDialog} onClose={() => setOpenErrorDialog(false)} />
+              </>
+            )) : <></>
+        }
+        exit={postIstatResult.isSuccess}
+        onExited={onPageExited}
+        onBeforeExit={onBeforePageExited}
       >
         <Stack
           direction="row"
-          spacing={2}
+          justifyContent="space-between"
+          alignItems="center"
+          py="1rem"
+        >
+          <Typography variant="displaySmall">ISTAT</Typography>
+          <Stack direction="column" alignItems="flex-end">
+            <Typography variant="titleLarge">{(isFetching || !isSuccess) ? <M3Skeleton width="8rem" /> : loadedMovements.date}</Typography>
+            <Typography variant="titleMedium">
+              {(isFetching || !isSuccess) ? <M3Skeleton width="12rem" /> : `${loadedMovements.prevTotal} presenze precedenti`}
+            </Typography>
+            <Typography variant="titleMedium">
+              {(isFetching || !isSuccess) ? <M3Skeleton width="12rem" /> : `${nextTotal} presenze attuali`}
+            </Typography>
+          </Stack>
+        </Stack>
+        <Box
           sx={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
+            position: "relative",
+            flex: 1,
           }}
         >
-          {italianList}
-          {foreignList}
-        </Stack>
-      </Box>
-    </M3Page>
+          <Stack
+            direction="row"
+            spacing={2}
+            sx={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+            }}
+          >
+            {italianList}
+            {foreignList}
+          </Stack>
+        </Box>
+      </M3Page>
+    </M3DrawerAdjacent>
   );
 }
 
