@@ -15,6 +15,7 @@ export type State = {
   clientHeight: number,
   lastFetchPeriod: FetchPeriod,
   scrollLeft: number,
+  isPanoramicView: boolean,
 };
 
 function getInitialState(): State {
@@ -32,6 +33,7 @@ function getInitialState(): State {
       to: Utils.getDateShift(leftmostDate, initialColumns - 1),
     },
     scrollLeft: 0,
+    isPanoramicView: false,
   };
 }
 
@@ -61,11 +63,14 @@ export const tableSlice = createSlice({
       if (state.scrollLeft < 0) {
         state.scrollLeft = 0;
       }
-    }
+    },
+    togglePanoramicView: (state) => {
+      state.isPanoramicView = !state.isPanoramicView;
+    },
   }
 });
 
-export const { updateHeights, changeDate, goNext, goPrev, updateColums, scrollX } = tableSlice.actions;
+export const { updateHeights, changeDate, goNext, goPrev, updateColums, scrollX, togglePanoramicView } = tableSlice.actions;
 
 export default tableSlice.reducer;
 
