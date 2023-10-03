@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { memo, useEffect, useMemo, useRef } from "react";
 
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -17,6 +17,10 @@ export default function PanoramicView(): JSX.Element {
   const floors = useFloors();
 
   const floorIds = Object.keys(floors).map(Number);
+
+  const floorSections = useMemo(() => (
+    floorIds.map((floorId, index) => <FloorContent key={floorId} floorId={floorId} isLast={index === floorIds.length - 1} />)
+  ), [floorIds]);
 
   function scroll(event: React.UIEvent<HTMLDivElement>): void {
     const scrollLeft = event.currentTarget?.scrollLeft;
@@ -71,7 +75,7 @@ export default function PanoramicView(): JSX.Element {
               display: "flex",
               flexDirection: "column",
             }}>
-              {floorIds.map((floorId, index) => <FloorContent key={floorId} floorId={floorId} isLast={index === floorIds.length - 1} />)}
+              {floorSections}
             </Box>
           </Box>
         </Stack>
@@ -123,10 +127,13 @@ type FloorContentProps = {
   isLast: boolean,
 };
 
-function FloorContent({ floorId, isLast }: FloorContentProps): JSX.Element {
+const FloorContent = memo(function FloorContent({ floorId, isLast }: FloorContentProps): JSX.Element {
   const theme = useTheme();
   const roomIds = useFloorRoomIds(floorId);
-  const dates = useDates();
+
+  const rooms = useMemo(() => (
+    roomIds.map(roomId => <RoomContent key={roomId} roomId={roomId} />)
+  ), [roomIds]);
 
   return (
     <Stack justifyContent="space-between" sx={{
@@ -134,23 +141,35 @@ function FloorContent({ floorId, isLast }: FloorContentProps): JSX.Element {
       borderBottom: !isLast ? `1px dashed ${theme.palette.outline.main}` : undefined,
       width: "fit-content",
     }}>
-      {roomIds.map(roomId => (
-        <Stack key={roomId} direction="row" sx={{
-          flex: 1
-        }}>
-          {dates.map((day, index) => (
-            <PanoramicViewCell
-              key={day}
-              roomId={roomId}
-              day={day}
-              prevDay={index === 0 ? Utils.getDateShift(day, -1) : dates[index - 1]}
-              isLast={index === dates.length - 1} />
-          ))}
-        </Stack>
-      ))}
+      {rooms}
     </Stack>
   );
-}
+});
+
+type RoomContentProps = {
+  roomId: number,
+};
+
+const RoomContent = memo(function RoomContent({ roomId }: RoomContentProps): JSX.Element {
+  const dates = useDates();
+
+  const cells = useMemo(() => dates.map((day, index) => (
+    <PanoramicViewCell
+      key={day}
+      roomId={roomId}
+      day={day}
+      prevDay={index === 0 ? Utils.getDateShift(day, -1) : dates[index - 1]}
+      isLast={index === dates.length - 1} />
+  )), [dates, roomId]);
+
+  return (
+    <Stack direction="row" sx={{
+      flex: 1
+    }}>
+      {cells}
+    </Stack>
+  );
+});
 
 type PanoramicViewCellProps = {
   roomId: number,
@@ -159,7 +178,7 @@ type PanoramicViewCellProps = {
   isLast: boolean,
 };
 
-function PanoramicViewCell({ roomId, day, prevDay, isLast }: PanoramicViewCellProps): JSX.Element {
+const PanoramicViewCell = memo(function PanoramicViewCell({ roomId, day, prevDay, isLast }: PanoramicViewCellProps): JSX.Element {
   const theme = useTheme();
   const currentTileId = useAppSelector(state => state.tiles.assignedMap[roomId][day]);
   const prevTileId = useAppSelector(state => state.tiles.assignedMap[roomId][prevDay]);
@@ -183,4 +202,4 @@ function PanoramicViewCell({ roomId, day, prevDay, isLast }: PanoramicViewCellPr
       }}></Box>
     </Stack>
   );
-}
+});
