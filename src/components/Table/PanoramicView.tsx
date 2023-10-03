@@ -19,7 +19,7 @@ export default function PanoramicView(): JSX.Element {
   const floorIds = Object.keys(floors).map(Number);
 
   const floorSections = useMemo(() => (
-    floorIds.map((floorId, index) => <FloorContent key={floorId} floorId={floorId} isLast={index === floorIds.length - 1} />)
+    floorIds.map((floorId) => <FloorContent key={floorId} floorId={floorId} />)
   ), [floorIds]);
 
   function scroll(event: React.UIEvent<HTMLDivElement>): void {
@@ -58,7 +58,7 @@ export default function PanoramicView(): JSX.Element {
             borderRight: `1px solid ${theme.palette.outline.main}`,
             overflowX: "scroll",
           }}>
-            {floorIds.map((floorId, index) => <FloorHeader key={floorId} floorId={floorId} isLast={index === floorIds.length - 1} />)}
+            {floorIds.map((floorId) => <FloorHeader key={floorId} floorId={floorId} />)}
           </Stack>
           <Box sx={{
             position: "relative",
@@ -86,10 +86,9 @@ export default function PanoramicView(): JSX.Element {
 
 type FloorHeaderProps = {
   floorId: number,
-  isLast: boolean,
 };
 
-function FloorHeader({ floorId, isLast }: FloorHeaderProps): JSX.Element {
+function FloorHeader({ floorId }: FloorHeaderProps): JSX.Element {
   const theme = useTheme();
   const roomIds = useFloorRoomIds(floorId);
   const floor = useAppSelector(state => state.floors.data[floorId]);
@@ -100,7 +99,7 @@ function FloorHeader({ floorId, isLast }: FloorHeaderProps): JSX.Element {
       flex: roomIds.length,
       pl: "1rem",
       pr: "1rem",
-      borderBottom: !isLast ? `1px dashed ${theme.palette.outline.main}` : undefined,
+      borderTop: `1px dashed ${theme.palette.outline.main}`,
     }}>
       {roomIds.map(roomId => <Box key={roomId} sx={{ flex: 1 }}></Box>)}
       <Box sx={{
@@ -124,10 +123,9 @@ function FloorHeader({ floorId, isLast }: FloorHeaderProps): JSX.Element {
 
 type FloorContentProps = {
   floorId: number,
-  isLast: boolean,
 };
 
-const FloorContent = memo(function FloorContent({ floorId, isLast }: FloorContentProps): JSX.Element {
+const FloorContent = memo(function FloorContent({ floorId }: FloorContentProps): JSX.Element {
   const theme = useTheme();
   const roomIds = useFloorRoomIds(floorId);
 
@@ -138,7 +136,7 @@ const FloorContent = memo(function FloorContent({ floorId, isLast }: FloorConten
   return (
     <Stack justifyContent="space-between" sx={{
       flex: roomIds.length,
-      borderBottom: !isLast ? `1px dashed ${theme.palette.outline.main}` : undefined,
+      borderTop: `1px dashed ${theme.palette.outline.main}`,
       width: "fit-content",
     }}>
       {rooms}
