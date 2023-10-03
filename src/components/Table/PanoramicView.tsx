@@ -4,6 +4,7 @@ import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import { useAppDispatch, useAppSelector, useDates, useFloorRoomIds, useFloors } from "../../redux/hooks";
 import { scrollX } from "../../redux/tableSlice";
@@ -15,6 +16,7 @@ export default function PanoramicView(): JSX.Element {
   const ref = useRef<HTMLDivElement>(null);
   const scrollLeft = useAppSelector(state => state.table.scrollLeft);
   const floors = useFloors();
+  const loadingState = useAppSelector(state => state.tiles.status);
 
   const floorIds = Object.keys(floors).map(Number);
 
@@ -77,6 +79,21 @@ export default function PanoramicView(): JSX.Element {
             }}>
               {floorSections}
             </Box>
+            {loadingState === "loading" ? (
+              <Box sx={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                bottom: 0,
+                right: 0,
+                backgroundColor: "rgba(0, 0, 0, 0.2)",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}>
+                <CircularProgress size="5rem" />
+              </Box>
+            ): null}
           </Box>
         </Stack>
       </Box>
