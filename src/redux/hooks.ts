@@ -40,11 +40,11 @@ export function useRightmostDate(): string {
   return useAppSelector((state) => Utils.getDateShift(state.table.leftmostDate, state.table.columns - 1));
 }
 
-export const useLeftmostDate:       () => string =
+export const useLeftmostDate: () => string =
   () => useAppSelector(state => state.table.leftmostDate);
 
-export const useColumns:            () => number =
+export const useColumns: () => number =
   () => useAppSelector(state => state.table.columns);
 
-export const useFloors:          () => Floors =
+export const useFloors: () => Floors =
   () => useAppSelector(state => state.floors.data);
