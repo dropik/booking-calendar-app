@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 
 import { useAppDispatch, useAppSelector, useDates, useFloorRoomIds, useFloors } from "../../redux/hooks";
 import { scrollX } from "../../redux/tableSlice";
+import { Utils } from "../../utils";
 
 export default function PanoramicView(): JSX.Element {
   const theme = useTheme();
@@ -49,7 +50,7 @@ export default function PanoramicView(): JSX.Element {
           height: "100%"
         }}>
           <Stack justifyContent="space-between" sx={{
-            width: "calc(7.5rem - 1px)",
+            width: "7.5rem",
             borderRight: `1px solid ${theme.palette.outline.main}`,
             overflowX: "scroll",
           }}>
@@ -134,10 +135,52 @@ function FloorContent({ floorId, isLast }: FloorContentProps): JSX.Element {
       width: "fit-content",
     }}>
       {roomIds.map(roomId => (
-        <Stack key={roomId} direction="row" sx={{ flex: 1 }}>
-          {dates.map(day => <Box key={day} sx={{ width: "calc(8rem + 1px)" }}></Box>)}
+        <Stack key={roomId} direction="row" sx={{
+          flex: 1
+        }}>
+          {dates.map((day, index) => (
+            <PanoramicViewCell
+              key={day}
+              roomId={roomId}
+              day={day}
+              prevDay={index === 0 ? Utils.getDateShift(day, -1) : dates[index - 1]}
+              isLast={index === dates.length - 1} />
+          ))}
         </Stack>
       ))}
+    </Stack>
+  );
+}
+
+type PanoramicViewCellProps = {
+  roomId: number,
+  day: string,
+  prevDay: string,
+  isLast: boolean,
+};
+
+function PanoramicViewCell({ roomId, day, prevDay, isLast }: PanoramicViewCellProps): JSX.Element {
+  const theme = useTheme();
+  const currentTileId = useAppSelector(state => state.tiles.assignedMap[roomId][day]);
+  const prevTileId = useAppSelector(state => state.tiles.assignedMap[roomId][prevDay]);
+  const currentTile = useAppSelector(state => currentTileId === undefined ? undefined : state.tiles.data[currentTileId]);
+  const prevTile = useAppSelector(state => prevTileId === undefined ? undefined : state.tiles.data[prevTileId]);
+
+  return (
+    <Stack direction="row" sx={{
+      width: "8rem",
+      borderRight: !isLast ? (
+        currentTile ? `1px solid ${theme.palette[`${currentTile.color}Container`].main}` : `1px solid ${theme.palette.surfaceVariant.light}`
+      ) : undefined,
+    }}>
+      <Box sx={{
+        flex: 1,
+        backgroundColor: prevTile ? theme.palette[`${prevTile.color}Container`].main : undefined,
+      }}></Box>
+      <Box sx={{
+        flex: 1,
+        backgroundColor: currentTile ? theme.palette[`${currentTile.color}Container`].main : undefined,
+      }}></Box>
     </Stack>
   );
 }
