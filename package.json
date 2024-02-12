@@ -1,13 +1,13 @@
 {
   "name": "booking-calendar",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Calendar view of reservations",
   "main": "dist/bundle.js",
   "scripts": {
     "start": "npx webpack serve --host 0.0.0.0 --env API_URL=https://localhost:44346/api/v1 --config webpack.dev.js",
     "start:netcore": "npx webpack serve --host 0.0.0.0 --env API_URL=http://localhost:5077/api/v1 --config webpack.dev.js",
     "build:dev": "npx webpack --env API_URL=https://api-dev.montipallidi.it/api/v1 --config webpack.prod.js",
-    "build": "npx webpack --env API_URL=https://api.montipallidi.it/api/v1 --config webpack.prod.js",
+    "build": "npx webpack --env API_URL=https://bz47zbi0rb.execute-api.eu-central-1.amazonaws.com/Prod/api/v1 --config webpack.prod.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint \"{src,test}/**/*.{ts,tsx,js}\" --fix"
   },
