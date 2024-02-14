@@ -238,6 +238,7 @@ function useGetPoliceRicevuta(): { query: (date: string) => void, data: Blob | u
           let response = await fetch(`${process.env.API_URL}/police/ricevuta?date=${date}`, {
             headers: {
               "Authorization": `Bearer ${workingAuth.accessToken}`,
+              "Accept": "application/pdf",
             },
           });
           if (!response.ok) {
@@ -265,6 +266,7 @@ function useGetPoliceRicevuta(): { query: (date: string) => void, data: Blob | u
               response = await fetch(`${process.env.API_URL}/police/ricevuta?date=${date}`, {
                 headers: {
                   "Authorization": `Bearer ${workingAuth.accessToken}`,
+                  "Accept": "application/pdf",
                 },
               });
             } else {
