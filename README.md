@@ -32,6 +32,9 @@ A client side part of a web app for managing hotel bookings by organazing them i
 
 ## Changes
 
+### v1.6.1
+- Pointing to backend API hosted on Amazon.
+
 ### v1.6.0
 - Migrated API calls to RTK Query.
 - Handling authorization to backend.
