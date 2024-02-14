@@ -35,6 +35,7 @@ A client side part of a web app for managing hotel bookings by organazing them i
 ### v1.6.2
 - Added panoramic view allowing to schematically visualize occupations.
 - Fixed remaining app bar scroll state on page change.
+- Fixed base64 issues with binary content type responses from AWS.
 
 ### v1.6.1
 - Pointing to backend API hosted on Amazon.
