@@ -32,6 +32,10 @@ A client side part of a web app for managing hotel bookings by organazing them i
 
 ## Changes
 
+### v1.6.2
+- Added panoramic view allowing to schematically visualize occupations.
+- Fixed remaining app bar scroll state on page change.
+
 ### v1.6.1
 - Pointing to backend API hosted on Amazon.
 
@@ -39,10 +43,10 @@ A client side part of a web app for managing hotel bookings by organazing them i
 - Migrated API calls to RTK Query.
 - Handling authorization to backend.
 - Moved settings page from app drawer into a dedicated page with tabs for user and structure data.
-- Static italian localization for date formats
+- Static italian localization for date formats.
 
 ### v1.5.4
-- Considering wether deposit is with bank transfer for displaying payment notification
+- Considering wether deposit is with bank transfer for displaying payment notification.
 
 ### v1.5.3
 - Added deposit not confirmd sign to tiles.

@@ -5,9 +5,10 @@ import UserButton from "./UserButton";
 
 type UpperHeaderProps = {
   children?: React.ReactNode,
+  actions?: React.ReactNode[],
 };
 
-export default function UpperHeader({ children }: UpperHeaderProps): JSX.Element {
+export default function UpperHeader({ children, actions }: UpperHeaderProps): JSX.Element {
   const headerParts: React.ReactNode[] = [null, null];
   Children.forEach(children, (child, index) => {
     // allow only two slots
@@ -39,7 +40,9 @@ export default function UpperHeader({ children }: UpperHeaderProps): JSX.Element
         justifyContent: "flex-end",
         alignItems: "center",
         pr: "1rem",
+        gap: "0.5rem",
       }}>
+        {actions?.map(action => action)}
         <UserButton />
       </Grid>
     </Grid>

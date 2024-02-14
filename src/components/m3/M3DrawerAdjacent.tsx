@@ -25,6 +25,7 @@ export default function M3DrawerAdjacent({ children, sx, ...props }: BoxProps): 
         justifyContent: "inherit",
         overflow: "hidden",
         ml: "5rem",
+        flex: 1,
         transition: theme.transitions.create(["margin"], {
           easing: theme.transitions.easing.emphasized,
           duration: theme.transitions.duration.long2,
