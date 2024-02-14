@@ -4,6 +4,9 @@ import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import Fade from "@mui/material/Fade";
 
+import { useAppDispatch } from "../../redux/hooks";
+import { set as setScroll } from "../../redux/scrollSlice";
+
 import M3ListSubheader from "../m3/M3ListSubheader";
 import M3ListItemButton from "../m3/M3ListItemButton";
 import M3ListItemIcon from "../m3/M3ListItemIcon";
@@ -26,6 +29,11 @@ type Props = {
 
 export default function DrawerLists({ open, lists }: Props): JSX.Element {
   const theme = useTheme();
+  const dispatch = useAppDispatch();
+
+  function resetScroll(): void {
+    dispatch(setScroll({ top: 0 }));
+  }
 
   return (
     <>
@@ -39,7 +47,7 @@ export default function DrawerLists({ open, lists }: Props): JSX.Element {
             }
           >
             {list.items.map((item, itemIndex) => (
-              <M3NavLink key={item.link} end={item.end} to={item.link} style={{ textDecoration: "none" }}>
+              <M3NavLink key={item.link} end={item.end} to={item.link} style={{ textDecoration: "none" }} onClick={resetScroll}>
                 {({ isActive }) => (
                   <M3ListItemButton selected={isActive} sx={{
                     overflow: "hidden",

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 
 import { useAppSelector } from "../redux/hooks";
 
@@ -11,7 +11,6 @@ import BookingDetails from "./BookingDetails";
 import Tools from "./Tools";
 import Clients from "./Clients";
 import Settings from "./Settings";
-import Dashboard from "./Tools/Dashboard";
 import Istat from "./Tools/Istat";
 import Login from "./Login";
 
@@ -28,8 +27,8 @@ export default function AppRoutes(): JSX.Element {
         <Route path="bookings" element={<Bookings />}>
           <Route path=":from/:bookingId" element={<BookingDetails />} />
         </Route>
-        <Route path="tools" element={<Tools />}>
-          <Route path="" element={<Dashboard />} />
+        <Route path="tools" element={<Outlet />}>
+          <Route path="" element={<Tools />} />
           <Route path="istat" element={<Istat />} />
         </Route>
         <Route path="clients" element={<Clients />} />

@@ -1,9 +1,10 @@
 import React from "react";
 
+import Stack from "@mui/material/Stack";
+
 import M3AppBar from "../m3/M3AppBar";
 import M3DrawerAdjacent from "../m3/M3DrawerAdjacent";
 import Tint from "./Tint";
-import Stack from "@mui/material/Stack";
 
 type TopAppBarProps = {
   children: React.ReactNode
