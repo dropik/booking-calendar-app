@@ -13,7 +13,7 @@ export default function FetchTiles(): null {
   const query = api.endpoints.getBookings.useQuery(
     args,
     {
-      pollingInterval: isWindowFocused ? 10000 : undefined,
+      pollingInterval: isWindowFocused ? 180000 : undefined,
       refetchOnMountOrArgChange: true,
       refetchOnFocus: true,
       refetchOnReconnect: true
