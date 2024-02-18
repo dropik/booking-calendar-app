@@ -32,6 +32,9 @@ A client side part of a web app for managing hotel bookings by organazing them i
 
 ## Changes
 
+### v1.6.3
+- Polling of bookings only if window is focused.
+
 ### v1.6.2
 - Added panoramic view allowing to schematically visualize occupations.
 - Fixed remaining app bar scroll state on page change.

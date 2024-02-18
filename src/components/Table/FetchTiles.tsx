@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import useWindowFocus from "use-window-focus";
 
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 
@@ -8,7 +9,15 @@ import { ColoredBooking, TileColor, addColorizedBookings } from "../../redux/til
 export default function FetchTiles(): null {
   const dispatch = useAppDispatch();
   const args = useAppSelector((state) => state.table.lastFetchPeriod);
-  const query = api.endpoints.getBookings.useQuery(args, { pollingInterval: 180000, refetchOnMountOrArgChange: true });
+  const isWindowFocused = useWindowFocus();
+  const query = api.endpoints.getBookings.useQuery(
+    args,
+    {
+      pollingInterval: isWindowFocused ? 10000 : undefined,
+      refetchOnMountOrArgChange: true,
+      refetchOnFocus: true,
+      refetchOnReconnect: true
+    });
   const [postAssignments] = api.endpoints.postAssignments.useMutation();
 
   useEffect(() => {
